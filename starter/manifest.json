@@ -1,6 +1,6 @@
 {
  "name": "starter",
- "version": "1.5.1",
+ "version": "1.5.2",
  "format": "port60-liquid@1",
  "label": "Starter",
  "description": "The reference template for the Port60 dialect — the developer docs' worked example and the base to copy when building your own. 1.1.0 adds the layout slot: the template owns the header, navigation and footer chrome.",
@@ -40,5 +40,5 @@
    }
   ]
  },
- "changelog": "Vista polish: your headline and buttons now sit ON the photograph (the treatment keeps them readable) instead of stacking below it — the hero no longer doubles in height."
+ "changelog": "Vista + giving form: the donation widget returns to the right-hand column, riding over the photograph and continuing onto the gradient below it — nothing stacks, nothing pushes."
 }

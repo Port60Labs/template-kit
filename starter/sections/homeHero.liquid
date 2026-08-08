@@ -31,6 +31,7 @@
 {% endif %}
 {% assign heroFraming = section.photoFraming | default: 'fill' %}
 {% if heroCount > 0 and heroFraming == 'whole' %}
+{% if section.givingStyle == 'button' %}
 <section class="lq-homehero lq-homehero--vista{% if heroCount > 1 %} lq-homehero--carousel{% endif %}">
   <div class="lq-vista">
     <img class="lq-vista-sizer" src="{{ section.images.first.imageUrl }}" alt="{{ section.images.first.alt }}" style="object-position: {{ heroFocus }}" fetchpriority="high" decoding="async">
@@ -41,24 +42,37 @@
         <h1>{{ section.title | default: brand.tagline | default: brand.name }}</h1>
         {% if section.lead %}<p class="lq-homehero-lead">{{ section.lead }}</p>{% endif %}
         <div class="lq-homehero-actions">
-          {% if section.givingStyle == 'button' %}
           <a class="button button-primary" href="{{ section.primaryHref | default: '/donate' }}">{{ section.primaryLabel | default: 'Donate now' }}</a>
-          {% else %}
-          <a class="button button-primary" href="#donate">{{ section.primaryLabel | default: 'Donate now' }}</a>
-          {% endif %}
           <a class="button" href="{{ section.secondaryHref | default: '/about' }}">{{ section.secondaryLabel | default: 'Our story' }}</a>
         </div>
       </div>
     </div>
   </div>
-  {% unless section.givingStyle == 'button' %}
-  <div class="container lq-vista-widget">
+</section>
+{% else %}
+{% comment %} Form mode: the grid pulls up over the band — copy on the photo, the widget riding
+    the seam onto the gradient below (never a stacked strip). {% endcomment %}
+<section class="lq-homehero lq-homehero--vista lq-homehero--vista-form{% if heroCount > 1 %} lq-homehero--carousel{% endif %}">
+  <div class="lq-vista">
+    <img class="lq-vista-sizer" src="{{ section.images.first.imageUrl }}" alt="{{ section.images.first.alt }}" style="object-position: {{ heroFocus }}" fetchpriority="high" decoding="async">
+    {% if heroCount > 1 %}{% island 'hero_carousel' %}{% else %}<div class="lq-vista-scrim" aria-hidden="true"></div>{% endif %}
+  </div>
+  <div class="container lq-homehero-inner lq-vista-overlap">
+    <div>
+      <p class="lq-kicker">{{ section.eyebrow | default: brand.name }}</p>
+      <h1>{{ section.title | default: brand.tagline | default: brand.name }}</h1>
+      {% if section.lead %}<p class="lq-homehero-lead">{{ section.lead }}</p>{% endif %}
+      <div class="lq-homehero-actions">
+        <a class="button button-primary" href="#donate">{{ section.primaryLabel | default: 'Donate now' }}</a>
+        <a class="button" href="{{ section.secondaryHref | default: '/about' }}">{{ section.secondaryLabel | default: 'Our story' }}</a>
+      </div>
+    </div>
     <aside id="donate">
       {% island 'donation_widget' %}
     </aside>
   </div>
-  {% endunless %}
 </section>
+{% endif %}
 {% else %}
 <section class="lq-homehero{% if heroPhoto %} lq-homehero--photo{% endif %}{% if heroCount > 1 %} lq-homehero--carousel{% endif %}"{% if heroPhoto %} style="background-image: url('{{ heroPhoto }}'); background-position: {{ heroFocus }}"{% endif %}>
   {% if heroCount > 1 %}{% island 'hero_carousel' %}{% endif %}

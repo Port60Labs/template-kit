@@ -152,3 +152,11 @@ body { font-family: ' IBM Plex Sans Arabic', var(--p60s-siteFont, 'Inter'), ui-s
   .lq-vista-copy { position: static; padding: 1.8rem 0 0; }
   .lq-vista-sizer { min-height: 160px; }
 }
+
+/* Vista + form (1.5.2): the widget rides the seam — grid pulled up over the band (under the
+   280px floor), gradient filling where the image ends; narrow screens stack back underneath. */
+.lq-homehero--vista-form { padding-bottom: 2.6rem; }
+.lq-vista-overlap { position: relative; z-index: 1; margin-top: -240px; align-items: start; }
+@media (max-width: 899px) {
+  .lq-vista-overlap { margin-top: 0; padding-top: 1.6rem; }
+}
