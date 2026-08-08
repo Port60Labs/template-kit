@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://developers.port60.co.uk/schemas/template-manifest-v1.json",
+  "title": "Port60 template manifest (contract v1)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "version", "format", "supports"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{1,48}[a-z0-9]$",
+      "description": "The template's identity — lowercase, hyphenated, stable across versions."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semver. Versions are IMMUTABLE once published — a fix is a new version."
+    },
+    "format": {
+      "type": "string",
+      "enum": ["port60-liquid@1"],
+      "description": "The dialect/contract major this template is written against."
+    },
+    "label": { "type": "string", "maxLength": 60, "description": "Human-readable name shown in pickers." },
+    "description": { "type": "string", "maxLength": 300 },
+    "changelog": {
+      "type": "string",
+      "maxLength": 300,
+      "description": "One human line describing what THIS version changed — shown on the Appearance update nudge."
+    },
+    "supports": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pages", "sections"],
+      "properties": {
+        "pages": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["home", "about"] },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "The pages this template renders (grows with the contract)."
+        },
+        "sections": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Section types this template ships renderers for (sections/{type}.liquid). Unsupported types are omitted at render — never an error."
+        },
+        "islands": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true,
+          "default": [],
+          "description": "Islands this template places. Every {% island %} name must be listed here AND exist in the platform island registry."
+        },
+        "layout": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when the template ships layout.liquid and owns the page chrome (header/nav/footer). The platform still owns <head>, consent, and identity — see the layouts guide."
+        },
+        "pageTemplates": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["events", "course"] },
+          "uniqueItems": true,
+          "default": [],
+          "description": "Pages whose DISPLAY body this template renders itself (pages/{page}.liquid) with that page's documented data context. Transactional views stay platform-owned; without an entry the platform body renders inside your chrome."
+        },
+        "worship": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when the layout renders the `worship` context (the prayer/service-times rail). Declared honesty: the choosers badge worship-enabled tenants toward looks that show their times, and warn on looks that don't. Requires supports.layout; the layout must actually branch on `worship`."
+        }
+      }
+    },
+    "fonts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^https://fonts\\.googleapis\\.com/css2\\?"
+      },
+      "default": [],
+      "description": "Webfont stylesheet URLs the platform loads in <head> (with preconnects, never a CSS @import). Google Fonts css2 URLs only."
+    },
+    "looks": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "values"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 40,
+            "description": "The look's evocative, author-chosen name — shown as a one-click chip in Appearance."
+          },
+          "values": {
+            "type": "object",
+            "minProperties": 1,
+            "propertyNames": { "pattern": "^[a-zA-Z][a-zA-Z0-9]{0,39}$" },
+            "additionalProperties": { "type": "string" },
+            "description": "Knob key → value. Every key must be a declared settings knob; select values must be listed options; font values must be catalogue families."
+          }
+        }
+      },
+      "default": [],
+      "description": "One-click LOOKS: author-named bundles of knob values (scheme + fonts + width…) applied together. Everything remains individually adjustable afterwards."
+    },
+    "settings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["key", "kind", "label"],
+            "properties": {
+              "key": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9]{0,39}$" },
+              "kind": { "type": "string", "enum": ["color", "select", "toggle", "font"] },
+              "label": { "type": "string", "maxLength": 60 },
+              "default": {},
+              "options": { "type": "array", "items": { "type": "string" } },
+              "group": {
+                "type": "string",
+                "enum": ["typography", "looks"],
+                "description": "Where the admin surfaces this knob: 'typography' → the Typography section beside the font slots; 'looks' → the Looks section with the one-click bundles (colour schemes and accent dials belong there — and ungrouped color knobs plus a knob keyed 'scheme' default there anyway); other ungrouped knobs render under Template options."
+              },
+              "weights": {
+                "type": "array",
+                "items": { "type": "integer", "minimum": 100, "maximum": 1000 },
+                "uniqueItems": true,
+                "description": "FONT knobs only: the weights this template's typographic system uses for the slot. The host requests these for the tenant's chosen family (clamped to the family's real weights). The tenant picks the FAMILY; weights, sizes and tracking stay template-owned."
+              }
+            }
+          },
+          "description": "The template's own theming knobs (colour schemes etc.) — rendered as an editor in Appearance/get-started; values land in site-config config.theme."
+        }
+      }
+    }
+  }
+}

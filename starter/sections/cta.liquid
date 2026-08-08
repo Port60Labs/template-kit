@@ -1,0 +1,12 @@
+<section class="lq-cta">
+  <div class="container lq-cta-grid">
+    <div>
+      <h2>{{ section.heading }}</h2>
+      {% if section.text %}<p>{{ section.text }}</p>{% endif %}
+      <a class="button button-primary" href="{{ section.buttonHref }}">{{ section.buttonLabel }}</a>
+    </div>
+    <div class="lq-cta-widget">
+      {% island 'donation_widget' %}
+    </div>
+  </div>
+</section>

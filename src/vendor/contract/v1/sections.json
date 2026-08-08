@@ -1,0 +1,558 @@
+{
+ "description": "The content-section catalogue — the closed set of section types a page may hold and a template may render. Section type = content KIND (coarse); layout/variant is the template's job. Additive-only: types and fields are added, never removed or re-shaped, within a contract major. Every section is independently omittable — a template must degrade gracefully when any subset is absent.",
+ "sections": [
+  {
+   "type": "hero",
+   "label": "Hero banner",
+   "pages": [
+    "about"
+   ],
+   "description": "The page opener: a headline with an optional kicker and sanitised rich-text intro.",
+   "fields": [
+    {
+     "name": "eyebrow",
+     "kind": "text",
+     "required": false,
+     "description": "Short kicker above the headline."
+    },
+    {
+     "name": "title",
+     "kind": "text",
+     "required": true,
+     "description": "The headline."
+    },
+    {
+     "name": "bodyHtml",
+     "kind": "richtext",
+     "required": false,
+     "description": "Sanitised HTML intro — render with the raw filter."
+    }
+   ],
+   "minimal": {
+    "title": "Our story"
+   },
+   "sample": {
+    "eyebrow": "About us",
+    "title": "Generosity, put to work.",
+    "bodyHtml": "<p>We began in 2019 around a simple belief: small, regular acts of kindness, pooled together, change lives.</p>"
+   }
+  },
+  {
+   "type": "values",
+   "label": "Values / list",
+   "pages": [
+    "about"
+   ],
+   "description": "A set of principles shown as cards or a numbered list, per the template.",
+   "fields": [
+    {
+     "name": "eyebrow",
+     "kind": "text",
+     "required": false,
+     "description": "Short kicker above the heading."
+    },
+    {
+     "name": "heading",
+     "kind": "text",
+     "required": false,
+     "description": "The section heading."
+    },
+    {
+     "name": "items",
+     "kind": "items",
+     "required": true,
+     "description": "The value entries.",
+     "itemFields": [
+      {
+       "name": "title",
+       "kind": "text",
+       "required": true,
+       "description": "The value's name."
+      },
+      {
+       "name": "description",
+       "kind": "text",
+       "required": true,
+       "description": "One sentence describing it."
+      },
+      {
+       "name": "icon",
+       "kind": "icon",
+       "required": false,
+       "description": "Optional emoji/icon."
+      }
+     ]
+    }
+   ],
+   "minimal": {
+    "items": [
+     {
+      "title": "Transparency",
+      "description": "Every pound is tracked and reported."
+     }
+    ]
+   },
+   "sample": {
+    "eyebrow": "What we stand for",
+    "heading": "Our values",
+    "items": [
+     {
+      "title": "Transparency",
+      "description": "Every pound is tracked and reported."
+     },
+     {
+      "title": "Dignity",
+      "description": "We work alongside communities, not for them."
+     },
+     {
+      "title": "Impact",
+      "description": "We fund what works and measure the difference."
+     }
+    ]
+   }
+  },
+  {
+   "type": "cta",
+   "label": "Call to action",
+   "pages": [
+    "home",
+    "about"
+   ],
+   "description": "A closing band: heading, optional line, one button.",
+   "fields": [
+    {
+     "name": "heading",
+     "kind": "text",
+     "required": true,
+     "description": "The band heading."
+    },
+    {
+     "name": "text",
+     "kind": "text",
+     "required": false,
+     "description": "A supporting line."
+    },
+    {
+     "name": "buttonLabel",
+     "kind": "text",
+     "required": true,
+     "description": "The button's label."
+    },
+    {
+     "name": "buttonHref",
+     "kind": "url",
+     "required": true,
+     "description": "The button's destination (scheme-guarded on save)."
+    }
+   ],
+   "minimal": {
+    "heading": "Ready to help?",
+    "buttonLabel": "Donate",
+    "buttonHref": "/donate"
+   },
+   "sample": {
+    "heading": "Ready to help?",
+    "text": "It takes less than a minute.",
+    "buttonLabel": "Donate now",
+    "buttonHref": "/#donate"
+   }
+  },
+  {
+   "type": "homeHero",
+   "label": "Home hero",
+   "pages": [
+    "home"
+   ],
+   "description": "The home opener. EVERY field optional: eyebrow/title derive from branding when absent, the lead OMITS when absent (never a fabricated placeholder), buttons fall back to platform defaults.",
+   "fields": [
+    {
+     "name": "eyebrow",
+     "kind": "text",
+     "required": false,
+     "description": "Defaults to the charity's name."
+    },
+    {
+     "name": "title",
+     "kind": "text",
+     "required": false,
+     "description": "Defaults to the charity's tagline."
+    },
+    {
+     "name": "lead",
+     "kind": "text",
+     "required": false,
+     "description": "A lead paragraph; omitted entirely when blank."
+    },
+    {
+     "name": "primaryLabel",
+     "kind": "text",
+     "required": false,
+     "description": "Main button label (default: Donate now)."
+    },
+    {
+     "name": "primaryHref",
+     "kind": "url",
+     "required": false,
+     "description": "Main button link (default: #donate)."
+    },
+    {
+     "name": "secondaryLabel",
+     "kind": "text",
+     "required": false,
+     "description": "Second button label (default: Our story)."
+    },
+    {
+     "name": "secondaryHref",
+     "kind": "url",
+     "required": false,
+     "description": "Second button link (default: /about)."
+    },
+    {
+     "name": "givingStyle",
+     "kind": "select",
+     "required": false,
+     "options": [
+      "form",
+      "button"
+     ],
+     "description": "How this hero offers giving: 'form' (default) places the donation widget beside the copy; 'button' renders copy only — the primary button becomes the giving path (defaulting to /donate). Templates MUST render both."
+    },
+    {
+     "name": "imageUrl",
+     "kind": "image",
+     "required": false,
+     "description": "Background photograph for the hero (uploaded through the platform pipeline). The template lays a dark overlay under the headline; omit for the flat colour hero."
+    }
+   ],
+   "minimal": {},
+   "sample": {
+    "lead": "We turn everyday generosity into practical help for the families who need it most.",
+    "givingStyle": "button"
+   }
+  },
+  {
+   "type": "impact",
+   "label": "Impact cards",
+   "pages": [
+    "home"
+   ],
+   "description": "What gifts make possible — optional intro plus icon/title/description cards. Claims must be truthful for the tenant.",
+   "fields": [
+    {
+     "name": "eyebrow",
+     "kind": "text",
+     "required": false,
+     "description": "Short kicker."
+    },
+    {
+     "name": "heading",
+     "kind": "text",
+     "required": false,
+     "description": "The section heading."
+    },
+    {
+     "name": "text",
+     "kind": "text",
+     "required": false,
+     "description": "An intro line."
+    },
+    {
+     "name": "items",
+     "kind": "items",
+     "required": true,
+     "description": "The impact cards.",
+     "itemFields": [
+      {
+       "name": "imageUrl",
+       "kind": "image",
+       "required": false,
+       "description": "Card image (uploaded through the platform pipeline). Preferred over icon."
+      },
+      {
+       "name": "icon",
+       "kind": "icon",
+       "required": false,
+       "description": "Legacy emoji/icon — superseded by imageUrl; render it only when imageUrl is absent."
+      },
+      {
+       "name": "title",
+       "kind": "text",
+       "required": true,
+       "description": "The card title."
+      },
+      {
+       "name": "description",
+       "kind": "text",
+       "required": true,
+       "description": "One sentence describing it."
+      }
+     ]
+    }
+   ],
+   "minimal": {
+    "items": [
+     {
+      "title": "Warm meals",
+      "description": "Hot meals served at a community kitchen."
+     }
+    ]
+   },
+   "sample": {
+    "eyebrow": "Where your gift goes",
+    "heading": "Real help, made of small acts",
+    "items": [
+     {
+      "imageUrl": "https://assets.example/impact-water.jpg",
+      "title": "£10 · Clean water",
+      "description": "Safe drinking water for a family for a whole month."
+     },
+     {
+      "icon": "🍲",
+      "title": "£25 · Warm meals",
+      "description": "Fifteen hot meals served at a local community kitchen."
+     },
+     {
+      "title": "£50 · School kit",
+      "description": "Books and supplies for two children for a full term."
+     }
+    ]
+   }
+  },
+  {
+   "type": "whatsOn",
+   "label": "What's-on strip",
+   "pages": [
+    "home"
+   ],
+   "kind": "widget",
+   "island": "whats_on_strip",
+   "description": "Widget section — positions the what's-on strip of info events. No authorable content.",
+   "fields": [],
+   "minimal": {},
+   "sample": {}
+  },
+  {
+   "type": "events",
+   "label": "Events carousel",
+   "pages": [
+    "home"
+   ],
+   "kind": "widget",
+   "island": "events_carousel",
+   "description": "Widget section — positions the ticketed-events carousel. No authorable content.",
+   "fields": [],
+   "minimal": {},
+   "sample": {}
+  },
+  {
+   "type": "articles",
+   "label": "Latest articles",
+   "pages": [
+    "home"
+   ],
+   "kind": "widget",
+   "island": "latest_articles",
+   "description": "Widget section — positions the latest-articles strip. No authorable content.",
+   "fields": [],
+   "minimal": {},
+   "sample": {}
+  },
+  {
+   "type": "emergency",
+   "label": "Emergency appeal strip",
+   "pages": [
+    "home"
+   ],
+   "description": "A high-urgency full-width strip — one headline, an optional line, one action. For live emergencies and time-critical appeals.",
+   "fields": [
+    {
+     "name": "heading",
+     "kind": "text",
+     "required": true,
+     "description": "The urgent headline."
+    },
+    {
+     "name": "text",
+     "kind": "text",
+     "required": false,
+     "description": "One supporting line."
+    },
+    {
+     "name": "buttonLabel",
+     "kind": "text",
+     "required": false,
+     "description": "Action label (default: Donate now)."
+    },
+    {
+     "name": "buttonHref",
+     "kind": "url",
+     "required": false,
+     "description": "Action link (default: /donate). Scheme-guarded on save."
+    }
+   ],
+   "minimal": {
+    "heading": "Emergency appeal"
+   },
+   "sample": {
+    "heading": "Gaza emergency appeal",
+    "text": "Families need food, water and shelter right now.",
+    "buttonLabel": "Give emergency aid",
+    "buttonHref": "/donate"
+   }
+  },
+  {
+   "type": "stats",
+   "label": "Stats band",
+   "pages": [
+    "home"
+   ],
+   "description": "Big headline numbers — the at-a-glance impact band. Values are author-entered text (write them exactly as they should read).",
+   "fields": [
+    {
+     "name": "eyebrow",
+     "kind": "text",
+     "required": false,
+     "description": "Short kicker."
+    },
+    {
+     "name": "heading",
+     "kind": "text",
+     "required": false,
+     "description": "The band heading."
+    },
+    {
+     "name": "items",
+     "kind": "items",
+     "required": true,
+     "description": "The stat entries.",
+     "itemFields": [
+      {
+       "name": "value",
+       "kind": "text",
+       "required": true,
+       "description": "The number, as it should read (e.g. 12,000 or 98%)."
+      },
+      {
+       "name": "label",
+       "kind": "text",
+       "required": true,
+       "description": "What it counts (e.g. meals served)."
+      }
+     ]
+    }
+   ],
+   "minimal": {
+    "items": [
+     {
+      "value": "1,200",
+      "label": "meals served"
+     }
+    ]
+   },
+   "sample": {
+    "eyebrow": "Last year",
+    "heading": "What your giving did",
+    "items": [
+     {
+      "value": "12,400",
+      "label": "hot meals served"
+     },
+     {
+      "value": "3,100",
+      "label": "families supported"
+     },
+     {
+      "value": "98p",
+      "label": "of every pound to the cause"
+     }
+    ]
+   }
+  },
+  {
+   "type": "appealGrid",
+   "label": "Appeal cards",
+   "pages": [
+    "home"
+   ],
+   "description": "A grid of appeal/campaign cards — image, title, a line, and a per-card action.",
+   "fields": [
+    {
+     "name": "eyebrow",
+     "kind": "text",
+     "required": false,
+     "description": "Short kicker."
+    },
+    {
+     "name": "heading",
+     "kind": "text",
+     "required": false,
+     "description": "The section heading."
+    },
+    {
+     "name": "items",
+     "kind": "items",
+     "required": true,
+     "description": "The appeal cards.",
+     "itemFields": [
+      {
+       "name": "imageUrl",
+       "kind": "image",
+       "required": false,
+       "description": "Card photograph (uploaded through the platform pipeline)."
+      },
+      {
+       "name": "title",
+       "kind": "text",
+       "required": true,
+       "description": "The appeal's name."
+      },
+      {
+       "name": "text",
+       "kind": "text",
+       "required": true,
+       "description": "One sentence on what it funds."
+      },
+      {
+       "name": "buttonLabel",
+       "kind": "text",
+       "required": false,
+       "description": "Card action label (default: Donate)."
+      },
+      {
+       "name": "buttonHref",
+       "kind": "url",
+       "required": false,
+       "description": "Card action link (default: /donate). Scheme-guarded on save."
+      }
+     ]
+    }
+   ],
+   "minimal": {
+    "items": [
+     {
+      "title": "Winter appeal",
+      "text": "Warm meals through the coldest months."
+     }
+    ]
+   },
+   "sample": {
+    "eyebrow": "Our appeals",
+    "heading": "Where help is needed most",
+    "items": [
+     {
+      "title": "Winter appeal",
+      "text": "Warm meals and heating grants through the coldest months.",
+      "buttonLabel": "Support winter",
+      "buttonHref": "/donate"
+     },
+     {
+      "title": "Clean water",
+      "text": "Wells and filtration for three villages.",
+      "buttonLabel": "Give water",
+      "buttonHref": "/donate"
+     }
+    ]
+   }
+  }
+ ]
+}

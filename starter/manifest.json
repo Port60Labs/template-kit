@@ -1,0 +1,40 @@
+{
+ "name": "starter",
+ "version": "1.2.0",
+ "format": "port60-liquid@1",
+ "label": "Starter",
+ "description": "The reference template for the Port60 dialect \u2014 the developer docs' worked example and the base to copy when building your own. 1.1.0 adds the layout slot: the template owns the header, navigation and footer chrome.",
+ "supports": {
+  "pages": [
+   "about"
+  ],
+  "sections": [
+   "hero",
+   "values",
+   "cta"
+  ],
+  "islands": [
+   "donation_widget",
+   "member_menu"
+  ],
+  "layout": true
+ },
+ "settings": {
+  "schema": [
+   {
+    "key": "siteFont",
+    "kind": "font",
+    "label": "Site font",
+    "default": "Inter",
+    "weights": [
+     400,
+     500,
+     600,
+     700,
+     800
+    ]
+   }
+  ]
+ },
+ "changelog": "The reference font slot \u2014 one 'Site font' knob showing the var(--p60s-*) pattern."
+}

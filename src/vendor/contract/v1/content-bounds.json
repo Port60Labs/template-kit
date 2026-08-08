@@ -1,0 +1,117 @@
+{
+  "description": "The maximum lengths of every admin-entered display field a template renders. The admin screens stop input at these caps and the API rejects anything longer, so a template can design cards, headings and captions against known worst cases. Additive-only within a contract major: a bound may loosen, never tighten. Long-form bodies (article bodies, course About pages, service pages) are deliberately outside this table — they are sanitised HTML rendered in dedicated full-width regions, never inside cards.",
+  "groups": [
+    {
+      "name": "Brand (layout chrome)",
+      "fields": [
+        {
+          "field": "brand.name",
+          "max": 60,
+          "note": "The masthead/wordmark text."
+        },
+        {
+          "field": "brand.tagline",
+          "max": 140,
+          "note": "One line under the masthead; may be empty."
+        }
+      ]
+    },
+    {
+      "name": "Articles",
+      "fields": [
+        {
+          "field": "Article title",
+          "max": 200
+        },
+        {
+          "field": "Excerpt",
+          "max": 500,
+          "note": "The card/front-page summary."
+        },
+        {
+          "field": "Author name / role",
+          "max": 120,
+          "note": "Each."
+        },
+        {
+          "field": "Articles nav label",
+          "max": 30,
+          "note": "The tenant's name for the section (\"Latest\", \"News\", …)."
+        },
+        {
+          "field": "Categories",
+          "max": null,
+          "note": "≤5 per article; names come from a tenant catalogue capped at 20 entries."
+        }
+      ]
+    },
+    {
+      "name": "Events",
+      "fields": [
+        {
+          "field": "Event name",
+          "max": 200
+        },
+        {
+          "field": "Summary (description)",
+          "max": 200,
+          "note": "A sentence or two for cards and listings. The long-form About body is separate sanitised HTML on the detail page."
+        },
+        {
+          "field": "Venue name",
+          "max": 200
+        },
+        {
+          "field": "Venue address",
+          "max": 500
+        },
+        {
+          "field": "Tag",
+          "max": 40,
+          "note": "Each — rendered as chips."
+        }
+      ]
+    },
+    {
+      "name": "Courses",
+      "fields": [
+        {
+          "field": "Course title",
+          "max": 200
+        },
+        {
+          "field": "Description",
+          "max": 500,
+          "note": "The card/detail summary; the long-form About page is separate sanitised HTML."
+        },
+        {
+          "field": "Venue label",
+          "max": 200
+        }
+      ]
+    },
+    {
+      "name": "Donations",
+      "fields": [
+        {
+          "field": "Cause name",
+          "max": 200
+        },
+        {
+          "field": "Cause description",
+          "max": 500
+        }
+      ]
+    },
+    {
+      "name": "Service pages",
+      "fields": [
+        {
+          "field": "Page name",
+          "max": 200,
+          "note": "The body is sanitised HTML rendered full-width — not card content."
+        }
+      ]
+    }
+  ]
+}

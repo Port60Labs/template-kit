@@ -1,0 +1,534 @@
+{
+ "description": "The data context templates render with. Templates receive ONLY platform-provided data — never secrets, never other tenants' data. Additive-only within a contract major. Section renderers get {section, brand}; the layout gets {brand, nav, socials}; page templates (pages/{page}.liquid) get their page's documented objects + brand.",
+ "variables": [
+  {
+   "path": "section",
+   "availableIn": [
+    "section"
+   ],
+   "description": "The typed content of the section being rendered — its shape is the section type's fields (see the section catalogue)."
+  },
+  {
+   "path": "brand.name",
+   "availableIn": [
+    "section",
+    "layout"
+   ],
+   "description": "The charity's display name."
+  },
+  {
+   "path": "brand.tagline",
+   "availableIn": [
+    "section",
+    "layout"
+   ],
+   "description": "The charity's tagline."
+  },
+  {
+   "path": "brand.logoUrl",
+   "availableIn": [
+    "layout"
+   ],
+   "description": "The charity's logo URL, or null when none is set — always branch on it."
+  },
+  {
+   "path": "brand.logoType",
+   "availableIn": [
+    "layout"
+   ],
+   "description": "'full' (the image already contains the name — show it alone) or 'icon' (a mark — show it beside brand.name)."
+  },
+  {
+   "path": "nav.items",
+   "availableIn": [
+    "layout"
+   ],
+   "description": "The site's primary navigation, platform-derived per tenant (pages that exist, features that are on). Render ALL of it — items a tenant doesn't have simply aren't in the list."
+  },
+  {
+   "path": "nav.items[].label",
+   "availableIn": [
+    "layout"
+   ],
+   "description": "The item's display label (tenant-chosen for some items — treat as text, it is escaped like everything else)."
+  },
+  {
+   "path": "nav.items[].href",
+   "availableIn": [
+    "layout"
+   ],
+   "description": "The item's destination path."
+  },
+  {
+   "path": "nav.items[].cta",
+   "availableIn": [
+    "layout"
+   ],
+   "description": "True for the call-to-action item (Donate) — style it prominently."
+  },
+  {
+   "path": "nav.items[].children",
+   "availableIn": [
+    "layout"
+   ],
+   "description": "Optional sub-items (e.g. a services dropdown). Absent on plain links; when present, render a dropdown/expandable group."
+  },
+  {
+   "path": "socials",
+   "availableIn": [
+    "layout"
+   ],
+   "description": "The tenant's configured social links (possibly empty). Render icons via iconSvg — platform-generated markup, safe for the raw filter (the one exception beyond richtext fields)."
+  },
+  {
+   "path": "socials[].platform",
+   "availableIn": [
+    "layout"
+   ],
+   "description": "Platform key (facebook, instagram, x, …)."
+  },
+  {
+   "path": "socials[].url",
+   "availableIn": [
+    "layout"
+   ],
+   "description": "The profile URL."
+  },
+  {
+   "path": "socials[].iconSvg",
+   "availableIn": [
+    "layout"
+   ],
+   "description": "The platform-drawn icon SVG for this network — output with | raw."
+  },
+  {
+   "path": "worship",
+   "availableIn": [
+    "layout"
+   ],
+   "description": "The tenant's worship-schedule rail (prayer/service times), or null when not configured — ALWAYS branch on it. Faith-neutral: every label is tenant data. Render it as header chrome (the reference pattern is a utility bar above the nav); omit entirely when null. Rendering it requires declaring supports.worship in the manifest (the validator checks both directions) — the choosers use that declaration to steer worship-enabled tenants."
+  },
+  {
+   "path": "worship.times",
+   "availableIn": [
+    "layout"
+   ],
+   "description": "Up to 8 rows of {name, begins, congregation} — name is the prayer/service name; begins and congregation are display strings (times or short text), either may be null."
+  },
+  {
+   "path": "worship.beginsLabel",
+   "availableIn": [
+    "layout"
+   ],
+   "description": "Row label for the begins times (tenant-set; defaults to 'Begins')."
+  },
+  {
+   "path": "worship.congregationLabel",
+   "availableIn": [
+    "layout"
+   ],
+   "description": "Row label for the congregation times (tenant-set; e.g. \"Jama'at\"; defaults to 'Congregation'). Only meaningful when at least one row carries a congregation value."
+  },
+  {
+   "path": "worship.note",
+   "availableIn": [
+    "layout"
+   ],
+   "description": "A short free-text line for the rail (e.g. \"Jum'a 13:15 & 14:15\"), or null."
+  },
+  {
+   "path": "worship.href",
+   "availableIn": [
+    "layout"
+   ],
+   "description": "A same-site path the note links to (a service page with full timetables), or null."
+  },
+  {
+   "path": "worship.today",
+   "availableIn": [
+    "layout"
+   ],
+   "description": "Today's date, platform-formatted (e.g. \"24 July 2026\")."
+  },
+  {
+   "path": "worship.todayAlt",
+   "availableIn": [
+    "layout"
+   ],
+   "description": "Today in the tenant's alternate calendar (Islamic civil calendar, e.g. \"11 Safar 1448\") when they opted in, else null — always branch."
+  },
+  {
+   "path": "events",
+   "availableIn": [
+    "page:events"
+   ],
+   "description": "The tenant's published events, soonest first — a CURATED read-only view for display. Transactional steps (RSVP, ticket purchase) stay platform-owned on the detail view."
+  },
+  {
+   "path": "events[].id",
+   "availableIn": [
+    "page:events"
+   ],
+   "description": "Stable event id."
+  },
+  {
+   "path": "events[].name",
+   "availableIn": [
+    "page:events"
+   ],
+   "description": "The event's name."
+  },
+  {
+   "path": "events[].description",
+   "availableIn": [
+    "page:events"
+   ],
+   "description": "Plain-text description, or null — branch on it."
+  },
+  {
+   "path": "events[].registrationMode",
+   "availableIn": [
+    "page:events"
+   ],
+   "description": "INFO (no sign-up), RSVP (free sign-up) or TICKETED (paid)."
+  },
+  {
+   "path": "events[].startsAt",
+   "availableIn": [
+    "page:events"
+   ],
+   "description": "ISO-8601 start — format with the date filter."
+  },
+  {
+   "path": "events[].endsAt",
+   "availableIn": [
+    "page:events"
+   ],
+   "description": "ISO-8601 end, or null."
+  },
+  {
+   "path": "events[].venueName",
+   "availableIn": [
+    "page:events"
+   ],
+   "description": "Venue name, or null (online events may have none)."
+  },
+  {
+   "path": "events[].online",
+   "availableIn": [
+    "page:events"
+   ],
+   "description": "True for online events."
+  },
+  {
+   "path": "events[].imageUrl",
+   "availableIn": [
+    "page:events"
+   ],
+   "description": "Promo image URL, or null — always branch."
+  },
+  {
+   "path": "events[].onSale",
+   "availableIn": [
+    "page:events"
+   ],
+   "description": "False before sales open."
+  },
+  {
+   "path": "events[].soldOut",
+   "availableIn": [
+    "page:events"
+   ],
+   "description": "True when no capacity remains."
+  },
+  {
+   "path": "events[].priceFrom",
+   "availableIn": [
+    "page:events"
+   ],
+   "description": "The cheapest ticket price (number), or null for free/INFO events."
+  },
+  {
+   "path": "events[].currency",
+   "availableIn": [
+    "page:events"
+   ],
+   "description": "ISO currency code for priceFrom, or null."
+  },
+  {
+   "path": "events[].detailHref",
+   "availableIn": [
+    "page:events"
+   ],
+   "description": "The canonical link to this event's detail view — always use this, never build URLs yourself."
+  },
+  {
+   "path": "course",
+   "availableIn": [
+    "page:course"
+   ],
+   "description": "The course this page addresses — a CURATED read-only view for display. The enrolment journey itself is the platform-owned course_enrol island; place it, never rebuild it."
+  },
+  {
+   "path": "course.id",
+   "availableIn": [
+    "page:course"
+   ],
+   "description": "Stable course id."
+  },
+  {
+   "path": "course.title",
+   "availableIn": [
+    "page:course"
+   ],
+   "description": "The course's title."
+  },
+  {
+   "path": "course.description",
+   "availableIn": [
+    "page:course"
+   ],
+   "description": "Plain-text summary, or null — branch on it. Prefer aboutHtml for the body when present."
+  },
+  {
+   "path": "course.aboutHtml",
+   "availableIn": [
+    "page:course"
+   ],
+   "description": "The tenant-authored About page as SANITISED HTML (platform-sanitised on save; images resolved) — render with the raw filter inside your prose styles, or null when not written."
+  },
+  {
+   "path": "course.imageUrl",
+   "availableIn": [
+    "page:course"
+   ],
+   "description": "The MAIN image (hero) URL, or null — always branch."
+  },
+  {
+   "path": "course.venue",
+   "availableIn": [
+    "page:course"
+   ],
+   "description": "Venue display text, or null."
+  },
+  {
+   "path": "course.audience",
+   "availableIn": [
+    "page:course"
+   ],
+   "description": "EVERYONE, or CHILD for children-only courses (parents enrol their children)."
+  },
+  {
+   "path": "course.billingMode",
+   "availableIn": [
+    "page:course"
+   ],
+   "description": "UPFRONT (one payment), TERM (committed term fee), or ROLLING (monthly with notice)."
+  },
+  {
+   "path": "course.termStart",
+   "availableIn": [
+    "page:course"
+   ],
+   "description": "ISO date the term starts, or null — format with the date filter."
+  },
+  {
+   "path": "course.termEnd",
+   "availableIn": [
+    "page:course"
+   ],
+   "description": "ISO date the term ends, or null."
+  },
+  {
+   "path": "course.currency",
+   "availableIn": [
+    "page:course"
+   ],
+   "description": "ISO currency code for priceFrom."
+  },
+  {
+   "path": "course.priceFrom",
+   "availableIn": [
+    "page:course"
+   ],
+   "description": "The cheapest priced option (number), or null when every option is free."
+  },
+  {
+   "path": "course.soldOut",
+   "availableIn": [
+    "page:course"
+   ],
+   "description": "True when no option has places left (the island shows the standard note)."
+  },
+  {
+   "path": "course.backHref",
+   "availableIn": [
+    "page:course"
+   ],
+   "description": "The canonical link back to the courses listing — always use this."
+  }
+ ],
+ "fixtures": {
+  "brand": {
+   "name": "Fixture Charity",
+   "tagline": "A fixture tagline.",
+   "logoUrl": null,
+   "logoType": "full"
+  },
+  "layout": {
+   "nav": {
+    "items": [
+     {
+      "label": "Home",
+      "href": "/",
+      "cta": false
+     },
+     {
+      "label": "About us",
+      "href": "/about",
+      "cta": false
+     },
+     {
+      "label": "Events",
+      "href": "/events",
+      "cta": false
+     },
+     {
+      "label": "Services",
+      "href": "/services",
+      "cta": false,
+      "children": [
+       {
+        "label": "Food bank",
+        "href": "/services?service=food-bank"
+       },
+       {
+        "label": "Youth club",
+        "href": "/services?service=youth-club"
+       }
+      ]
+     },
+     {
+      "label": "Donate",
+      "href": "/donate",
+      "cta": true
+     }
+    ]
+   },
+   "socials": [
+    {
+     "platform": "facebook",
+     "url": "https://facebook.com/fixture",
+     "iconSvg": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/></svg>"
+    }
+   ],
+   "worship": {
+    "times": [
+     {
+      "name": "Fajr",
+      "begins": "03:20",
+      "congregation": "04:00"
+     },
+     {
+      "name": "Zuhr",
+      "begins": "13:11",
+      "congregation": "13:30"
+     },
+     {
+      "name": "Asr",
+      "begins": "18:30",
+      "congregation": "19:00"
+     },
+     {
+      "name": "Maghrib",
+      "begins": "21:04",
+      "congregation": "21:04"
+     },
+     {
+      "name": "Isha",
+      "begins": "22:12",
+      "congregation": "22:30"
+     }
+    ],
+    "beginsLabel": "Begins",
+    "congregationLabel": "Jama'at",
+    "note": "Jum'a 13:15 & 14:15",
+    "href": "/services?service=prayer-times",
+    "today": "24 July 2026",
+    "todayAlt": "11 Safar 1448"
+   }
+  },
+  "pages": {
+   "events": {
+    "events": [
+     {
+      "id": "11111111-1111-1111-1111-111111111111",
+      "name": "Summer Gala",
+      "description": "An evening of music and giving.",
+      "registrationMode": "TICKETED",
+      "startsAt": "2030-08-15T18:00:00Z",
+      "endsAt": null,
+      "venueName": "Town Hall",
+      "online": false,
+      "imageUrl": null,
+      "onSale": true,
+      "soldOut": false,
+      "priceFrom": 10.0,
+      "currency": "GBP",
+      "detailHref": "/events?event=11111111-1111-1111-1111-111111111111"
+     },
+     {
+      "id": "22222222-2222-2222-2222-222222222222",
+      "name": "Coffee Morning",
+      "description": null,
+      "registrationMode": "RSVP",
+      "startsAt": "2030-08-01T10:00:00Z",
+      "endsAt": "2030-08-01T12:00:00Z",
+      "venueName": null,
+      "online": true,
+      "imageUrl": null,
+      "onSale": true,
+      "soldOut": true,
+      "priceFrom": null,
+      "currency": null,
+      "detailHref": "/events?event=22222222-2222-2222-2222-222222222222"
+     },
+     {
+      "id": "33333333-3333-3333-3333-333333333333",
+      "name": "Open Day",
+      "description": "Drop in and meet the team.",
+      "registrationMode": "INFO",
+      "startsAt": "2030-09-01T09:00:00Z",
+      "endsAt": null,
+      "venueName": "Community Centre",
+      "online": false,
+      "imageUrl": null,
+      "onSale": true,
+      "soldOut": false,
+      "priceFrom": null,
+      "currency": null,
+      "detailHref": "/events?event=33333333-3333-3333-3333-333333333333"
+     }
+    ]
+   },
+   "course": {
+    "course": {
+     "id": "33333333-3333-3333-3333-333333333333",
+     "title": "Junior Athletics",
+     "description": "Weekly athletics for children aged 7–12.",
+     "aboutHtml": "<h2>What we do</h2><p>Track and field fundamentals in a friendly, coached setting.</p><ul><li>Warm-ups and drills</li><li>Sprints, jumps and throws</li></ul>",
+     "imageUrl": null,
+     "venue": "King's Park track",
+     "audience": "CHILD",
+     "billingMode": "ROLLING",
+     "termStart": null,
+     "termEnd": null,
+     "currency": "GBP",
+     "priceFrom": 15.0,
+     "soldOut": false,
+     "backHref": "/courses"
+    }
+   }
+  }
+ }
+}

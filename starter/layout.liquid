@@ -1,0 +1,75 @@
+{% comment %}
+  The starter's chrome — header/nav/footer around the {% content %} slot. It reuses the platform
+  chrome classes (.site-header/.site-nav/…) so the base mechanics (sticky header, burger
+  breakpoint, dropdown hover) apply, and emits the documented behaviour attributes
+  (data-nav-burger, #site-nav) so the platform tail script wires the mobile burger. Identity is
+  PLACED, never rebuilt: {% island 'member_menu' %}. The footer derives everything from brand/nav —
+  no fabricated copy (derive or omit).
+{% endcomment %}
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand-lockup" href="/">
+      {% if brand.logoUrl and brand.logoType != 'icon' %}
+        <img class="brand-logo" src="{{ brand.logoUrl }}" alt="{{ brand.name }}">
+      {% elsif brand.logoUrl %}
+        <img class="brand-logo-icon" src="{{ brand.logoUrl }}" alt="">
+        <strong>{{ brand.name }}</strong>
+      {% else %}
+        <span class="brand-mark" aria-hidden="true">♥</span>
+        <strong>{{ brand.name }}</strong>
+      {% endif %}
+    </a>
+
+    <button type="button" class="nav-burger" data-nav-burger aria-label="Menu" aria-expanded="false" aria-controls="site-nav">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      {% for item in nav.items %}
+        {% if item.children %}
+          <span class="nav-dropdown">
+            <a href="{{ item.href }}" class="nav-dropdown-toggle" aria-haspopup="true">{{ item.label }} ▾</a>
+            <span class="nav-dropdown-menu">
+              {% for child in item.children %}
+                <a href="{{ child.href }}">{{ child.label }}</a>
+              {% endfor %}
+            </span>
+          </span>
+        {% elsif item.cta %}
+          <a class="nav-cta" href="{{ item.href }}">{{ item.label }}</a>
+        {% else %}
+          <a href="{{ item.href }}">{{ item.label }}</a>
+        {% endif %}
+      {% endfor %}
+      {% island 'member_menu' %}
+    </nav>
+  </div>
+</header>
+
+<main>
+  {% content %}
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <p class="lq-kicker">{{ brand.name }}</p>
+      {% if brand.tagline %}<h2>{{ brand.tagline }}</h2>{% endif %}
+    </div>
+    <div class="footer-links">
+      {% for item in nav.items %}
+        <a href="{{ item.href }}">{{ item.label }}</a>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="container">
+    <p class="footer-note">
+      <span class="footer-legal-links">
+        <a href="/cookies">Cookies</a>
+        · <button type="button" class="footer-linklike" data-consent-open>Cookie settings</button>
+      </span>
+    </p>
+  </div>
+</footer>

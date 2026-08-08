@@ -1,0 +1,43 @@
+/* starter theme — a deliberately distinct look (midnight/emerald) proving the artifact owns the skin */
+:root:root {
+  --bg: #0e1614;
+  --bg-tint: #14201d;
+  --surface: #16231f;
+  --ink: #eef6f2;
+  --muted: #93a8a0;
+  --primary: #2dd4a7;
+  --primary-strong: #19b28a;
+  --primary-soft: rgba(45, 212, 167, 0.14);
+  --accent: #f2b23e;
+  --accent-strong: #d99a24;
+  --line: rgba(238, 246, 242, 0.14);
+  --line-strong: rgba(45, 212, 167, 0.4);
+  --shadow-sm: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  --radius: 10px;
+  --radius-sm: 7px;
+}
+body { background: var(--bg); }
+h1, h2, h3, h4 { color: var(--ink); font-family: 'IBM Plex Sans Arabic', var(--p60s-siteFont, 'Inter'), sans-serif; letter-spacing: -0.02em; margin: 0 0 1rem; line-height: 1.1; }
+h1 { font-size: clamp(2.4rem, 5vw, 3.6rem); }
+h2 { font-size: clamp(1.7rem, 3vw, 2.4rem); }
+h3 { font-size: 1.15rem; }
+p { color: var(--muted); line-height: 1.7; margin: 0 0 1rem; }
+strong { color: var(--ink); }
+.site-header { background: rgba(14, 22, 20, 0.86); }
+.lq-hero { padding: 4.5rem 0 2.5rem; border-bottom: 1px solid var(--line); }
+.lq-kicker { display: inline-block; border: 1px solid var(--line-strong); color: var(--primary); border-radius: 4px; padding: 0.3rem 0.8rem; font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; }
+.lq-hero h1 { margin-top: 1rem; max-width: 18ch; }
+.lq-hero-body { max-width: 62ch; }
+.lq-values { padding: 3.5rem 0; }
+.lq-value-rail { list-style: none; margin: 0; padding: 0 0 0 1.4rem; border-left: 2px solid var(--line-strong); display: grid; gap: 1.6rem; max-width: 700px; }
+.lq-value-rail li { position: relative; }
+.lq-value-dot { position: absolute; left: -1.75rem; top: 0.35rem; width: 0.65rem; height: 0.65rem; border-radius: 50%; background: var(--primary); box-shadow: 0 0 0 4px var(--primary-soft); }
+.lq-value-rail h3 { margin: 0 0 0.25rem; }
+.lq-value-rail p { margin: 0; }
+.lq-cta { padding: 3.5rem 0 4.5rem; }
+.lq-cta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start; }
+@media (max-width: 900px) { .lq-cta-grid { grid-template-columns: 1fr; } }
+
+/* The one font slot — headings above already follow it; body text too. */
+body { font-family: ' IBM Plex Sans Arabic', var(--p60s-siteFont, 'Inter'), ui-sans-serif, system-ui, sans-serif; }

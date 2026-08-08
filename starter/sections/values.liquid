@@ -1,0 +1,14 @@
+<section class="lq-values">
+  <div class="container">
+    <h2>{{ section.heading | default: "What guides us" }}</h2>
+    <ol class="lq-value-rail">
+      {% for item in section.items %}
+      <li>
+        <span class="lq-value-dot"></span>
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.description }}</p>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>

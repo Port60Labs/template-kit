@@ -1,0 +1,7 @@
+<section class="lq-hero">
+  <div class="container">
+    {% if section.eyebrow %}<p class="lq-kicker">{{ section.eyebrow }}</p>{% endif %}
+    <h1>{{ section.title }}</h1>
+    <div class="lq-hero-body">{{ section.bodyHtml | raw }}</div>
+  </div>
+</section>
