@@ -70,6 +70,9 @@ platform accepts it; if it fails here, the upload will fail identically.
   behaviourally.
 - "Looks" = named one-click bundles of knob values in \`manifest.looks\`.
 - Fonts: only families from the platform font catalogue, declared with the weights you use.
+- \`manifest.imagery.hero\` (optional but recommended): declare the photo shape YOUR hero
+  composes best with (\`idealAspect\`, \`minWidth\`, a one-line \`note\`) — the charity's editor
+  measures their actual upload against it and advises. Advice, never enforcement.
 
 ## Which contract this is
 

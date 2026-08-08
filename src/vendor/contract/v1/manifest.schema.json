@@ -78,6 +78,35 @@
         }
       }
     },
+    "imagery": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The template's OWN image advice, surfaced beside uploads in the charity's editor — a design statement (what shape suits THIS composition), advisory only, never enforced. Entity images (events, courses, articles) are platform-scoped instead: see the contract's imagery.json envelopes.",
+      "properties": {
+        "hero": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["idealAspect", "minWidth"],
+          "properties": {
+            "idealAspect": {
+              "type": "string",
+              "pattern": "^\\d+:\\d+$",
+              "description": "The aspect this hero composes best with, e.g. \"16:9\"."
+            },
+            "minWidth": {
+              "type": "integer",
+              "minimum": 800,
+              "description": "Below this pixel width the photo may look soft full-bleed."
+            },
+            "note": {
+              "type": "string",
+              "maxLength": 240,
+              "description": "One human line of advice, e.g. how panoramas or portraits behave in this hero."
+            }
+          }
+        }
+      }
+    },
     "fonts": {
       "type": "array",
       "items": {

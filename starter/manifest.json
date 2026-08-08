@@ -1,6 +1,6 @@
 {
  "name": "starter",
- "version": "1.5.2",
+ "version": "1.5.3",
  "format": "port60-liquid@1",
  "label": "Starter",
  "description": "The reference template for the Port60 dialect — the developer docs' worked example and the base to copy when building your own. 1.1.0 adds the layout slot: the template owns the header, navigation and footer chrome.",
@@ -40,5 +40,12 @@
    }
   ]
  },
- "changelog": "Vista + giving form: the donation widget returns to the right-hand column, riding over the photograph and continuing onto the gradient below it — nothing stacks, nothing pushes."
+ "changelog": "Declares image advice: the ideal photo shape for this hero, shown beside the upload in your editor.",
+ "imagery": {
+  "hero": {
+   "idealAspect": "16:9",
+   "minWidth": 1600,
+   "note": "Landscape around 16:9 fills the hero cleanly; panoramas suit the whole-photo framing."
+  }
+ }
 }
