@@ -240,6 +240,19 @@
        "kind": "text",
        "required": false,
        "description": "Accessible description; empty renders as decorative (alt=\"\")."
+      },
+      {
+       "name": "focus",
+       "kind": "select",
+       "required": false,
+       "options": [
+        "centre",
+        "top",
+        "bottom",
+        "left",
+        "right"
+       ],
+       "description": "Which part of the photograph survives the fill-crop (templates render photos cover-style, so an aspect mismatch crops — this picks the slice that stays). Maps to background-position/object-position; absent means centre."
       }
      ]
     }

@@ -17,7 +17,16 @@
 {% elsif heroCount == 0 %}
   {% assign heroPhoto = section.imageUrl %}
 {% endif %}
-<section class="lq-homehero{% if heroPhoto %} lq-homehero--photo{% endif %}{% if heroCount > 1 %} lq-homehero--carousel{% endif %}"{% if heroPhoto %} style="background-image: url('{{ heroPhoto }}')"{% endif %}>
+{% assign heroFocus = 'center' %}
+{% if heroCount > 0 %}
+  {% case section.images.first.focus %}
+    {% when 'top' %}{% assign heroFocus = 'center top' %}
+    {% when 'bottom' %}{% assign heroFocus = 'center bottom' %}
+    {% when 'left' %}{% assign heroFocus = 'left center' %}
+    {% when 'right' %}{% assign heroFocus = 'right center' %}
+  {% endcase %}
+{% endif %}
+<section class="lq-homehero{% if heroPhoto %} lq-homehero--photo{% endif %}{% if heroCount > 1 %} lq-homehero--carousel{% endif %}"{% if heroPhoto %} style="background-image: url('{{ heroPhoto }}'); background-position: {{ heroFocus }}"{% endif %}>
   {% if heroCount > 1 %}{% island 'hero_carousel' %}{% endif %}
   <div class="container lq-homehero-inner">
     <div>
