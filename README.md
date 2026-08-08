@@ -1,5 +1,8 @@
 # @port60/template-kit
 
+[![npm](https://img.shields.io/npm/v/%40port60%2Ftemplate-kit)](https://www.npmjs.com/package/@port60/template-kit)
+[![CI](https://github.com/Port60Labs/template-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/Port60Labs/template-kit/actions/workflows/ci.yml)
+
 The official toolkit for building [Port60](https://port60.com) site templates — scaffold from
 the starter, preview locally against the platform contract, validate with the exact checks the
 platform runs at upload, and package for review.
