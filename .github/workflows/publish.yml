@@ -1,6 +1,9 @@
 name: Publish to npm
-# Publishes on a GitHub release, with provenance attestation linking the package to this build.
-# Requires the NPM_TOKEN repository secret (an npm automation token for the @port60 scope).
+# Publishes on a GitHub release via npm TRUSTED PUBLISHING (OIDC): no token exists anywhere —
+# npm trusts this exact repo + workflow file, GitHub proves the identity per run, and provenance
+# attestation is attached automatically. Setup (once, after the package's first manual publish):
+# npmjs.com → @port60/template-kit → Settings → Trusted Publisher →
+#   GitHub Actions / Port60Labs / template-kit / publish.yml
 on:
   release:
     types: [published]
@@ -9,15 +12,15 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write # npm provenance
+      id-token: write # the OIDC identity npm verifies
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
+      # Trusted publishing needs a current npm client.
+      - run: npm install -g npm@latest
       - run: npm ci
       - run: npm test
-      - run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: npm publish
