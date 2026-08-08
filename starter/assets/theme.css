@@ -113,3 +113,22 @@ body { font-family: ' IBM Plex Sans Arabic', var(--p60s-siteFont, 'Inter'), ui-s
   cursor: pointer;
 }
 .lq-homehero--carousel .hero-dot--active { background: var(--accent); }
+
+/* ── Vista framing (photoFraming 'whole') — the hero adapts to the PHOTO's shape ───────────── */
+.lq-homehero--vista { padding-top: 0; }
+.lq-vista { position: relative; overflow: hidden; }
+.lq-vista-sizer { display: block; width: 100%; height: auto; max-height: 74vh; object-fit: cover; }
+.lq-vista-scrim,
+.lq-homehero--vista .hero-slide-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--bg) 45%, transparent) 0%,
+    color-mix(in srgb, var(--bg) 12%, transparent) 40%,
+    color-mix(in srgb, var(--bg-tint) 60%, transparent) 100%
+  );
+}
+.lq-homehero--vista .lq-homehero-inner { padding-top: 2.4rem; }
+.lq-homehero--vista .hero-carousel { position: absolute; inset: 0; z-index: 0; }

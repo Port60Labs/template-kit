@@ -1,6 +1,6 @@
 {
  "name": "starter",
- "version": "1.4.0",
+ "version": "1.5.0",
  "format": "port60-liquid@1",
  "label": "Starter",
  "description": "The reference template for the Port60 dialect — the developer docs' worked example and the base to copy when building your own. 1.1.0 adds the layout slot: the template owns the header, navigation and footer chrome.",
@@ -40,5 +40,5 @@
    }
   ]
  },
- "changelog": "Per-photo focus: choose which part of a hero photograph survives the fill-crop (centre/top/bottom/left/right) — panoramas and portraits stop cropping blind."
+ "changelog": "Vista framing: 'show the whole photo' adapts the hero to the photograph's own shape (height-clamped) — wide landscape shots stay fully visible instead of cropping to fill."
 }

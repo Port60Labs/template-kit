@@ -224,6 +224,16 @@
      "description": "Background photograph for the hero (uploaded through the platform pipeline). Superseded by `images` when that carries any entry — render imageUrl only when images is absent/empty. The template must TREAT the photo (scrim/tint from its own palette variables), never place it raw, and omit for its designed no-photo state."
     },
     {
+     "name": "photoFraming",
+     "kind": "select",
+     "required": false,
+     "options": [
+      "fill",
+      "whole"
+     ],
+     "description": "How hero photographs meet the hero. 'fill' (default): the hero keeps its designed shape and photos crop to fill it (use each photo's focus to pick the surviving slice). 'whole': the hero adapts toward the photo's own shape (height-clamped) so the FULL scene stays visible — the vista treatment for wide landscape photographs; templates overlay or stack their copy accordingly."
+    },
+    {
      "name": "images",
      "kind": "items",
      "required": false,

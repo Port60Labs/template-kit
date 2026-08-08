@@ -1,6 +1,6 @@
 {
   "name": "@port60/template-kit",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Build Port60 site templates locally: scaffold, live-preview, validate against the platform contract, and package for studio upload. AI-agent ready — every scaffold ships AGENTS.md and validate emits machine-readable JSON.",
   "type": "module",
   "bin": {
