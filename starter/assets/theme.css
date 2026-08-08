@@ -132,3 +132,23 @@ body { font-family: ' IBM Plex Sans Arabic', var(--p60s-siteFont, 'Inter'), ui-s
 }
 .lq-homehero--vista .lq-homehero-inner { padding-top: 2.4rem; }
 .lq-homehero--vista .hero-carousel { position: absolute; inset: 0; z-index: 0; }
+
+/* Vista 1.5.1: copy ON the photograph (strengthened lower scrim); the widget follows in its
+   own strip; narrow screens flow the copy back underneath. */
+.lq-vista-copy { position: absolute; inset-inline: 0; bottom: 0; padding: 1.4rem 0 2rem; z-index: 1; }
+.lq-homehero--vista .lq-vista-scrim,
+.lq-homehero--vista .hero-slide-scrim {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--bg) 38%, transparent) 0%,
+    color-mix(in srgb, var(--bg) 10%, transparent) 38%,
+    color-mix(in srgb, var(--bg-tint) 82%, transparent) 100%
+  );
+}
+.lq-vista-sizer { min-height: 280px; }
+.lq-vista-widget { padding: 2.2rem 0 0; display: flex; justify-content: center; }
+.lq-vista-widget aside { width: min(560px, 100%); }
+@media (max-width: 720px) {
+  .lq-vista-copy { position: static; padding: 1.8rem 0 0; }
+  .lq-vista-sizer { min-height: 160px; }
+}

@@ -35,27 +35,29 @@
   <div class="lq-vista">
     <img class="lq-vista-sizer" src="{{ section.images.first.imageUrl }}" alt="{{ section.images.first.alt }}" style="object-position: {{ heroFocus }}" fetchpriority="high" decoding="async">
     {% if heroCount > 1 %}{% island 'hero_carousel' %}{% else %}<div class="lq-vista-scrim" aria-hidden="true"></div>{% endif %}
-  </div>
-  <div class="container lq-homehero-inner">
-    <div>
-      <p class="lq-kicker">{{ section.eyebrow | default: brand.name }}</p>
-      <h1>{{ section.title | default: brand.tagline | default: brand.name }}</h1>
-      {% if section.lead %}<p class="lq-homehero-lead">{{ section.lead }}</p>{% endif %}
-      <div class="lq-homehero-actions">
-        {% if section.givingStyle == 'button' %}
-        <a class="button button-primary" href="{{ section.primaryHref | default: '/donate' }}">{{ section.primaryLabel | default: 'Donate now' }}</a>
-        {% else %}
-        <a class="button button-primary" href="#donate">{{ section.primaryLabel | default: 'Donate now' }}</a>
-        {% endif %}
-        <a class="button" href="{{ section.secondaryHref | default: '/about' }}">{{ section.secondaryLabel | default: 'Our story' }}</a>
+    <div class="lq-vista-copy">
+      <div class="container">
+        <p class="lq-kicker">{{ section.eyebrow | default: brand.name }}</p>
+        <h1>{{ section.title | default: brand.tagline | default: brand.name }}</h1>
+        {% if section.lead %}<p class="lq-homehero-lead">{{ section.lead }}</p>{% endif %}
+        <div class="lq-homehero-actions">
+          {% if section.givingStyle == 'button' %}
+          <a class="button button-primary" href="{{ section.primaryHref | default: '/donate' }}">{{ section.primaryLabel | default: 'Donate now' }}</a>
+          {% else %}
+          <a class="button button-primary" href="#donate">{{ section.primaryLabel | default: 'Donate now' }}</a>
+          {% endif %}
+          <a class="button" href="{{ section.secondaryHref | default: '/about' }}">{{ section.secondaryLabel | default: 'Our story' }}</a>
+        </div>
       </div>
     </div>
-    {% unless section.givingStyle == 'button' %}
+  </div>
+  {% unless section.givingStyle == 'button' %}
+  <div class="container lq-vista-widget">
     <aside id="donate">
       {% island 'donation_widget' %}
     </aside>
-    {% endunless %}
   </div>
+  {% endunless %}
 </section>
 {% else %}
 <section class="lq-homehero{% if heroPhoto %} lq-homehero--photo{% endif %}{% if heroCount > 1 %} lq-homehero--carousel{% endif %}"{% if heroPhoto %} style="background-image: url('{{ heroPhoto }}'); background-position: {{ heroFocus }}"{% endif %}>
