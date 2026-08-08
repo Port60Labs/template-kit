@@ -160,3 +160,30 @@ body { font-family: ' IBM Plex Sans Arabic', var(--p60s-siteFont, 'Inter'), ui-s
 @media (max-width: 899px) {
   .lq-vista-overlap { margin-top: 0; padding-top: 1.6rem; }
 }
+
+/* People / team cards — grid to single column on phones. */
+.lq-people {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.2rem;
+  text-align: center;
+}
+.lq-person {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1.4rem 1.1rem;
+}
+.lq-person-photo {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto 0.8rem;
+}
+.lq-person-role { margin: 0.15rem 0 0; font-size: 0.9rem; color: var(--muted); }
+.lq-person-statement { margin: 0.7rem 0 0; font-style: italic; color: var(--muted); }
+@media (max-width: 640px) {
+  .lq-people { grid-template-columns: 1fr; }
+}

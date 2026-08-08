@@ -1,0 +1,26 @@
+{% comment %}
+  People / team — the reference implementation: simple cards (name, role, optional photo and
+  one-line statement), a grid that collapses to one column on phones. No placeholder faces:
+  a person without a photo just renders text (derive or omit, never fabricate).
+{% endcomment %}
+<section class="lq-section">
+  <div class="container">
+    {% if section.eyebrow or section.heading or section.text %}
+    <div class="lq-section-head">
+      {% if section.eyebrow %}<p class="lq-kicker">{{ section.eyebrow }}</p>{% endif %}
+      {% if section.heading %}<h2>{{ section.heading }}</h2>{% endif %}
+      {% if section.text %}<p class="lq-muted">{{ section.text }}</p>{% endif %}
+    </div>
+    {% endif %}
+    <div class="lq-people">
+      {% for person in section.items %}
+      <article class="lq-person">
+        {% if person.imageUrl %}<img class="lq-person-photo" src="{{ person.imageUrl }}" alt="" loading="lazy">{% endif %}
+        <h3>{{ person.name }}</h3>
+        <p class="lq-person-role">{{ person.role }}</p>
+        {% if person.statement %}<p class="lq-person-statement">“{{ person.statement }}”</p>{% endif %}
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>

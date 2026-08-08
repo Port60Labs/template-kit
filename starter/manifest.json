@@ -1,6 +1,6 @@
 {
  "name": "starter",
- "version": "1.5.3",
+ "version": "1.5.4",
  "format": "port60-liquid@1",
  "label": "Starter",
  "description": "The reference template for the Port60 dialect — the developer docs' worked example and the base to copy when building your own. 1.1.0 adds the layout slot: the template owns the header, navigation and footer chrome.",
@@ -13,7 +13,8 @@
    "homeHero",
    "hero",
    "values",
-   "cta"
+   "cta",
+   "people"
   ],
   "islands": [
    "donation_widget",
@@ -40,7 +41,7 @@
    }
   ]
  },
- "changelog": "Declares image advice: the ideal photo shape for this hero, shown beside the upload in your editor.",
+ "changelog": "People / team: the new About-page section — the key people behind the charity as cards, stacking on phones.",
  "imagery": {
   "hero": {
    "idealAspect": "16:9",

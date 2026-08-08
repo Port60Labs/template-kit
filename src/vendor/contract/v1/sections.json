@@ -142,7 +142,7 @@
      "name": "buttonHref",
      "kind": "url",
      "required": true,
-     "description": "The button's destination (scheme-guarded on save)."
+     "description": "The button's destination (scheme-guarded on save). The editor's cause picker writes /donate/{slug} here and records causeId beside it (editor bookkeeping — renderers use buttonHref only and may ignore causeId)."
     }
    ],
    "minimal": {
@@ -575,7 +575,7 @@
        "name": "buttonHref",
        "kind": "url",
        "required": false,
-       "description": "Card action link (default: /donate). Scheme-guarded on save."
+       "description": "Card action link (default: /donate). Scheme-guarded on save. The cause picker writes /donate/{slug} and records causeId beside it (editor bookkeeping; renderers use buttonHref only)."
       }
      ]
     }
@@ -603,6 +603,96 @@
       "text": "Wells and filtration for three villages.",
       "buttonLabel": "Give water",
       "buttonHref": "/donate"
+     }
+    ]
+   }
+  },
+  {
+   "type": "people",
+   "label": "People / team",
+   "pages": [
+    "about"
+   ],
+   "description": "The key people behind the charity — trustees, staff, volunteers — as simple cards: name, position, an optional photograph (uploaded through the platform pipeline) and an optional one-line statement. Templates render a card grid that collapses to a single column on small screens; a card without a photo renders cleanly (initials or plain), never a placeholder face.",
+   "fields": [
+    {
+     "name": "eyebrow",
+     "kind": "text",
+     "required": false,
+     "description": "Short kicker, e.g. Who we are."
+    },
+    {
+     "name": "heading",
+     "kind": "text",
+     "required": false,
+     "description": "The section heading, e.g. Our team."
+    },
+    {
+     "name": "text",
+     "kind": "text",
+     "required": false,
+     "description": "An optional intro line."
+    },
+    {
+     "name": "items",
+     "kind": "items",
+     "required": true,
+     "description": "The people.",
+     "itemFields": [
+      {
+       "name": "name",
+       "kind": "text",
+       "required": true,
+       "description": "The person's name."
+      },
+      {
+       "name": "role",
+       "kind": "text",
+       "required": true,
+       "description": "Their position, e.g. Chair of Trustees."
+      },
+      {
+       "name": "imageUrl",
+       "kind": "image",
+       "required": false,
+       "description": "A photograph (platform pipeline). Absent renders cleanly — never a placeholder face."
+      },
+      {
+       "name": "statement",
+       "kind": "text",
+       "required": false,
+       "description": "One line in their voice, e.g. why they serve."
+      }
+     ]
+    }
+   ],
+   "minimal": {
+    "items": [
+     {
+      "name": "Amina Khan",
+      "role": "Chair of Trustees"
+     }
+    ]
+   },
+   "sample": {
+    "eyebrow": "Who we are",
+    "heading": "The people behind the work",
+    "text": "A small team and a lot of volunteers, accountable to you.",
+    "items": [
+     {
+      "name": "Amina Khan",
+      "role": "Chair of Trustees",
+      "imageUrl": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' fill='%23355e4b'/%3E%3Ccircle cx='48' cy='38' r='16' fill='%23e8e2d4'/%3E%3Cpath d='M16 88c4-20 18-28 32-28s28 8 32 28z' fill='%23e8e2d4'/%3E%3C/svg%3E",
+      "statement": "Every pound is a trust — we treat it that way."
+     },
+     {
+      "name": "Daniel Osei",
+      "role": "Treasurer"
+     },
+     {
+      "name": "Sara Malik",
+      "role": "Volunteer Coordinator",
+      "statement": "Fifty pairs of hands, one purpose."
      }
     ]
    }
