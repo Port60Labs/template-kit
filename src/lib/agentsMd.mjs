@@ -62,6 +62,12 @@ platform accepts it; if it fails here, the upload will fail identically.
 - Theme via CSS custom properties and the settings knobs you declare in
   \`manifest.settings.schema\` — they surface in the charity's Appearance editor as
   \`--p60s-<key>\` variables and \`data-p60s-<key>\` body attributes.
+- Hero photographs (\`homeHero.images\`, when you declare \`supports.heroImagery\`): render one
+  photo directly as a TREATED backdrop (a scrim/tint built from your own palette variables via
+  color-mix — never raw), place the \`hero_carousel\` island for two or more (style its
+  \`.hero-slide-scrim\`), and design the no-photo state as a gradient/colour — never a
+  placeholder. The starter's \`.lq-homehero\` is the reference; the validator checks all of this
+  behaviourally.
 - "Looks" = named one-click bundles of knob values in \`manifest.looks\`.
 - Fonts: only families from the platform font catalogue, declared with the weights you use.
 

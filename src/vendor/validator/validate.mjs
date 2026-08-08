@@ -99,6 +99,9 @@ export async function validateArtifact(files) {
   const catalogueByType = new Map(sectionCatalogue.sections.map((s) => [s.type, s]));
   const declaredIslands = new Set(manifest?.supports?.islands ?? []);
   const placedIslands = new Set();
+  // heroImagery proof state (filled by the homeHero renders below).
+  let homeHeroMultiShows = null; // sample (several photos): probe in html OR hero_carousel placed
+  let homeHeroSingleShows = null; // single-photo variant: probe rendered directly
 
   // 2–4. Sections: catalogue membership, parse, fixture renders.
   for (const type of manifest?.supports?.sections ?? []) {
@@ -126,6 +129,21 @@ export async function validateArtifact(files) {
           section: fixture,
           brand: contextContract.fixtures.brand
         });
+        if (type === 'homeHero' && fixtureName === 'sample') {
+          const probe = 'Hero photo one';
+          homeHeroMultiShows = html.includes(probe)
+            || splitIslandParts(html).some((p) => p.island === 'hero_carousel');
+          // The single-photo path proven separately: same fixture, first photo only.
+          try {
+            const single = await liquid.render(parsed, {
+              section: { ...fixture, images: (fixture.images ?? []).slice(0, 1) },
+              brand: contextContract.fixtures.brand
+            });
+            homeHeroSingleShows = single.includes(probe);
+          } catch {
+            homeHeroSingleShows = false;
+          }
+        }
         for (const part of splitIslandParts(html)) {
           if (part.island === CONTENT_SLOT) {
             errors.push(`section '${type}': uses {% content %} — that tag is layout-only`);
@@ -135,6 +153,31 @@ export async function validateArtifact(files) {
         }
       } catch (e) {
         errors.push(`section '${type}': failed rendering the ${fixtureName} fixture — ${e.message}`);
+      }
+    }
+  }
+
+  // Hero-imagery honesty, checked BEHAVIOURALLY (the worship pattern). The homeHero sample
+  // fixture carries photographs whose data URIs embed a quote-free marker that survives HTML
+  // escaping, so "does the rendered hero display the tenant's photos?" is a substring check —
+  // and with several photos, placing the hero_carousel island IS displaying them (the island
+  // renders the slides at runtime). The single-photo path is proven separately: images[0] must
+  // appear directly. Declaration and behaviour must agree; the choosers badge photo-led tenants
+  // by supports.heroImagery. Legacy imageUrl-only renderers never match (the fixture's photos
+  // ride `images`), so they pass undeclared — they just don't earn the badge.
+  {
+    const declaresHero = manifest?.supports?.heroImagery === true;
+    if (declaresHero && !(manifest?.supports?.sections ?? []).includes('homeHero')) {
+      errors.push('manifest: supports.heroImagery requires the homeHero section — the photographs live on it');
+    } else if (homeHeroMultiShows !== null) {
+      if (declaresHero && !homeHeroMultiShows) {
+        errors.push('homeHero: manifest declares supports.heroImagery but the rendered section neither displays the images fixture nor places the hero_carousel island');
+      }
+      if (declaresHero && !homeHeroSingleShows) {
+        errors.push('homeHero: supports.heroImagery must render a SINGLE photograph directly (images[0], treated, never raw) — the carousel island only covers 2+');
+      }
+      if (!declaresHero && (homeHeroMultiShows || homeHeroSingleShows)) {
+        errors.push('homeHero: renders the hero photographs but the manifest does not declare supports.heroImagery — declare it so the choosers can badge it');
       }
     }
   }

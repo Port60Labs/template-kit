@@ -1,0 +1,42 @@
+{% comment %}
+  The home opener — and the REFERENCE IMPLEMENTATION of supports.heroImagery. Three rules worth
+  copying:
+
+  1. EVERY field is optional. Copy derives from brand (| default) or omits; no photos means the
+     designed gradient below — never a placeholder image.
+  2. Photos are NEVER placed raw. The .lq-homehero--photo treatment in theme.css lays a scrim
+     built from the palette variables (color-mix over var(--bg)/var(--primary)), so any uploaded
+     photograph is toned into the template. Tune the treatment, don't remove it.
+  3. Templates ship no JavaScript, so rotation is the PLATFORM's hero_carousel island: with two
+     or more photos, place it and style its documented classes (.hero-slide, .hero-slide-scrim,
+     .hero-dots) — the platform owns the motion, you own the look.
+{% endcomment %}
+{% assign heroCount = section.images | size %}
+{% if heroCount == 1 %}
+  {% assign heroPhoto = section.images.first.imageUrl %}
+{% elsif heroCount == 0 %}
+  {% assign heroPhoto = section.imageUrl %}
+{% endif %}
+<section class="lq-homehero{% if heroPhoto %} lq-homehero--photo{% endif %}{% if heroCount > 1 %} lq-homehero--carousel{% endif %}"{% if heroPhoto %} style="background-image: url('{{ heroPhoto }}')"{% endif %}>
+  {% if heroCount > 1 %}{% island 'hero_carousel' %}{% endif %}
+  <div class="container lq-homehero-inner">
+    <div>
+      <p class="lq-kicker">{{ section.eyebrow | default: brand.name }}</p>
+      <h1>{{ section.title | default: brand.tagline | default: brand.name }}</h1>
+      {% if section.lead %}<p class="lq-homehero-lead">{{ section.lead }}</p>{% endif %}
+      <div class="lq-homehero-actions">
+        {% if section.givingStyle == 'button' %}
+        <a class="button button-primary" href="{{ section.primaryHref | default: '/donate' }}">{{ section.primaryLabel | default: 'Donate now' }}</a>
+        {% else %}
+        <a class="button button-primary" href="#donate">{{ section.primaryLabel | default: 'Donate now' }}</a>
+        {% endif %}
+        <a class="button" href="{{ section.secondaryHref | default: '/about' }}">{{ section.secondaryLabel | default: 'Our story' }}</a>
+      </div>
+    </div>
+    {% unless section.givingStyle == 'button' %}
+    <aside id="donate">
+      {% island 'donation_widget' %}
+    </aside>
+    {% endunless %}
+  </div>
+</section>

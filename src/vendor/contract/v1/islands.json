@@ -90,6 +90,23 @@
     ".course-pay-panel",
     ".course-soldout-note"
    ]
+  },
+  {
+   "name": "hero_carousel",
+   "label": "Hero image carousel",
+   "status": "available",
+   "description": "Rotation for the home hero's photographs (homeHero.images, 2+): auto-advance every ~6s, pauses on hover/focus, honours prefers-reduced-motion (no auto-advance), swipe on touch, dot navigation. The platform owns the motion; the TEMPLATE owns the look — including the tonal treatment: every slide ships an empty .hero-slide-scrim layer over its image, and the template colours it from its OWN palette variables (a colour wash, a blend, a gradient) so any uploaded photo sits inside the template's tones. Renders nothing with fewer than 2 images — single-image and no-image states are the template's own renderer, not this island's.",
+   "params": [],
+   "stylingApi": [
+    ".hero-carousel",
+    ".hero-slides",
+    ".hero-slide",
+    ".hero-slide-img",
+    ".hero-slide-scrim",
+    ".hero-dots",
+    ".hero-dot",
+    ".hero-dot--active"
+   ]
   }
  ]
 }

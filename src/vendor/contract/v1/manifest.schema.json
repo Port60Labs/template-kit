@@ -70,6 +70,11 @@
           "type": "boolean",
           "default": false,
           "description": "True when the layout renders the `worship` context (the prayer/service-times rail). Declared honesty: the choosers badge worship-enabled tenants toward looks that show their times, and warn on looks that don't. Requires supports.layout; the layout must actually branch on `worship`."
+        },
+        "heroImagery": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when the homeHero renderer displays the tenant's hero photographs (homeHero.images, legacy imageUrl) — always under a TREATMENT built from the template's own palette variables (scrim/tint/blend), never raw. Declared honesty, proven behaviourally at validation: the choosers badge photo-led tenants toward templates that show their images and warn on ones that won't. Requires the homeHero section among supports.sections."
         }
       }
     },

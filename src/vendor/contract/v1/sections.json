@@ -221,13 +221,43 @@
      "name": "imageUrl",
      "kind": "image",
      "required": false,
-     "description": "Background photograph for the hero (uploaded through the platform pipeline). The template lays a dark overlay under the headline; omit for the flat colour hero."
+     "description": "Background photograph for the hero (uploaded through the platform pipeline). Superseded by `images` when that carries any entry — render imageUrl only when images is absent/empty. The template must TREAT the photo (scrim/tint from its own palette variables), never place it raw, and omit for its designed no-photo state."
+    },
+    {
+     "name": "images",
+     "kind": "items",
+     "required": false,
+     "description": "Hero photographs (0–6, uploaded through the platform pipeline). One = a main image; several = rotation material — a template with supports.heroImagery renders at least the first and MAY place the hero_carousel island (or a CSS scroll strip) for the rest. Like every field: absent means the template's designed no-photo state, never a placeholder.",
+     "itemFields": [
+      {
+       "name": "imageUrl",
+       "kind": "image",
+       "required": true,
+       "description": "The photograph."
+      },
+      {
+       "name": "alt",
+       "kind": "text",
+       "required": false,
+       "description": "Accessible description; empty renders as decorative (alt=\"\")."
+      }
+     ]
     }
    ],
    "minimal": {},
    "sample": {
     "lead": "We turn everyday generosity into practical help for the families who need it most.",
-    "givingStyle": "button"
+    "givingStyle": "button",
+    "images": [
+     {
+      "imageUrl": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 90'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23355e4b'/%3E%3Cstop offset='1' stop-color='%23103528'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='160' height='90' fill='url(%23g)'/%3E%3Ccircle cx='118' cy='28' r='14' fill='%23baa769' opacity='.7'/%3E%3Ctext x='10' y='78' font-family='sans-serif' font-size='9' fill='%23ffffff' opacity='.75'%3EHero photo one%3C/text%3E%3C/svg%3E",
+      "alt": "Volunteers serving meals at dusk"
+     },
+     {
+      "imageUrl": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 90'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23445a78'/%3E%3Cstop offset='1' stop-color='%23141d2c'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='160' height='90' fill='url(%23g)'/%3E%3Ccircle cx='40' cy='30' r='12' fill='%23e8e2d4' opacity='.5'/%3E%3Ctext x='10' y='78' font-family='sans-serif' font-size='9' fill='%23ffffff' opacity='.75'%3EHero photo two%3C/text%3E%3C/svg%3E",
+      "alt": "The community hall on open day"
+     }
+    ]
    }
   },
   {
