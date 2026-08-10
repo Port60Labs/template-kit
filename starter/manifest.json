@@ -1,6 +1,6 @@
 {
   "name": "starter",
-  "version": "1.5.5",
+  "version": "1.6.0",
   "format": "port60-liquid@1",
   "label": "Starter",
   "description": "The reference template for the Port60 dialect — the developer docs' worked example and the base to copy when building your own. 1.1.0 adds the layout slot: the template owns the header, navigation and footer chrome.",

@@ -33,14 +33,14 @@
             <a href="{{ item.href }}" class="nav-dropdown-toggle" aria-haspopup="true">{{ item.label }} ▾</a>
             <span class="nav-dropdown-menu">
               {% for child in item.children %}
-                <a href="{{ child.href }}">{{ child.label }}</a>
+                <a href="{{ child.href }}"{% if child.external %} target="_blank" rel="noopener"{% endif %}>{{ child.label }}</a>
               {% endfor %}
             </span>
           </span>
         {% elsif item.cta %}
-          <a class="nav-cta" href="{{ item.href }}">{{ item.label }}</a>
+          <a class="nav-cta" href="{{ item.href }}"{% if item.external %} target="_blank" rel="noopener"{% endif %}>{{ item.label }}</a>
         {% else %}
-          <a href="{{ item.href }}">{{ item.label }}</a>
+          <a href="{{ item.href }}"{% if item.external %} target="_blank" rel="noopener"{% endif %}>{{ item.label }}</a>
         {% endif %}
       {% endfor %}
       {% island 'member_menu' %}
@@ -59,9 +59,19 @@
       {% if brand.tagline %}<h2>{{ brand.tagline }}</h2>{% endif %}
     </div>
     <div class="footer-links">
-      {% for item in nav.items %}
-        <a href="{{ item.href }}">{{ item.label }}</a>
-      {% endfor %}
+      {% comment %} A tenant-curated footer menu when they've built one, else the main nav. {% endcomment %}
+      {% if nav.footer.size > 0 %}
+        {% for item in nav.footer %}
+          <a href="{{ item.href }}"{% if item.external %} target="_blank" rel="noopener"{% endif %}>{{ item.label }}</a>
+          {% for child in item.children %}
+            <a href="{{ child.href }}"{% if child.external %} target="_blank" rel="noopener"{% endif %}>{{ child.label }}</a>
+          {% endfor %}
+        {% endfor %}
+      {% else %}
+        {% for item in nav.items %}
+          <a href="{{ item.href }}">{{ item.label }}</a>
+        {% endfor %}
+      {% endif %}
     </div>
   </div>
   <div class="container">
