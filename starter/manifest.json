@@ -1,52 +1,52 @@
 {
- "name": "starter",
- "version": "1.5.4",
- "format": "port60-liquid@1",
- "label": "Starter",
- "description": "The reference template for the Port60 dialect — the developer docs' worked example and the base to copy when building your own. 1.1.0 adds the layout slot: the template owns the header, navigation and footer chrome.",
- "supports": {
-  "pages": [
-   "home",
-   "about"
-  ],
-  "sections": [
-   "homeHero",
-   "hero",
-   "values",
-   "cta",
-   "people"
-  ],
-  "islands": [
-   "donation_widget",
-   "member_menu",
-   "hero_carousel"
-  ],
-  "layout": true,
-  "heroImagery": true
- },
- "settings": {
-  "schema": [
-   {
-    "key": "siteFont",
-    "kind": "font",
-    "label": "Site font",
-    "default": "Inter",
-    "weights": [
-     400,
-     500,
-     600,
-     700,
-     800
+  "name": "starter",
+  "version": "1.5.5",
+  "format": "port60-liquid@1",
+  "label": "Starter",
+  "description": "The reference template for the Port60 dialect — the developer docs' worked example and the base to copy when building your own. 1.1.0 adds the layout slot: the template owns the header, navigation and footer chrome.",
+  "supports": {
+    "pages": [
+      "home",
+      "about"
+    ],
+    "sections": [
+      "homeHero",
+      "hero",
+      "values",
+      "cta",
+      "people"
+    ],
+    "islands": [
+      "donation_widget",
+      "member_menu",
+      "hero_carousel"
+    ],
+    "layout": true,
+    "heroImagery": true
+  },
+  "settings": {
+    "schema": [
+      {
+        "key": "siteFont",
+        "kind": "font",
+        "label": "Site font",
+        "default": "Inter",
+        "weights": [
+          400,
+          500,
+          600,
+          700,
+          800
+        ]
+      }
     ]
-   }
-  ]
- },
- "changelog": "People / team: the new About-page section — the key people behind the charity as cards, stacking on phones.",
- "imagery": {
-  "hero": {
-   "idealAspect": "16:9",
-   "minWidth": 1600,
-   "note": "Landscape around 16:9 fills the hero cleanly; panoramas suit the whole-photo framing."
+  },
+  "changelog": "Versionless source workflow — no content changes.",
+  "imagery": {
+    "hero": {
+      "idealAspect": "16:9",
+      "minWidth": 1600,
+      "note": "Landscape around 16:9 fills the hero cleanly; panoramas suit the whole-photo framing."
+    }
   }
- }
 }

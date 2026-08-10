@@ -1,701 +1,710 @@
 {
- "description": "The content-section catalogue — the closed set of section types a page may hold and a template may render. Section type = content KIND (coarse); layout/variant is the template's job. Additive-only: types and fields are added, never removed or re-shaped, within a contract major. Every section is independently omittable — a template must degrade gracefully when any subset is absent.",
- "sections": [
-  {
-   "type": "hero",
-   "label": "Hero banner",
-   "pages": [
-    "about"
-   ],
-   "description": "The page opener: a headline with an optional kicker and sanitised rich-text intro.",
-   "fields": [
+  "description": "The content-section catalogue — the closed set of section types a page may hold and a template may render. Section type = content KIND (coarse); layout/variant is the template's job. Additive-only: types and fields are added, never removed or re-shaped, within a contract major. Every section is independently omittable — a template must degrade gracefully when any subset is absent.",
+  "sections": [
     {
-     "name": "eyebrow",
-     "kind": "text",
-     "required": false,
-     "description": "Short kicker above the headline."
-    },
-    {
-     "name": "title",
-     "kind": "text",
-     "required": true,
-     "description": "The headline."
-    },
-    {
-     "name": "bodyHtml",
-     "kind": "richtext",
-     "required": false,
-     "description": "Sanitised HTML intro — render with the raw filter."
-    }
-   ],
-   "minimal": {
-    "title": "Our story"
-   },
-   "sample": {
-    "eyebrow": "About us",
-    "title": "Generosity, put to work.",
-    "bodyHtml": "<p>We began in 2019 around a simple belief: small, regular acts of kindness, pooled together, change lives.</p>"
-   }
-  },
-  {
-   "type": "values",
-   "label": "Values / list",
-   "pages": [
-    "about"
-   ],
-   "description": "A set of principles shown as cards or a numbered list, per the template.",
-   "fields": [
-    {
-     "name": "eyebrow",
-     "kind": "text",
-     "required": false,
-     "description": "Short kicker above the heading."
-    },
-    {
-     "name": "heading",
-     "kind": "text",
-     "required": false,
-     "description": "The section heading."
-    },
-    {
-     "name": "items",
-     "kind": "items",
-     "required": true,
-     "description": "The value entries.",
-     "itemFields": [
-      {
-       "name": "title",
-       "kind": "text",
-       "required": true,
-       "description": "The value's name."
+      "type": "hero",
+      "label": "Hero banner",
+      "pages": [
+        "about"
+      ],
+      "description": "The page opener: a headline with an optional kicker and sanitised rich-text intro.",
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Short kicker above the headline."
+        },
+        {
+          "name": "title",
+          "kind": "text",
+          "required": true,
+          "description": "The headline."
+        },
+        {
+          "name": "bodyHtml",
+          "kind": "richtext",
+          "required": false,
+          "description": "Sanitised HTML intro — render with the raw filter."
+        }
+      ],
+      "minimal": {
+        "title": "Our story"
       },
-      {
-       "name": "description",
-       "kind": "text",
-       "required": true,
-       "description": "One sentence describing it."
-      },
-      {
-       "name": "icon",
-       "kind": "icon",
-       "required": false,
-       "description": "Optional emoji/icon."
+      "sample": {
+        "eyebrow": "About us",
+        "title": "Generosity, put to work.",
+        "bodyHtml": "<p>We began in 2019 around a simple belief: small, regular acts of kindness, pooled together, change lives.</p>"
       }
-     ]
-    }
-   ],
-   "minimal": {
-    "items": [
-     {
-      "title": "Transparency",
-      "description": "Every pound is tracked and reported."
-     }
-    ]
-   },
-   "sample": {
-    "eyebrow": "What we stand for",
-    "heading": "Our values",
-    "items": [
-     {
-      "title": "Transparency",
-      "description": "Every pound is tracked and reported."
-     },
-     {
-      "title": "Dignity",
-      "description": "We work alongside communities, not for them."
-     },
-     {
-      "title": "Impact",
-      "description": "We fund what works and measure the difference."
-     }
-    ]
-   }
-  },
-  {
-   "type": "cta",
-   "label": "Call to action",
-   "pages": [
-    "home",
-    "about"
-   ],
-   "description": "A closing band: heading, optional line, one button.",
-   "fields": [
-    {
-     "name": "heading",
-     "kind": "text",
-     "required": true,
-     "description": "The band heading."
     },
     {
-     "name": "text",
-     "kind": "text",
-     "required": false,
-     "description": "A supporting line."
-    },
-    {
-     "name": "buttonLabel",
-     "kind": "text",
-     "required": true,
-     "description": "The button's label."
-    },
-    {
-     "name": "buttonHref",
-     "kind": "url",
-     "required": true,
-     "description": "The button's destination (scheme-guarded on save). The editor's cause picker writes /donate/{slug} here and records causeId beside it (editor bookkeeping — renderers use buttonHref only and may ignore causeId)."
-    }
-   ],
-   "minimal": {
-    "heading": "Ready to help?",
-    "buttonLabel": "Donate",
-    "buttonHref": "/donate"
-   },
-   "sample": {
-    "heading": "Ready to help?",
-    "text": "It takes less than a minute.",
-    "buttonLabel": "Donate now",
-    "buttonHref": "/#donate"
-   }
-  },
-  {
-   "type": "homeHero",
-   "label": "Home hero",
-   "pages": [
-    "home"
-   ],
-   "description": "The home opener. EVERY field optional: eyebrow/title derive from branding when absent, the lead OMITS when absent (never a fabricated placeholder), buttons fall back to platform defaults.",
-   "fields": [
-    {
-     "name": "eyebrow",
-     "kind": "text",
-     "required": false,
-     "description": "Defaults to the charity's name."
-    },
-    {
-     "name": "title",
-     "kind": "text",
-     "required": false,
-     "description": "Defaults to the charity's tagline."
-    },
-    {
-     "name": "lead",
-     "kind": "text",
-     "required": false,
-     "description": "A lead paragraph; omitted entirely when blank."
-    },
-    {
-     "name": "primaryLabel",
-     "kind": "text",
-     "required": false,
-     "description": "Main button label (default: Donate now)."
-    },
-    {
-     "name": "primaryHref",
-     "kind": "url",
-     "required": false,
-     "description": "Main button link (default: #donate)."
-    },
-    {
-     "name": "secondaryLabel",
-     "kind": "text",
-     "required": false,
-     "description": "Second button label (default: Our story)."
-    },
-    {
-     "name": "secondaryHref",
-     "kind": "url",
-     "required": false,
-     "description": "Second button link (default: /about)."
-    },
-    {
-     "name": "givingStyle",
-     "kind": "select",
-     "required": false,
-     "options": [
-      "form",
-      "button"
-     ],
-     "description": "How this hero offers giving: 'form' (default) places the donation widget beside the copy; 'button' renders copy only — the primary button becomes the giving path (defaulting to /donate). Templates MUST render both."
-    },
-    {
-     "name": "imageUrl",
-     "kind": "image",
-     "required": false,
-     "description": "Background photograph for the hero (uploaded through the platform pipeline). Superseded by `images` when that carries any entry — render imageUrl only when images is absent/empty. The template must TREAT the photo (scrim/tint from its own palette variables), never place it raw, and omit for its designed no-photo state."
-    },
-    {
-     "name": "photoFraming",
-     "kind": "select",
-     "required": false,
-     "options": [
-      "fill",
-      "whole"
-     ],
-     "description": "How hero photographs meet the hero. 'fill' (default): the hero keeps its designed shape and photos crop to fill it (use each photo's focus to pick the surviving slice). 'whole': the hero adapts toward the photo's own shape (height-clamped) so the FULL scene stays visible — the vista treatment for wide landscape photographs; templates overlay or stack their copy accordingly."
-    },
-    {
-     "name": "images",
-     "kind": "items",
-     "required": false,
-     "description": "Hero photographs (0–6, uploaded through the platform pipeline). One = a main image; several = rotation material — a template with supports.heroImagery renders at least the first and MAY place the hero_carousel island (or a CSS scroll strip) for the rest. Like every field: absent means the template's designed no-photo state, never a placeholder.",
-     "itemFields": [
-      {
-       "name": "imageUrl",
-       "kind": "image",
-       "required": true,
-       "description": "The photograph."
+      "type": "values",
+      "label": "Values / list",
+      "pages": [
+        "about"
+      ],
+      "description": "A set of principles shown as cards or a numbered list, per the template.",
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Short kicker above the heading."
+        },
+        {
+          "name": "heading",
+          "kind": "text",
+          "required": false,
+          "description": "The section heading."
+        },
+        {
+          "name": "items",
+          "kind": "items",
+          "required": true,
+          "description": "The value entries.",
+          "itemFields": [
+            {
+              "name": "title",
+              "kind": "text",
+              "required": true,
+              "description": "The value's name."
+            },
+            {
+              "name": "description",
+              "kind": "text",
+              "required": true,
+              "description": "One sentence describing it."
+            },
+            {
+              "name": "icon",
+              "kind": "icon",
+              "required": false,
+              "description": "Optional emoji/icon."
+            }
+          ]
+        }
+      ],
+      "minimal": {
+        "items": [
+          {
+            "title": "Transparency",
+            "description": "Every pound is tracked and reported."
+          }
+        ]
       },
-      {
-       "name": "alt",
-       "kind": "text",
-       "required": false,
-       "description": "Accessible description; empty renders as decorative (alt=\"\")."
-      },
-      {
-       "name": "focus",
-       "kind": "select",
-       "required": false,
-       "options": [
-        "centre",
-        "top",
-        "bottom",
-        "left",
-        "right"
-       ],
-       "description": "Which part of the photograph survives the fill-crop (templates render photos cover-style, so an aspect mismatch crops — this picks the slice that stays). Maps to background-position/object-position; absent means centre."
+      "sample": {
+        "eyebrow": "What we stand for",
+        "heading": "Our values",
+        "items": [
+          {
+            "title": "Transparency",
+            "description": "Every pound is tracked and reported."
+          },
+          {
+            "title": "Dignity",
+            "description": "We work alongside communities, not for them."
+          },
+          {
+            "title": "Impact",
+            "description": "We fund what works and measure the difference."
+          }
+        ]
       }
-     ]
-    }
-   ],
-   "minimal": {},
-   "sample": {
-    "lead": "We turn everyday generosity into practical help for the families who need it most.",
-    "givingStyle": "button",
-    "images": [
-     {
-      "imageUrl": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 90'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23355e4b'/%3E%3Cstop offset='1' stop-color='%23103528'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='160' height='90' fill='url(%23g)'/%3E%3Ccircle cx='118' cy='28' r='14' fill='%23baa769' opacity='.7'/%3E%3Ctext x='10' y='78' font-family='sans-serif' font-size='9' fill='%23ffffff' opacity='.75'%3EHero photo one%3C/text%3E%3C/svg%3E",
-      "alt": "Volunteers serving meals at dusk"
-     },
-     {
-      "imageUrl": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 90'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23445a78'/%3E%3Cstop offset='1' stop-color='%23141d2c'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='160' height='90' fill='url(%23g)'/%3E%3Ccircle cx='40' cy='30' r='12' fill='%23e8e2d4' opacity='.5'/%3E%3Ctext x='10' y='78' font-family='sans-serif' font-size='9' fill='%23ffffff' opacity='.75'%3EHero photo two%3C/text%3E%3C/svg%3E",
-      "alt": "The community hall on open day"
-     }
-    ]
-   }
-  },
-  {
-   "type": "impact",
-   "label": "Impact cards",
-   "pages": [
-    "home"
-   ],
-   "description": "What gifts make possible — optional intro plus icon/title/description cards. Claims must be truthful for the tenant.",
-   "fields": [
-    {
-     "name": "eyebrow",
-     "kind": "text",
-     "required": false,
-     "description": "Short kicker."
     },
     {
-     "name": "heading",
-     "kind": "text",
-     "required": false,
-     "description": "The section heading."
-    },
-    {
-     "name": "text",
-     "kind": "text",
-     "required": false,
-     "description": "An intro line."
-    },
-    {
-     "name": "items",
-     "kind": "items",
-     "required": true,
-     "description": "The impact cards.",
-     "itemFields": [
-      {
-       "name": "imageUrl",
-       "kind": "image",
-       "required": false,
-       "description": "Card image (uploaded through the platform pipeline). Preferred over icon."
+      "type": "cta",
+      "label": "Call to action",
+      "pages": [
+        "home",
+        "about"
+      ],
+      "description": "A closing band: heading, optional line, one button.",
+      "fields": [
+        {
+          "name": "heading",
+          "kind": "text",
+          "required": true,
+          "description": "The band heading."
+        },
+        {
+          "name": "text",
+          "kind": "text",
+          "required": false,
+          "description": "A supporting line."
+        },
+        {
+          "name": "buttonLabel",
+          "kind": "text",
+          "required": true,
+          "description": "The button's label."
+        },
+        {
+          "name": "buttonHref",
+          "kind": "url",
+          "required": true,
+          "description": "The button's destination (scheme-guarded on save). The editor's cause picker writes /donate/{slug} here and records causeId beside it (editor bookkeeping — renderers use buttonHref only and may ignore causeId)."
+        }
+      ],
+      "minimal": {
+        "heading": "Ready to help?",
+        "buttonLabel": "Donate",
+        "buttonHref": "/donate"
       },
-      {
-       "name": "icon",
-       "kind": "icon",
-       "required": false,
-       "description": "Legacy emoji/icon — superseded by imageUrl; render it only when imageUrl is absent."
-      },
-      {
-       "name": "title",
-       "kind": "text",
-       "required": true,
-       "description": "The card title."
-      },
-      {
-       "name": "description",
-       "kind": "text",
-       "required": true,
-       "description": "One sentence describing it."
+      "sample": {
+        "heading": "Ready to help?",
+        "text": "It takes less than a minute.",
+        "buttonLabel": "Donate now",
+        "buttonHref": "/#donate"
       }
-     ]
-    }
-   ],
-   "minimal": {
-    "items": [
-     {
-      "title": "Warm meals",
-      "description": "Hot meals served at a community kitchen."
-     }
-    ]
-   },
-   "sample": {
-    "eyebrow": "Where your gift goes",
-    "heading": "Real help, made of small acts",
-    "items": [
-     {
-      "imageUrl": "https://assets.example/impact-water.jpg",
-      "title": "£10 · Clean water",
-      "description": "Safe drinking water for a family for a whole month."
-     },
-     {
-      "icon": "🍲",
-      "title": "£25 · Warm meals",
-      "description": "Fifteen hot meals served at a local community kitchen."
-     },
-     {
-      "title": "£50 · School kit",
-      "description": "Books and supplies for two children for a full term."
-     }
-    ]
-   }
-  },
-  {
-   "type": "whatsOn",
-   "label": "What's-on strip",
-   "pages": [
-    "home"
-   ],
-   "kind": "widget",
-   "island": "whats_on_strip",
-   "description": "Widget section — positions the what's-on strip of info events. No authorable content.",
-   "fields": [],
-   "minimal": {},
-   "sample": {}
-  },
-  {
-   "type": "events",
-   "label": "Events carousel",
-   "pages": [
-    "home"
-   ],
-   "kind": "widget",
-   "island": "events_carousel",
-   "description": "Widget section — positions the ticketed-events carousel. No authorable content.",
-   "fields": [],
-   "minimal": {},
-   "sample": {}
-  },
-  {
-   "type": "articles",
-   "label": "Latest articles",
-   "pages": [
-    "home"
-   ],
-   "kind": "widget",
-   "island": "latest_articles",
-   "description": "Widget section — positions the latest-articles strip. No authorable content.",
-   "fields": [],
-   "minimal": {},
-   "sample": {}
-  },
-  {
-   "type": "emergency",
-   "label": "Emergency appeal strip",
-   "pages": [
-    "home"
-   ],
-   "description": "A high-urgency full-width strip — one headline, an optional line, one action. For live emergencies and time-critical appeals.",
-   "fields": [
-    {
-     "name": "heading",
-     "kind": "text",
-     "required": true,
-     "description": "The urgent headline."
     },
     {
-     "name": "text",
-     "kind": "text",
-     "required": false,
-     "description": "One supporting line."
-    },
-    {
-     "name": "buttonLabel",
-     "kind": "text",
-     "required": false,
-     "description": "Action label (default: Donate now)."
-    },
-    {
-     "name": "buttonHref",
-     "kind": "url",
-     "required": false,
-     "description": "Action link (default: /donate). Scheme-guarded on save."
-    }
-   ],
-   "minimal": {
-    "heading": "Emergency appeal"
-   },
-   "sample": {
-    "heading": "Gaza emergency appeal",
-    "text": "Families need food, water and shelter right now.",
-    "buttonLabel": "Give emergency aid",
-    "buttonHref": "/donate"
-   }
-  },
-  {
-   "type": "stats",
-   "label": "Stats band",
-   "pages": [
-    "home"
-   ],
-   "description": "Big headline numbers — the at-a-glance impact band. Values are author-entered text (write them exactly as they should read).",
-   "fields": [
-    {
-     "name": "eyebrow",
-     "kind": "text",
-     "required": false,
-     "description": "Short kicker."
-    },
-    {
-     "name": "heading",
-     "kind": "text",
-     "required": false,
-     "description": "The band heading."
-    },
-    {
-     "name": "items",
-     "kind": "items",
-     "required": true,
-     "description": "The stat entries.",
-     "itemFields": [
-      {
-       "name": "value",
-       "kind": "text",
-       "required": true,
-       "description": "The number, as it should read (e.g. 12,000 or 98%)."
-      },
-      {
-       "name": "label",
-       "kind": "text",
-       "required": true,
-       "description": "What it counts (e.g. meals served)."
+      "type": "homeHero",
+      "label": "Home hero",
+      "pages": [
+        "home"
+      ],
+      "description": "The home opener. EVERY field optional: eyebrow/title derive from branding when absent, the lead OMITS when absent (never a fabricated placeholder), buttons fall back to platform defaults.",
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Defaults to the charity's name."
+        },
+        {
+          "name": "title",
+          "kind": "text",
+          "required": false,
+          "description": "Defaults to the charity's tagline."
+        },
+        {
+          "name": "lead",
+          "kind": "text",
+          "required": false,
+          "description": "A lead paragraph; omitted entirely when blank."
+        },
+        {
+          "name": "primaryLabel",
+          "kind": "text",
+          "required": false,
+          "description": "Main button label (default: Donate now)."
+        },
+        {
+          "name": "primaryHref",
+          "kind": "url",
+          "required": false,
+          "description": "Main button link (default: #donate)."
+        },
+        {
+          "name": "secondaryLabel",
+          "kind": "text",
+          "required": false,
+          "description": "Second button label (default: Our story)."
+        },
+        {
+          "name": "secondaryHref",
+          "kind": "url",
+          "required": false,
+          "description": "Second button link (default: /about)."
+        },
+        {
+          "name": "givingStyle",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "form",
+            "button"
+          ],
+          "description": "How this hero offers giving: 'form' (default) places the donation widget beside the copy; 'button' renders copy only — the primary button becomes the giving path (defaulting to /donate). Templates MUST render both."
+        },
+        {
+          "name": "imageUrl",
+          "kind": "image",
+          "required": false,
+          "description": "Background photograph for the hero (uploaded through the platform pipeline). Superseded by `images` when that carries any entry — render imageUrl only when images is absent/empty. The template must TREAT the photo (scrim/tint from its own palette variables), never place it raw, and omit for its designed no-photo state."
+        },
+        {
+          "name": "photoFraming",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "fill",
+            "whole"
+          ],
+          "description": "How hero photographs meet the hero. 'fill' (default): the hero keeps its designed shape and photos crop to fill it (use each photo's focus to pick the surviving slice). 'whole': the hero adapts toward the photo's own shape (height-clamped) so the FULL scene stays visible — the vista treatment for wide landscape photographs; templates overlay or stack their copy accordingly."
+        },
+        {
+          "name": "images",
+          "kind": "items",
+          "required": false,
+          "description": "Hero photographs (0–6, uploaded through the platform pipeline). One = a main image; several = rotation material — a template with supports.heroImagery renders at least the first and MAY place the hero_carousel island (or a CSS scroll strip) for the rest. Like every field: absent means the template's designed no-photo state, never a placeholder.",
+          "itemFields": [
+            {
+              "name": "imageUrl",
+              "kind": "image",
+              "required": true,
+              "description": "The photograph."
+            },
+            {
+              "name": "alt",
+              "kind": "text",
+              "required": false,
+              "description": "Accessible description; empty renders as decorative (alt=\"\")."
+            },
+            {
+              "name": "focus",
+              "kind": "select",
+              "required": false,
+              "options": [
+                "centre",
+                "top",
+                "bottom",
+                "left",
+                "right"
+              ],
+              "description": "Which part of the photograph survives the fill-crop (templates render photos cover-style, so an aspect mismatch crops — this picks the slice that stays). Maps to background-position/object-position; absent means centre."
+            }
+          ]
+        }
+      ],
+      "minimal": {},
+      "sample": {
+        "lead": "We turn everyday generosity into practical help for the families who need it most.",
+        "givingStyle": "button",
+        "images": [
+          {
+            "imageUrl": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 90'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23355e4b'/%3E%3Cstop offset='1' stop-color='%23103528'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='160' height='90' fill='url(%23g)'/%3E%3Ccircle cx='118' cy='28' r='14' fill='%23baa769' opacity='.7'/%3E%3Ctext x='10' y='78' font-family='sans-serif' font-size='9' fill='%23ffffff' opacity='.75'%3EHero photo one%3C/text%3E%3C/svg%3E",
+            "alt": "Volunteers serving meals at dusk"
+          },
+          {
+            "imageUrl": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 90'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23445a78'/%3E%3Cstop offset='1' stop-color='%23141d2c'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='160' height='90' fill='url(%23g)'/%3E%3Ccircle cx='40' cy='30' r='12' fill='%23e8e2d4' opacity='.5'/%3E%3Ctext x='10' y='78' font-family='sans-serif' font-size='9' fill='%23ffffff' opacity='.75'%3EHero photo two%3C/text%3E%3C/svg%3E",
+            "alt": "The community hall on open day"
+          }
+        ]
       }
-     ]
-    }
-   ],
-   "minimal": {
-    "items": [
-     {
-      "value": "1,200",
-      "label": "meals served"
-     }
-    ]
-   },
-   "sample": {
-    "eyebrow": "Last year",
-    "heading": "What your giving did",
-    "items": [
-     {
-      "value": "12,400",
-      "label": "hot meals served"
-     },
-     {
-      "value": "3,100",
-      "label": "families supported"
-     },
-     {
-      "value": "98p",
-      "label": "of every pound to the cause"
-     }
-    ]
-   }
-  },
-  {
-   "type": "appealGrid",
-   "label": "Appeal cards",
-   "pages": [
-    "home"
-   ],
-   "description": "A grid of appeal/campaign cards — image, title, a line, and a per-card action.",
-   "fields": [
-    {
-     "name": "eyebrow",
-     "kind": "text",
-     "required": false,
-     "description": "Short kicker."
     },
     {
-     "name": "heading",
-     "kind": "text",
-     "required": false,
-     "description": "The section heading."
-    },
-    {
-     "name": "items",
-     "kind": "items",
-     "required": true,
-     "description": "The appeal cards.",
-     "itemFields": [
-      {
-       "name": "imageUrl",
-       "kind": "image",
-       "required": false,
-       "description": "Card photograph (uploaded through the platform pipeline)."
+      "type": "impact",
+      "label": "Impact cards",
+      "pages": [
+        "home"
+      ],
+      "description": "What gifts make possible — optional intro plus icon/title/description cards. Claims must be truthful for the tenant.",
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Short kicker."
+        },
+        {
+          "name": "heading",
+          "kind": "text",
+          "required": false,
+          "description": "The section heading."
+        },
+        {
+          "name": "text",
+          "kind": "text",
+          "required": false,
+          "description": "An intro line."
+        },
+        {
+          "name": "items",
+          "kind": "items",
+          "required": true,
+          "description": "The impact cards.",
+          "itemFields": [
+            {
+              "name": "imageUrl",
+              "kind": "image",
+              "required": false,
+              "description": "Card image (uploaded through the platform pipeline). Preferred over icon."
+            },
+            {
+              "name": "icon",
+              "kind": "icon",
+              "required": false,
+              "description": "Legacy emoji/icon — superseded by imageUrl; render it only when imageUrl is absent."
+            },
+            {
+              "name": "title",
+              "kind": "text",
+              "required": true,
+              "description": "The card title."
+            },
+            {
+              "name": "description",
+              "kind": "text",
+              "required": true,
+              "description": "One sentence describing it."
+            }
+          ]
+        }
+      ],
+      "minimal": {
+        "items": [
+          {
+            "title": "Warm meals",
+            "description": "Hot meals served at a community kitchen."
+          }
+        ]
       },
-      {
-       "name": "title",
-       "kind": "text",
-       "required": true,
-       "description": "The appeal's name."
-      },
-      {
-       "name": "text",
-       "kind": "text",
-       "required": true,
-       "description": "One sentence on what it funds."
-      },
-      {
-       "name": "buttonLabel",
-       "kind": "text",
-       "required": false,
-       "description": "Card action label (default: Donate)."
-      },
-      {
-       "name": "buttonHref",
-       "kind": "url",
-       "required": false,
-       "description": "Card action link (default: /donate). Scheme-guarded on save. The cause picker writes /donate/{slug} and records causeId beside it (editor bookkeeping; renderers use buttonHref only)."
+      "sample": {
+        "eyebrow": "Where your gift goes",
+        "heading": "Real help, made of small acts",
+        "items": [
+          {
+            "imageUrl": "https://assets.example/impact-water.jpg",
+            "title": "£10 · Clean water",
+            "description": "Safe drinking water for a family for a whole month."
+          },
+          {
+            "icon": "🍲",
+            "title": "£25 · Warm meals",
+            "description": "Fifteen hot meals served at a local community kitchen."
+          },
+          {
+            "title": "£50 · School kit",
+            "description": "Books and supplies for two children for a full term."
+          }
+        ]
       }
-     ]
-    }
-   ],
-   "minimal": {
-    "items": [
-     {
-      "title": "Winter appeal",
-      "text": "Warm meals through the coldest months."
-     }
-    ]
-   },
-   "sample": {
-    "eyebrow": "Our appeals",
-    "heading": "Where help is needed most",
-    "items": [
-     {
-      "title": "Winter appeal",
-      "text": "Warm meals and heating grants through the coldest months.",
-      "buttonLabel": "Support winter",
-      "buttonHref": "/donate"
-     },
-     {
-      "title": "Clean water",
-      "text": "Wells and filtration for three villages.",
-      "buttonLabel": "Give water",
-      "buttonHref": "/donate"
-     }
-    ]
-   }
-  },
-  {
-   "type": "people",
-   "label": "People / team",
-   "pages": [
-    "about"
-   ],
-   "description": "The key people behind the charity — trustees, staff, volunteers — as simple cards: name, position, an optional photograph (uploaded through the platform pipeline) and an optional one-line statement. Templates render a card grid that collapses to a single column on small screens; a card without a photo renders cleanly (initials or plain), never a placeholder face.",
-   "fields": [
-    {
-     "name": "eyebrow",
-     "kind": "text",
-     "required": false,
-     "description": "Short kicker, e.g. Who we are."
     },
     {
-     "name": "heading",
-     "kind": "text",
-     "required": false,
-     "description": "The section heading, e.g. Our team."
+      "type": "whatsOn",
+      "label": "What's on",
+      "pages": [
+        "home"
+      ],
+      "kind": "widget",
+      "island": "whats_on_strip",
+      "description": "Upcoming info events (special days — no sign-up). Render the `infoEvents` context your way, or place {% island 'whats_on_strip' %} for the ready-made strip.",
+      "fields": [],
+      "minimal": {},
+      "sample": {},
+      "context": [
+        "infoEvents"
+      ]
     },
     {
-     "name": "text",
-     "kind": "text",
-     "required": false,
-     "description": "An optional intro line."
+      "type": "events",
+      "label": "Events",
+      "pages": [
+        "home"
+      ],
+      "kind": "widget",
+      "island": "events_carousel",
+      "description": "Upcoming ticketed events on the home page. Your template renders the `events` context (the curated listing model) however its voice demands — or places {% island 'events_carousel' %} for the ready-made rotating showcase. Listing data only: ticket sales happen on the platform-rendered detail view (detailHref).",
+      "fields": [],
+      "minimal": {},
+      "sample": {},
+      "context": [
+        "events"
+      ]
     },
     {
-     "name": "items",
-     "kind": "items",
-     "required": true,
-     "description": "The people.",
-     "itemFields": [
-      {
-       "name": "name",
-       "kind": "text",
-       "required": true,
-       "description": "The person's name."
+      "type": "articles",
+      "label": "Latest articles",
+      "pages": [
+        "home"
+      ],
+      "kind": "widget",
+      "island": "latest_articles",
+      "description": "The newest published articles. Render the `latestArticles` context your way, or place {% island 'latest_articles' %} for the ready-made strip.",
+      "fields": [],
+      "minimal": {},
+      "sample": {},
+      "context": [
+        "latestArticles"
+      ]
+    },
+    {
+      "type": "emergency",
+      "label": "Emergency appeal strip",
+      "pages": [
+        "home"
+      ],
+      "description": "A high-urgency full-width strip — one headline, an optional line, one action. For live emergencies and time-critical appeals.",
+      "fields": [
+        {
+          "name": "heading",
+          "kind": "text",
+          "required": true,
+          "description": "The urgent headline."
+        },
+        {
+          "name": "text",
+          "kind": "text",
+          "required": false,
+          "description": "One supporting line."
+        },
+        {
+          "name": "buttonLabel",
+          "kind": "text",
+          "required": false,
+          "description": "Action label (default: Donate now)."
+        },
+        {
+          "name": "buttonHref",
+          "kind": "url",
+          "required": false,
+          "description": "Action link (default: /donate). Scheme-guarded on save."
+        }
+      ],
+      "minimal": {
+        "heading": "Emergency appeal"
       },
-      {
-       "name": "role",
-       "kind": "text",
-       "required": true,
-       "description": "Their position, e.g. Chair of Trustees."
-      },
-      {
-       "name": "imageUrl",
-       "kind": "image",
-       "required": false,
-       "description": "A photograph (platform pipeline). Absent renders cleanly — never a placeholder face."
-      },
-      {
-       "name": "statement",
-       "kind": "text",
-       "required": false,
-       "description": "One line in their voice, e.g. why they serve."
+      "sample": {
+        "heading": "Gaza emergency appeal",
+        "text": "Families need food, water and shelter right now.",
+        "buttonLabel": "Give emergency aid",
+        "buttonHref": "/donate"
       }
-     ]
+    },
+    {
+      "type": "stats",
+      "label": "Stats band",
+      "pages": [
+        "home"
+      ],
+      "description": "Big headline numbers — the at-a-glance impact band. Values are author-entered text (write them exactly as they should read).",
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Short kicker."
+        },
+        {
+          "name": "heading",
+          "kind": "text",
+          "required": false,
+          "description": "The band heading."
+        },
+        {
+          "name": "items",
+          "kind": "items",
+          "required": true,
+          "description": "The stat entries.",
+          "itemFields": [
+            {
+              "name": "value",
+              "kind": "text",
+              "required": true,
+              "description": "The number, as it should read (e.g. 12,000 or 98%)."
+            },
+            {
+              "name": "label",
+              "kind": "text",
+              "required": true,
+              "description": "What it counts (e.g. meals served)."
+            }
+          ]
+        }
+      ],
+      "minimal": {
+        "items": [
+          {
+            "value": "1,200",
+            "label": "meals served"
+          }
+        ]
+      },
+      "sample": {
+        "eyebrow": "Last year",
+        "heading": "What your giving did",
+        "items": [
+          {
+            "value": "12,400",
+            "label": "hot meals served"
+          },
+          {
+            "value": "3,100",
+            "label": "families supported"
+          },
+          {
+            "value": "98p",
+            "label": "of every pound to the cause"
+          }
+        ]
+      }
+    },
+    {
+      "type": "appealGrid",
+      "label": "Appeal cards",
+      "pages": [
+        "home"
+      ],
+      "description": "A grid of appeal/campaign cards — image, title, a line, and a per-card action.",
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Short kicker."
+        },
+        {
+          "name": "heading",
+          "kind": "text",
+          "required": false,
+          "description": "The section heading."
+        },
+        {
+          "name": "items",
+          "kind": "items",
+          "required": true,
+          "description": "The appeal cards.",
+          "itemFields": [
+            {
+              "name": "imageUrl",
+              "kind": "image",
+              "required": false,
+              "description": "Card photograph (uploaded through the platform pipeline)."
+            },
+            {
+              "name": "title",
+              "kind": "text",
+              "required": true,
+              "description": "The appeal's name."
+            },
+            {
+              "name": "text",
+              "kind": "text",
+              "required": true,
+              "description": "One sentence on what it funds."
+            },
+            {
+              "name": "buttonLabel",
+              "kind": "text",
+              "required": false,
+              "description": "Card action label (default: Donate)."
+            },
+            {
+              "name": "buttonHref",
+              "kind": "url",
+              "required": false,
+              "description": "Card action link (default: /donate). Scheme-guarded on save. The cause picker writes /donate/{slug} and records causeId beside it (editor bookkeeping; renderers use buttonHref only)."
+            }
+          ]
+        }
+      ],
+      "minimal": {
+        "items": [
+          {
+            "title": "Winter appeal",
+            "text": "Warm meals through the coldest months."
+          }
+        ]
+      },
+      "sample": {
+        "eyebrow": "Our appeals",
+        "heading": "Where help is needed most",
+        "items": [
+          {
+            "title": "Winter appeal",
+            "text": "Warm meals and heating grants through the coldest months.",
+            "buttonLabel": "Support winter",
+            "buttonHref": "/donate"
+          },
+          {
+            "title": "Clean water",
+            "text": "Wells and filtration for three villages.",
+            "buttonLabel": "Give water",
+            "buttonHref": "/donate"
+          }
+        ]
+      }
+    },
+    {
+      "type": "people",
+      "label": "People / team",
+      "pages": [
+        "about"
+      ],
+      "description": "The key people behind the charity — trustees, staff, volunteers — as simple cards: name, position, an optional photograph (uploaded through the platform pipeline) and an optional one-line statement. Templates render a card grid that collapses to a single column on small screens; a card without a photo renders cleanly (initials or plain), never a placeholder face.",
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Short kicker, e.g. Who we are."
+        },
+        {
+          "name": "heading",
+          "kind": "text",
+          "required": false,
+          "description": "The section heading, e.g. Our team."
+        },
+        {
+          "name": "text",
+          "kind": "text",
+          "required": false,
+          "description": "An optional intro line."
+        },
+        {
+          "name": "items",
+          "kind": "items",
+          "required": true,
+          "description": "The people.",
+          "itemFields": [
+            {
+              "name": "name",
+              "kind": "text",
+              "required": true,
+              "description": "The person's name."
+            },
+            {
+              "name": "role",
+              "kind": "text",
+              "required": true,
+              "description": "Their position, e.g. Chair of Trustees."
+            },
+            {
+              "name": "imageUrl",
+              "kind": "image",
+              "required": false,
+              "description": "A photograph (platform pipeline). Absent renders cleanly — never a placeholder face."
+            },
+            {
+              "name": "statement",
+              "kind": "text",
+              "required": false,
+              "description": "One line in their voice, e.g. why they serve."
+            }
+          ]
+        }
+      ],
+      "minimal": {
+        "items": [
+          {
+            "name": "Amina Khan",
+            "role": "Chair of Trustees"
+          }
+        ]
+      },
+      "sample": {
+        "eyebrow": "Who we are",
+        "heading": "The people behind the work",
+        "text": "A small team and a lot of volunteers, accountable to you.",
+        "items": [
+          {
+            "name": "Amina Khan",
+            "role": "Chair of Trustees",
+            "imageUrl": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' fill='%23355e4b'/%3E%3Ccircle cx='48' cy='38' r='16' fill='%23e8e2d4'/%3E%3Cpath d='M16 88c4-20 18-28 32-28s28 8 32 28z' fill='%23e8e2d4'/%3E%3C/svg%3E",
+            "statement": "Every pound is a trust — we treat it that way."
+          },
+          {
+            "name": "Daniel Osei",
+            "role": "Treasurer"
+          },
+          {
+            "name": "Sara Malik",
+            "role": "Volunteer Coordinator",
+            "statement": "Fifty pairs of hands, one purpose."
+          }
+        ]
+      }
     }
-   ],
-   "minimal": {
-    "items": [
-     {
-      "name": "Amina Khan",
-      "role": "Chair of Trustees"
-     }
-    ]
-   },
-   "sample": {
-    "eyebrow": "Who we are",
-    "heading": "The people behind the work",
-    "text": "A small team and a lot of volunteers, accountable to you.",
-    "items": [
-     {
-      "name": "Amina Khan",
-      "role": "Chair of Trustees",
-      "imageUrl": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' fill='%23355e4b'/%3E%3Ccircle cx='48' cy='38' r='16' fill='%23e8e2d4'/%3E%3Cpath d='M16 88c4-20 18-28 32-28s28 8 32 28z' fill='%23e8e2d4'/%3E%3C/svg%3E",
-      "statement": "Every pound is a trust — we treat it that way."
-     },
-     {
-      "name": "Daniel Osei",
-      "role": "Treasurer"
-     },
-     {
-      "name": "Sara Malik",
-      "role": "Volunteer Coordinator",
-      "statement": "Fifty pairs of hands, one purpose."
-     }
-    ]
-   }
-  }
- ]
+  ]
 }

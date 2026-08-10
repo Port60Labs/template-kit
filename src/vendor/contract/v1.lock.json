@@ -1,0 +1,446 @@
+{
+  "_comment": "FROZEN compatibility baseline for port60-liquid@1 (8.6). tests/contract-freeze.test.mjs enforces that everything here still exists — removals/narrowings fail. Regenerate ONLY deliberately via scripts/contract-lock.mjs; the diff is the review.",
+  "format": "port60-liquid@1",
+  "dialect": {
+    "tags": [
+      "assign",
+      "break",
+      "capture",
+      "case",
+      "comment",
+      "continue",
+      "echo",
+      "else",
+      "elsif",
+      "endcapture",
+      "endcase",
+      "endcomment",
+      "endfor",
+      "endif",
+      "endraw",
+      "endunless",
+      "for",
+      "if",
+      "liquid",
+      "raw",
+      "unless",
+      "when"
+    ],
+    "filters": [
+      "abs",
+      "append",
+      "at_least",
+      "at_most",
+      "capitalize",
+      "ceil",
+      "compact",
+      "concat",
+      "date",
+      "default",
+      "divided_by",
+      "downcase",
+      "escape",
+      "escape_once",
+      "first",
+      "floor",
+      "join",
+      "last",
+      "lstrip",
+      "map",
+      "minus",
+      "modulo",
+      "newline_to_br",
+      "plus",
+      "prepend",
+      "raw",
+      "remove",
+      "remove_first",
+      "replace",
+      "replace_first",
+      "reverse",
+      "round",
+      "rstrip",
+      "size",
+      "slice",
+      "sort",
+      "sort_natural",
+      "split",
+      "strip",
+      "strip_html",
+      "strip_newlines",
+      "times",
+      "truncate",
+      "truncatewords",
+      "uniq",
+      "upcase",
+      "url_decode",
+      "url_encode",
+      "where"
+    ]
+  },
+  "sectionTypes": [
+    "appealGrid",
+    "articles",
+    "cta",
+    "emergency",
+    "events",
+    "hero",
+    "homeHero",
+    "impact",
+    "people",
+    "stats",
+    "values",
+    "whatsOn"
+  ],
+  "islands": {
+    "course_enrol": [
+      ".course-enrol",
+      ".course-pay-panel",
+      ".course-soldout-note",
+      ".course-subject-list",
+      ".course-summary",
+      ".course-variant-list"
+    ],
+    "donation_widget": [
+      ".amount-grid",
+      ".amount-list",
+      ".amount-option",
+      ".amount-row",
+      ".donate-card",
+      ".donate-head",
+      ".donate-note",
+      ".donate-sub",
+      ".donate-submit",
+      ".donate-success",
+      ".freq-tab",
+      ".freq-tabs",
+      ".giftaid-box"
+    ],
+    "events_carousel": [
+      ".carousel-caption",
+      ".carousel-dot",
+      ".carousel-dots",
+      ".carousel-slide",
+      ".events-carousel"
+    ],
+    "hero_carousel": [
+      ".hero-carousel",
+      ".hero-dot",
+      ".hero-dot--active",
+      ".hero-dots",
+      ".hero-slide",
+      ".hero-slide-img",
+      ".hero-slide-scrim",
+      ".hero-slides"
+    ],
+    "latest_articles": [
+      ".article-card",
+      ".article-card-body",
+      ".article-grid",
+      ".article-strip-cta"
+    ],
+    "member_menu": [
+      ".nav-account",
+      ".nav-account-menu",
+      ".nav-account-toggle",
+      ".nav-p60-signin",
+      ".p60-mark"
+    ],
+    "whats_on_strip": [
+      ".info-event-chip",
+      ".info-events-bar",
+      ".info-events-inner"
+    ]
+  },
+  "contextVariables": {
+    "brand.footerLogoUrl": [
+      "layout"
+    ],
+    "brand.logoType": [
+      "layout"
+    ],
+    "brand.logoUrl": [
+      "layout"
+    ],
+    "brand.name": [
+      "layout",
+      "section"
+    ],
+    "brand.tagline": [
+      "layout",
+      "section"
+    ],
+    "course": [
+      "page:course"
+    ],
+    "course.aboutHtml": [
+      "page:course"
+    ],
+    "course.audience": [
+      "page:course"
+    ],
+    "course.backHref": [
+      "page:course"
+    ],
+    "course.billingMode": [
+      "page:course"
+    ],
+    "course.currency": [
+      "page:course"
+    ],
+    "course.description": [
+      "page:course"
+    ],
+    "course.id": [
+      "page:course"
+    ],
+    "course.imageUrl": [
+      "page:course"
+    ],
+    "course.priceFrom": [
+      "page:course"
+    ],
+    "course.soldOut": [
+      "page:course"
+    ],
+    "course.termEnd": [
+      "page:course"
+    ],
+    "course.termStart": [
+      "page:course"
+    ],
+    "course.title": [
+      "page:course"
+    ],
+    "course.venue": [
+      "page:course"
+    ],
+    "events": [
+      "page:events",
+      "section:events"
+    ],
+    "events[].currency": [
+      "page:events"
+    ],
+    "events[].description": [
+      "page:events"
+    ],
+    "events[].detailHref": [
+      "page:events"
+    ],
+    "events[].endsAt": [
+      "page:events"
+    ],
+    "events[].id": [
+      "page:events"
+    ],
+    "events[].imageUrl": [
+      "page:events"
+    ],
+    "events[].name": [
+      "page:events"
+    ],
+    "events[].online": [
+      "page:events"
+    ],
+    "events[].onSale": [
+      "page:events"
+    ],
+    "events[].priceFrom": [
+      "page:events"
+    ],
+    "events[].registrationMode": [
+      "page:events"
+    ],
+    "events[].soldOut": [
+      "page:events"
+    ],
+    "events[].startsAt": [
+      "page:events"
+    ],
+    "events[].venueName": [
+      "page:events"
+    ],
+    "infoEvents": [
+      "section:whatsOn"
+    ],
+    "latestArticles": [
+      "section:articles"
+    ],
+    "latestArticles[].categories": [
+      "section:articles"
+    ],
+    "latestArticles[].excerpt": [
+      "section:articles"
+    ],
+    "latestArticles[].href": [
+      "section:articles"
+    ],
+    "latestArticles[].imageUrl": [
+      "section:articles"
+    ],
+    "latestArticles[].publishedAt": [
+      "section:articles"
+    ],
+    "latestArticles[].readingMinutes": [
+      "section:articles"
+    ],
+    "latestArticles[].title": [
+      "section:articles"
+    ],
+    "nav.items": [
+      "layout"
+    ],
+    "nav.items[].children": [
+      "layout"
+    ],
+    "nav.items[].cta": [
+      "layout"
+    ],
+    "nav.items[].href": [
+      "layout"
+    ],
+    "nav.items[].label": [
+      "layout"
+    ],
+    "section": [
+      "section"
+    ],
+    "socials": [
+      "layout"
+    ],
+    "socials[].iconSvg": [
+      "layout"
+    ],
+    "socials[].platform": [
+      "layout"
+    ],
+    "socials[].url": [
+      "layout"
+    ],
+    "worship": [
+      "layout"
+    ],
+    "worship.beginsLabel": [
+      "layout"
+    ],
+    "worship.congregationLabel": [
+      "layout"
+    ],
+    "worship.href": [
+      "layout"
+    ],
+    "worship.note": [
+      "layout"
+    ],
+    "worship.times": [
+      "layout"
+    ],
+    "worship.today": [
+      "layout"
+    ],
+    "worship.todayAlt": [
+      "layout"
+    ]
+  },
+  "tokens": [
+    "--accent",
+    "--accent-strong",
+    "--bg",
+    "--bg-tint",
+    "--container",
+    "--cta-hover",
+    "--cta-hover-strong",
+    "--danger",
+    "--gold",
+    "--ink",
+    "--line",
+    "--line-strong",
+    "--muted",
+    "--primary",
+    "--primary-soft",
+    "--primary-strong",
+    "--radius",
+    "--radius-sm",
+    "--shadow",
+    "--shadow-sm",
+    "--surface"
+  ],
+  "fonts": [
+    "Abril Fatface",
+    "Albert Sans",
+    "Alfa Slab One",
+    "Almarai",
+    "Amiri",
+    "Archivo",
+    "Arvo",
+    "Baloo 2",
+    "Barlow",
+    "Bebas Neue",
+    "Bitter",
+    "Cairo",
+    "Comfortaa",
+    "Cormorant Garamond",
+    "Crimson Pro",
+    "DM Sans",
+    "EB Garamond",
+    "Figtree",
+    "Fraunces",
+    "Fredoka",
+    "IBM Plex Sans",
+    "IBM Plex Sans Arabic",
+    "IBM Plex Serif",
+    "Inter",
+    "Josefin Sans",
+    "Jost",
+    "Karla",
+    "Lato",
+    "Libre Baskerville",
+    "Lora",
+    "Manrope",
+    "Merriweather",
+    "Montserrat",
+    "Newsreader",
+    "Noto Kufi Arabic",
+    "Noto Naskh Arabic",
+    "Nunito",
+    "Open Sans",
+    "Oswald",
+    "Outfit",
+    "Playfair Display",
+    "Plus Jakarta Sans",
+    "Poppins",
+    "Quicksand",
+    "Raleway",
+    "Roboto Slab",
+    "Rubik",
+    "Scheherazade New",
+    "Sora",
+    "Source Serif 4",
+    "Space Grotesk",
+    "Tajawal",
+    "Work Sans",
+    "Zilla Slab"
+  ],
+  "manifest": {
+    "required": [
+      "format",
+      "name",
+      "supports",
+      "version"
+    ],
+    "properties": [
+      "changelog",
+      "description",
+      "fonts",
+      "format",
+      "imagery",
+      "label",
+      "looks",
+      "name",
+      "settings",
+      "supports",
+      "version"
+    ]
+  }
+}

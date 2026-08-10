@@ -103,6 +103,17 @@ export async function validateArtifact(files) {
   let homeHeroMultiShows = null; // sample (several photos): probe in html OR hero_carousel placed
   let homeHeroSingleShows = null; // single-photo variant: probe rendered directly
 
+  // Author-renderable widget sections (the flip): each carries a curated data context; a template
+  // either places the section's DEFAULT ISLAND (which owns rendering + empty states) or renders
+  // the data itself — in which case both directions are proven behaviourally (the worship
+  // pattern): the populated fixture's sentinel must appear, and the EMPTY context must render it
+  // away (derive or omit — nothing invented, nothing dangling).
+  const WIDGET_SECTIONS = {
+    events: { island: 'events_carousel', dataKey: 'events', sentinel: 'Fixture Lantern Gala' },
+    whatsOn: { island: 'whats_on_strip', dataKey: 'infoEvents', sentinel: 'Fixture Open Morning' },
+    articles: { island: 'latest_articles', dataKey: 'latestArticles', sentinel: 'Fixture Winter Diary' }
+  };
+
   // 2–4. Sections: catalogue membership, parse, fixture renders.
   for (const type of manifest?.supports?.sections ?? []) {
     const entry = catalogueByType.get(type);
@@ -122,12 +133,49 @@ export async function validateArtifact(files) {
       errors.push(`section '${type}': does not parse under the dialect — ${e.message}`);
       continue;
     }
+    // Widget-section proof (independent of the minimal/sample loop): island placed → the island
+    // owns everything; hand-rendered → sentinel appears with data, vanishes without.
+    const widget = WIDGET_SECTIONS[type];
+    if (widget) {
+      const dataFixture = contextContract.fixtures.sections?.[type] ?? {};
+      try {
+        const populated = await liquid.render(parsed, {
+          section: {},
+          brand: contextContract.fixtures.brand,
+          ...dataFixture
+        });
+        const placesIsland = splitIslandParts(populated).some((p) => p.island === widget.island);
+        if (!placesIsland) {
+          if (!populated.includes(widget.sentinel)) {
+            errors.push(
+              `section '${type}': neither places the ${widget.island} island nor renders the ${widget.dataKey} context — render the data (the fixture's "${widget.sentinel}" must appear) or place the island`
+            );
+          }
+          const empty = await liquid.render(parsed, {
+            section: {},
+            brand: contextContract.fixtures.brand,
+            [widget.dataKey]: []
+          });
+          if (empty.includes(widget.sentinel)) {
+            errors.push(`section '${type}': still shows fixture content with an empty ${widget.dataKey} — content must come from the context`);
+          }
+          if (/\bundefined\b|\bnull\b/.test(empty.replace(/data-[a-z-]+="[^"]*"/g, ''))) {
+            errors.push(`section '${type}': renders 'undefined'/'null' literals when ${widget.dataKey} is empty — guard the empty case (derive or omit)`);
+          }
+        }
+      } catch (e) {
+        errors.push(`section '${type}': failed rendering the ${widget.dataKey} context fixtures — ${e.message}`);
+      }
+    }
     for (const fixtureName of ['minimal', 'sample']) {
       const fixture = entry[fixtureName] ?? {};
       try {
         const html = await liquid.render(parsed, {
           section: fixture,
-          brand: contextContract.fixtures.brand
+          brand: contextContract.fixtures.brand,
+          // Widget data rides the ordinary fixture renders too, so a hand-rendering section
+          // doesn't fail the generic pass for want of its context.
+          ...(widget ? (contextContract.fixtures.sections?.[type] ?? {}) : {})
         });
         if (type === 'homeHero' && fixtureName === 'sample') {
           const probe = 'Hero photo one';

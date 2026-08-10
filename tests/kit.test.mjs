@@ -109,10 +109,9 @@ test('DRIFT GUARD: vendored contract/engine/validator match charity-site byte fo
     }
   }
 
-  // The starter must match the latest published starter artifact too.
+  // The starter must match the source starter artifact (versionless source dir — version in manifest).
   const starterRoot = resolve(import.meta.dirname, '../../../frontends/charity-site/template-artifacts/starter');
-  const latest = readdirSync(starterRoot).filter((d) => /^\d+\.\d+\.\d+$/.test(d)).sort().at(-1);
-  const starterManifest = readFileSync(join(starterRoot, latest, 'manifest.json'), 'utf8');
+  const starterManifest = readFileSync(join(starterRoot, 'manifest.json'), 'utf8');
   assert.equal(readFileSync(resolve(import.meta.dirname, '../starter/manifest.json'), 'utf8'),
     starterManifest, 'starter drifted — run npm run sync-vendor');
 });
