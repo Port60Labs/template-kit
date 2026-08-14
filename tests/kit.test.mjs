@@ -129,7 +129,7 @@ test('preview passes section data fixtures to widget section renderers', async (
     'assets/theme.css': ''
   });
 
-  assert.match(html, /Fixture Lantern Gala/);
+  assert.match(html, /The Lantern Gala/);
 });
 
 test('DRIFT GUARD: vendored contract/engine/validator match charity-site byte for byte', () => {

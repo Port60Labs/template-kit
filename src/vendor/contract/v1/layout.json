@@ -1,16 +1,16 @@
 {
-  "description": "How platform pages are placed inside a template. Every platform page (donate, services, events, campaigns, the members area) renders through a fixed set of LAYOUT INTENTS — the content SEAM. A template STYLES these intents to place content its way; it must never build a parallel content container, or platform pages drift from the template's own sections. Enforced at publish by the conformance validator.",
+  "description": "How platform pages are placed inside a template. Every platform page (donate, services, events, campaigns, the members area) renders through a fixed set of LAYOUT INTENTS, the content SEAM. A template STYLES these intents to place content its way; it must never build a parallel content container, or platform pages drift from the template's own sections. Enforced at publish by the conformance validator.",
   "widthToken": "--container",
   "intents": [
     {
       "class": "container",
       "kind": "contained",
-      "note": "The contained content column — text, forms, cards. Style it (and override --container) to set your content width and gutter. Use it in your own layout and sections too, so everything shares one column."
+      "note": "The contained content column, text, forms, cards. Style it (and override --container) to set your content width and gutter. Use it in your own layout and sections too, so everything shares one column."
     },
     {
       "class": "full",
       "kind": "full-bleed",
-      "note": "Edge-to-edge regardless of the container it sits in — a hero image, a colour band. Restyle it freely; the default breaks out to the viewport width."
+      "note": "Edge-to-edge regardless of the container it sits in, a hero image, a colour band. Restyle it freely; the default breaks out to the viewport width."
     }
   ],
   "rules": [
@@ -19,7 +19,7 @@
       "kind": "css-width-off-token",
       "token": "--container",
       "allow": ["container", "full"],
-      "message": "builds its own content container from var(--container). Platform pages render inside .container, so a parallel container drifts from your sections — style .container instead (override --container for width and add your gutter there), and use .full for edge-to-edge."
+      "message": "builds its own content container from var(--container). Platform pages render inside .container, so a parallel container drifts from your sections, style .container instead (override --container for width and add your gutter there), and use .full for edge-to-edge."
     }
   ]
 }

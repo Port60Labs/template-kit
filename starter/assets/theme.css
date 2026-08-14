@@ -1,4 +1,4 @@
-/* starter theme — a deliberately distinct look (midnight/emerald) proving the artifact owns the skin */
+/* starter theme, a deliberately distinct look (midnight/emerald) proving the artifact owns the skin */
 :root:root {
   --bg: #0e1614;
   --bg-tint: #14201d;
@@ -39,13 +39,13 @@ strong { color: var(--ink); }
 .lq-cta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start; }
 @media (max-width: 900px) { .lq-cta-grid { grid-template-columns: 1fr; } }
 
-/* The one font slot — headings above already follow it; body text too. */
+/* The one font slot, headings above already follow it; body text too. */
 body { font-family: ' IBM Plex Sans Arabic', var(--p60s-siteFont, 'Inter'), ui-sans-serif, system-ui, sans-serif; }
 
-/* ── Home hero (supports.heroImagery — the reference treatment) ─────────────────────────────
+/* ── Home hero (supports.heroImagery, the reference treatment) ─────────────────────────────
    The no-photo state is a DESIGNED gradient (rule: derive or omit, never a placeholder image).
    Photos get a scrim built from the palette itself via color-mix, so uploads tone into the
-   template — and any palette change re-tones them for free. Never place a hero photo raw. */
+   template, and any palette change re-tones them for free. Never place a hero photo raw. */
 .lq-homehero {
   position: relative;
   padding: 4.5rem 0;
@@ -73,7 +73,7 @@ body { font-family: ' IBM Plex Sans Arabic', var(--p60s-siteFont, 'Inter'), ui-s
 .lq-homehero-lead { color: var(--muted); max-width: 46ch; margin: 0.9rem 0 1.4rem; }
 .lq-homehero-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
 
-/* The platform hero_carousel island, styled through its class API — the island owns motion
+/* The platform hero_carousel island, styled through its class API, the island owns motion
    (auto-advance, swipe, reduced-motion), this owns the look. Each slide's .hero-slide-scrim is
    the same palette treatment as a single photo. */
 .lq-homehero--carousel { overflow: hidden; }
@@ -114,7 +114,7 @@ body { font-family: ' IBM Plex Sans Arabic', var(--p60s-siteFont, 'Inter'), ui-s
 }
 .lq-homehero--carousel .hero-dot--active { background: var(--accent); }
 
-/* ── Vista framing (photoFraming 'whole') — the hero adapts to the PHOTO's shape ───────────── */
+/* ── Vista framing (photoFraming 'whole'), the hero adapts to the PHOTO's shape ───────────── */
 .lq-homehero--vista { padding-top: 0; }
 .lq-vista { position: relative; overflow: hidden; }
 .lq-vista-sizer { display: block; width: 100%; height: auto; max-height: 74vh; object-fit: cover; }
@@ -153,7 +153,7 @@ body { font-family: ' IBM Plex Sans Arabic', var(--p60s-siteFont, 'Inter'), ui-s
   .lq-vista-sizer { min-height: 160px; }
 }
 
-/* Vista + form (1.5.2): the widget rides the seam — grid pulled up over the band (under the
+/* Vista + form (1.5.2): the widget rides the seam, grid pulled up over the band (under the
    280px floor), gradient filling where the image ends; narrow screens stack back underneath. */
 .lq-homehero--vista-form { padding-bottom: 2.6rem; }
 .lq-vista-overlap { position: relative; z-index: 1; margin-top: -240px; align-items: start; }
@@ -161,7 +161,7 @@ body { font-family: ' IBM Plex Sans Arabic', var(--p60s-siteFont, 'Inter'), ui-s
   .lq-vista-overlap { margin-top: 0; padding-top: 1.6rem; }
 }
 
-/* People / team cards — grid to single column on phones. */
+/* People / team cards, grid to single column on phones. */
 .lq-people {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -188,13 +188,13 @@ body { font-family: ' IBM Plex Sans Arabic', var(--p60s-siteFont, 'Inter'), ui-s
   .lq-people { grid-template-columns: 1fr; }
 }
 
-/* Campaigns — the same quiet rail as values: title, summary, one action. */
+/* Campaigns, the same quiet rail as values: title, summary, one action. */
 .lq-campaigns { padding: 3.5rem 0; }
 .lq-campaign-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.6rem; max-width: 700px; }
 .lq-campaign h3 { margin: 0 0 0.25rem; }
 .lq-campaign p { margin: 0 0 0.6rem; }
 
-/* Behaviours (engine-wired via data-p60-* — docs: Motion and behaviour guide). Everything that
+/* Behaviours (engine-wired via data-p60-*, docs: Motion and behaviour guide). Everything that
    hides pre-behaviour content is .p60-js-scoped: the no-JS render stays complete. */
 
 /* Reveal: the values rail rises in with a stagger. */

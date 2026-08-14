@@ -1,6 +1,5 @@
 name: Publish to npm
-# Publishes on a GitHub release via npm TRUSTED PUBLISHING (OIDC): no token exists anywhere —
-# npm trusts this exact repo + workflow file, GitHub proves the identity per run, and provenance
+# Publishes on a GitHub release via npm TRUSTED PUBLISHING (OIDC): no token exists anywhere, # npm trusts this exact repo + workflow file, GitHub proves the identity per run, and provenance
 # attestation is attached automatically. Setup (once, after the package's first manual publish):
 # npmjs.com → @port60/template-kit → Settings → Trusted Publisher →
 #   GitHub Actions / Port60Labs / template-kit / publish.yml

@@ -1,237 +1,258 @@
 {
- "description": "The platform's functional islands — the app-block table. A template PLACES an island with {% island 'name' %}; the platform renders, hydrates, upgrades and patches it. The stylingApi lists the STABLE class names a template may target with CSS; anything not listed is internal and may change without notice.",
- "islands": [
-  {
-   "name": "donation_widget",
-   "label": "Donation widget",
-   "status": "available",
-   "description": "The full donation flow for the tenant's quick-give cause: suggested amounts, custom amount, donor details, Gift Aid opt-in, payment. All payment/compliance behaviour is platform-owned.",
-   "params": [],
-   "stylingApi": [
-    ".donate-card",
-    ".donate-head",
-    ".donate-sub",
-    ".freq-tabs",
-    ".freq-tab",
-    ".amount-grid",
-    ".amount-option",
-    ".amount-list",
-    ".amount-row",
-    ".giftaid-box",
-    ".donate-submit",
-    ".donate-note",
-    ".donate-success"
-   ]
-  },
-  {
-   "name": "member_menu",
-   "label": "Port60 ID sign-in / account menu",
-   "status": "available",
-   "description": "The branded Port60 ID entry point: the sign-in button (popup flow) for guests, the account pill (Members area / Sign out) for signed-in members. Renders NOTHING when the tenant doesn't allow member sign-ups. The identity brand and popup behaviour are platform-owned and identical across every template — place it in your header's nav; never rebuild it.",
-   "params": [],
-   "stylingApi": [
-    ".nav-p60-signin",
-    ".nav-account",
-    ".nav-account-toggle",
-    ".nav-account-menu",
-    ".p60-mark"
-   ]
-  },
-  {
-   "name": "events_carousel",
-   "label": "Events carousel",
-   "status": "available",
-   "description": "The rotating showcase of published ticketed events. Renders nothing when the tenant has no matching published content.",
-   "params": [],
-   "stylingApi": [
-    ".events-carousel",
-    ".carousel-slide",
-    ".carousel-caption",
-    ".carousel-dots",
-    ".carousel-dot"
-   ]
-  },
-  {
-   "name": "whats_on_strip",
-   "label": "What's-on strip",
-   "status": "available",
-   "description": "The slim banner of upcoming info events. Renders nothing when the tenant has no matching published content.",
-   "params": [],
-   "stylingApi": [
-    ".info-events-bar",
-    ".info-events-inner",
-    ".info-event-chip"
-   ]
-  },
-  {
-   "name": "latest_articles",
-   "label": "Latest articles",
-   "status": "available",
-   "description": "A strip of the most recent published articles. Renders nothing when the tenant has no matching published content.",
-   "params": [],
-   "stylingApi": [
-    ".article-grid",
-    ".article-card",
-    ".article-card-body",
-    ".article-strip-cta"
-   ]
-  },
-  {
-   "name": "course_enrol",
-   "label": "Course enrolment widget",
-   "status": "available",
-   "description": "The member-gated course enrolment journey (schedule options, household picker, payment, seat holds) for the course the page addresses. Only meaningful on the course page template (pages/course.liquid) — place it where your layout wants the purchase column (left rail, right rail, or below the content); position in your source is position on the page. Everything inside is platform-owned; it renders a standard sold-out note when no places remain (branch on course.soldOut if you want your own tag elsewhere).",
-   "params": [],
-   "stylingApi": [
-    ".course-enrol",
-    ".course-variant-list",
-    ".course-subject-list",
-    ".course-summary",
-    ".course-pay-panel",
-    ".course-soldout-note"
-   ]
-  },
-  {
-   "name": "next_prayer",
-   "label": "Next worship time",
-   "status": "available",
-   "description": "A live countdown to worship.next for the tenant's schedule. Renders nothing when no next time is available. The platform owns the clock; the template owns presentation through the stable classes.",
-   "params": [],
-   "stylingApi": [
-    ".next-prayer",
-    ".next-prayer-label",
-    ".next-prayer-name",
-    ".next-prayer-time",
-    ".next-prayer-countdown"
-   ]
-  },
-  {
-   "name": "article_engagement",
-   "label": "Article engagement",
-   "status": "available",
-   "description": "The platform-owned article views, likes and sharing bar for the article page being rendered.",
-   "params": [],
-   "stylingApi": [
-    ".article-engage",
-    ".article-views",
-    ".article-share-group",
-    ".article-share-btn",
-    ".article-share-word",
-    ".article-share-copied"
-   ]
-  },
-  {
-   "name": "article_comments",
-   "label": "Article comments",
-   "status": "available",
-   "description": "The identity-aware article conversation for the article page being rendered. Renders the closed state when comments are disabled.",
-   "params": [],
-   "stylingApi": [
-    ".article-comments",
-    ".article-comment-list",
-    ".article-comment",
-    ".article-comment-head",
-    ".article-comment-form",
-    ".article-comments-gate",
-    ".article-comments-note"
-   ]
-  },
-  {
-   "name": "hero_carousel",
-   "label": "Hero image carousel",
-   "status": "available",
-   "description": "Rotation for the home hero's photographs (homeHero.images, 2+): auto-advance every ~6s, pauses on hover/focus, honours prefers-reduced-motion (no auto-advance), swipe on touch, dot navigation. The platform owns the motion; the TEMPLATE owns the look — including the tonal treatment: every slide ships an empty .hero-slide-scrim layer over its image, and the template colours it from its OWN palette variables (a colour wash, a blend, a gradient) so any uploaded photo sits inside the template's tones. Renders nothing with fewer than 2 images — single-image and no-image states are the template's own renderer, not this island's.",
-   "params": [],
-   "stylingApi": [
-    ".hero-carousel",
-    ".hero-slides",
-    ".hero-slide",
-    ".hero-slide--active",
-    ".hero-slide-img",
-    ".hero-slide-scrim",
-    ".hero-dots",
-    ".hero-dot",
-    ".hero-dot--active"
-   ]
-  },
-  {
-   "name": "newsletter_signup",
-   "label": "Newsletter sign-up",
-   "status": "available",
-   "description": "Explicit email opt-in over the platform's versioned consent and one-click unsubscribe rail. Templates own placement and presentation; wording, evidence and abuse checks remain platform-owned.",
-   "params": [],
-   "stylingApi": [
-    ".newsletter-signup",
-    ".newsletter-label",
-    ".newsletter-fields",
-    ".newsletter-email",
-    ".newsletter-submit",
-    ".newsletter-consent",
-    ".newsletter-message"
-   ]
-  },
-  {
-   "name": "language_switch",
-   "label": "Language switch",
-   "status": "available",
-   "description": "Switches between the platform's supported public languages while preserving the current route. The host supplies locale and text direction to Liquid and the document element.",
-   "params": [],
-   "stylingApi": [
-    ".language-switch",
-    ".language-switch-label",
-    ".language-switch-select"
-   ]
-  },
-  {
-   "name": "search",
-   "label": "Site search",
-   "status": "available",
-   "description": "Searches published articles, programmes, events and public resources. It reads public projections only and cannot search member, payment, private media or admin data.",
-   "params": [],
-   "stylingApi": [
-    ".site-search",
-    ".site-search-form",
-    ".site-search-label",
-    ".site-search-fields",
-    ".site-search-input",
-    ".site-search-submit",
-    ".site-search-results",
-    ".site-search-result",
-    ".site-search-kind",
-    ".site-search-link",
-    ".site-search-summary",
-    ".site-search-empty"
-   ]
-  },
-  {
-   "name": "volunteer_signup",
-   "label": "Volunteer expression of interest",
-   "status": "available",
-   "description": "Lists published opportunities and captures a privacy-recorded expression of interest. Templates own placement and styling; validation, abuse checks and submission storage remain platform-owned.",
-   "params": [],
-   "stylingApi": [
-    ".volunteer-signup",
-    ".volunteer-field",
-    ".volunteer-privacy",
-    ".volunteer-submit",
-    ".volunteer-message"
-   ]
-  },
-  {
-   "name": "form",
-   "label": "Public form",
-   "status": "available",
-   "description": "Renders the tenant's first published platform form and records its submission with explicit privacy acceptance. Templates cannot handle or redirect submissions themselves.",
-   "params": [],
-   "stylingApi": [
-    ".public-form",
-    ".public-form-head",
-    ".public-form-field",
-    ".public-form-check",
-    ".public-form-privacy",
-    ".public-form-submit",
-    ".public-form-message"
-   ]
-  }
- ]
+  "description": "The platform's functional islands, the app-block table. A template PLACES an island with {% island 'name' %}; the platform renders, hydrates, upgrades and patches it. The stylingApi lists the STABLE class names a template may target with CSS; anything not listed is internal and may change without notice.",
+  "islands": [
+    {
+      "name": "donation_widget",
+      "label": "Donation widget",
+      "status": "available",
+      "description": "The full donation flow for the tenant's quick-give cause: suggested amounts, custom amount, donor details, Gift Aid opt-in, payment. All payment/compliance behaviour is platform-owned.",
+      "params": [],
+      "stylingApi": [
+        ".donate-card",
+        ".donate-head",
+        ".donate-sub",
+        ".freq-tabs",
+        ".freq-tab",
+        ".amount-grid",
+        ".amount-option",
+        ".amount-list",
+        ".amount-row",
+        ".giftaid-box",
+        ".donate-submit",
+        ".donate-note",
+        ".donate-success"
+      ]
+    },
+    {
+      "name": "member_menu",
+      "label": "Port60 ID sign-in / account menu",
+      "status": "available",
+      "description": "The branded Port60 ID entry point: the sign-in button (popup flow) for guests, the account pill (Members area / Sign out) for signed-in members. Renders NOTHING when the tenant doesn't allow member sign-ups. The identity brand and popup behaviour are platform-owned and identical across every template, place it in your header's nav; never rebuild it.",
+      "params": [],
+      "stylingApi": [
+        ".nav-p60-signin",
+        ".nav-account",
+        ".nav-account-toggle",
+        ".nav-account-menu",
+        ".p60-mark"
+      ]
+    },
+    {
+      "name": "events_carousel",
+      "label": "Events carousel",
+      "status": "available",
+      "description": "The rotating showcase of published ticketed events. Renders nothing when the tenant has no matching published content.",
+      "params": [],
+      "stylingApi": [
+        ".events-carousel",
+        ".carousel-slide",
+        ".carousel-caption",
+        ".carousel-dots",
+        ".carousel-dot"
+      ]
+    },
+    {
+      "name": "whats_on_strip",
+      "label": "What's-on strip",
+      "status": "available",
+      "description": "The slim banner of upcoming info events. Renders nothing when the tenant has no matching published content.",
+      "params": [],
+      "stylingApi": [
+        ".info-events-bar",
+        ".info-events-inner",
+        ".info-event-chip"
+      ]
+    },
+    {
+      "name": "latest_articles",
+      "label": "Latest articles",
+      "status": "available",
+      "description": "A strip of the most recent published articles. Renders nothing when the tenant has no matching published content.",
+      "params": [],
+      "stylingApi": [
+        ".article-grid",
+        ".article-card",
+        ".article-card-body",
+        ".article-strip-cta"
+      ]
+    },
+    {
+      "name": "course_enrol",
+      "label": "Course enrolment widget",
+      "status": "available",
+      "description": "The member-gated course enrolment journey (schedule options, household picker, payment, seat holds) for the course the page addresses. Only meaningful on the course page template (pages/course.liquid), place it where your layout wants the purchase column (left rail, right rail, or below the content); position in your source is position on the page. Everything inside is platform-owned; it renders a standard sold-out note when no places remain (branch on course.soldOut if you want your own tag elsewhere).",
+      "params": [],
+      "stylingApi": [
+        ".course-enrol",
+        ".course-variant-list",
+        ".course-subject-list",
+        ".course-summary",
+        ".course-pay-panel",
+        ".course-soldout-note"
+      ]
+    },
+    {
+      "name": "next_prayer",
+      "label": "Next worship time",
+      "status": "available",
+      "description": "A live countdown to worship.next for the tenant's schedule. Renders nothing when no next time is available. The platform owns the clock; the template owns presentation through the stable classes.",
+      "params": [],
+      "stylingApi": [
+        ".next-prayer",
+        ".next-prayer-label",
+        ".next-prayer-name",
+        ".next-prayer-time",
+        ".next-prayer-countdown"
+      ]
+    },
+    {
+      "name": "article_engagement",
+      "label": "Article engagement",
+      "status": "available",
+      "description": "The platform-owned article views, likes and sharing bar for the article page being rendered.",
+      "params": [],
+      "stylingApi": [
+        ".article-engage",
+        ".article-views",
+        ".article-share-group",
+        ".article-share-btn",
+        ".article-share-word",
+        ".article-share-copied"
+      ]
+    },
+    {
+      "name": "article_comments",
+      "label": "Article comments",
+      "status": "available",
+      "description": "The identity-aware article conversation for the article page being rendered. Renders the closed state when comments are disabled.",
+      "params": [],
+      "stylingApi": [
+        ".article-comments",
+        ".article-comment-list",
+        ".article-comment",
+        ".article-comment-head",
+        ".article-comment-form",
+        ".article-comments-gate",
+        ".article-comments-note"
+      ]
+    },
+    {
+      "name": "hero_carousel",
+      "label": "Hero image carousel",
+      "status": "available",
+      "description": "Rotation for the home hero's photographs (homeHero.images, 2+): auto-advance every ~6s, pauses on hover/focus, honours prefers-reduced-motion (no auto-advance), swipe on touch, dot navigation. The platform owns the motion; the TEMPLATE owns the look, including the tonal treatment: every slide ships an empty .hero-slide-scrim layer over its image, and the template colours it from its OWN palette variables (a colour wash, a blend, a gradient) so any uploaded photo sits inside the template's tones. Renders nothing with fewer than 2 images, single-image and no-image states are the template's own renderer, not this island's.",
+      "params": [],
+      "stylingApi": [
+        ".hero-carousel",
+        ".hero-slides",
+        ".hero-slide",
+        ".hero-slide--active",
+        ".hero-slide-img",
+        ".hero-slide-scrim",
+        ".hero-dots",
+        ".hero-dot",
+        ".hero-dot--active"
+      ]
+    },
+    {
+      "name": "newsletter_signup",
+      "label": "Newsletter sign-up",
+      "status": "available",
+      "description": "Explicit email opt-in over the platform's versioned consent and one-click unsubscribe rail. Templates own placement and presentation; wording, evidence and abuse checks remain platform-owned.",
+      "params": [],
+      "stylingApi": [
+        ".newsletter-signup",
+        ".newsletter-label",
+        ".newsletter-fields",
+        ".newsletter-email",
+        ".newsletter-submit",
+        ".newsletter-consent",
+        ".newsletter-message"
+      ]
+    },
+    {
+      "name": "language_switch",
+      "label": "Language switch",
+      "status": "available",
+      "description": "Switches between the platform's supported public languages while preserving the current route. The host supplies locale and text direction to Liquid and the document element.",
+      "params": [],
+      "stylingApi": [
+        ".language-switch",
+        ".language-switch-label",
+        ".language-switch-select"
+      ]
+    },
+    {
+      "name": "search",
+      "label": "Site search",
+      "status": "available",
+      "description": "Searches published articles, programmes, events and public resources. It reads public projections only and cannot search member, payment, private media or admin data.",
+      "params": [],
+      "stylingApi": [
+        ".site-search",
+        ".site-search-form",
+        ".site-search-label",
+        ".site-search-fields",
+        ".site-search-input",
+        ".site-search-submit",
+        ".site-search-results",
+        ".site-search-result",
+        ".site-search-kind",
+        ".site-search-link",
+        ".site-search-summary",
+        ".site-search-empty"
+      ]
+    },
+    {
+      "name": "volunteer_signup",
+      "label": "Volunteer expression of interest",
+      "status": "available",
+      "description": "Lists published opportunities and captures a privacy-recorded expression of interest. Templates own placement and styling; validation, abuse checks and submission storage remain platform-owned.",
+      "params": [],
+      "stylingApi": [
+        ".volunteer-signup",
+        ".volunteer-field",
+        ".volunteer-privacy",
+        ".volunteer-submit",
+        ".volunteer-message"
+      ]
+    },
+    {
+      "name": "form",
+      "label": "Public form",
+      "status": "available",
+      "description": "Renders the tenant's first published platform form and records its submission with explicit privacy acceptance. Templates cannot handle or redirect submissions themselves.",
+      "params": [],
+      "stylingApi": [
+        ".public-form",
+        ".public-form-head",
+        ".public-form-field",
+        ".public-form-check",
+        ".public-form-privacy",
+        ".public-form-submit",
+        ".public-form-message"
+      ]
+    },
+    {
+      "name": "map",
+      "label": "Impact map",
+      "status": "available",
+      "description": "The tenant's published impact map: a themed, privacy-clean map (platform-served tiles, never a third-party tile CDN) whose points open cards derived from the content they link. The island derives its colours from the template's tokens; v1 renders the tenant's first published map.",
+      "params": [],
+      "stylingApi": [
+        ".impact-map",
+        ".impact-map-head",
+        ".impact-map-intro",
+        ".impact-map-canvas",
+        ".impact-map-pin",
+        ".impact-map-pin--active",
+        ".impact-map-card",
+        ".impact-map-card-kind",
+        ".impact-map-card-title",
+        ".impact-map-card-summary",
+        ".impact-map-card-cta",
+        ".impact-map-empty"
+      ]
+    }
+  ]
 }

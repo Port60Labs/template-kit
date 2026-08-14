@@ -9,7 +9,7 @@
     "name": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9-]{1,48}[a-z0-9]$",
-      "description": "The template's identity — lowercase, hyphenated, stable across versions."
+      "description": "The template's identity, lowercase, hyphenated, stable across versions."
     },
     "version": {
       "type": "string",
@@ -63,7 +63,7 @@
     "changelog": {
       "type": "string",
       "maxLength": 300,
-      "description": "One human line describing what THIS version changed — shown on the Appearance update nudge."
+      "description": "One human line describing what THIS version changed, shown on the Appearance update nudge."
     },
     "supports": {
       "type": "object",
@@ -82,7 +82,7 @@
           "items": { "type": "string" },
           "minItems": 1,
           "uniqueItems": true,
-          "description": "Section types this template ships renderers for (sections/{type}.liquid). Unsupported types are omitted at render — never an error."
+          "description": "Section types this template ships renderers for (sections/{type}.liquid). Unsupported types are omitted at render, never an error."
         },
         "islands": {
           "type": "array",
@@ -94,7 +94,7 @@
         "layout": {
           "type": "boolean",
           "default": false,
-          "description": "True when the template ships layout.liquid and owns the page chrome (header/nav/footer). The platform still owns <head>, consent, and identity — see the layouts guide."
+          "description": "True when the template ships layout.liquid and owns the page chrome (header/nav/footer). The platform still owns <head>, consent, and identity, see the layouts guide."
         },
         "pageTemplates": {
           "type": "array",
@@ -111,7 +111,7 @@
         "heroImagery": {
           "type": "boolean",
           "default": false,
-          "description": "True when the homeHero renderer displays the tenant's hero photographs (homeHero.images, legacy imageUrl) — always under a TREATMENT built from the template's own palette variables (scrim/tint/blend), never raw. Declared honesty, proven behaviourally at validation: the choosers badge photo-led tenants toward templates that show their images and warn on ones that won't. Requires the homeHero section among supports.sections."
+          "description": "True when the homeHero renderer displays the tenant's hero photographs (homeHero.images, legacy imageUrl), always under a TREATMENT built from the template's own palette variables (scrim/tint/blend), never raw. Declared honesty, proven behaviourally at validation: the choosers badge photo-led tenants toward templates that show their images and warn on ones that won't. Requires the homeHero section among supports.sections."
         },
         "behaviors": {
           "type": "array",
@@ -127,7 +127,7 @@
     "imagery": {
       "type": "object",
       "additionalProperties": false,
-      "description": "The template's OWN image advice, surfaced beside uploads in the charity's editor — a design statement (what shape suits THIS composition), advisory only, never enforced. Entity images (events, courses, articles) are platform-scoped instead: see the contract's imagery.json envelopes.",
+      "description": "The template's OWN image advice, surfaced beside uploads in the charity's editor, a design statement (what shape suits THIS composition), advisory only, never enforced. Entity images (events, courses, articles) are platform-scoped instead: see the contract's imagery.json envelopes.",
       "properties": {
         "hero": {
           "type": "object",
@@ -173,7 +173,7 @@
           "name": {
             "type": "string",
             "maxLength": 40,
-            "description": "The look's evocative, author-chosen name — shown as a one-click chip in Appearance."
+            "description": "The look's evocative, author-chosen name, shown as a one-click chip in Appearance."
           },
           "values": {
             "type": "object",
@@ -206,7 +206,7 @@
               "group": {
                 "type": "string",
                 "enum": ["typography", "looks"],
-                "description": "Where the admin surfaces this knob: 'typography' → the Typography section beside the font slots; 'looks' → the Looks section with the one-click bundles (colour schemes and accent dials belong there — and ungrouped color knobs plus a knob keyed 'scheme' default there anyway); other ungrouped knobs render under Template options."
+                "description": "Where the admin surfaces this knob: 'typography' → the Typography section beside the font slots; 'looks' → the Looks section with the one-click bundles (colour schemes and accent dials belong there, and ungrouped color knobs plus a knob keyed 'scheme' default there anyway); other ungrouped knobs render under Template options."
               },
               "weights": {
                 "type": "array",
@@ -216,7 +216,7 @@
               }
             }
           },
-          "description": "The template's own theming knobs (colour schemes etc.) — rendered as an editor in Appearance/get-started; values land in site-config config.theme."
+          "description": "The template's own theming knobs (colour schemes etc.), rendered as an editor in Appearance/get-started; values land in site-config config.theme."
         }
       }
     }

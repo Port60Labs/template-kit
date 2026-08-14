@@ -22,6 +22,7 @@ import contextContract from '../contract/v1/context.json' with { type: 'json' };
 import fontCatalogue from '../contract/v1/fonts.json' with { type: 'json' };
 import layoutContract from '../contract/v1/layout.json' with { type: 'json' };
 import behaviourCatalogue from '../contract/v1/behaviours.json' with { type: 'json' };
+import { buildSiteFixture, extractContentFootprint, contentModel } from './site-context.mjs';
 
 const Ajv = Ajv2020.default ?? Ajv2020;
 
@@ -55,6 +56,18 @@ export async function validateArtifact(files) {
   } catch (e) {
     return { errors: [`manifest.json unreadable: ${e.message}`], warnings, manifest: null };
   }
+  // preview-content.json is a DEV-ONLY data override: package excludes it and the intake
+  // refuses it — an artifact must never carry data, only shape.
+  if (has('preview-content.json')) {
+    errors.push('preview-content.json: development preview data never ships in an artifact — remove it (package excludes it automatically)');
+  }
+
+  // Content model v1: the footprint is decidable from the sources (closed dialect); unknown
+  // paths, dynamic indexing and tree aliasing are errors from site-context.mjs.
+  const contentAnalysis = extractContentFootprint(files);
+  errors.push(...contentAnalysis.errors);
+  const siteFx = buildSiteFixture(manifest);
+
   const ajv = new Ajv({ allErrors: true });
   const validateManifest = ajv.compile(manifestSchema);
   if (!validateManifest(manifest)) {
@@ -212,15 +225,20 @@ export async function validateArtifact(files) {
   // the data itself — in which case both directions are proven behaviourally (the worship
   // pattern): the populated fixture's sentinel must appear, and the EMPTY context must render it
   // away (derive or omit — nothing invented, nothing dangling).
+  // Sentinels are DERIVED from the canonical fixtures (the first item's display field), never
+  // hardcoded — the fixture data is free to become richer without touching a proof, and a proof
+  // can never drift from the data it renders.
+  const sentinelOf = (type, dataKey, field) =>
+    (contextContract.fixtures.sections?.[type]?.[dataKey] ?? [])[0]?.[field] ?? null;
   const WIDGET_SECTIONS = {
-    events: { island: 'events_carousel', dataKey: 'events', sentinel: 'Fixture Lantern Gala' },
-    whatsOn: { island: 'whats_on_strip', dataKey: 'infoEvents', sentinel: 'Fixture Open Morning' },
-    articles: { island: 'latest_articles', dataKey: 'latestArticles', sentinel: 'Fixture Winter Diary' },
-    campaigns: { island: null, dataKey: 'campaigns', sentinel: 'Fixture Winter Campaign' },
-    resources: { island: null, dataKey: 'resources', sentinel: 'Fixture annual report.pdf' },
-    locations: { island: null, dataKey: 'locations', sentinel: 'Fixture Community Hall' },
-    volunteering: { island: 'volunteer_signup', dataKey: 'opportunities', sentinel: 'Fixture Garden Volunteer' },
-    media: { island: null, dataKey: 'media', sentinel: 'Fixture Community Talk' }
+    events: { island: 'events_carousel', dataKey: 'events', sentinel: sentinelOf('events', 'events', 'name') },
+    whatsOn: { island: 'whats_on_strip', dataKey: 'infoEvents', sentinel: sentinelOf('whatsOn', 'infoEvents', 'name') },
+    articles: { island: 'latest_articles', dataKey: 'latestArticles', sentinel: sentinelOf('articles', 'latestArticles', 'title') },
+    campaigns: { island: null, dataKey: 'campaigns', sentinel: sentinelOf('campaigns', 'campaigns', 'title') },
+    resources: { island: null, dataKey: 'resources', sentinel: sentinelOf('resources', 'resources', 'title') },
+    locations: { island: null, dataKey: 'locations', sentinel: sentinelOf('locations', 'locations', 'name') },
+    volunteering: { island: 'volunteer_signup', dataKey: 'opportunities', sentinel: sentinelOf('volunteering', 'opportunities', 'title') },
+    media: { island: null, dataKey: 'media', sentinel: sentinelOf('media', 'media', 'title') }
   };
 
   // 2–4. Sections: catalogue membership, parse, fixture renders.
@@ -251,12 +269,13 @@ export async function validateArtifact(files) {
         const populated = await liquid.render(parsed, {
           section: {},
           brand: contextContract.fixtures.brand,
+          site: siteFx,
           ...dataFixture
         });
         const placesIsland = widget.island !== null
           && splitIslandParts(populated).some((p) => p.island === widget.island);
         if (!placesIsland) {
-          if (!populated.includes(widget.sentinel)) {
+          if (widget.sentinel && !populated.includes(widget.sentinel)) {
             errors.push(
               widget.island
                 ? `section '${type}': neither places the ${widget.island} island nor renders the ${widget.dataKey} context — render the data (the fixture's "${widget.sentinel}" must appear) or place the island`
@@ -266,9 +285,10 @@ export async function validateArtifact(files) {
           const empty = await liquid.render(parsed, {
             section: {},
             brand: contextContract.fixtures.brand,
+            site: { ...siteFx, content: Object.fromEntries(Object.keys(siteFx.content).map((k) => [k, []])) },
             [widget.dataKey]: []
           });
-          if (empty.includes(widget.sentinel)) {
+          if (widget.sentinel && empty.includes(widget.sentinel)) {
             errors.push(`section '${type}': still shows fixture content with an empty ${widget.dataKey} — content must come from the context`);
           }
           if (/\bundefined\b|\bnull\b/.test(empty.replace(/data-[a-z-]+="[^"]*"/g, ''))) {
@@ -285,19 +305,23 @@ export async function validateArtifact(files) {
         const html = await liquid.render(parsed, {
           section: fixture,
           brand: contextContract.fixtures.brand,
+          site: siteFx,
           // Widget data rides the ordinary fixture renders too, so a hand-rendering section
           // doesn't fail the generic pass for want of its context.
           ...(widget ? (contextContract.fixtures.sections?.[type] ?? {}) : {})
         });
         if (type === 'homeHero' && fixtureName === 'sample') {
-          const probe = 'Hero photo one';
+          // The sample's own first image reference is the probe: `p60fixture:` refs are quote-free
+          // and survive HTML escaping, so "does the hero display the photos?" stays a substring check.
+          const probe = (fixture.images ?? [])[0]?.imageUrl ?? 'p60fixture:';
           homeHeroMultiShows = html.includes(probe)
             || splitIslandParts(html).some((p) => p.island === 'hero_carousel');
           // The single-photo path proven separately: same fixture, first photo only.
           try {
             const single = await liquid.render(parsed, {
               section: { ...fixture, images: (fixture.images ?? []).slice(0, 1) },
-              brand: contextContract.fixtures.brand
+              brand: contextContract.fixtures.brand,
+              site: siteFx
             });
             homeHeroSingleShows = single.includes(probe);
           } catch {
@@ -359,6 +383,7 @@ export async function validateArtifact(files) {
       if (parsedLayout) {
         try {
           const html = await liquid.render(parsedLayout, {
+            site: siteFx,
             brand: contextContract.fixtures.brand,
             nav: contextContract.fixtures.layout.nav,
             socials: contextContract.fixtures.layout.socials ?? [],
@@ -394,10 +419,12 @@ export async function validateArtifact(files) {
             }
             if (manifest?.supports?.worship) {
               const nullHtml = await liquid.render(parsedLayout, {
+                site: siteFx,
                 brand: contextContract.fixtures.brand,
                 nav: contextContract.fixtures.layout.nav,
                 socials: contextContract.fixtures.layout.socials ?? [],
                 worship: null,
+                site: { ...siteFx, content: { ...siteFx.content, schedules: [] } },
                 locale: contextContract.fixtures.layout.locale
               });
               if (nullHtml.includes(worshipProbe)) {
@@ -434,7 +461,7 @@ export async function validateArtifact(files) {
       continue;
     }
     try {
-      const html = await liquid.render(parsedPage, { ...fixture, brand: contextContract.fixtures.brand });
+      const html = await liquid.render(parsedPage, { ...fixture, site: siteFx, brand: contextContract.fixtures.brand });
       for (const part of splitIslandParts(html)) {
         if (part.island === CONTENT_SLOT) {
           errors.push(`page template '${pageName}': uses {% content %} — that tag is layout-only`);
@@ -495,5 +522,35 @@ export async function validateArtifact(files) {
     }
   }
 
-  return { errors, warnings, manifest };
+  // Open enums, proven survivable (content model v1 discipline 2): a template whose footprint
+  // reads site.content.events must survive a registration mode it has never heard of — new modes
+  // WILL arrive within the major. No throw, and no undefined/null literal leaking into markup.
+  if (contentAnalysis.footprint.includes('content.events')) {
+    const futureEvent = {
+      ...(siteFx.content.events[0] ?? {}),
+      id: 'ffffffff-ffff-4fff-8fff-ffffffffffff',
+      name: 'Open Enum Probe Event',
+      registrationMode: 'X_FUTURE_MODE',
+      detailHref: '/events?event=ffffffff-ffff-4fff-8fff-ffffffffffff'
+    };
+    const doctored = { ...siteFx, content: { ...siteFx.content, events: [...siteFx.content.events, futureEvent] } };
+    for (const type of manifest?.supports?.sections ?? []) {
+      const file = `sections/${type}.liquid`;
+      if (!has(file) || !/\bsite\s*[.[]/.test(read(file))) continue;
+      try {
+        const html = await liquid.render(liquid.parse(read(file)), {
+          section: catalogueByType.get(type)?.sample ?? {},
+          brand: contextContract.fixtures.brand,
+          site: doctored
+        });
+        if (/\bundefined\b|\bnull\b/.test(html.replace(/data-[a-z-]+="[^"]*"/g, ''))) {
+          errors.push(`section '${type}': renders 'undefined'/'null' literals for an unknown event registrationMode — the enum is OPEN, branch on the modes you style and fall back for the rest`);
+        }
+      } catch (e) {
+        errors.push(`section '${type}': failed rendering an unknown event registrationMode — the enum is OPEN and new modes will arrive (${e.message})`);
+      }
+    }
+  }
+
+  return { errors, warnings, manifest, contentFootprint: contentAnalysis.footprint, minContentVersion: contentAnalysis.minModelVersion };
 }

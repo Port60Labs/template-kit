@@ -64,7 +64,7 @@
       "name": "stickyHeader",
       "status": "available",
       "label": "Sticky header condense",
-      "description": "State classes for scroll-aware headers: past a small threshold the engine adds is-condensed; with the \"auto-hide\" value, scrolling down past 160px adds is-hidden and scrolling up removes it. The engine only ever toggles classes (rAF-throttled) — what condensing or hiding looks like, and whether it animates, is entirely the template's CSS (gate transitions behind prefers-reduced-motion yourself; the classes always apply because a condensed header is layout, not decoration).",
+      "description": "State classes for scroll-aware headers: past a small threshold the engine adds is-condensed; with the \"auto-hide\" value, scrolling down past 160px adds is-hidden and scrolling up removes it. The engine only ever toggles classes (rAF-throttled), what condensing or hiding looks like, and whether it animates, is entirely the template's CSS (gate transitions behind prefers-reduced-motion yourself; the classes always apply because a condensed header is layout, not decoration).",
       "attributes": [
         { "attr": "data-p60-sticky-header", "value": "none for condense-only; \"auto-hide\" adds the hide-on-scroll-down pair" }
       ],
@@ -75,7 +75,7 @@
       "name": "stickyCta",
       "status": "available",
       "label": "Sticky call-to-action bar",
-      "description": "Adds is-stuck once the visitor scrolls past the threshold (the attribute value in px, default 480) and removes it above. The bar should DUPLICATE an action that already exists in the page (a donate button, a ticket link) — because of that, this is the one behaviour whose element may be hidden unconditionally in CSS rather than .p60-js-scoped: a no-JS visitor loses nothing, the original action is still on the page.",
+      "description": "Adds is-stuck once the visitor scrolls past the threshold (the attribute value in px, default 480) and removes it above. The bar should DUPLICATE an action that already exists in the page (a donate button, a ticket link); because of that, this is the one behaviour whose element may be hidden unconditionally in CSS rather than .p60-js-scoped: a no-JS visitor loses nothing; the original action is still on the page.",
       "attributes": [
         { "attr": "data-p60-sticky-cta", "value": "optional scroll threshold in px (default 480)" }
       ],
@@ -86,7 +86,7 @@
       "name": "lightbox",
       "status": "available",
       "label": "Lightbox",
-      "description": "On a group container: each data-p60-lightbox-item is an anchor whose href is the full image (the no-JS render simply navigates to it — already functional). The engine intercepts the click and opens an injected overlay (.p60-lightbox) with the image, a caption from data-p60-caption or the thumbnail's alt, a close button, backdrop and Escape close, arrow-key prev/next within the group, and a focus trap. Reduced motion: no transition on the overlay (the engine sets none; style the steady state).",
+      "description": "On a group container: each data-p60-lightbox-item is an anchor whose href is the full image (the no-JS render simply navigates to it, already functional). The engine intercepts the click and opens an injected overlay (.p60-lightbox) with the image, a caption from data-p60-caption or the thumbnail's alt, a close button, backdrop and Escape close, arrow-key prev/next within the group, and a focus trap. Reduced motion: no transition on the overlay (the engine sets none; style the steady state).",
       "attributes": [
         { "attr": "data-p60-lightbox", "value": "none; the group container" },
         { "attr": "data-p60-lightbox-item", "value": "none; on each anchor to a full image" },
@@ -100,7 +100,7 @@
       "name": "tabs",
       "status": "available",
       "label": "Tabs",
-      "description": "data-p60-tab=\"key\" on each tab control and data-p60-panel=\"key\" on each panel, inside a data-p60-tabs container. The engine wires the tablist/tab/tabpanel roles, aria-selected, roving tabindex, arrow/Home/End keys, toggles is-active on the active pair and hides inactive panels with the hidden attribute — so the no-JS render shows every panel stacked and complete, with no CSS scoping needed. The first tab (or the one authored with is-active) starts active.",
+      "description": "data-p60-tab=\"key\" on each tab control and data-p60-panel=\"key\" on each panel, inside a data-p60-tabs container. The engine wires the tablist/tab/tabpanel roles, aria-selected, roving tabindex, arrow/Home/End keys, toggles is-active on the active pair and hides inactive panels with the hidden attribute, so the no-JS render shows every panel stacked and complete, with no CSS scoping needed. The first tab (or the one authored with is-active) starts active.",
       "attributes": [
         { "attr": "data-p60-tabs", "value": "none; the container" },
         { "attr": "data-p60-tab", "value": "the key of the panel this control activates" },

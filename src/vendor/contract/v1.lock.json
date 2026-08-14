@@ -1,5 +1,5 @@
 {
-  "_comment": "FROZEN compatibility baseline for port60-liquid@1 (8.6). tests/contract-freeze.test.mjs enforces that everything here still exists — removals/narrowings fail. Regenerate ONLY deliberately via scripts/contract-lock.mjs; the diff is the review.",
+  "_comment": "FROZEN compatibility baseline for port60-liquid@1 (8.6). tests/contract-freeze.test.mjs enforces that everything here still exists, removals/narrowings fail. Regenerate ONLY deliberately via scripts/contract-lock.mjs; the diff is the review.",
   "format": "port60-liquid@1",
   "dialect": {
     "tags": [

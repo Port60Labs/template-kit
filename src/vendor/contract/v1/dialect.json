@@ -1,6 +1,6 @@
 {
   "format": "port60-liquid@1",
-  "description": "The Port60 template dialect — a strict, whitelisted subset of Liquid. Anything not listed here is rejected at parse time by the engine and at publish time by the conformance validator.",
+  "description": "The Port60 template dialect, a strict, whitelisted subset of Liquid. Anything not listed here is rejected at parse time by the engine and at publish time by the conformance validator.",
   "outputEscape": "escape",
   "rawFilter": "raw",
   "tags": [
@@ -16,7 +16,7 @@
     {
       "name": "island",
       "usage": "{% island 'donation_widget' %}",
-      "description": "Places a platform functional island (a live, hydrated component) at this position. Templates place islands, never implement them — the island's markup, behaviour and data are platform-owned and upgraded platform-side. The island name must be declared in the manifest's supports.islands."
+      "description": "Places a platform functional island (a live, hydrated component) at this position. Templates place islands, never implement them, the island's markup, behaviour and data are platform-owned and upgraded platform-side. The island name must be declared in the manifest's supports.islands."
     },
     {
       "name": "content",
@@ -34,6 +34,6 @@
   ],
   "excluded": {
     "tags": ["include", "render", "layout", "tablerow", "cycle", "increment", "decrement"],
-    "reason": "File inclusion (no file system exists inside an artifact yet — a snippets mechanism arrives with the Layout slot), table markup generation, and stateful counters are outside the v1 dialect."
+    "reason": "File inclusion (no file system exists inside an artifact yet, a snippets mechanism arrives with the Layout slot), table markup generation, and stateful counters are outside the v1 dialect."
   }
 }

@@ -15,6 +15,13 @@ import dialect from '../contract/v1/dialect.json' with { type: 'json' };
 import sectionCatalogue from '../contract/v1/sections.json' with { type: 'json' };
 import islandRegistry from '../contract/v1/islands.json' with { type: 'json' };
 import contextContract from '../contract/v1/context.json' with { type: 'json' };
+import { resolveFixtureArt } from './fixture-art.mjs';
+import { buildSiteFixture, applyPreviewContent } from './site-context.mjs';
+
+// Fixture imagery resolved for the SEALED studio render (p60fixture: refs become inline-SVG data
+// URIs the network-dead CSP can show). The dev preview may instead resolve them to the platform
+// CDN via options.fixtureImageBase — the dev-richer / studio-sealed split.
+const STUDIO_FX = resolveFixtureArt(contextContract.fixtures);
 
 const escapeHtml = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -35,7 +42,7 @@ function previewNote(name) {
 }
 
 function eventCards(events) {
-  return events.slice(0, 2).map((event) => `
+  return events.slice(0, 3).map((event) => `
     <article class="carousel-slide">
       <div class="carousel-caption">
         <p>${escapeHtml(event.venueName ?? (event.online ? 'Online' : 'Event'))}</p>
@@ -45,8 +52,8 @@ function eventCards(events) {
     </article>`).join('');
 }
 
-function islandSkeleton(name, ctx = {}) {
-  const fixtures = contextContract.fixtures;
+function islandSkeleton(name, ctx = {}, fx = STUDIO_FX) {
+  const fixtures = fx;
   const events = fixtures.sections?.events?.events ?? fixtures.pages?.events?.events ?? [];
   const infoEvents = fixtures.sections?.whatsOn?.infoEvents ?? [];
   const articles = fixtures.sections?.articles?.latestArticles ?? [];
@@ -69,12 +76,14 @@ function islandSkeleton(name, ctx = {}) {
         <button class="nav-p60-signin" type="button" disabled><span class="p60-mark" aria-hidden="true">P</span> Sign in</button>
         ${previewNote(name)}
       </div>`;
-    case 'events_carousel':
+    case 'events_carousel': {
+      const dots = Math.max(Math.min(events.length, 3), 2);
       return `<section class="events-carousel" data-p60-preview-island="events_carousel">
         ${previewNote(name)}
         ${eventCards(events)}
-        <div class="carousel-dots" aria-hidden="true"><span class="carousel-dot"></span><span class="carousel-dot"></span></div>
+        <div class="carousel-dots" aria-hidden="true">${Array.from({ length: dots }, () => '<span class="carousel-dot"></span>').join('')}</div>
       </section>`;
+    }
     case 'whats_on_strip':
       return `<section class="info-events-bar" data-p60-preview-island="whats_on_strip">
         ${previewNote(name)}
@@ -101,7 +110,7 @@ function islandSkeleton(name, ctx = {}) {
         <div class="article-share-group"><span class="article-share-word">Share</span><button class="article-share-btn" type="button" disabled>Email</button><button class="article-share-btn" type="button" disabled>Copy link</button></div>
       </aside>`;
     case 'next_prayer': {
-      const time = (contextContract.fixtures.layout?.worship?.times ?? [])
+      const time = (fx.layout?.worship?.times ?? [])
         .find((t) => t.name === 'Asr') ?? { name: 'Asr', congregation: '19:00' };
       return `<aside class="next-prayer" data-p60-preview-island="next_prayer">
         ${previewNote(name)}
@@ -111,7 +120,7 @@ function islandSkeleton(name, ctx = {}) {
     case 'article_comments':
       return `<section class="article-comments" data-p60-preview-island="article_comments">
         ${previewNote(name)}
-        <div class="article-comment-list"><article class="article-comment"><header class="article-comment-head"><strong>Fixture supporter</strong></header><p>Thank you for sharing this update.</p></article></div>
+        <div class="article-comment-list"><article class="article-comment"><header class="article-comment-head"><strong>Margaret H.</strong></header><p>Wonderful to see the garden open at last. See you Saturday.</p></article></div>
         <div class="article-comments-gate"><p class="article-comments-note">Sign in to join the conversation.</p></div>
       </section>`;
     case 'hero_carousel': {
@@ -137,12 +146,36 @@ function islandSkeleton(name, ctx = {}) {
     case 'language_switch':
       return `<label class="language-switch" data-p60-preview-island="language_switch">${previewNote(name)}<span class="language-switch-label">Language</span><select class="language-switch-select" disabled><option>English</option><option>Cymraeg</option><option>العربية</option></select></label>`;
     case 'search':
-      return `<div class="site-search" data-p60-preview-island="search">${previewNote(name)}<form class="site-search-form"><label class="site-search-label">Search this site</label><div class="site-search-fields"><input class="site-search-input" type="search" disabled><button class="site-search-submit" type="button" disabled>Search</button></div></form><ul class="site-search-results"><li class="site-search-result"><span class="site-search-kind">Article</span><a class="site-search-link" href="#">Fixture search result</a><p class="site-search-summary">A realistic non-interactive preview result.</p></li></ul></div>`;
+      return `<div class="site-search" data-p60-preview-island="search">${previewNote(name)}<form class="site-search-form"><label class="site-search-label">Search this site</label><div class="site-search-fields"><input class="site-search-input" type="search" disabled><button class="site-search-submit" type="button" disabled>Search</button></div></form><ul class="site-search-results"><li class="site-search-result"><span class="site-search-kind">Article</span><a class="site-search-link" href="#">The Community Garden Opens Its Gates</a><p class="site-search-summary">Two years of digging and Saturday mornings in the rain: the Foundry Lane garden is open.</p></li></ul></div>`;
     case 'volunteer_signup': {
-      const opportunities = contextContract.fixtures.sections?.volunteering?.opportunities ?? [];
-      const options = (opportunities.length ? opportunities : [{ title: 'Fixture Garden Volunteer' }])
+      const opportunities = fx.sections?.volunteering?.opportunities ?? [];
+      const options = (opportunities.length ? opportunities : [{ title: 'Garden Volunteer' }])
         .map((o) => `<option>${escapeHtml(o.title)}</option>`).join('');
       return `<form class="volunteer-signup" data-p60-preview-island="volunteer_signup">${previewNote(name)}<label class="volunteer-field"><span>Opportunity</span><select disabled>${options}</select></label><label class="volunteer-field"><span>Name</span><input disabled></label><label class="volunteer-field"><span>Email address</span><input disabled></label><label class="volunteer-privacy"><input type="checkbox" disabled><span>I agree that the organisation may respond.</span></label><button class="volunteer-submit" type="button" disabled>Register my interest</button></form>`;
+    }
+    case 'map': {
+      // The impact-map skeleton: the fixture's points projected onto a token-themed canvas —
+      // the same fallback rendering production uses until the platform tile layer is configured.
+      const im = fx.sections?.impactMap?.impactMap ?? { title: 'Impact map', points: [] };
+      const pts = im.points ?? [];
+      const lats = pts.map((pt) => pt.latitude);
+      const lngs = pts.map((pt) => pt.longitude);
+      const pad = 0.15;
+      const latMin = Math.min(...lats), latMax = Math.max(...lats);
+      const lngMin = Math.min(...lngs), lngMax = Math.max(...lngs);
+      const pos = (pt) => {
+        const x = lngMax === lngMin ? 50 : (pad + (1 - 2 * pad) * ((pt.longitude - lngMin) / (lngMax - lngMin))) * 100;
+        const y = latMax === latMin ? 50 : (pad + (1 - 2 * pad) * (1 - (pt.latitude - latMin) / (latMax - latMin))) * 100;
+        return `left:${x.toFixed(1)}%;top:${y.toFixed(1)}%`;
+      };
+      const first = pts[0] ?? null;
+      return `<section class="impact-map" data-p60-preview-island="map">
+        ${previewNote(name)}
+        <div class="impact-map-canvas" style="position:relative;min-height:320px;border-radius:12px;background:linear-gradient(160deg,#22303c,#101820)">
+          ${pts.map((pt, i) => `<button class="impact-map-pin${i === 0 ? ' impact-map-pin--active' : ''}" type="button" disabled style="position:absolute;${pos(pt)};width:14px;height:14px;border-radius:50%;border:2px solid #fff;background:currentColor" aria-label="${escapeHtml(pt.title)}"></button>`).join('')}
+        </div>
+        ${first ? `<aside class="impact-map-card"><span class="impact-map-card-kind">${escapeHtml(first.kind)}</span><h3 class="impact-map-card-title">${escapeHtml(first.title)}</h3><p class="impact-map-card-summary">${escapeHtml(first.summary ?? '')}</p>${first.href ? `<a class="impact-map-card-cta" href="${escapeHtml(first.href)}">See more</a>` : ''}</aside>` : '<p class="impact-map-empty">No published map yet.</p>'}
+      </section>`;
     }
     case 'form':
       return `<form class="public-form" data-p60-preview-island="form">${previewNote(name)}<header class="public-form-head"><h2>Ask the team</h2><p>Send a question and the team will respond.</p></header><label class="public-form-field"><span>Name</span><input disabled></label><label class="public-form-field"><span>Email address</span><input disabled></label><label class="public-form-field"><span>Your question</span><textarea disabled></textarea></label><label class="public-form-privacy"><input type="checkbox" disabled><span>I agree that the organisation may respond.</span></label><button class="public-form-submit" type="button" disabled>Send</button></form>`;
@@ -162,8 +195,8 @@ function surfaceDivider(label) {
   return `<div class="p60-preview-divider" role="note">platform page: ${escapeHtml(label)} — styled by your tokens and chrome</div>`;
 }
 
-function eventsListingSkeleton() {
-  const events = contextContract.fixtures.pages?.events?.events ?? [];
+function eventsListingSkeleton(fx = STUDIO_FX) {
+  const events = fx.pages?.events?.events ?? [];
   return `${surfaceDivider('events')}<section class="section"><div class="container">
     <h1>What's on</h1>
     <div class="event-grid">${events.map((e) => `
@@ -178,8 +211,8 @@ function eventsListingSkeleton() {
   </div></section>`;
 }
 
-function eventDetailSkeleton() {
-  const event = (contextContract.fixtures.pages?.events?.events ?? [])
+function eventDetailSkeleton(fx = STUDIO_FX) {
+  const event = (fx.pages?.events?.events ?? [])
     .find((e) => e.registrationMode === 'TICKETED') ?? { name: 'Fixture Gala', venueName: 'Town Hall' };
   const tier = (name, sub, price, note) => `
     <div class="ticket-type"><div class="tt-main">
@@ -204,9 +237,9 @@ function eventDetailSkeleton() {
   </div></section>`;
 }
 
-function donateSkeleton() {
-  const causes = contextContract.fixtures.sections?.appealGrid?.causes
-    ?? contextContract.fixtures.sections?.emergency?.causes ?? [];
+function donateSkeleton(fx = STUDIO_FX) {
+  const causes = fx.sections?.appealGrid?.causes
+    ?? fx.sections?.emergency?.causes ?? [];
   return `${surfaceDivider('donate')}<section class="section"><div class="container">
     <h1>Donate</h1>
     <div class="cause-options">${causes.slice(0, 2).map((c) => `
@@ -215,12 +248,12 @@ function donateSkeleton() {
         <p class="cause-option-desc">${escapeHtml(c.text ?? c.description ?? '')}</p>
         <div class="cause-progress"><div class="cause-progress-track"><div class="cause-progress-fill" style="width: 62%"></div></div><span class="cause-progress-text">62% of target</span></div>
       </article>`).join('')}</div>
-    ${islandSkeleton('donation_widget')}
+    ${islandSkeleton('donation_widget', {}, fx)}
   </div></section>`;
 }
 
-function articlesListingSkeleton() {
-  const articles = contextContract.fixtures.pages?.articles?.articles ?? [];
+function articlesListingSkeleton(fx = STUDIO_FX) {
+  const articles = fx.pages?.articles?.articles ?? [];
   return `${surfaceDivider('articles')}<section class="section"><div class="container">
     <h1>Latest</h1>
     <div class="article-grid">${articles.map((a) => `
@@ -232,23 +265,23 @@ function articlesListingSkeleton() {
   </div></section>`;
 }
 
-function articleDetailSkeleton() {
-  const article = contextContract.fixtures.pages?.article?.article ?? { title: 'Fixture article', bodyHtml: '<p>Body</p>' };
+function articleDetailSkeleton(fx = STUDIO_FX) {
+  const article = fx.pages?.article?.article ?? { title: 'Fixture article', bodyHtml: '<p>Body</p>' };
   return `${surfaceDivider('article')}<section class="section"><div class="container">
     <article class="article-body">
       <h1>${escapeHtml(article.title)}</h1>
       <p class="article-card-meta">${escapeHtml(article.authorName ?? '')} · ${article.readingMinutes ?? 3} min read</p>
       ${article.bodyHtml ?? ''}
-      ${islandSkeleton('article_engagement')}
-      ${islandSkeleton('article_comments')}
+      ${islandSkeleton('article_engagement', {}, fx)}
+      ${islandSkeleton('article_comments', {}, fx)}
     </article>
   </div></section>`;
 }
 
-function campaignsListingSkeleton() {
-  const campaigns = contextContract.fixtures.sections?.campaigns?.campaigns ?? [];
+function campaignsListingSkeleton(fx = STUDIO_FX) {
+  const campaigns = fx.sections?.campaigns?.campaigns ?? [];
   return `${surfaceDivider('campaigns')}<section class="section"><div class="container">
-    <h1>${escapeHtml(contextContract.fixtures.sections?.campaigns?.campaignsLabel ?? 'Campaigns')}</h1>
+    <h1>${escapeHtml(fx.sections?.campaigns?.campaignsLabel ?? 'Campaigns')}</h1>
     <div class="article-grid">${campaigns.map((c) => `
       <article class="article-card"><div class="article-card-body">
         <h3><a href="/campaigns/${escapeHtml(c.href?.split('/').pop() ?? '')}">${escapeHtml(c.title)}</a></h3>
@@ -257,18 +290,18 @@ function campaignsListingSkeleton() {
   </div></section>`;
 }
 
-function campaignDetailSkeleton() {
-  const campaign = (contextContract.fixtures.sections?.campaigns?.campaigns ?? [])[0]
+function campaignDetailSkeleton(fx = STUDIO_FX) {
+  const campaign = (fx.sections?.campaigns?.campaigns ?? [])[0]
     ?? { title: 'Fixture Winter Campaign', summary: '' };
   return `${surfaceDivider('campaign')}<section class="section"><div class="container">
     <h1>${escapeHtml(campaign.title)}</h1>
     ${campaign.summary ? `<p>${escapeHtml(campaign.summary)}</p>` : ''}
-    ${islandSkeleton('form')}
+    ${islandSkeleton('form', {}, fx)}
   </div></section>`;
 }
 
-function servicesListingSkeleton() {
-  const services = contextContract.fixtures.sections?.programmes?.services ?? [];
+function servicesListingSkeleton(fx = STUDIO_FX) {
+  const services = fx.sections?.programmes?.services ?? [];
   return `${surfaceDivider('services')}<section class="section"><div class="container">
     <h1>What we do</h1>
     <div class="article-grid">${services.map((s) => `
@@ -279,8 +312,8 @@ function servicesListingSkeleton() {
   </div></section>`;
 }
 
-function serviceDetailSkeleton() {
-  const service = (contextContract.fixtures.sections?.programmes?.services ?? [])[0]
+function serviceDetailSkeleton(fx = STUDIO_FX) {
+  const service = (fx.sections?.programmes?.services ?? [])[0]
     ?? { title: 'Fixture service', summary: '' };
   return `${surfaceDivider('service page')}<section class="section"><div class="container">
     <article class="article-body">
@@ -292,8 +325,8 @@ function serviceDetailSkeleton() {
   </div></section>`;
 }
 
-function courseListingSkeleton() {
-  const course = contextContract.fixtures.pages?.course?.course ?? { title: 'Fixture course' };
+function courseListingSkeleton(fx = STUDIO_FX) {
+  const course = fx.pages?.course?.course ?? { title: 'Fixture course' };
   return `${surfaceDivider('courses')}<section class="section"><div class="container">
     <h1>Courses</h1>
     <article class="event-card"><div class="event-card-body">
@@ -329,17 +362,18 @@ function surfaceBar(active) {
     link('services', '/services'), link('service', '/services?service=fixture'),
     link('donate', '/donate'), link('articles', '/articles'), link('article', '/articles/fixture'),
     link('campaigns', '/campaigns'), link('campaign', '/campaigns/fixture'), link('course', '/courses'),
+    `<a href="/model" style="margin-left:auto;font-weight:700">site.content model →</a>`,
   ];
   return `<nav class="p60-preview-surfaces" aria-label="Preview surfaces" style="position:sticky;top:0;z-index:99;display:flex;gap:12px;flex-wrap:wrap;padding:8px 14px;font:12px/1.4 system-ui,sans-serif;background:#0b1220;color:#e6e9f2;opacity:.94">
     <strong style="letter-spacing:.06em;text-transform:uppercase;font-size:10px">Surfaces</strong>${links.join('')}
   </nav>`;
 }
 
-function partsToHtml(html, contentHtml, ctx = {}) {
+function partsToHtml(html, contentHtml, ctx = {}, fx = STUDIO_FX) {
   let out = '';
   for (const part of splitIslandParts(html)) {
     if (part.island === CONTENT_SLOT) out += contentHtml ?? '';
-    else if (part.island) out += islandSkeleton(part.island, ctx);
+    else if (part.island) out += islandSkeleton(part.island, ctx, fx);
     else out += part.html;
   }
   return out;
@@ -377,7 +411,49 @@ export async function renderStudioPreview(files, options = {}) {
   configureDialect(liquid, dialect, allIslands);
 
   const catalogueByType = new Map(sectionCatalogue.sections.map((s) => [s.type, s]));
-  const brand = contextContract.fixtures.brand;
+  // Studio-sealed by default; the kit's dev server may pass fixtureImageBase to resolve fixture
+  // imagery to the platform CDN instead of inline-SVG art (the dev-richer half of the split).
+  const artOptions = options.fixtureImageBase ? { imageBase: options.fixtureImageBase } : null;
+  let fx = artOptions ? resolveFixtureArt(contextContract.fixtures, artOptions) : STUDIO_FX;
+  // The one content tree (content model v1): about composed from this manifest's declared
+  // sections, dev preview-content overlaid when the kit passes it (validated there), imagery
+  // resolved exactly like the rest of the fixtures.
+  const site = resolveFixtureArt(
+    applyPreviewContent(buildSiteFixture(manifest), options.previewContent ?? null),
+    artOptions ?? {});
+  const brand = site.brand ?? fx.brand;
+  // With a content override, the TREE is the source of truth for every fixture view: the routed
+  // platform skeletons and island skeletons re-derive their slices from the overridden site, so
+  // the developer's own data shows on /events, /donate and friends, not just where site.* is read.
+  if (options.previewContent) {
+    const c = site.content;
+    fx = {
+      ...fx,
+      brand: site.brand,
+      pages: {
+        ...fx.pages,
+        events: { events: c.events },
+        articles: { ...fx.pages?.articles, articles: c.articles },
+        article: c.articles?.length
+          ? { ...fx.pages?.article, article: { ...fx.pages?.article?.article, ...c.articles[0] } }
+          : fx.pages?.article
+      },
+      sections: {
+        ...fx.sections,
+        events: { events: (c.events ?? []).filter((e) => e.registrationMode === 'TICKETED') },
+        whatsOn: { infoEvents: (c.events ?? []).filter((e) => e.registrationMode === 'INFO') },
+        articles: { latestArticles: c.articles ?? [] },
+        campaigns: { ...fx.sections?.campaigns, campaigns: c.campaigns ?? [] },
+        appealGrid: { causes: c.causes ?? [] },
+        emergency: { causes: c.causes ?? [] },
+        programmes: { services: c.services ?? [] },
+        resources: { resources: c.resources ?? [] },
+        locations: { locations: c.locations ?? [] },
+        volunteering: { opportunities: c.volunteering ?? [] },
+        media: { media: c.media ?? [] }
+      }
+    };
+  }
 
   const surface = options.surface ?? 'home';
   let contentHtml;
@@ -386,15 +462,15 @@ export async function renderStudioPreview(files, options = {}) {
     // platform-page fixture skeleton — either way inside the theme's layout below.
     const def = SURFACES[surface];
     const templateSource = def.template ? files[`pages/${def.template}.liquid`] : null;
-    const fixture = def.template ? contextContract.fixtures.pages?.[def.template] : null;
+    const fixture = def.template ? fx.pages?.[def.template] : null;
     if (templateSource != null && fixture != null
         && (manifest?.supports?.pageTemplates ?? []).includes(def.template)) {
-      const context = { brand, ...fixture };
+      const context = { brand, site, ...fixture };
       const rendered = await liquid.parseAndRender(templateSource, context);
       contentHtml = `<div class="p60-preview-divider" role="note">page template: ${escapeHtml(def.template)}</div>`
-        + partsToHtml(rendered, '', context);
+        + partsToHtml(rendered, '', context, fx);
     } else {
-      contentHtml = def.builtin();
+      contentHtml = def.builtin(fx);
     }
   } else {
     const sectionsHtml = [];
@@ -403,14 +479,15 @@ export async function renderStudioPreview(files, options = {}) {
       const source = files[`sections/${type}.liquid`];
       if (!entry || source == null) continue;
       const context = {
-        section: entry.sample ?? {},
+        section: artOptions ? resolveFixtureArt(entry.sample ?? {}, artOptions) : resolveFixtureArt(entry.sample ?? {}),
         brand,
-        ...(contextContract.fixtures.sections?.[type] ?? {})
+        site,
+        ...(fx.sections?.[type] ?? {})
       };
       const rendered = await liquid.parseAndRender(source, context);
       // Island skeletons see the SAME context the section rendered with — that is what lets the
       // hero carousel skeleton hydrate from the section's own photo fixtures.
-      sectionsHtml.push(partsToHtml(rendered, '', context));
+      sectionsHtml.push(partsToHtml(rendered, '', context, fx));
     }
 
     // Declared page templates render too (over their page fixtures) — the loop an author lives in
@@ -418,12 +495,12 @@ export async function renderStudioPreview(files, options = {}) {
     // each at its own path; this keeps the studio's single document complete.
     for (const page of manifest?.supports?.pageTemplates ?? []) {
       const source = files[`pages/${page}.liquid`];
-      const fixture = contextContract.fixtures.pages?.[page];
+      const fixture = fx.pages?.[page];
       if (source == null || fixture == null) continue;
-      const context = { brand, ...fixture };
+      const context = { brand, site, ...fixture };
       const rendered = await liquid.parseAndRender(source, context);
       sectionsHtml.push(`<div class="p60-preview-divider" role="note">page template: ${escapeHtml(page)}</div>`
-        + partsToHtml(rendered, '', context));
+        + partsToHtml(rendered, '', context, fx));
     }
     contentHtml = sectionsHtml.join('\n');
   }
@@ -432,12 +509,13 @@ export async function renderStudioPreview(files, options = {}) {
   if (manifest?.supports?.layout && files['layout.liquid'] != null) {
     const rendered = await liquid.parseAndRender(files['layout.liquid'], {
       brand,
-      nav: contextContract.fixtures.layout.nav,
-      socials: contextContract.fixtures.layout.socials ?? [],
-      worship: manifest?.supports?.worship ? (contextContract.fixtures.layout.worship ?? null) : null,
-      locale: contextContract.fixtures.layout.locale
+      site,
+      nav: fx.layout.nav,
+      socials: fx.layout.socials ?? [],
+      worship: manifest?.supports?.worship ? (fx.layout.worship ?? null) : null,
+      locale: fx.layout.locale
     });
-    bodyHtml = partsToHtml(rendered, contentHtml);
+    bodyHtml = partsToHtml(rendered, contentHtml, {}, fx);
   } else {
     bodyHtml = contentHtml;
   }
@@ -451,9 +529,24 @@ export async function renderStudioPreview(files, options = {}) {
   // nothing and keep the fully script-free CSP. Without the runtime, a CSS-only crossfade
   // approximates behaviour carousels so a static preview still reads as alive.
   const runtime = options.behaviorsRuntime ?? null;
+  // With a fixture image base, the dev document may load imagery from that ONE origin; the studio
+  // render never widens beyond data: URIs.
+  const imgOrigins = new Set();
+  if (options.fixtureImageBase) {
+    try {
+      imgOrigins.add(new URL(options.fixtureImageBase).origin);
+    } catch {
+      // A relative or malformed base stays sealed rather than guessing an origin.
+    }
+  }
+  // The author's own imagery (a --content override) renders from exactly the hosts it names.
+  for (const origin of options.contentImageOrigins ?? []) {
+    imgOrigins.add(origin);
+  }
+  const imgSrc = ['data:', ...imgOrigins].join(' ');
   const csp = runtime
-    ? "default-src 'none'; style-src 'unsafe-inline'; img-src data:; script-src 'unsafe-inline';"
-    : "default-src 'none'; style-src 'unsafe-inline'; img-src data:;";
+    ? `default-src 'none'; style-src 'unsafe-inline'; img-src ${imgSrc}; script-src 'unsafe-inline';`
+    : `default-src 'none'; style-src 'unsafe-inline'; img-src ${imgSrc};`;
   const motionApproximation = runtime ? '' : `
 @media (prefers-reduced-motion: no-preference) {
   [data-p60-carousel] > [data-p60-slide], .p60-preview-slide { animation: p60-preview-crossfade 8s infinite; }

@@ -1,16 +1,16 @@
 {% comment %}
-  Live campaigns — the starter's plain rendering of the `campaigns` context, kept simple on
+  Live site.content.campaigns, the starter's plain rendering of the `site.content.campaigns` context, kept simple on
   purpose: this template is the worked example template authors copy from. The context is the
-  platform's published campaigns; hrefs are platform-derived — always link via campaign.href.
+  platform's published site.content.campaigns; hrefs are platform-derived, always link via campaign.href.
   Derive or omit: nothing renders when no campaign is live.
 {% endcomment %}
-{% if campaigns.size > 0 %}
-<section class="lq-campaigns">
+{% if site.content.campaigns.size > 0 %}
+<section class="lq-site.content.campaigns">
   <div class="container">
     <h2>{{ section.heading | default: campaignsLabel }}</h2>
     {% if section.text %}<p>{{ section.text }}</p>{% endif %}
     <ul class="lq-campaign-list">
-      {% for campaign in campaigns %}
+      {% for campaign in site.content.campaigns %}
       <li class="lq-campaign">
         <h3>{{ campaign.title }}</h3>
         {% if campaign.summary %}<p>{{ campaign.summary }}</p>{% endif %}

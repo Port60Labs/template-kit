@@ -3,9 +3,8 @@ import { validateArtifact } from '../vendor/validator/validate.mjs';
 import { loadArtifactDir } from '../lib/artifactFiles.mjs';
 
 /**
- * `validate <dir> [--json]` — the exact checks the platform runs at upload, plus the T3 promise:
- * **supports as an OUTPUT**. On a clean pass the manifest's supports block IS the proven set —
- * the validator's two-way honesty checks (declared ⇒ renders the fixture, renders ⇒ declared)
+ * `validate <dir> [--json]`, the exact checks the platform runs at upload, plus the T3 promise:
+ * **supports as an OUTPUT**. On a clean pass the manifest's supports block IS the proven set, * the validator's two-way honesty checks (declared ⇒ renders the fixture, renders ⇒ declared)
  * are what turn a declaration into proof. `--json` is the AI agent's feedback loop: iterate
  * until {ok: true}.
  */

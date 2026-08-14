@@ -4227,3 +4227,24 @@ textarea.p60-form-control {
 @media (max-width: 640px) {
   .people-grid { grid-template-columns: 1fr; }
 }
+
+/* ── Impact map island (WP4) — baseline look; templates restyle via the styling API. Colours ride
+   currentColor and the theme's tokens so the island wears the template's clothes. */
+.impact-map { margin: 24px 0; }
+.impact-map-head h2 { margin: 0 0 6px; }
+.impact-map-intro { margin: 0 0 14px; opacity: 0.85; }
+.impact-map-canvas { position: relative; min-height: 340px; border-radius: 14px; overflow: hidden;
+  background: linear-gradient(160deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.55)), currentColor; }
+.impact-map-pin { position: absolute; width: 16px; height: 16px; border-radius: 50%;
+  transform: translate(-50%, -50%); border: 2px solid #fff; background: currentColor;
+  cursor: pointer; padding: 0; transition: transform 120ms ease; }
+.impact-map-pin:hover, .impact-map-pin:focus-visible { transform: translate(-50%, -50%) scale(1.35); }
+.impact-map-pin--active { box-shadow: 0 0 0 5px rgb(255 255 255 / 28%); }
+.impact-map-card { margin-top: 14px; border: 1px solid rgb(127 127 127 / 30%); border-radius: 12px;
+  padding: 16px 18px; max-width: 34rem; }
+.impact-map-card-kind { display: inline-block; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.65; margin-bottom: 4px; }
+.impact-map-card-title { margin: 0 0 6px; }
+.impact-map-card-summary { margin: 0 0 10px; opacity: 0.9; }
+.impact-map-card-cta { font-weight: 600; }
+.impact-map-empty { opacity: 0.7; }

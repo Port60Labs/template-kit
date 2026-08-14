@@ -1,5 +1,5 @@
 {
-  "description": "The maximum lengths of every admin-entered display field a template renders. The admin screens stop input at these caps and the API rejects anything longer, so a template can design cards, headings and captions against known worst cases. Additive-only within a contract major: a bound may loosen, never tighten. Long-form bodies (article bodies, course About pages, service pages) are deliberately outside this table — they are sanitised HTML rendered in dedicated full-width regions, never inside cards.",
+  "description": "The maximum lengths of every admin-entered display field a template renders. The admin screens stop input at these caps and the API rejects anything longer, so a template can design cards, headings and captions against known worst cases. Additive-only within a contract major: a bound may loosen, never tighten. Long-form bodies (article bodies, course About pages, service pages) are deliberately outside this table; they are sanitised HTML rendered in dedicated full-width regions, never inside cards.",
   "groups": [
     {
       "name": "Brand (layout chrome)",
@@ -68,7 +68,7 @@
         {
           "field": "Tag",
           "max": 40,
-          "note": "Each — rendered as chips."
+          "note": "Each, rendered as chips."
         }
       ]
     },
@@ -109,7 +109,7 @@
         {
           "field": "Page name",
           "max": 200,
-          "note": "The body is sanitised HTML rendered full-width — not card content."
+          "note": "The body is sanitised HTML rendered full-width, not card content."
         }
       ]
     }

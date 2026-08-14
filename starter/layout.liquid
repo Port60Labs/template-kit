@@ -1,22 +1,21 @@
 {% comment %}
-  The starter's chrome — header/nav/footer around the {% content %} slot. It reuses the platform
+  The starter's chrome, header/nav/footer around the {% content %} slot. It reuses the platform
   chrome classes (.site-header/.site-nav/…) so the base mechanics (sticky header, burger
   breakpoint, dropdown hover) apply, and emits the documented behaviour attributes
   (data-nav-burger, #site-nav) so the platform tail script wires the mobile burger. Identity is
-  PLACED, never rebuilt: {% island 'member_menu' %}. The footer derives everything from brand/nav —
-  no fabricated copy (derive or omit).
+  PLACED, never rebuilt: {% island 'member_menu' %}. The footer derives everything from brand/nav, no fabricated copy (derive or omit).
 {% endcomment %}
 <header class="site-header">
   <div class="container header-inner">
     <a class="brand-lockup" href="/">
-      {% if brand.logoUrl and brand.logoType != 'icon' %}
-        <img class="brand-logo" src="{{ brand.logoUrl }}" alt="{{ brand.name }}">
-      {% elsif brand.logoUrl %}
-        <img class="brand-logo-icon" src="{{ brand.logoUrl }}" alt="">
-        <strong>{{ brand.name }}</strong>
+      {% if site.brand.logoUrl and site.brand.logoType != 'icon' %}
+        <img class="brand-logo" src="{{ site.brand.logoUrl }}" alt="{{ site.brand.name }}">
+      {% elsif site.brand.logoUrl %}
+        <img class="brand-logo-icon" src="{{ site.brand.logoUrl }}" alt="">
+        <strong>{{ site.brand.name }}</strong>
       {% else %}
         <span class="brand-mark" aria-hidden="true">♥</span>
-        <strong>{{ brand.name }}</strong>
+        <strong>{{ site.brand.name }}</strong>
       {% endif %}
     </a>
 
@@ -27,7 +26,7 @@
     </button>
 
     <nav class="site-nav" id="site-nav" aria-label="Primary">
-      {% for item in nav.items %}
+      {% for item in site.nav.items %}
         {% if item.children %}
           <span class="nav-dropdown">
             <a href="{{ item.href }}" class="nav-dropdown-toggle" aria-haspopup="true">{{ item.label }} ▾</a>
@@ -55,20 +54,20 @@
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
-      <p class="lq-kicker">{{ brand.name }}</p>
-      {% if brand.tagline %}<h2>{{ brand.tagline }}</h2>{% endif %}
+      <p class="lq-kicker">{{ site.brand.name }}</p>
+      {% if site.brand.tagline %}<h2>{{ site.brand.tagline }}</h2>{% endif %}
     </div>
     <div class="footer-links">
-      {% comment %} A tenant-curated footer menu when they've built one, else the main nav. {% endcomment %}
-      {% if nav.footer.size > 0 %}
-        {% for item in nav.footer %}
+      {% comment %} A tenant-curated footer menu when they've built one, else the main site.nav. {% endcomment %}
+      {% if site.nav.footer.size > 0 %}
+        {% for item in site.nav.footer %}
           <a href="{{ item.href }}"{% if item.external %} target="_blank" rel="noopener"{% endif %}>{{ item.label }}</a>
           {% for child in item.children %}
             <a href="{{ child.href }}"{% if child.external %} target="_blank" rel="noopener"{% endif %}>{{ child.label }}</a>
           {% endfor %}
         {% endfor %}
       {% else %}
-        {% for item in nav.items %}
+        {% for item in site.nav.items %}
           <a href="{{ item.href }}">{{ item.label }}</a>
         {% endfor %}
       {% endif %}

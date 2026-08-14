@@ -1,16 +1,16 @@
 {% comment %}
-  The home opener — and the REFERENCE IMPLEMENTATION of supports.heroImagery. Rules worth
+  The home opener, and the REFERENCE IMPLEMENTATION of supports.heroImagery. Rules worth
   copying:
 
   1. EVERY field is optional. Copy derives from brand (| default) or omits; no photos means the
-     designed gradient below — never a placeholder image.
+     designed gradient below, never a placeholder image.
   2. Photos are NEVER placed raw. The treatments in theme.css lay scrims built from the palette
      variables (color-mix over var(--bg)/var(--bg-tint)), so any uploaded photograph is toned
      into the template. Tune the treatment, don't remove it.
   3. Rotation is the PLATFORM's hero_carousel island (templates ship no JavaScript): with two or
      more photos, place it and style its documented classes.
   4. photoFraming is the charity's call, honour BOTH: 'fill' (default) covers your designed hero
-     shape (per-photo focus picks the surviving slice); 'whole' is the VISTA — the hero adapts
+     shape (per-photo focus picks the surviving slice); 'whole' is the VISTA, the hero adapts
      toward the photo's own shape (height-clamped) so a wide landscape stays entirely visible,
      with your copy stacked after the band.
 {% endcomment %}
@@ -38,8 +38,8 @@
     {% if heroCount > 1 %}{% island 'hero_carousel' %}{% else %}<div class="lq-vista-scrim" aria-hidden="true"></div>{% endif %}
     <div class="lq-vista-copy">
       <div class="container">
-        <p class="lq-kicker">{{ section.eyebrow | default: brand.name }}</p>
-        <h1>{{ section.title | default: brand.tagline | default: brand.name }}</h1>
+        <p class="lq-kicker">{{ section.eyebrow | default: site.brand.name }}</p>
+        <h1>{{ section.title | default: site.brand.tagline | default: site.brand.name }}</h1>
         {% if section.lead %}<p class="lq-homehero-lead">{{ section.lead }}</p>{% endif %}
         <div class="lq-homehero-actions">
           <a class="button button-primary" href="{{ section.primaryHref | default: '/donate' }}">{{ section.primaryLabel | default: 'Donate now' }}</a>
@@ -50,7 +50,7 @@
   </div>
 </section>
 {% else %}
-{% comment %} Form mode: the grid pulls up over the band — copy on the photo, the widget riding
+{% comment %} Form mode: the grid pulls up over the band, copy on the photo, the widget riding
     the seam onto the gradient below (never a stacked strip). {% endcomment %}
 <section class="lq-homehero lq-homehero--vista lq-homehero--vista-form{% if heroCount > 1 %} lq-homehero--carousel{% endif %}">
   <div class="lq-vista">
@@ -59,8 +59,8 @@
   </div>
   <div class="container lq-homehero-inner lq-vista-overlap">
     <div>
-      <p class="lq-kicker">{{ section.eyebrow | default: brand.name }}</p>
-      <h1>{{ section.title | default: brand.tagline | default: brand.name }}</h1>
+      <p class="lq-kicker">{{ section.eyebrow | default: site.brand.name }}</p>
+      <h1>{{ section.title | default: site.brand.tagline | default: site.brand.name }}</h1>
       {% if section.lead %}<p class="lq-homehero-lead">{{ section.lead }}</p>{% endif %}
       <div class="lq-homehero-actions">
         <a class="button button-primary" href="#donate">{{ section.primaryLabel | default: 'Donate now' }}</a>
@@ -76,7 +76,7 @@
 {% else %}
 <section class="lq-homehero{% if heroPhoto %} lq-homehero--photo{% endif %}{% if heroCount > 1 %} lq-homehero--carousel{% endif %}"{% if heroPhoto %} style="background-image: url('{{ heroPhoto }}'); background-position: {{ heroFocus }}"{% endif %}>
   {% comment %}
-    Several photos → the BEHAVIOUR carousel (data-p60-carousel, engine-wired — the template ships
+    Several photos → the BEHAVIOUR carousel (data-p60-carousel, engine-wired, the template ships
     no JavaScript): complete static markup, one data-p60-slide per photo, auto-advance opt-in.
     Hiding non-active slides is .p60-js-scoped in theme.css so a no-JS visitor sees the photos
     stacked, never a blank hero. The vista framings above show the other route: the ready-made
@@ -93,8 +93,8 @@
   {% endif %}
   <div class="container lq-homehero-inner">
     <div>
-      <p class="lq-kicker">{{ section.eyebrow | default: brand.name }}</p>
-      <h1>{{ section.title | default: brand.tagline | default: brand.name }}</h1>
+      <p class="lq-kicker">{{ section.eyebrow | default: site.brand.name }}</p>
+      <h1>{{ section.title | default: site.brand.tagline | default: site.brand.name }}</h1>
       {% if section.lead %}<p class="lq-homehero-lead">{{ section.lead }}</p>{% endif %}
       <div class="lq-homehero-actions">
         {% if section.givingStyle == 'button' %}

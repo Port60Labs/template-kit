@@ -1,23 +1,23 @@
 {
- "description": "Platform imagery envelopes — ADVICE, never enforcement. Entity images (events, courses, articles) render on SEVERAL surfaces at once (cards, carousel slides, detail banners), including platform-owned components, so their guidance is platform-level: the envelope every surface can live with. Template-composed slots (the home hero) are different — their ideal is the TEMPLATE's own design call, declared per-template in manifest.imagery and surfaced beside the upload. Editors measure the actual upload against the relevant guidance and advise; the charity always decides.",
+ "description": "Platform imagery envelopes, ADVICE, never enforcement. Entity images (events, courses, articles) render on SEVERAL surfaces at once (cards, carousel slides, detail banners), including platform-owned components, so their guidance is platform-level: the envelope every surface can live with. Template-composed slots (the home hero) are different, their ideal is the TEMPLATE's own design call, declared per-template in manifest.imagery and surfaced beside the upload. Editors measure the actual upload against the relevant guidance and advise; the charity always decides.",
  "entityImages": {
   "eventPromo": {
    "idealAspect": "3:2",
    "aspectRange": ["4:3", "16:9"],
    "minWidth": 1600,
-   "note": "One photo, several surfaces: the events card, the home carousel slide, and the event page banner — each crops differently, so keep the subject centred and avoid text baked into the image."
+   "note": "One photo, several surfaces: the events card, the home carousel slide, and the event page banner, each crops differently, so keep the subject centred and avoid text baked into the image."
   },
   "courseImage": {
    "idealAspect": "3:2",
    "aspectRange": ["4:3", "16:9"],
    "minWidth": 1600,
-   "note": "Renders as the course card and the course page opener — subject centred, no baked-in text."
+   "note": "Renders as the course card and the course page opener, subject centred, no baked-in text."
   },
   "articleCover": {
    "idealAspect": "16:9",
    "aspectRange": ["3:2", "2:1"],
    "minWidth": 1600,
-   "note": "The article card thumbnail and the article page cover — wide editorial shots sit best."
+   "note": "The article card thumbnail and the article page cover, wide editorial shots sit best."
   }
  }
 }

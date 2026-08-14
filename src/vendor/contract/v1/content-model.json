@@ -1,0 +1,193 @@
+{
+  "description": "The CONTENT MODEL REGISTRY (docs/template-content-model.md, v1): the typed `site.content.*` tree every template reads. One realistic organisation, one shape. Four disciplines are baked in from birth because they cannot be retrofitted: every collection is BOUNDED (a documented cap and an explicit moreHref, so a big tenant can never break a render budget); every enum field is OPEN (values grow; templates must survive unknown values, proven behaviourally); every optional field is EXPLICITLY nullable (branch-on-it is the norm); and the model is ADD-ONLY (fields and collections gain `deprecated: true` markers, they are never removed within a major, deprecated means it stops being documented, never that it stops being served). Versioning is COMPUTED, never author-declared: every collection and field carries `since`, the validator derives a template's required minimum from its content footprint at publish, and authors never think about versions. New list or field = minor. Fixture or doc clarification = patch.",
+  "version": "1.0",
+  "root": "site",
+  "siblings": {
+    "description": "site.brand, site.nav, site.socials and site.locale carry the SAME shapes documented in context.json for the flat era; the tree re-addresses them, it does not reshape them.",
+    "keys": ["brand", "nav", "socials", "locale"]
+  },
+  "collections": {
+    "services": {
+      "since": "1.0",
+      "cap": 24,
+      "moreHref": "/services",
+      "description": "The organisation's published content pages (the services CMS), newest curation order first.",
+      "item": {
+        "id": { "type": "string", "since": "1.0" },
+        "title": { "type": "string", "since": "1.0", "max": 200 },
+        "slug": { "type": "string", "since": "1.0" },
+        "summary": { "type": "string", "since": "1.0", "nullable": true, "max": 500 },
+        "imageUrl": { "type": "string", "since": "1.0", "nullable": true },
+        "href": { "type": "string", "since": "1.0" }
+      }
+    },
+    "events": {
+      "since": "1.0",
+      "cap": 12,
+      "moreHref": "/events",
+      "description": "Published events, soonest first. `registrationMode` is an OPEN enum: INFO, RSVP and TICKETED exist today and new modes will arrive; branch on the ones you style and fall back for the rest.",
+      "item": {
+        "id": { "type": "string", "since": "1.0" },
+        "name": { "type": "string", "since": "1.0", "max": 200 },
+        "description": { "type": "string", "since": "1.0", "nullable": true, "max": 200 },
+        "registrationMode": { "type": "string", "since": "1.0", "enumOpen": ["INFO", "RSVP", "TICKETED"] },
+        "startsAt": { "type": "string", "since": "1.0" },
+        "endsAt": { "type": "string", "since": "1.0", "nullable": true },
+        "venueName": { "type": "string", "since": "1.0", "nullable": true, "max": 200 },
+        "online": { "type": "boolean", "since": "1.0" },
+        "imageUrl": { "type": "string", "since": "1.0", "nullable": true },
+        "onSale": { "type": "boolean", "since": "1.0" },
+        "soldOut": { "type": "boolean", "since": "1.0" },
+        "priceFrom": { "type": "number", "since": "1.0", "nullable": true },
+        "currency": { "type": "string", "since": "1.0", "nullable": true },
+        "detailHref": { "type": "string", "since": "1.0" }
+      }
+    },
+    "articles": {
+      "since": "1.0",
+      "cap": 12,
+      "moreHref": "/articles/all",
+      "description": "Published articles, newest first. Detail bodies stay editor-owned sanitised richtext on the article page BY DESIGN; the card model carries everything a listing needs.",
+      "item": {
+        "id": { "type": "string", "since": "1.0" },
+        "title": { "type": "string", "since": "1.0", "max": 200 },
+        "slug": { "type": "string", "since": "1.0" },
+        "excerpt": { "type": "string", "since": "1.0", "nullable": true, "max": 500 },
+        "imageUrl": { "type": "string", "since": "1.0", "nullable": true },
+        "authorName": { "type": "string", "since": "1.0", "nullable": true, "max": 120 },
+        "authorRole": { "type": "string", "since": "1.0", "nullable": true, "max": 120 },
+        "categories": { "type": "string[]", "since": "1.0" },
+        "publishedAt": { "type": "string", "since": "1.0" },
+        "readingMinutes": { "type": "number", "since": "1.0", "nullable": true },
+        "href": { "type": "string", "since": "1.0" }
+      }
+    },
+    "campaigns": {
+      "since": "1.0",
+      "cap": 12,
+      "moreHref": "/campaigns",
+      "description": "Live campaigns, curation order.",
+      "item": {
+        "id": { "type": "string", "since": "1.0" },
+        "title": { "type": "string", "since": "1.0", "max": 200 },
+        "href": { "type": "string", "since": "1.0" },
+        "summary": { "type": "string", "since": "1.0", "nullable": true, "max": 500 },
+        "imageUrl": { "type": "string", "since": "1.0", "nullable": true }
+      }
+    },
+    "causes": {
+      "since": "1.0",
+      "cap": 12,
+      "moreHref": "/donate",
+      "description": "Causes currently accepting donations, quick-give first. `paymentOptions` mirrors the public cause contract.",
+      "item": {
+        "id": { "type": "string", "since": "1.0" },
+        "title": { "type": "string", "since": "1.0", "max": 200 },
+        "slug": { "type": "string", "since": "1.0" },
+        "description": { "type": "string", "since": "1.0", "nullable": true, "max": 500 },
+        "imageUrl": { "type": "string", "since": "1.0", "nullable": true },
+        "targetAmount": { "type": "number", "since": "1.0", "nullable": true },
+        "raisedAmount": { "type": "number", "since": "1.0", "nullable": true },
+        "progressPercentage": { "type": "number", "since": "1.0", "nullable": true },
+        "href": { "type": "string", "since": "1.0" },
+        "paymentOptions": { "type": "object", "since": "1.0", "nullable": true }
+      }
+    },
+    "courses": {
+      "since": "1.0",
+      "cap": 12,
+      "moreHref": "/courses",
+      "description": "Enrollable courses. The long-form About body is sanitised richtext on the course page, never in cards.",
+      "item": {
+        "id": { "type": "string", "since": "1.0" },
+        "title": { "type": "string", "since": "1.0", "max": 200 },
+        "description": { "type": "string", "since": "1.0", "nullable": true, "max": 500 },
+        "imageUrl": { "type": "string", "since": "1.0", "nullable": true },
+        "venue": { "type": "string", "since": "1.0", "nullable": true, "max": 200 },
+        "audience": { "type": "string", "since": "1.0", "enumOpen": ["ADULT", "CHILD", "FAMILY"] },
+        "priceFrom": { "type": "number", "since": "1.0", "nullable": true },
+        "currency": { "type": "string", "since": "1.0", "nullable": true },
+        "soldOut": { "type": "boolean", "since": "1.0" },
+        "href": { "type": "string", "since": "1.0" }
+      }
+    },
+    "volunteering": {
+      "since": "1.0",
+      "cap": 12,
+      "moreHref": "/volunteering",
+      "description": "Open volunteering opportunities.",
+      "item": {
+        "id": { "type": "string", "since": "1.0" },
+        "slug": { "type": "string", "since": "1.0" },
+        "title": { "type": "string", "since": "1.0", "max": 200 },
+        "summary": { "type": "string", "since": "1.0", "nullable": true, "max": 500 },
+        "imageUrl": { "type": "string", "since": "1.0", "nullable": true },
+        "content": { "type": "object", "since": "1.0", "nullable": true }
+      }
+    },
+    "media": {
+      "since": "1.0",
+      "cap": 12,
+      "moreHref": "/media",
+      "description": "Published media items. `content.mediaType` is an OPEN enum (VIDEO and AUDIO today).",
+      "item": {
+        "id": { "type": "string", "since": "1.0" },
+        "slug": { "type": "string", "since": "1.0" },
+        "title": { "type": "string", "since": "1.0", "max": 200 },
+        "summary": { "type": "string", "since": "1.0", "nullable": true, "max": 500 },
+        "imageUrl": { "type": "string", "since": "1.0", "nullable": true },
+        "content": { "type": "object", "since": "1.0", "nullable": true }
+      }
+    },
+    "resources": {
+      "since": "1.0",
+      "cap": 24,
+      "moreHref": "/resources",
+      "description": "Published documents, grouped by folder.",
+      "item": {
+        "id": { "type": "string", "since": "1.0" },
+        "title": { "type": "string", "since": "1.0", "max": 200 },
+        "folder": { "type": "string", "since": "1.0", "nullable": true },
+        "url": { "type": "string", "since": "1.0" },
+        "contentType": { "type": "string", "since": "1.0", "nullable": true },
+        "bytes": { "type": "number", "since": "1.0", "nullable": true },
+        "publishedAt": { "type": "string", "since": "1.0", "nullable": true }
+      }
+    },
+    "locations": {
+      "since": "1.0",
+      "cap": 12,
+      "moreHref": "/locations",
+      "description": "The organisation's physical places, primary first.",
+      "item": {
+        "id": { "type": "string", "since": "1.0" },
+        "name": { "type": "string", "since": "1.0", "max": 200 },
+        "address": { "type": "string", "since": "1.0", "nullable": true, "max": 500 },
+        "latitude": { "type": "number", "since": "1.0", "nullable": true },
+        "longitude": { "type": "number", "since": "1.0", "nullable": true },
+        "primary": { "type": "boolean", "since": "1.0" },
+        "directionsHref": { "type": "string", "since": "1.0", "nullable": true }
+      }
+    },
+    "schedules": {
+      "since": "1.0",
+      "cap": 4,
+      "moreHref": null,
+      "description": "TYPE-DERIVED recurring schedules. `type` is an OPEN enum; 'worship' is the first (its shape is the layout worship contract: times, labels, today, next). Other institutions arrive as new types; render the types you know, ignore the rest.",
+      "item": {
+        "type": { "type": "string", "since": "1.0", "enumOpen": ["worship"] },
+        "content": { "type": "object", "since": "1.0" }
+      }
+    },
+    "about": {
+      "since": "1.0",
+      "cap": 24,
+      "moreHref": null,
+      "description": "The admin-authored page composition: the ordered sections of the home/about surface. `type` is the section catalogue's OPEN enum; `content` is that section type's fields. This is what `section.*` re-addresses; a mega-page template can walk it directly.",
+      "item": {
+        "type": { "type": "string", "since": "1.0", "enumOpen": [] },
+        "content": { "type": "object", "since": "1.0" }
+      }
+    }
+  }
+}
