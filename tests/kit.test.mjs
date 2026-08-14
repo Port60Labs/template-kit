@@ -10,8 +10,10 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { buildZip } from '../src/lib/zip.mjs';
 import { loadArtifactDir } from '../src/lib/artifactFiles.mjs';
+import { renderStudioPreview } from '../src/vendor/validator/preview.mjs';
 
 const CLI = resolve(import.meta.dirname, '../bin/cli.mjs');
+const KIT_PACKAGE = JSON.parse(readFileSync(resolve(import.meta.dirname, '../package.json'), 'utf8'));
 
 function run(args, opts = {}) {
   return execFileSync(process.execPath, [CLI, ...args], { encoding: 'utf8', ...opts });
@@ -27,6 +29,12 @@ test('create → validate → package: the full loop on a fresh scaffold', () =>
       assert.ok(existsSync(join(dir, f)), `${f} missing`);
     }
     assert.match(readFileSync(join(dir, 'AGENTS.md'), 'utf8'), /validate:json/);
+    const scaffoldPackage = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'));
+    assert.equal(
+      scaffoldPackage.devDependencies['@port60/template-kit'],
+      `^${KIT_PACKAGE.version}`,
+      'a fresh scaffold must accept the same kit version that generated it'
+    );
 
     const json = JSON.parse(run(['validate', dir, '--json']));
     assert.equal(json.ok, true, JSON.stringify(json.errors));
@@ -82,6 +90,48 @@ test('the zip writer produces archives the platform intake reads', async () => {
   assert.equal(zip.readUInt32LE(zip.length - 22), 0x06054b50);
 });
 
+test('preview renders realistic, non-interactive island skeletons', async () => {
+  const starter = resolve(import.meta.dirname, '../starter');
+  const html = await renderStudioPreview(loadArtifactDir(starter));
+
+  assert.match(html, /class="donate-card"/);
+  assert.match(html, /class="nav-p60-signin"/);
+  // The starter's standard hero is now the BEHAVIOUR carousel (engine-wired data-p60-* markup,
+  // docs/template-behaviours.md) rather than the hero_carousel island — the preview shows the
+  // complete static slide stack.
+  assert.match(html, /data-p60-carousel/);
+  assert.match(html, /data-p60-slide/);
+  assert.doesNotMatch(html, />island:/);
+  assert.match(html, /default-src 'none'/);
+});
+
+test('the dev preview inlines ONLY the platform behaviour runtime; studio stays script-free', async () => {
+  const starter = resolve(import.meta.dirname, '../starter');
+  const runtime = readFileSync(resolve(import.meta.dirname, '../src/vendor/validator/behaviors-runtime.js'), 'utf8');
+
+  const withRuntime = await renderStudioPreview(loadArtifactDir(starter), { behaviorsRuntime: runtime });
+  assert.match(withRuntime, /p60Behaviors\.initBehaviors\(\)/);
+  assert.match(withRuntime, /script-src 'unsafe-inline'/);
+
+  const studio = await renderStudioPreview(loadArtifactDir(starter));
+  assert.doesNotMatch(studio, /<script/);
+  assert.match(studio, /default-src 'none'; style-src 'unsafe-inline'; img-src data:;"/);
+});
+
+test('preview passes section data fixtures to widget section renderers', async () => {
+  const html = await renderStudioPreview({
+    'manifest.json': JSON.stringify({
+      name: 'fixture-preview',
+      label: 'Fixture preview',
+      supports: { pages: ['home'], sections: ['events'], islands: [] }
+    }),
+    'sections/events.liquid': '{% for e in events %}<h2>{{ e.name }}</h2>{% endfor %}',
+    'assets/theme.css': ''
+  });
+
+  assert.match(html, /Fixture Lantern Gala/);
+});
+
 test('DRIFT GUARD: vendored contract/engine/validator match charity-site byte for byte', () => {
   const site = resolve(import.meta.dirname, '../../../frontends/charity-site/src/templates');
   if (!existsSync(site)) {
@@ -93,7 +143,9 @@ test('DRIFT GUARD: vendored contract/engine/validator match charity-site byte fo
     ['engine/dialect.mjs', 'engine/dialect.mjs'],
     ['engine/budgets.mjs', 'engine/budgets.mjs'],
     ['validator/validate.mjs', 'validator/validate.mjs'],
-    ['validator/preview.mjs', 'validator/preview.mjs']
+    ['validator/preview.mjs', 'validator/preview.mjs'],
+    ['validator/behaviors-runtime.js', 'validator/behaviors-runtime.js'],
+    ['validator/platform-base.css', 'validator/platform-base.css']
   ];
   for (const [srcRel, venRel] of pairs) {
     const src = join(site, srcRel);

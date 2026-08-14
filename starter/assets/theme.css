@@ -187,3 +187,49 @@ body { font-family: ' IBM Plex Sans Arabic', var(--p60s-siteFont, 'Inter'), ui-s
 @media (max-width: 640px) {
   .lq-people { grid-template-columns: 1fr; }
 }
+
+/* Campaigns — the same quiet rail as values: title, summary, one action. */
+.lq-campaigns { padding: 3.5rem 0; }
+.lq-campaign-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.6rem; max-width: 700px; }
+.lq-campaign h3 { margin: 0 0 0.25rem; }
+.lq-campaign p { margin: 0 0 0.6rem; }
+
+/* Behaviours (engine-wired via data-p60-* — docs: Motion and behaviour guide). Everything that
+   hides pre-behaviour content is .p60-js-scoped: the no-JS render stays complete. */
+
+/* Reveal: the values rail rises in with a stagger. */
+.p60-js .lq-value-rail li {
+  opacity: 0;
+  transform: translateY(0.6rem);
+  transition: opacity 480ms ease, transform 480ms ease;
+  transition-delay: calc(var(--p60-reveal-index, 0) * 90ms);
+}
+.p60-js .lq-value-rail.is-revealed li { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .p60-js .lq-value-rail li { opacity: 1; transform: none; transition: none; }
+}
+
+/* Behaviour carousel: the standard hero's photo stack (the vista framings use the island). */
+.lq-hero-slides { position: absolute; inset: 0; overflow: hidden; }
+.lq-hero-slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.p60-js .lq-hero-slide { opacity: 0; transition: opacity 700ms ease; }
+.p60-js .lq-hero-slide.is-active { opacity: 1; }
+.lq-hero-slides .p60-carousel-dots {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0.9rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.45rem;
+  z-index: 2;
+}
+.lq-hero-slides .p60-carousel-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+.lq-hero-slides .p60-carousel-dot--active { background: rgba(255, 255, 255, 0.95); }

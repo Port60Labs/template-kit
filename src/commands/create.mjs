@@ -3,6 +3,9 @@ import { resolve, join, basename } from 'node:path';
 import { agentsMd } from '../lib/agentsMd.mjs';
 
 const NAME_PATTERN = /^[a-z][a-z0-9-]{1,48}[a-z0-9]$/;
+const KIT_PACKAGE = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, '../../package.json'), 'utf8')
+);
 
 /** `create <dir> [--name x] [--label "X"]` — a working, validating template from the starter,
  *  briefed for AI agents (AGENTS.md + CLAUDE.md) and wired with the kit's npm scripts. */
@@ -50,7 +53,7 @@ export function create(args) {
       package: 'p60-template-kit package .'
     },
     devDependencies: {
-      '@port60/template-kit': '^0.1.0'
+      '@port60/template-kit': `^${KIT_PACKAGE.version}`
     }
   }, null, 2) + '\n');
   writeFileSync(join(target, 'README.md'), `# ${label}

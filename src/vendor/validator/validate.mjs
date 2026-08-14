@@ -20,10 +20,24 @@ import islandRegistry from '../contract/v1/islands.json' with { type: 'json' };
 import manifestSchema from '../contract/v1/manifest.schema.json' with { type: 'json' };
 import contextContract from '../contract/v1/context.json' with { type: 'json' };
 import fontCatalogue from '../contract/v1/fonts.json' with { type: 'json' };
+import layoutContract from '../contract/v1/layout.json' with { type: 'json' };
+import behaviourCatalogue from '../contract/v1/behaviours.json' with { type: 'json' };
 
 const Ajv = Ajv2020.default ?? Ajv2020;
 
-export { dialect as contractDialect, sectionCatalogue, islandRegistry, contextContract };
+export { dialect as contractDialect, sectionCatalogue, islandRegistry, contextContract, behaviourCatalogue };
+
+// Templates are markup and attributes, NEVER code (docs/template-behaviours.md). These are hard
+// errors over the RAW liquid source — even inside comments, because there is no legitimate reason
+// for the tokens to appear at all. The handler pattern names real DOM event families rather than
+// matching any on* word, so attributes like `once` or `online` never false-positive.
+const FORBIDDEN_MARKUP = [
+  [/<script\b/i, 'a <script> tag'],
+  [/<(iframe|object|embed)\b/i, 'an embedded frame or plugin element'],
+  [/\son(?:click|dbl|aux|load|error|abort|unload|mouse|pointer|touch|drag|drop|wheel|scroll|key|focus|blur|input|change|submit|reset|invalid|select|toggle|copy|paste|cut|context|play|pause|ended|seek|stall|suspend|time|volume|waiting|canplay|animation|transition|message|resize|hashchange|popstate|storage|got|lost)[a-z]*\s*=/i,
+    'an inline event handler'],
+  [/javascript\s*:/i, 'a javascript: URL'],
+];
 
 export async function validateArtifact(files) {
   const errors = [];
@@ -46,6 +60,96 @@ export async function validateArtifact(files) {
   if (!validateManifest(manifest)) {
     for (const err of validateManifest.errors) {
       errors.push(`manifest${err.instancePath || ''}: ${err.message}`);
+    }
+  }
+
+  // Capability declarations are catalogue MATCHING metadata, not an entitlement shortcut. Keep
+  // them honest by requiring one corresponding template-facing surface. The mapping is deliberately
+  // structural: it proves the design can present a capability without inspecting tenant data or
+  // crossing the platform-owned transaction, identity and consent boundaries.
+  {
+    const sections = new Set(manifest?.supports?.sections ?? []);
+    const islands = new Set(manifest?.supports?.islands ?? []);
+    const pages = new Set(manifest?.supports?.pageTemplates ?? []);
+    const hasAny = (values, expected) => expected.some((value) => values.has(value));
+    const capabilitySurface = {
+      giving: () => islands.has('donation_widget'),
+      appeals: () => hasAny(sections, ['appealGrid', 'emergency']) || islands.has('donation_widget'),
+      worship: () => manifest?.supports?.worship === true || islands.has('next_prayer'),
+      courses: () => pages.has('course') || islands.has('course_enrol'),
+      membership: () => islands.has('member_menu'),
+      events: () => sections.has('events') || pages.has('events') || islands.has('events_carousel'),
+      articles: () => sections.has('articles') || hasAny(pages, ['articles', 'article']) || islands.has('latest_articles'),
+      services: () => sections.has('programmes'),
+      volunteering: () => sections.has('volunteering') || islands.has('volunteer_signup'),
+      forms: () => islands.has('form'),
+      resources: () => sections.has('resources'),
+      locations: () => sections.has('locations'),
+      newsletter: () => islands.has('newsletter_signup'),
+      i18n: () => islands.has('language_switch'),
+      search: () => islands.has('search'),
+      media: () => sections.has('media')
+    };
+    for (const capability of manifest?.requiresCapabilities ?? []) {
+      if (!capabilitySurface[capability]?.()) {
+        errors.push(`manifest: requiresCapabilities '${capability}' has no corresponding declared section, page template or island`);
+      }
+    }
+  }
+
+  // Markup and attributes, NEVER code — the machine-enforced JavaScript ban over every liquid
+  // source (docs/template-behaviours.md). Behaviour is engine-owned; a template wanting motion
+  // declares supports.behaviors and uses the data-p60-* grammar.
+  for (const [path, source] of Object.entries(files)) {
+    if (!path.endsWith('.liquid')) continue;
+    for (const [pattern, what] of FORBIDDEN_MARKUP) {
+      if (pattern.test(source)) {
+        errors.push(`${path}: contains ${what} — templates are markup and attributes, never code (behaviour is engine-owned; see the behaviour catalogue)`);
+      }
+    }
+  }
+
+  // Behaviour declaration and usage must agree in BOTH directions. Source-level, deliberately:
+  // usage often sits inside content-dependent branches the fixtures never take, so the grammar's
+  // presence in the source is the honest minimal proof.
+  {
+    const declaredBehaviours = new Set(manifest?.supports?.behaviors ?? []);
+    const liquidSource = Object.entries(files)
+      .filter(([path]) => path.endsWith('.liquid'))
+      .map(([, source]) => source)
+      .join('\n');
+    const PRIMARY_ATTR = {
+      reveal: [/data-p60-reveal\b/, 'data-p60-reveal'],
+      counter: [/data-p60-count\b/, 'data-p60-count'],
+      progress: [/data-p60-progress\b/, 'data-p60-progress'],
+      countdown: [/data-p60-countdown\b/, 'data-p60-countdown'],
+      accordion: [/data-p60-accordion\b/, 'data-p60-accordion'],
+      carousel: [/data-p60-carousel\b/, 'data-p60-carousel'],
+      stickyHeader: [/data-p60-sticky-header\b/, 'data-p60-sticky-header'],
+      stickyCta: [/data-p60-sticky-cta\b/, 'data-p60-sticky-cta'],
+      lightbox: [/data-p60-lightbox\b/, 'data-p60-lightbox'],
+      tabs: [/data-p60-tabs\b/, 'data-p60-tabs'],
+    };
+    for (const name of declaredBehaviours) {
+      const primary = PRIMARY_ATTR[name];
+      if (primary && !primary[0].test(liquidSource)) {
+        errors.push(`manifest: supports.behaviors declares '${name}' but no ${primary[1]} attribute appears in any liquid source`);
+      }
+    }
+    for (const [name, [pattern, attr]] of Object.entries(PRIMARY_ATTR)) {
+      if (pattern.test(liquidSource) && !declaredBehaviours.has(name)) {
+        errors.push(`behaviour '${name}': ${attr} appears in the markup but supports.behaviors does not declare it`);
+      }
+    }
+    if (/data-p60-carousel(?!-)\b/.test(liquidSource) && !/data-p60-slide\b/.test(liquidSource)) {
+      errors.push("behaviour 'carousel': a data-p60-carousel container needs data-p60-slide children");
+    }
+    if (/data-p60-lightbox(?!-)\b/.test(liquidSource) && !/data-p60-lightbox-item\b/.test(liquidSource)) {
+      errors.push("behaviour 'lightbox': a data-p60-lightbox group needs data-p60-lightbox-item anchors");
+    }
+    if (/data-p60-tabs\b/.test(liquidSource)
+        && (!/data-p60-tab(?!s)\b/.test(liquidSource) || !/data-p60-panel\b/.test(liquidSource))) {
+      errors.push("behaviour 'tabs': a data-p60-tabs container needs data-p60-tab controls and data-p60-panel panels");
     }
   }
 
@@ -111,7 +215,12 @@ export async function validateArtifact(files) {
   const WIDGET_SECTIONS = {
     events: { island: 'events_carousel', dataKey: 'events', sentinel: 'Fixture Lantern Gala' },
     whatsOn: { island: 'whats_on_strip', dataKey: 'infoEvents', sentinel: 'Fixture Open Morning' },
-    articles: { island: 'latest_articles', dataKey: 'latestArticles', sentinel: 'Fixture Winter Diary' }
+    articles: { island: 'latest_articles', dataKey: 'latestArticles', sentinel: 'Fixture Winter Diary' },
+    campaigns: { island: null, dataKey: 'campaigns', sentinel: 'Fixture Winter Campaign' },
+    resources: { island: null, dataKey: 'resources', sentinel: 'Fixture annual report.pdf' },
+    locations: { island: null, dataKey: 'locations', sentinel: 'Fixture Community Hall' },
+    volunteering: { island: 'volunteer_signup', dataKey: 'opportunities', sentinel: 'Fixture Garden Volunteer' },
+    media: { island: null, dataKey: 'media', sentinel: 'Fixture Community Talk' }
   };
 
   // 2–4. Sections: catalogue membership, parse, fixture renders.
@@ -144,11 +253,14 @@ export async function validateArtifact(files) {
           brand: contextContract.fixtures.brand,
           ...dataFixture
         });
-        const placesIsland = splitIslandParts(populated).some((p) => p.island === widget.island);
+        const placesIsland = widget.island !== null
+          && splitIslandParts(populated).some((p) => p.island === widget.island);
         if (!placesIsland) {
           if (!populated.includes(widget.sentinel)) {
             errors.push(
-              `section '${type}': neither places the ${widget.island} island nor renders the ${widget.dataKey} context — render the data (the fixture's "${widget.sentinel}" must appear) or place the island`
+              widget.island
+                ? `section '${type}': neither places the ${widget.island} island nor renders the ${widget.dataKey} context — render the data (the fixture's "${widget.sentinel}" must appear) or place the island`
+                : `section '${type}': does not render the ${widget.dataKey} context — the fixture's "${widget.sentinel}" must appear`
             );
           }
           const empty = await liquid.render(parsed, {
@@ -250,7 +362,8 @@ export async function validateArtifact(files) {
             brand: contextContract.fixtures.brand,
             nav: contextContract.fixtures.layout.nav,
             socials: contextContract.fixtures.layout.socials ?? [],
-            worship: contextContract.fixtures.layout.worship ?? null
+            worship: contextContract.fixtures.layout.worship ?? null,
+            locale: contextContract.fixtures.layout.locale
           });
           let contentSlots = 0;
           const layoutIslands = [];
@@ -284,7 +397,8 @@ export async function validateArtifact(files) {
                 brand: contextContract.fixtures.brand,
                 nav: contextContract.fixtures.layout.nav,
                 socials: contextContract.fixtures.layout.socials ?? [],
-                worship: null
+                worship: null,
+                locale: contextContract.fixtures.layout.locale
               });
               if (nullHtml.includes(worshipProbe)) {
                 errors.push('layout: worship rail content appears even when `worship` is null — always branch on it (tenants without a schedule must not see a rail)');
@@ -350,6 +464,35 @@ export async function validateArtifact(files) {
   // 6. Theme.
   if (!has('assets/theme.css') || read('assets/theme.css').trim() === '') {
     errors.push('assets/theme.css missing or empty — a template must ship its look');
+  }
+
+  // 6b. Layout contract (contract/v1/layout.json). Platform pages render through the content SEAM
+  // (.container / .full); a template STYLES those to place content, never a parallel content container.
+  // The rule is DATA — the seam token, the allowed selectors and the message all come from the contract
+  // file; this only implements the check KIND (a non-seam selector sizing its width off the token).
+  {
+    const css = has('assets/theme.css') ? read('assets/theme.css') : '';
+    const stripped = css.replace(/\/\*[\s\S]*?\*\//g, ' '); // drop comments so an example can't trip it
+    const RULE = /([^{}]+)\{([^{}]*)\}/g;
+    for (const rule of layoutContract.rules ?? []) {
+      if (rule.kind !== 'css-width-off-token') continue;
+      const token = rule.token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const sizesOffToken = new RegExp(`\\b(?:min-|max-)?(?:width|inline-size)\\s*:[^;]*var\\(\\s*${token}\\b`);
+      const isSeam = new RegExp(`\\.(?:${rule.allow.join('|')})(?![\\w-])`);
+      const offenders = new Set();
+      let m;
+      RULE.lastIndex = 0;
+      while ((m = RULE.exec(stripped)) !== null) {
+        if (!sizesOffToken.test(m[2])) continue; // only rules that size a box off the token
+        for (const sel of m[1].split(',')) {
+          const s = sel.trim();
+          if (s && !isSeam.test(s)) offenders.add(s);
+        }
+      }
+      for (const sel of [...offenders].sort()) {
+        errors.push(`theme: selector '${sel}' ${rule.message}`);
+      }
+    }
   }
 
   return { errors, warnings, manifest };

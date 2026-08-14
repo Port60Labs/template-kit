@@ -420,12 +420,29 @@
       ]
     },
     {
+      "type": "campaigns",
+      "label": "Campaigns",
+      "pages": ["home"],
+      "description": "The tenant's LIVE campaigns (appeals, petitions, surveys) as cards linking to each campaign's page. Render the `campaigns` context your way; render nothing when no campaign is live.",
+      "context": ["campaigns", "campaignsLabel"],
+      "fields": [
+        { "name": "eyebrow", "kind": "text", "required": false, "description": "Short kicker." },
+        { "name": "heading", "kind": "text", "required": false, "description": "The section heading; fall back to the campaignsLabel context when unset." },
+        { "name": "text", "kind": "text", "required": false, "description": "Optional introduction." }
+      ],
+      "minimal": {},
+      "sample": { "eyebrow": "Get involved", "heading": "Our campaigns", "text": "What we are asking for right now." }
+    },
+    {
       "type": "emergency",
       "label": "Emergency appeal strip",
       "pages": [
         "home"
       ],
       "description": "A high-urgency full-width strip — one headline, an optional line, one action. For live emergencies and time-critical appeals.",
+      "context": [
+        "causes"
+      ],
       "fields": [
         {
           "name": "heading",
@@ -537,6 +554,9 @@
         "home"
       ],
       "description": "A grid of appeal/campaign cards — image, title, a line, and a per-card action.",
+      "context": [
+        "causes"
+      ],
       "fields": [
         {
           "name": "eyebrow",
@@ -615,6 +635,99 @@
           }
         ]
       }
+    },
+    {
+      "type": "programmes",
+      "label": "Services and programmes",
+      "pages": [
+        "home"
+      ],
+      "description": "The tenant's published services and programmes as a dynamic card collection. Render the services context and omit the section when it is empty.",
+      "context": [
+        "services"
+      ],
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Short kicker."
+        },
+        {
+          "name": "heading",
+          "kind": "text",
+          "required": false,
+          "description": "The section heading."
+        },
+        {
+          "name": "text",
+          "kind": "text",
+          "required": false,
+          "description": "Optional introduction."
+        }
+      ],
+      "minimal": {},
+      "sample": {
+        "eyebrow": "What we do",
+        "heading": "Programmes for our community",
+        "text": "Explore practical support, learning and activities."
+      }
+    },
+    {
+      "type": "resources",
+      "label": "Resource library",
+      "pages": ["home"],
+      "description": "Public documents from the tenant's media library. The resources context contains PUBLIC documents only; private files and storage metadata never reach Liquid.",
+      "context": ["resources"],
+      "fields": [
+        { "name": "eyebrow", "kind": "text", "required": false, "description": "Short kicker." },
+        { "name": "heading", "kind": "text", "required": false, "description": "The section heading." },
+        { "name": "text", "kind": "text", "required": false, "description": "Optional introduction." }
+      ],
+      "minimal": {},
+      "sample": { "eyebrow": "Resources", "heading": "Useful documents", "text": "Policies, guides and downloads." }
+    },
+    {
+      "type": "locations",
+      "label": "Locations",
+      "pages": ["home"],
+      "description": "The tenant's public venue directory with safe directions links. Provider references and private venue notes are never exposed.",
+      "context": ["locations"],
+      "fields": [
+        { "name": "eyebrow", "kind": "text", "required": false, "description": "Short kicker." },
+        { "name": "heading", "kind": "text", "required": false, "description": "The section heading." },
+        { "name": "text", "kind": "text", "required": false, "description": "Optional introduction." }
+      ],
+      "minimal": {},
+      "sample": { "eyebrow": "Find us", "heading": "Our locations", "text": "Visit the place nearest to you." }
+    },
+    {
+      "type": "volunteering",
+      "label": "Volunteering opportunities",
+      "pages": ["home"],
+      "description": "Published opportunities from the volunteering module. Templates render the cards and place volunteer_signup for the platform-owned, privacy-recorded expression-of-interest flow.",
+      "context": ["opportunities"],
+      "fields": [
+        { "name": "eyebrow", "kind": "text", "required": false, "description": "Short kicker." },
+        { "name": "heading", "kind": "text", "required": false, "description": "The section heading." },
+        { "name": "text", "kind": "text", "required": false, "description": "Optional introduction." }
+      ],
+      "minimal": {},
+      "sample": { "eyebrow": "Get involved", "heading": "Volunteer with us", "text": "Find a role that suits your time and skills." }
+    },
+    {
+      "type": "media",
+      "label": "Audio, video and livestreams",
+      "pages": ["home"],
+      "description": "Structured public audio, video and livestream entries with titles, speakers, dates and safe media links.",
+      "context": ["media"],
+      "fields": [
+        { "name": "eyebrow", "kind": "text", "required": false, "description": "Short kicker." },
+        { "name": "heading", "kind": "text", "required": false, "description": "The section heading." },
+        { "name": "text", "kind": "text", "required": false, "description": "Optional introduction." }
+      ],
+      "minimal": {},
+      "sample": { "eyebrow": "Media", "heading": "Watch and listen", "text": "Talks, updates and live broadcasts." }
     },
     {
       "type": "people",

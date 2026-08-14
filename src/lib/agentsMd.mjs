@@ -53,9 +53,29 @@ platform accepts it; if it fails here, the upload will fail identically.
    hide the rail when \`worship\` is null, and rendering it undeclared is equally an error. The
    same honesty applies across the contract.
 5. **Render budgets are real.** Runaway loops are killed (~1s per render). Keep renderers simple.
-6. **Context is a whitelist.** Sections see \`{section, brand}\`; layouts see
-   \`{brand, nav, socials, worship}\`; page templates see their fixture + \`brand\`. Nothing else
-   exists — do not invent variables.
+6. **Context is a whitelist.** Sections see \`{section, brand}\` plus only the collection named by
+   that section in the contract; layouts see \`{brand, nav, socials, worship, locale}\`; page
+   templates see their documented fixture + \`brand\`. Nothing else exists — do not invent
+   variables.
+7. **Capabilities are matching metadata, never entitlements.** Every value in
+   \`requiresCapabilities\` must have a declared section, page template or island that presents it.
+   \`suitsProfiles\` describes design intent and changes catalogue ordering only.
+
+## What each declaration owns
+
+- \`supports.layout\` owns the visible header, navigation and footer around platform pages. The
+  platform still owns the document head, consent and identity.
+- \`supports.pages\` owns section based bodies for \`home\` and \`about\` through the declared
+  renderers in \`sections/\`.
+- \`supports.pageTemplates: ["events"]\` owns the events listing only. Event details, RSVP and
+  ticket purchase remain platform owned.
+- \`supports.pageTemplates: ["course"]\` owns a course detail presentation only. The course
+  listing stays platform owned and enrolment remains the \`course_enrol\` island.
+- \`supports.pageTemplates: ["articles"]\` owns the article front page and archive listings.
+- \`supports.pageTemplates: ["article"]\` owns article detail presentation; engagement and
+  comments stay the \`article_engagement\` and \`article_comments\` islands.
+- Other platform routes keep their platform body and render inside your layout. Capability flags
+  expose documented optional context; they do not transfer transaction or route ownership.
 
 ## What to build with
 
@@ -70,6 +90,15 @@ platform accepts it; if it fails here, the upload will fail identically.
   behaviourally.
 - "Looks" = named one-click bundles of knob values in \`manifest.looks\`.
 - Fonts: only families from the platform font catalogue, declared with the weights you use.
+- Navigation can contain two levels below a top item. Render every supplied child and branch on
+  optional \`group\`, \`description\`, \`imageUrl\` and \`megaMenu\` promo metadata. Never hardcode
+  menu groups that are not in \`nav\`.
+- Dynamic sections include appeals (\`causes\`), programmes (\`services\`), resources, locations,
+  volunteering opportunities and structured media. Derive or omit when a collection is empty and
+  use the supplied URLs rather than constructing routes.
+- Submission and behaviour surfaces such as \`newsletter_signup\`, \`volunteer_signup\`, \`form\`,
+  \`search\`, \`language_switch\` and \`next_prayer\` are platform islands. Place and style them;
+  never reproduce their API calls or consent behaviour.
 - \`manifest.imagery.hero\` (optional but recommended): declare the photo shape YOUR hero
   composes best with (\`idealAspect\`, \`minWidth\`, a one-line \`note\`) — the charity's editor
   measures their actual upload against it and advises. Advice, never enforcement.

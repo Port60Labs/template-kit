@@ -78,7 +78,7 @@
       "availableIn": [
         "layout"
       ],
-      "description": "Optional sub-items (e.g. a services dropdown, or a tenant-curated 'About us' group). Absent on plain links; when present, render a dropdown/expandable group. Children are { label, href, external? } — one level only."
+      "description": "Optional sub-items for dropdowns and mega menus. Children use the same item shape and may carry one further children level, giving a maximum of two levels below the top item."
     },
     {
       "path": "nav.items[].external",
@@ -86,6 +86,34 @@
         "layout"
       ],
       "description": "True when the item points off-site (a tenant-curated external link) — add target=\"_blank\" rel=\"noopener\". Absent/false for internal links."
+    },
+    {
+      "path": "nav.items[].group",
+      "availableIn": [
+        "layout"
+      ],
+      "description": "Optional tenant-authored column or topic label for grouping items inside a mega menu."
+    },
+    {
+      "path": "nav.items[].description",
+      "availableIn": [
+        "layout"
+      ],
+      "description": "Optional short supporting text for a richer navigation card."
+    },
+    {
+      "path": "nav.items[].imageUrl",
+      "availableIn": [
+        "layout"
+      ],
+      "description": "Optional image URL for a navigation card. Always branch when absent."
+    },
+    {
+      "path": "nav.items[].megaMenu",
+      "availableIn": [
+        "layout"
+      ],
+      "description": "Optional mega-menu presentation metadata on a top-level item: columns (2 to 4) and an optional promo object with title, text, href, label and imageUrl. It is content only; the template owns hover, focus and responsive presentation in CSS."
     },
     {
       "path": "nav.footer",
@@ -186,12 +214,120 @@
       "description": "Today in the tenant's alternate calendar (Islamic civil calendar, e.g. \"11 Safar 1448\") when they opted in, else null — always branch."
     },
     {
+      "path": "worship.next",
+      "availableIn": [
+        "layout"
+      ],
+      "description": "The next prayer or service as {name, begins, congregation, target}, or null. target is an ISO timestamp in the organisation's timezone. Templates may display it statically; use the next_prayer island for a ticking countdown."
+    },
+    {
+      "path": "worship.jumah",
+      "availableIn": [
+        "layout"
+      ],
+      "description": "Structured Friday congregations as rows of {name, begins, congregation}. Empty for schedules without configured Friday times."
+    },
+    {
+      "path": "worship.hijri",
+      "availableIn": [
+        "layout"
+      ],
+      "description": "Structured alternate-calendar data. Contract v1 exposes {display}, or null when disabled."
+    },
+    {
+      "path": "worship.observances",
+      "availableIn": [
+        "layout"
+      ],
+      "description": "Upcoming structured observances as {name, date, href}. Empty until the tenant has authored observances."
+    },
+    {
+      "path": "locale",
+      "availableIn": ["layout"],
+      "description": "The public rendering locale and direction. Always present as {code, direction, languages}."
+    },
+    {
+      "path": "locale.code",
+      "availableIn": ["layout"],
+      "description": "Current BCP 47 language code, currently en, cy or ar."
+    },
+    {
+      "path": "locale.direction",
+      "availableIn": ["layout"],
+      "description": "ltr or rtl. The platform also applies this direction to the document element."
+    },
+    {
+      "path": "locale.languages",
+      "availableIn": ["layout"],
+      "description": "Supported public languages as {code, label, direction}. Place the language_switch island for platform-owned switching behaviour."
+    },
+    {
       "path": "events",
       "availableIn": [
         "page:events",
         "section:events"
       ],
       "description": "The tenant's published events, soonest first — a CURATED read-only view for display. On page:events it is every published event; on section:events it is the TICKETED ones (the section's purpose). Transactional steps (RSVP, ticket purchase) stay platform-owned on the detail view — link with detailHref, never rebuild those flows."
+    },
+    {
+      "path": "causes",
+      "availableIn": [
+        "section:appealGrid",
+        "section:emergency"
+      ],
+      "description": "Published and currently available appeals. This is a display-only summary; payment processor identifiers and transaction configuration are never exposed. Empty when there is no active appeal."
+    },
+    {
+      "path": "causes[]",
+      "availableIn": [
+        "section:appealGrid",
+        "section:emergency"
+      ],
+      "description": "An appeal card with id, title, slug, description, imageUrl, targetAmount, raisedAmount, progressPercentage, href and a boolean paymentOptions summary. Always use href to reach the platform donation flow."
+    },
+    {
+      "path": "services",
+      "availableIn": [
+        "section:programmes"
+      ],
+      "description": "Published services and programmes in display order. Empty when none are published, so omit the section rather than inventing cards."
+    },
+    {
+      "path": "services[]",
+      "availableIn": [
+        "section:programmes"
+      ],
+      "description": "A service card with id, title, slug, summary, imageUrl and href. Use href rather than constructing a route."
+    },
+    {
+      "path": "resources",
+      "availableIn": ["section:resources"],
+      "description": "Public documents from the tenant's media library, newest first. Private assets are never included. Empty when no public documents exist."
+    },
+    {
+      "path": "resources[]",
+      "availableIn": ["section:resources"],
+      "description": "A safe document link with id, title, folder, url, contentType, bytes and publishedAt. Always use url rather than constructing storage paths."
+    },
+    {
+      "path": "locations",
+      "availableIn": ["section:locations"],
+      "description": "Public locations from the tenant's venue book, primary first. Empty when no venues are configured."
+    },
+    {
+      "path": "locations[]",
+      "availableIn": ["section:locations"],
+      "description": "A public location with id, name, address, latitude, longitude, primary and directionsHref. Provider references and private notes are excluded."
+    },
+    {
+      "path": "opportunities",
+      "availableIn": ["section:volunteering"],
+      "description": "Published volunteering opportunities in display order. Each item contains id, slug, title, summary, imageUrl and content with location, schedule, commitment, dates, expected hours and shift dates. Sign-up remains the volunteer_signup island."
+    },
+    {
+      "path": "media",
+      "availableIn": ["section:media"],
+      "description": "Published structured media entries. Each item contains id, slug, title, summary, imageUrl and content with mediaType, mediaUrl, speaker, publishedAt and duration."
     },
     {
       "path": "infoEvents",
@@ -255,6 +391,84 @@
         "section:articles"
       ],
       "description": "The article's category names (possibly empty) — treat as text."
+    },
+    {
+      "path": "campaigns",
+      "availableIn": [
+        "section:campaigns"
+      ],
+      "description": "The tenant's live campaigns, in display order. Empty when none are live — render nothing."
+    },
+    {
+      "path": "campaigns[].title",
+      "availableIn": [
+        "section:campaigns"
+      ],
+      "description": "The campaign's name."
+    },
+    {
+      "path": "campaigns[].href",
+      "availableIn": [
+        "section:campaigns"
+      ],
+      "description": "The canonical link to the campaign page — always use this."
+    },
+    {
+      "path": "campaigns[].summary",
+      "availableIn": [
+        "section:campaigns"
+      ],
+      "description": "Short summary, or null — branch on it."
+    },
+    {
+      "path": "campaigns[].imageUrl",
+      "availableIn": [
+        "section:campaigns"
+      ],
+      "description": "Featured image URL, or null — always branch."
+    },
+    {
+      "path": "campaignsLabel",
+      "availableIn": [
+        "section:campaigns"
+      ],
+      "description": "What the tenant calls their campaigns section (\"Campaigns\" by default) — the heading fallback."
+    },
+    {
+      "path": "articles",
+      "availableIn": [
+        "page:articles"
+      ],
+      "description": "Published article summaries for the current listing or selected category. Each item contains id, title, slug, excerpt, imageUrl, authorName, authorRole, categories, publishedAt, readingMinutes, engagement counts and href."
+    },
+    {
+      "path": "selectedCategory",
+      "availableIn": [
+        "page:articles"
+      ],
+      "description": "The active category filter, or null on an unfiltered listing."
+    },
+    {
+      "path": "article",
+      "availableIn": [
+        "page:article"
+      ],
+      "description": "The article detail being displayed. It carries the article summary fields plus sanitised bodyHtml, updatedAt and allowComments. Render bodyHtml with the raw filter; engagement and comments remain platform islands."
+    },
+    {
+      "path": "relatedArticles",
+      "availableIn": [
+        "page:article"
+      ],
+      "description": "Up to three other published article summaries, newest first."
+    },
+    {
+      "path": "categories",
+      "availableIn": [
+        "page:articles",
+        "page:article"
+      ],
+      "description": "Categories currently used by published articles. Each item has name, count and href."
     },
     {
       "path": "events[].id",
@@ -493,13 +707,31 @@
             "children": [
               {
                 "label": "Food bank",
-                "href": "/services?service=food-bank"
+                "href": "/services?service=food-bank",
+                "group": "Support",
+                "description": "Emergency food parcels and practical advice."
               },
               {
-                "label": "Youth club",
-                "href": "/services?service=youth-club"
+                "label": "Community",
+                "href": "#",
+                "group": "Get involved",
+                "children": [
+                  {
+                    "label": "Youth club",
+                    "href": "/services?service=youth-club"
+                  }
+                ]
               }
-            ]
+            ],
+            "megaMenu": {
+              "columns": 3,
+              "promo": {
+                "title": "Visit this week",
+                "text": "Find a programme and meet the team.",
+                "href": "/services",
+                "label": "Explore services"
+              }
+            }
           },
           {
             "label": "Donate",
@@ -565,7 +797,30 @@
         "note": "Jum'a 13:15 & 14:15",
         "href": "/services?service=prayer-times",
         "today": "24 July 2026",
-        "todayAlt": "11 Safar 1448"
+        "todayAlt": "11 Safar 1448",
+        "next": {
+          "name": "Asr",
+          "begins": "18:30",
+          "congregation": "19:00",
+          "target": "2030-07-24T19:00:00+01:00"
+        },
+        "jumah": [
+          { "name": "Jum'a 1", "begins": null, "congregation": "13:15" },
+          { "name": "Jum'a 2", "begins": null, "congregation": "14:15" }
+        ],
+        "hijri": { "display": "11 Safar 1448" },
+        "observances": [
+          { "name": "Community iftar", "date": "2 March 2030", "href": "/events" }
+        ]
+      },
+      "locale": {
+        "code": "en",
+        "direction": "ltr",
+        "languages": [
+          { "code": "en", "label": "English", "direction": "ltr" },
+          { "code": "cy", "label": "Cymraeg", "direction": "ltr" },
+          { "code": "ar", "label": "العربية", "direction": "rtl" }
+        ]
       }
     },
     "pages": {
@@ -638,6 +893,74 @@
           "soldOut": false,
           "backHref": "/courses"
         }
+      },
+      "articles": {
+        "selectedCategory": null,
+        "categories": [
+          { "name": "News", "count": 4, "href": "/articles/all?category=News" },
+          { "name": "Stories", "count": 2, "href": "/articles/all?category=Stories" }
+        ],
+        "articles": [
+          {
+            "id": "88888888-8888-8888-8888-888888888888",
+            "title": "Fixture Community Garden Opens",
+            "slug": "fixture-community-garden-opens",
+            "excerpt": "Neighbours came together to create a new shared space.",
+            "imageUrl": null,
+            "authorName": "Amina Khan",
+            "authorRole": "Community Editor",
+            "categories": ["News"],
+            "publishedAt": "2030-04-12T09:00:00Z",
+            "readingMinutes": 4,
+            "viewCount": 82,
+            "likeCount": 12,
+            "commentCount": 3,
+            "href": "/articles/fixture-community-garden-opens"
+          }
+        ]
+      },
+      "article": {
+        "article": {
+          "id": "88888888-8888-8888-8888-888888888888",
+          "title": "Fixture Community Garden Opens",
+          "slug": "fixture-community-garden-opens",
+          "excerpt": "Neighbours came together to create a new shared space.",
+          "imageUrl": null,
+          "authorName": "Amina Khan",
+          "authorRole": "Community Editor",
+          "categories": ["News"],
+          "publishedAt": "2030-04-12T09:00:00Z",
+          "updatedAt": "2030-04-12T10:00:00Z",
+          "readingMinutes": 4,
+          "viewCount": 82,
+          "likeCount": 12,
+          "commentCount": 3,
+          "href": "/articles/fixture-community-garden-opens",
+          "bodyHtml": "<h2>A shared place to grow</h2><p>The garden is now open to everyone.</p>",
+          "allowComments": true
+        },
+        "relatedArticles": [
+          {
+            "id": "99999999-9999-9999-9999-999999999999",
+            "title": "Fixture Volunteer Morning",
+            "slug": "fixture-volunteer-morning",
+            "excerpt": "How local volunteers prepared the garden.",
+            "imageUrl": null,
+            "authorName": null,
+            "authorRole": null,
+            "categories": ["Stories"],
+            "publishedAt": "2030-04-01T09:00:00Z",
+            "readingMinutes": 3,
+            "viewCount": 44,
+            "likeCount": 7,
+            "commentCount": 0,
+            "href": "/articles/fixture-volunteer-morning"
+          }
+        ],
+        "categories": [
+          { "name": "News", "count": 4, "href": "/articles/all?category=News" },
+          { "name": "Stories", "count": 2, "href": "/articles/all?category=Stories" }
+        ]
       }
     },
     "sections": {
@@ -720,6 +1043,135 @@
             "categories": [
               "News"
             ]
+          }
+        ]
+      },
+      "campaigns": {
+        "campaigns": [
+          {
+            "id": "99999999-9999-9999-9999-999999999991",
+            "title": "Fixture Winter Campaign",
+            "href": "/campaigns/fixture-winter-campaign",
+            "summary": "Help keep neighbours warm this winter.",
+            "imageUrl": "/fixture/campaign.jpg"
+          },
+          {
+            "id": "99999999-9999-9999-9999-999999999992",
+            "title": "Fixture Community Survey",
+            "href": "/campaigns/fixture-community-survey",
+            "summary": null,
+            "imageUrl": null
+          }
+        ],
+        "campaignsLabel": "Campaigns"
+      },
+      "emergency": {
+        "causes": [
+          {
+            "id": "55555555-5555-5555-5555-555555555555",
+            "title": "Fixture Emergency Appeal",
+            "slug": "fixture-emergency-appeal",
+            "description": "Urgent food, water and shelter.",
+            "imageUrl": null,
+            "targetAmount": 50000,
+            "raisedAmount": 18750,
+            "progressPercentage": 38,
+            "href": "/donate/fixture-emergency-appeal",
+            "paymentOptions": {
+              "oneOff": true,
+              "recurringCard": true,
+              "directDebit": true
+            }
+          }
+        ]
+      },
+      "appealGrid": {
+        "causes": [
+          {
+            "id": "55555555-5555-5555-5555-555555555555",
+            "title": "Fixture Winter Appeal",
+            "slug": "fixture-winter-appeal",
+            "description": "Warm meals and heating support.",
+            "imageUrl": null,
+            "targetAmount": 20000,
+            "raisedAmount": 12500,
+            "progressPercentage": 63,
+            "href": "/donate/fixture-winter-appeal",
+            "paymentOptions": {
+              "oneOff": true,
+              "recurringCard": true,
+              "directDebit": false
+            }
+          }
+        ]
+      },
+      "programmes": {
+        "services": [
+          {
+            "id": "66666666-6666-6666-6666-666666666666",
+            "title": "Fixture Food Bank",
+            "slug": "fixture-food-bank",
+            "summary": "Practical food support for local households.",
+            "imageUrl": null,
+            "href": "/services?service=fixture-food-bank"
+          },
+          {
+            "id": "77777777-7777-7777-7777-777777777777",
+            "title": "Fixture Youth Club",
+            "slug": "fixture-youth-club",
+            "summary": "Weekly activities for young people.",
+            "imageUrl": null,
+            "href": "/services?service=fixture-youth-club"
+          }
+        ]
+      },
+      "resources": {
+        "resources": [
+          {
+            "id": "88888888-8888-8888-8888-888888888888",
+            "title": "Fixture annual report.pdf",
+            "folder": "Reports",
+            "url": "/fixture/annual-report.pdf",
+            "contentType": "application/pdf",
+            "bytes": 245760,
+            "publishedAt": "2030-02-01T10:00:00Z"
+          }
+        ]
+      },
+      "locations": {
+        "locations": [
+          {
+            "id": "99999999-9999-9999-9999-999999999999",
+            "name": "Fixture Community Hall",
+            "address": "1 Fixture Street, Leeds",
+            "latitude": 53.8008,
+            "longitude": -1.5491,
+            "primary": true,
+            "directionsHref": "https://www.google.com/maps/dir/?api=1&destination=Fixture%20Community%20Hall"
+          }
+        ]
+      },
+      "volunteering": {
+        "opportunities": [
+          {
+            "id": "aaaaaaaa-1111-4111-8111-111111111111",
+            "slug": "fixture-garden-volunteer",
+            "title": "Fixture Garden Volunteer",
+            "summary": "Help care for the community garden on Saturday mornings.",
+            "imageUrl": null,
+            "content": { "location": "Fixture Garden", "schedule": "Saturday mornings", "commitment": "Twice a month", "hoursExpected": "3 hours" }
+          }
+        ]
+      },
+      "media": {
+        "media": [
+          {
+            "id": "bbbbbbbb-2222-4222-8222-222222222222",
+            "slug": "fixture-community-talk",
+            "title": "Fixture Community Talk",
+            "summary": "A short update from the project team.",
+            "imageUrl": null,
+            "content": { "mediaType": "VIDEO", "mediaUrl": "/fixture/community-talk", "speaker": "Amina Khan", "duration": "18 minutes" }
           }
         ]
       }

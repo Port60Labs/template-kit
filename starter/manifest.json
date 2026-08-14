@@ -1,9 +1,9 @@
 {
   "name": "starter",
-  "version": "1.6.0",
+  "version": "1.8.0",
   "format": "port60-liquid@1",
   "label": "Starter",
-  "description": "The reference template for the Port60 dialect — the developer docs' worked example and the base to copy when building your own. 1.1.0 adds the layout slot: the template owns the header, navigation and footer chrome.",
+  "description": "The reference template for the Port60 dialect \u2014 the developer docs' worked example and the base to copy when building your own. 1.1.0 adds the layout slot: the template owns the header, navigation and footer chrome.",
   "supports": {
     "pages": [
       "home",
@@ -14,7 +14,8 @@
       "hero",
       "values",
       "cta",
-      "people"
+      "people",
+      "campaigns"
     ],
     "islands": [
       "donation_widget",
@@ -22,7 +23,11 @@
       "hero_carousel"
     ],
     "layout": true,
-    "heroImagery": true
+    "heroImagery": true,
+    "behaviors": [
+      "reveal",
+      "carousel"
+    ]
   },
   "settings": {
     "schema": [
@@ -41,7 +46,7 @@
       }
     ]
   },
-  "changelog": "Versionless source workflow — no content changes.",
+  "changelog": "Demonstrates the behaviour catalogue: the values rail reveals with a stagger and a multi-photo standard hero becomes an engine-wired carousel.",
   "imagery": {
     "hero": {
       "idealAspect": "16:9",

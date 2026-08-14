@@ -75,7 +75,22 @@
 {% endif %}
 {% else %}
 <section class="lq-homehero{% if heroPhoto %} lq-homehero--photo{% endif %}{% if heroCount > 1 %} lq-homehero--carousel{% endif %}"{% if heroPhoto %} style="background-image: url('{{ heroPhoto }}'); background-position: {{ heroFocus }}"{% endif %}>
-  {% if heroCount > 1 %}{% island 'hero_carousel' %}{% endif %}
+  {% comment %}
+    Several photos → the BEHAVIOUR carousel (data-p60-carousel, engine-wired — the template ships
+    no JavaScript): complete static markup, one data-p60-slide per photo, auto-advance opt-in.
+    Hiding non-active slides is .p60-js-scoped in theme.css so a no-JS visitor sees the photos
+    stacked, never a blank hero. The vista framings above show the other route: the ready-made
+    hero_carousel island. A template chooses either.
+  {% endcomment %}
+  {% if heroCount > 1 %}
+  <div class="lq-hero-slides" data-p60-carousel="auto" aria-label="Hero photographs">
+    {% for image in section.images %}
+    <img class="lq-hero-slide{% if forloop.first %} is-active{% endif %}" data-p60-slide
+         src="{{ image.imageUrl }}" alt="{{ image.alt }}" style="object-position: {{ heroFocus }}"
+         {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">
+    {% endfor %}
+  </div>
+  {% endif %}
   <div class="container lq-homehero-inner">
     <div>
       <p class="lq-kicker">{{ section.eyebrow | default: brand.name }}</p>
