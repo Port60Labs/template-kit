@@ -111,34 +111,6 @@
         "href": { "type": "string", "since": "1.0" }
       }
     },
-    "volunteering": {
-      "since": "1.0",
-      "cap": 12,
-      "moreHref": "/volunteering",
-      "description": "Open volunteering opportunities.",
-      "item": {
-        "id": { "type": "string", "since": "1.0" },
-        "slug": { "type": "string", "since": "1.0" },
-        "title": { "type": "string", "since": "1.0", "max": 200 },
-        "summary": { "type": "string", "since": "1.0", "nullable": true, "max": 500 },
-        "imageUrl": { "type": "string", "since": "1.0", "nullable": true },
-        "content": { "type": "object", "since": "1.0", "nullable": true }
-      }
-    },
-    "media": {
-      "since": "1.0",
-      "cap": 12,
-      "moreHref": "/media",
-      "description": "Published media items. `content.mediaType` is an OPEN enum (VIDEO and AUDIO today).",
-      "item": {
-        "id": { "type": "string", "since": "1.0" },
-        "slug": { "type": "string", "since": "1.0" },
-        "title": { "type": "string", "since": "1.0", "max": 200 },
-        "summary": { "type": "string", "since": "1.0", "nullable": true, "max": 500 },
-        "imageUrl": { "type": "string", "since": "1.0", "nullable": true },
-        "content": { "type": "object", "since": "1.0", "nullable": true }
-      }
-    },
     "resources": {
       "since": "1.0",
       "cap": 24,

@@ -47,7 +47,7 @@
         "section",
         "layout"
       ],
-      "description": "The typed collections: services, events, articles, campaigns, causes, courses, volunteering, media, resources, locations, schedules, about. EVERY collection is bounded (cap + moreHref in the model registry), every enum is open, every optional field explicitly nullable, and the model only ever grows. The validator computes your template's content footprint from the paths you read and stamps the required minimum model version at publish; dynamic indexing into site.content is refused so the footprint stays decidable."
+      "description": "The typed collections: services, events, articles, campaigns, causes, courses, resources, locations, schedules, about. EVERY collection is bounded (cap + moreHref in the model registry), every enum is open, every optional field explicitly nullable, and the model only ever grows. The validator computes your template's content footprint from the paths you read and stamps the required minimum model version at publish; dynamic indexing into site.content is refused so the footprint stays decidable."
     },
     {
       "path": "section",
@@ -428,22 +428,6 @@
         "section:locations"
       ],
       "description": "A public location with id, name, address, latitude, longitude, primary and directionsHref. Provider references and private notes are excluded.",
-      "deprecated": true
-    },
-    {
-      "path": "opportunities",
-      "availableIn": [
-        "section:volunteering"
-      ],
-      "description": "Published volunteering opportunities in display order. Each item contains id, slug, title, summary, imageUrl and content with location, schedule, commitment, dates, expected hours and shift dates. Sign-up remains the volunteer_signup island.",
-      "deprecated": true
-    },
-    {
-      "path": "media",
-      "availableIn": [
-        "section:media"
-      ],
-      "description": "Published structured media entries. Each item contains id, slug, title, summary, imageUrl and content with mediaType, mediaUrl, speaker, publishedAt and duration.",
       "deprecated": true
     },
     {
@@ -1738,92 +1722,6 @@
           }
         ]
       },
-      "volunteering": {
-        "opportunities": [
-          {
-            "id": "aaaaaaaa-1111-4111-8111-111111111111",
-            "slug": "garden-volunteer",
-            "title": "Garden Volunteer",
-            "summary": "Keep the Foundry Lane beds thriving: sowing, watering, and showing first-timers where the trowels live.",
-            "imageUrl": "p60fixture:volunteer/garden",
-            "content": {
-              "location": "Foundry Lane Garden",
-              "schedule": "Saturday mornings",
-              "commitment": "Twice a month",
-              "hoursExpected": "3 hours"
-            }
-          },
-          {
-            "id": "aaaaaaaa-1111-4111-8111-111111111112",
-            "slug": "kitchen-crew",
-            "title": "Wednesday Kitchen Crew",
-            "summary": "Help cook and serve the weekly community meal. Full food hygiene training provided.",
-            "imageUrl": "p60fixture:volunteer/kitchen",
-            "content": {
-              "location": "St Chad's Hall",
-              "schedule": "Wednesdays 9am to 2pm",
-              "commitment": "Weekly",
-              "hoursExpected": "5 hours"
-            }
-          },
-          {
-            "id": "aaaaaaaa-1111-4111-8111-111111111113",
-            "slug": "food-bank-driver",
-            "title": "Food Bank Driver",
-            "summary": "Collect supermarket surplus on the morning round. A full licence and a friendly wave required.",
-            "imageUrl": null,
-            "content": {
-              "location": "Foundry Lane depot",
-              "schedule": "Weekday mornings",
-              "commitment": "One morning a week",
-              "hoursExpected": "2 hours"
-            }
-          }
-        ]
-      },
-      "media": {
-        "media": [
-          {
-            "id": "bbbbbbbb-2222-4222-8222-222222222221",
-            "slug": "garden-opening-film",
-            "title": "The Garden Opening, on Film",
-            "summary": "Four minutes from the gates opening, shot by the youth club media group.",
-            "imageUrl": "p60fixture:media/gardenfilm",
-            "content": {
-              "mediaType": "VIDEO",
-              "mediaUrl": "/fixture/garden-opening",
-              "speaker": null,
-              "duration": "4 minutes"
-            }
-          },
-          {
-            "id": "bbbbbbbb-2222-4222-8222-222222222222",
-            "slug": "trustee-talk-2030",
-            "title": "Where the Trust Goes Next",
-            "summary": "Chair of trustees Priya Sharma on the three-year plan, recorded at the spring members' evening.",
-            "imageUrl": "p60fixture:media/talk",
-            "content": {
-              "mediaType": "VIDEO",
-              "mediaUrl": "/fixture/trustee-talk",
-              "speaker": "Priya Sharma",
-              "duration": "18 minutes"
-            }
-          },
-          {
-            "id": "bbbbbbbb-2222-4222-8222-222222222223",
-            "slug": "sound-of-the-kitchen",
-            "title": "Sound of the Kitchen",
-            "summary": "An audio portrait of Wednesday lunchtime, best enjoyed hungry.",
-            "imageUrl": null,
-            "content": {
-              "mediaType": "AUDIO",
-              "mediaUrl": "/fixture/kitchen-audio",
-              "speaker": null,
-              "duration": "9 minutes"
-            }
-          }
-        ]
-      },
       "impactMap": {
         "impactMap": {
           "slug": "our-work",
@@ -2355,88 +2253,6 @@
             "currency": "GBP",
             "soldOut": false,
             "href": "/courses"
-          }
-        ],
-        "volunteering": [
-          {
-            "id": "aaaaaaaa-1111-4111-8111-111111111111",
-            "slug": "garden-volunteer",
-            "title": "Garden Volunteer",
-            "summary": "Keep the Foundry Lane beds thriving: sowing, watering, and showing first-timers where the trowels live.",
-            "imageUrl": "p60fixture:volunteer/garden",
-            "content": {
-              "location": "Foundry Lane Garden",
-              "schedule": "Saturday mornings",
-              "commitment": "Twice a month",
-              "hoursExpected": "3 hours"
-            }
-          },
-          {
-            "id": "aaaaaaaa-1111-4111-8111-111111111112",
-            "slug": "kitchen-crew",
-            "title": "Wednesday Kitchen Crew",
-            "summary": "Help cook and serve the weekly community meal. Full food hygiene training provided.",
-            "imageUrl": "p60fixture:volunteer/kitchen",
-            "content": {
-              "location": "St Chad's Hall",
-              "schedule": "Wednesdays 9am to 2pm",
-              "commitment": "Weekly",
-              "hoursExpected": "5 hours"
-            }
-          },
-          {
-            "id": "aaaaaaaa-1111-4111-8111-111111111113",
-            "slug": "food-bank-driver",
-            "title": "Food Bank Driver",
-            "summary": "Collect supermarket surplus on the morning round. A full licence and a friendly wave required.",
-            "imageUrl": null,
-            "content": {
-              "location": "Foundry Lane depot",
-              "schedule": "Weekday mornings",
-              "commitment": "One morning a week",
-              "hoursExpected": "2 hours"
-            }
-          }
-        ],
-        "media": [
-          {
-            "id": "bbbbbbbb-2222-4222-8222-222222222221",
-            "slug": "garden-opening-film",
-            "title": "The Garden Opening, on Film",
-            "summary": "Four minutes from the gates opening, shot by the youth club media group.",
-            "imageUrl": "p60fixture:media/gardenfilm",
-            "content": {
-              "mediaType": "VIDEO",
-              "mediaUrl": "/fixture/garden-opening",
-              "speaker": null,
-              "duration": "4 minutes"
-            }
-          },
-          {
-            "id": "bbbbbbbb-2222-4222-8222-222222222222",
-            "slug": "trustee-talk-2030",
-            "title": "Where the Trust Goes Next",
-            "summary": "Chair of trustees Priya Sharma on the three-year plan, recorded at the spring members' evening.",
-            "imageUrl": "p60fixture:media/talk",
-            "content": {
-              "mediaType": "VIDEO",
-              "mediaUrl": "/fixture/trustee-talk",
-              "speaker": "Priya Sharma",
-              "duration": "18 minutes"
-            }
-          },
-          {
-            "id": "bbbbbbbb-2222-4222-8222-222222222223",
-            "slug": "sound-of-the-kitchen",
-            "title": "Sound of the Kitchen",
-            "summary": "An audio portrait of Wednesday lunchtime, best enjoyed hungry.",
-            "imageUrl": null,
-            "content": {
-              "mediaType": "AUDIO",
-              "mediaUrl": "/fixture/kitchen-audio",
-              "speaker": null,
-              "duration": "9 minutes"
-            }
           }
         ],
         "resources": [

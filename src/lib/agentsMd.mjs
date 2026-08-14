@@ -80,8 +80,8 @@ platform accepts it; if it fails here, the upload will fail identically.
 
 Everything you read comes from ONE tree: \`site\`, \`site.brand\`, \`site.nav\`,
 \`site.socials\`, \`site.locale\` and the typed collections under \`site.content.*\`
-(services, events, articles, campaigns, causes, courses, volunteering, media, resources,
-locations, schedules, about). Four rules it never breaks, so neither should you:
+(services, events, articles, campaigns, causes, courses, resources, locations,
+schedules, about). Four rules it never breaks, so neither should you:
 
 - Every collection is BOUNDED (a documented cap plus a \`moreHref\`), link onward, never
   assume you have everything.
@@ -121,11 +121,11 @@ excludes it, and conformance proofs always run on the canonical fixtures.
 - Navigation can contain two levels below a top item. Render every supplied child and branch on
   optional \`group\`, \`description\`, \`imageUrl\` and \`megaMenu\` promo metadata. Never hardcode
   menu groups that are not in \`nav\`.
-- Dynamic sections include appeals (\`causes\`), programmes (\`services\`), resources, locations,
-  volunteering opportunities and structured media. Derive or omit when a collection is empty and
-  use the supplied URLs rather than constructing routes.
-- Submission and behaviour surfaces such as \`newsletter_signup\`, \`volunteer_signup\`, \`form\`,
-  \`search\`, \`language_switch\` and \`next_prayer\` are platform islands. Place and style them;
+- Dynamic sections include appeals (\`causes\`), programmes (\`services\`), resources and
+  locations. Derive or omit when a collection is empty and use the supplied URLs rather than
+  constructing routes.
+- Submission and behaviour surfaces such as \`newsletter_signup\`, \`form\`, \`search\`,
+  \`language_switch\` and \`next_prayer\` are platform islands. Place and style them;
   never reproduce their API calls or consent behaviour.
 - \`manifest.imagery.hero\` (optional but recommended): declare the photo shape YOUR hero
   composes best with (\`idealAspect\`, \`minWidth\`, a one-line \`note\`), the charity's editor

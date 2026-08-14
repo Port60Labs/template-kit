@@ -147,12 +147,6 @@ function islandSkeleton(name, ctx = {}, fx = STUDIO_FX) {
       return `<label class="language-switch" data-p60-preview-island="language_switch">${previewNote(name)}<span class="language-switch-label">Language</span><select class="language-switch-select" disabled><option>English</option><option>Cymraeg</option><option>العربية</option></select></label>`;
     case 'search':
       return `<div class="site-search" data-p60-preview-island="search">${previewNote(name)}<form class="site-search-form"><label class="site-search-label">Search this site</label><div class="site-search-fields"><input class="site-search-input" type="search" disabled><button class="site-search-submit" type="button" disabled>Search</button></div></form><ul class="site-search-results"><li class="site-search-result"><span class="site-search-kind">Article</span><a class="site-search-link" href="#">The Community Garden Opens Its Gates</a><p class="site-search-summary">Two years of digging and Saturday mornings in the rain: the Foundry Lane garden is open.</p></li></ul></div>`;
-    case 'volunteer_signup': {
-      const opportunities = fx.sections?.volunteering?.opportunities ?? [];
-      const options = (opportunities.length ? opportunities : [{ title: 'Garden Volunteer' }])
-        .map((o) => `<option>${escapeHtml(o.title)}</option>`).join('');
-      return `<form class="volunteer-signup" data-p60-preview-island="volunteer_signup">${previewNote(name)}<label class="volunteer-field"><span>Opportunity</span><select disabled>${options}</select></label><label class="volunteer-field"><span>Name</span><input disabled></label><label class="volunteer-field"><span>Email address</span><input disabled></label><label class="volunteer-privacy"><input type="checkbox" disabled><span>I agree that the organisation may respond.</span></label><button class="volunteer-submit" type="button" disabled>Register my interest</button></form>`;
-    }
     case 'map': {
       // The impact-map skeleton: the fixture's points projected onto a token-themed canvas —
       // the same fallback rendering production uses until the platform tile layer is configured.
@@ -448,9 +442,7 @@ export async function renderStudioPreview(files, options = {}) {
         emergency: { causes: c.causes ?? [] },
         programmes: { services: c.services ?? [] },
         resources: { resources: c.resources ?? [] },
-        locations: { locations: c.locations ?? [] },
-        volunteering: { opportunities: c.volunteering ?? [] },
-        media: { media: c.media ?? [] }
+        locations: { locations: c.locations ?? [] }
       }
     };
   }

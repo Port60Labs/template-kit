@@ -94,14 +94,12 @@ export async function validateArtifact(files) {
       events: () => sections.has('events') || pages.has('events') || islands.has('events_carousel'),
       articles: () => sections.has('articles') || hasAny(pages, ['articles', 'article']) || islands.has('latest_articles'),
       services: () => sections.has('programmes'),
-      volunteering: () => sections.has('volunteering') || islands.has('volunteer_signup'),
       forms: () => islands.has('form'),
       resources: () => sections.has('resources'),
       locations: () => sections.has('locations'),
       newsletter: () => islands.has('newsletter_signup'),
       i18n: () => islands.has('language_switch'),
-      search: () => islands.has('search'),
-      media: () => sections.has('media')
+      search: () => islands.has('search')
     };
     for (const capability of manifest?.requiresCapabilities ?? []) {
       if (!capabilitySurface[capability]?.()) {
@@ -236,9 +234,7 @@ export async function validateArtifact(files) {
     articles: { island: 'latest_articles', dataKey: 'latestArticles', sentinel: sentinelOf('articles', 'latestArticles', 'title') },
     campaigns: { island: null, dataKey: 'campaigns', sentinel: sentinelOf('campaigns', 'campaigns', 'title') },
     resources: { island: null, dataKey: 'resources', sentinel: sentinelOf('resources', 'resources', 'title') },
-    locations: { island: null, dataKey: 'locations', sentinel: sentinelOf('locations', 'locations', 'name') },
-    volunteering: { island: 'volunteer_signup', dataKey: 'opportunities', sentinel: sentinelOf('volunteering', 'opportunities', 'title') },
-    media: { island: null, dataKey: 'media', sentinel: sentinelOf('media', 'media', 'title') }
+    locations: { island: null, dataKey: 'locations', sentinel: sentinelOf('locations', 'locations', 'name') }
   };
 
   // 2–4. Sections: catalogue membership, parse, fixture renders.

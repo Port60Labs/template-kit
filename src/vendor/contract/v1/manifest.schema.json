@@ -36,14 +36,12 @@
           "events",
           "articles",
           "services",
-          "volunteering",
           "forms",
           "resources",
           "locations",
           "newsletter",
           "i18n",
-          "search",
-          "media"
+          "search"
         ]
       },
       "uniqueItems": true,

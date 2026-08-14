@@ -204,20 +204,6 @@
       ]
     },
     {
-      "name": "volunteer_signup",
-      "label": "Volunteer expression of interest",
-      "status": "available",
-      "description": "Lists published opportunities and captures a privacy-recorded expression of interest. Templates own placement and styling; validation, abuse checks and submission storage remain platform-owned.",
-      "params": [],
-      "stylingApi": [
-        ".volunteer-signup",
-        ".volunteer-field",
-        ".volunteer-privacy",
-        ".volunteer-submit",
-        ".volunteer-message"
-      ]
-    },
-    {
       "name": "form",
       "label": "Public form",
       "status": "available",
