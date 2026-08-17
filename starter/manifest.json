@@ -1,6 +1,6 @@
 {
   "name": "starter",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "format": "port60-liquid@1",
   "label": "Starter",
   "description": "The reference template for the Port60 dialect, the developer docs' worked example and the base to copy when building your own. 1.1.0 adds the layout slot: the template owns the header, navigation and footer chrome.",
@@ -15,12 +15,14 @@
       "values",
       "cta",
       "people",
-      "campaigns"
+      "campaigns",
+      "impactMap"
     ],
     "islands": [
       "donation_widget",
       "member_menu",
-      "hero_carousel"
+      "hero_carousel",
+      "map"
     ],
     "layout": true,
     "heroImagery": true,
@@ -46,7 +48,7 @@
       }
     ]
   },
-  "changelog": "Demonstrates the behaviour catalogue: the values rail reveals with a stagger and a multi-photo standard hero becomes an engine-wired carousel.",
+  "changelog": "Adds the impact map section: pin your located work on a themed map of where you work.",
   "imagery": {
     "hero": {
       "idealAspect": "16:9",

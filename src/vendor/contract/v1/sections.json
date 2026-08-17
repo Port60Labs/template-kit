@@ -892,6 +892,12 @@
           "kind": "text",
           "required": false,
           "description": "Optional introduction."
+        },
+        {
+          "name": "mapSlug",
+          "kind": "text",
+          "required": false,
+          "description": "WHICH map renders here, by its address (the Pages editor's placement picker writes it; the Maps area is where maps exist). Absent = the tenant's first published map."
         }
       ],
       "minimal": {},

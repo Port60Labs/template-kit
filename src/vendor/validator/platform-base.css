@@ -20,6 +20,15 @@
   --accent: #ef6044;
   --accent-strong: #d94d33;
   --gold: #f3b13b;
+  /* Impact map. --marker = the map pin colour (a deliberate brand accent by default; the live-map
+     markers are a zoom-scaling MapLibre circle layer that takes this colour). --map-mode = the
+     basemap colour mode read by the map island: `auto` derives the map's paper/ink from the theme
+     neutrals below, `light`/`dark`/`muted` force a base. Template-owned — set in theme.css or exposed
+     as Appearance knobs; the tenant never edits map colour directly. */
+  --marker: var(--accent);
+  --map-mode: auto;
+  /* flat (default) or globe — MapLibre's own globe projection, a rotatable sphere. */
+  --map-projection: flat;
   --line: rgba(31, 42, 51, 0.1);
   --line-strong: rgba(18, 135, 122, 0.28);
   --danger: #c0392b;
@@ -951,6 +960,22 @@ textarea.p60-form-control {
   padding: 1.7rem;
   display: grid;
   gap: 1rem;
+}
+
+/* MOBILE BREAKOUT (owner, 2026-08-17): on phones the nesting stack squashes the card badly —
+   measured on Sanctuary: 390px viewport → 346 container → 294 aside → 249px card → ~195px of
+   actual controls. A donate form is a working control surface; it gets the full screen width
+   (edge to edge, side borders/radius dropped, its own padding kept). The negative-margin trick
+   escapes ANY wrapper depth; layouts here are symmetric, so the sheet lands exactly 0..100vw. */
+@media (max-width: 640px) {
+  .donate-card {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    padding: 1.4rem 1.1rem;
+  }
 }
 
 /* Optional cause image banner at the top of the widget (set per-cause in tenant-admin). */
@@ -1966,6 +1991,30 @@ textarea.p60-form-control {
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 1.5rem;
 }
+/* MOBILE: the stacked grid becomes an edge-to-edge SWIPE ROW with a peek (owner, 2026-08-17) —
+   the scroller bleeds to the screen edges, each card keeps its padding, the first card aligns to
+   the text gutter, and the cut-off next card IS the "swipe me" affordance (the reference maps'
+   card idiom). Snap keeps cards settling cleanly; the scrollbar is hidden, the peek replaces it. */
+@media (max-width: 640px) {
+  .article-grid {
+    display: flex;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    gap: 0.9rem;
+    padding: 0.2rem 22px 0.6rem;
+    scroll-padding-left: 22px;
+    scrollbar-width: none;
+  }
+  .article-grid::-webkit-scrollbar { display: none; }
+  .article-grid > .article-card {
+    flex: 0 0 78%;
+    max-width: 330px;
+    scroll-snap-align: start;
+  }
+}
 .article-card {
   display: flex;
   flex-direction: column;
@@ -2354,6 +2403,26 @@ textarea.p60-form-control {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+/* MOBILE: the rotator is MEDIA — it bleeds edge to edge like the hero and the map, with the
+   arrows overlaid on the image instead of eating width beside it. */
+@media (max-width: 640px) {
+  .events-carousel {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    gap: 0;
+  }
+  .events-carousel .carousel-slide { border-radius: 0; }
+  .events-carousel > .carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    opacity: 0.9;
+  }
+  .events-carousel > .carousel-arrow:first-of-type { left: 10px; }
+  .events-carousel > .carousel-arrow:last-of-type { right: 10px; }
 }
 .carousel-slide {
   position: relative;
@@ -4228,23 +4297,80 @@ textarea.p60-form-control {
   .people-grid { grid-template-columns: 1fr; }
 }
 
-/* ── Impact map island (WP4) — baseline look; templates restyle via the styling API. Colours ride
-   currentColor and the theme's tokens so the island wears the template's clothes. */
+/* ── Impact map island (WP4) — the OVERLAY borrows the theme: pins wear --marker (a brand accent by
+   default), the card is a themed --surface. The BASEMAP colour is derived by the map island from the
+   theme + --map-mode (see lib/mapTheme.ts). Brand on the overlay, neutrals on the map — the recipe
+   that stays legible on any theme. Templates restyle any of this via the tokens or these classes. */
 .impact-map { margin: 24px 0; }
 .impact-map-head h2 { margin: 0 0 6px; }
 .impact-map-intro { margin: 0 0 14px; opacity: 0.85; }
-.impact-map-canvas { position: relative; min-height: 340px; border-radius: 14px; overflow: hidden;
-  background: linear-gradient(160deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.55)), currentColor; }
+.impact-map-stats { margin: 0 0 14px; color: var(--muted); font-weight: 600; letter-spacing: 0.01em; }
+/* The stable stage, shaped like THE WORLD BAND ITSELF: the island's planet view is all 360° of
+   longitude by 84°N–58°S (whole Greenland in, only the polar void and Antarctica trimmed), which in
+   Web Mercator is a 1.497:1 box — so a frame with that exact ratio holds the full planet edge to
+   edge, full width AND full height, at any screen size. A ratio wider than the band (a max-height
+   clamp once made it so on large screens) turns the fit height-constrained and the world renders
+   NARROWER than the frame — dead bars at the sides; a narrower ratio (min-height on phones) just
+   adds benign vertical margin. Relative + clipped so MapLibre always has a real box and can never
+   escape it. Keep this ratio in step with the island's planet bounds. */
+.impact-map-stage { position: relative; width: 100%; aspect-ratio: 1.497; min-height: 300px;
+  border-radius: 14px; overflow: hidden; }
+  /* width:100% is LOAD-BEARING: with height pinned by min-height and width left auto, CSS derives
+     width FROM the aspect-ratio (300 x 1.497 = 449px) — on phones the stage overflowed the page
+     sideways, shoving every other section into a lopsided "left with a right gutter" layout. Width
+     pinned, the ratio yields height and min-height only ever makes the stage TALLER. */
+/* MOBILE BREAKOUT: a map is a canvas — every pixel is information, nothing needs a margin — so on
+   phones it bleeds edge to edge (media bleeds, prose gutters: the hero already sets the rhythm).
+   Cooperative gestures keep page-scrolling safe over the full-width canvas. */
+@media (max-width: 640px) {
+  .impact-map-stage {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    border-radius: 0;
+  }
+}
+.impact-map-canvas { position: absolute; inset: 0;
+  background: linear-gradient(160deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.55)), var(--muted); }
 .impact-map-pin { position: absolute; width: 16px; height: 16px; border-radius: 50%;
-  transform: translate(-50%, -50%); border: 2px solid #fff; background: currentColor;
+  transform: translate(-50%, -50%); border: 2px solid var(--surface); background: var(--marker);
   cursor: pointer; padding: 0; transition: transform 120ms ease; }
 .impact-map-pin:hover, .impact-map-pin:focus-visible { transform: translate(-50%, -50%) scale(1.35); }
-.impact-map-pin--active { box-shadow: 0 0 0 5px rgb(255 255 255 / 28%); }
-.impact-map-card { margin-top: 14px; border: 1px solid rgb(127 127 127 / 30%); border-radius: 12px;
+.impact-map-pin--active { box-shadow: 0 0 0 5px var(--primary-soft); }
+.impact-map-card { margin-top: 14px; background: var(--surface); color: var(--ink);
+  border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: var(--shadow-sm);
   padding: 16px 18px; max-width: 34rem; }
 .impact-map-card-kind { display: inline-block; font-size: 11px; font-weight: 700;
-  letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.65; margin-bottom: 4px; }
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
 .impact-map-card-title { margin: 0 0 6px; }
 .impact-map-card-summary { margin: 0 0 10px; opacity: 0.9; }
-.impact-map-card-cta { font-weight: 600; }
+.impact-map-card-cta { font-weight: 600; color: var(--primary); }
 .impact-map-empty { opacity: 0.7; }
+/* The live tile layer (slice 2): fills the stage from first render so MapLibre measures a real box;
+   the pin canvas overlays it until (unless) the map is ready, then unmounts to reveal the map.
+   Sized with width/height (NOT inset) because MapLibre forces position:relative on this element,
+   which would defeat absolute insets and collapse the box to zero height. */
+.impact-map-gl { width: 100%; height: 100%; }
+/* Live-map markers are a MapLibre circle layer (WebGL) — they scale with zoom and take their colour
+   from --marker (circle-color) — so there is no DOM marker element to style here. The pin canvas
+   fallback above keeps its own .impact-map-pin dots for the no-tiles case. */
+/* The INLINE marker card (a MapLibre popup anchored at the clicked marker — where "See more"
+   lives): the shell takes the theme's surface; the tip is recoloured per anchor side to match. */
+.impact-map-popup .maplibregl-popup-content { background: var(--surface); color: var(--ink);
+  border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: var(--shadow);
+  padding: 14px 16px; }
+.impact-map-popup.maplibregl-popup-anchor-bottom .maplibregl-popup-tip,
+.impact-map-popup.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip,
+.impact-map-popup.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip { border-top-color: var(--surface); }
+.impact-map-popup.maplibregl-popup-anchor-top .maplibregl-popup-tip,
+.impact-map-popup.maplibregl-popup-anchor-top-left .maplibregl-popup-tip,
+.impact-map-popup.maplibregl-popup-anchor-top-right .maplibregl-popup-tip { border-bottom-color: var(--surface); }
+.impact-map-popup.maplibregl-popup-anchor-left .maplibregl-popup-tip { border-right-color: var(--surface); }
+.impact-map-popup.maplibregl-popup-anchor-right .maplibregl-popup-tip { border-left-color: var(--surface); }
+.impact-map-popup-card .impact-map-card-title { margin: 4px 0 6px; font-size: 1.02rem; }
+.impact-map-popup-card .impact-map-card-summary { margin: 0 0 8px; }
+/* The point's image (when it has one): bleeds to the popup's top edge; plain rounded in the
+   fallback card. Absent image = the card simply starts at the kind line. */
+.impact-map-card-image { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
+  border-radius: 10px; margin: 0 0 10px; }
+.impact-map-popup-card .impact-map-card-image { width: calc(100% + 32px); margin: -14px -16px 10px;
+  border-radius: calc(var(--radius-sm) - 1px) calc(var(--radius-sm) - 1px) 0 0; }
