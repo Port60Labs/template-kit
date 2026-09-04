@@ -19,5 +19,9 @@
     "ajv": "^8.20.0",
     "liquidjs": "^10.27.2"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Port60Labs/template-kit.git"
+  }
 }
