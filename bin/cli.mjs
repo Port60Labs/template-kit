@@ -10,6 +10,8 @@ import { model } from '../src/commands/model.mjs';
 import { content } from '../src/commands/content.mjs';
 import { upgrade } from '../src/commands/upgrade.mjs';
 import { refresh } from '../src/commands/refresh.mjs';
+import { login, logout, whoami } from '../src/commands/auth.mjs';
+import { publish } from '../src/commands/publish.mjs';
 
 function parseArgs(argv) {
   const args = { _: [] };
@@ -59,6 +61,18 @@ switch (command) {
   case 'package':
     await packageCmd(args);
     break;
+  case 'login':
+    await login(args);
+    break;
+  case 'logout':
+    await logout(args);
+    break;
+  case 'whoami':
+    await whoami(args);
+    break;
+  case 'publish':
+    await publish(args);
+    break;
   default:
     console.log(`@port60/template-kit, build Port60 site templates locally
 
@@ -73,6 +87,12 @@ usage:
   p60-template-kit package [dir]               validate + build the uploadable zip
   p60-template-kit upgrade [dir]               move an existing template to the latest kit
                                                and contract, re-brief, re-validate
+  p60-template-kit login                       sign in from the terminal (the browser does the
+                                               actual sign-in; the code appears here)
+  p60-template-kit whoami                      who is signed in, and which studio workspace
+  p60-template-kit logout                      sign this machine out and revoke its token
+  p60-template-kit publish [dir] [--no-submit] validate, package, upload to your studio and
+                                               submit for review, in one command
 
 AI agents: the scaffold's AGENTS.md is your briefing; iterate with \`validate --json\`.
 Docs: https://developers.port60.com (agents: /llms-full.txt)`);

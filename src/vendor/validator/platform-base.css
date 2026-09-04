@@ -4339,6 +4339,24 @@ textarea.p60-form-control {
 .impact-map-card { margin-top: 14px; background: var(--surface); color: var(--ink);
   border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: var(--shadow-sm);
   padding: 16px 18px; max-width: 34rem; }
+/* On the LIVE map the below-map card is a SMALL-SCREEN device: the anchored popup is taller than a
+   phone-height stage, so the marker selection drives this card instead (Google-Maps-mobile idiom).
+   Desktop keeps the inline popup and hides this. The pin-canvas fallback (no modifier) shows the
+   card on every screen size, as it always has. */
+.impact-map-card--small-screens { display: none; }
+@media (max-width: 640px) {
+  /* Full width, flush under the full-bleed map — the two read as one attached sheet (the same
+     breakout as the donate card; the hairline top border is the seam between map and card). */
+  .impact-map-card--small-screens {
+    display: block;
+    width: 100vw;
+    margin: 0 0 0 calc(50% - 50vw);
+    max-width: none;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+}
 .impact-map-card-kind { display: inline-block; font-size: 11px; font-weight: 700;
   letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
 .impact-map-card-title { margin: 0 0 6px; }

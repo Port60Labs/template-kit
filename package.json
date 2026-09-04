@@ -1,7 +1,7 @@
 {
   "name": "@port60/template-kit",
-  "version": "0.12.0",
-  "description": "Build Port60 site templates locally: scaffold, live-preview, validate against the platform contract, and package for studio upload. AI-agent ready — every scaffold ships AGENTS.md and validate emits machine-readable JSON.",
+  "version": "0.13.0",
+  "description": "Build Port60 site templates locally: scaffold, live-preview, validate against the platform contract, and package for studio upload. AI-agent ready \u2014 every scaffold ships AGENTS.md and validate emits machine-readable JSON.",
   "type": "module",
   "bin": {
     "p60-template-kit": "bin/cli.mjs"
@@ -12,22 +12,12 @@
     "starter"
   ],
   "scripts": {
+    "sync-vendor": "node scripts/sync-vendor.mjs",
     "test": "node --test 'tests/*.test.mjs'"
   },
   "dependencies": {
     "ajv": "^8.20.0",
     "liquidjs": "^10.27.2"
   },
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Port60Labs/template-kit.git"
-  },
-  "homepage": "https://developers.port60.com",
-  "bugs": {
-    "url": "https://github.com/Port60Labs/template-kit/issues"
-  },
-  "publishConfig": {
-    "access": "public"
-  }
+  "license": "MIT"
 }
