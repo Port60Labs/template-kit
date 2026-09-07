@@ -49,7 +49,8 @@ test('publish --ci: OIDC token for the platform audience, archive posted, outcom
       seen.submit = url.searchParams.get('submit');
       res.setHeader('content-type', 'application/json');
       res.end(JSON.stringify({
-        templateName: 'ci-theme', repository: 'acme/ci-theme', ref: 'refs/tags/v1.0.0', submitted: true,
+        templateName: 'ci-theme', templateLabel: 'CI Theme', templateCreated: true,
+        repository: 'acme/ci-theme', ref: 'refs/tags/v1.0.0', submitted: true,
         upload: { accepted: true, version: '1.0.0', status: 'SUBMITTED', errors: [], warnings: ['one warning'] }
       }));
       return;
@@ -74,6 +75,7 @@ test('publish --ci: OIDC token for the platform audience, archive posted, outcom
     assert.ok(seen.bodyBytes > 100, 'the archive was posted');
     assert.equal(seen.submit, 'true');
     assert.match(out, /uploading from CI/);
+    assert.match(out, /CI Theme created from its manifest/);
     assert.match(out, /one warning/);
     assert.match(out, /Version 1\.0\.0 uploaded and validated/);
     assert.match(out, /Submitted for review/);
@@ -92,7 +94,7 @@ test('publish --ci: a refusal from the platform is explained and fails the job',
     }
     res.statusCode = 403;
     res.setHeader('content-type', 'application/problem+json');
-    res.end(JSON.stringify({ message: 'No template trusts acme/ci-theme.' }));
+    res.end(JSON.stringify({ message: 'No studio trusts acme/ci-theme.' }));
   });
   const dir = join(mkdtempSync(join(tmpdir(), 'p60kit-ci-')), 'ci-theme');
   try {
@@ -103,7 +105,7 @@ test('publish --ci: a refusal from the platform is explained and fails the job',
       P60_API_BASE: `http://127.0.0.1:${port}`
     });
     assert.equal(code, 1);
-    assert.match(out, /Publish refused \(403\): No template trusts acme\/ci-theme/);
+    assert.match(out, /Publish refused \(403\): No studio trusts acme\/ci-theme/);
     assert.match(out, /Automate publishing/);
   } finally {
     server.close();

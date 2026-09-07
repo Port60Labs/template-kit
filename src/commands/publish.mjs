@@ -15,7 +15,8 @@ import { accessToken, api, apiBase, loadCredentials, requireCredentials } from '
  * package steps, but inside GitHub Actions there is no person to sign in. The workflow's own
  * OIDC token, minted by GitHub for the platform's audience, is the credential; the platform
  * verifies GitHub's signature and the repository trust the developer registered in the studio.
- * CI can add versions to a trusted template, never create one, and review still decides.
+ * A trusted workflow does what a signed-in terminal does (a new name creates the template, an
+ * owned name gains a version); review still decides.
  * Auto-detected inside Actions when this machine holds no stored login.
  */
 export async function publish(args) {
@@ -124,12 +125,15 @@ async function publishFromCi(args, zip) {
   if (!res.ok) {
     console.error(`✗ Publish refused (${res.status}): ${await errorMessage(res)}`);
     if (res.status === 403) {
-      console.error('  Trust this repository under Automate publishing on the template in your studio,');
+      console.error('  Trust this repository under Automate publishing in your studio,');
       console.error('  and check the workflow runs from a ref the trust allows (refs/tags/v* by default).');
     }
     process.exit(1);
   }
   const result = await res.json();
+  if (result.templateCreated) {
+    console.log(`✓ ${result.templateLabel ?? result.templateName} created from its manifest.`);
+  }
   console.log(`✓ ${result.templateName} accepted this run from ${result.repository} (${result.ref}).`);
   if (!printUpload(result.upload ?? {})) process.exit(1);
   if (result.submitted) {
