@@ -93,6 +93,8 @@ usage:
   p60-template-kit logout                      sign this machine out and revoke its token
   p60-template-kit publish [dir] [--no-submit] validate, package, upload to your studio and
                                                submit for review, in one command
+  p60-template-kit publish [dir] --ci          the same from a GitHub Actions workflow: no
+                                               login, the run's own OIDC token is the credential
 
 AI agents: the scaffold's AGENTS.md is your briefing; iterate with \`validate --json\`.
 Docs: https://developers.port60.com (agents: /llms-full.txt)`);

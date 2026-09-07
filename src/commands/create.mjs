@@ -42,7 +42,7 @@ export function create(args) {
   const briefing = agentsMd(name);
   writeFileSync(join(target, 'AGENTS.md'), briefing);
   writeFileSync(join(target, 'CLAUDE.md'), briefing);
-  writeFileSync(join(target, '.gitignore'), 'node_modules/\n*.zip\n');
+  writeFileSync(join(target, '.gitignore'), 'node_modules/\ndist/\n');
   writeFileSync(join(target, 'package.json'), JSON.stringify({
     name: `${name}-template`,
     private: true,
@@ -62,7 +62,7 @@ A Port60 site template. Start with \`npm install\`, then:
 
 - \`npm run dev\`, live preview at http://localhost:4400
 - \`npm run validate\`, conformance against the platform contract
-- \`npm run package\`, the uploadable zip
+- \`npm run package\`, the uploadable zip in \`dist/\` (recreated on every run)
 
 **Working with an AI agent?** Point it at this directory, \`AGENTS.md\` (and \`CLAUDE.md\`)
 brief it on the contract, the rules and the validate loop.

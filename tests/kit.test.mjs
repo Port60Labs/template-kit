@@ -5,7 +5,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, readdirSync, existsSync, rmSync, statSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, readdirSync, existsSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { buildZip } from '../src/lib/zip.mjs';
@@ -41,10 +41,15 @@ test('create → validate → package: the full loop on a fresh scaffold', () =>
     assert.equal(json.manifest.name, 'my-ai-theme');
     assert.ok(json.provenSupports.sections.length > 0);
 
+    // Packaging leaves a stale archive from a previous version behind? No: dist/ is recreated.
+    mkdirSync(join(dir, 'dist'), { recursive: true });
+    writeFileSync(join(dir, 'dist', 'my-ai-theme-0.0.9.zip'), 'stale');
     run(['package', dir]);
-    const zip = join(dir, 'my-ai-theme-0.1.0.zip');
+    const zip = join(dir, 'dist', 'my-ai-theme-0.1.0.zip');
     assert.ok(existsSync(zip));
     assert.ok(statSync(zip).size > 1000);
+    assert.deepEqual(readdirSync(join(dir, 'dist')), ['my-ai-theme-0.1.0.zip']);
+    assert.match(readFileSync(join(dir, '.gitignore'), 'utf8'), /^dist\/$/m);
   } finally {
     rmSync(resolve(dir, '..'), { recursive: true, force: true });
   }
