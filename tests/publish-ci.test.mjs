@@ -106,7 +106,7 @@ test('publish --ci: a refusal from the platform is explained and fails the job',
     });
     assert.equal(code, 1);
     assert.match(out, /Publish refused \(403\): No studio trusts acme\/ci-theme/);
-    assert.match(out, /Automate publishing/);
+    assert.match(out, /Automate in your studio/);
   } finally {
     server.close();
     rmSync(dir, { recursive: true, force: true });

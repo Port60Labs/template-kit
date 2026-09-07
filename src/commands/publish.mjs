@@ -125,8 +125,7 @@ async function publishFromCi(args, zip) {
   if (!res.ok) {
     console.error(`✗ Publish refused (${res.status}): ${await errorMessage(res)}`);
     if (res.status === 403) {
-      console.error('  Trust this repository under Automate publishing in your studio,');
-      console.error('  and check the workflow runs from a ref the trust allows (refs/tags/v* by default).');
+      console.error('  Trust this repository under Automate in your studio (one field: owner/name).');
     }
     process.exit(1);
   }
