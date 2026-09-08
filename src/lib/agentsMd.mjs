@@ -34,8 +34,11 @@ platform accepts it; if it fails here, the upload will fail identically.
   \`supports.sections\`. Charities compose pages from a **closed catalogue** of section types
   (see \`npm run validate\` output or the docs), you cannot invent new types.
 - \`pages/<page>.liquid\`, optional full-page templates for \`supports.pageTemplates\`.
-- \`assets/theme.css\`, required, your entire look. More \`.css\` files under \`assets/\` are
-  allowed. **No images, no JS**, they are refused at upload.
+- \`assets/theme.css\`, required, your entire look, and the ONLY stylesheet the platform loads
+  (other \`.css\` files under \`assets/\` are packaged but never loaded, so keep everything in
+  it). **No images, no fonts, no JS**: \`package\` and \`publish\` leave them out and list what
+  they left out; the upload refuses them. Photographs belong in the charity's media library;
+  decorative textures go inline in the CSS as data URIs.
 
 ## The rules the validator enforces (do not fight them)
 

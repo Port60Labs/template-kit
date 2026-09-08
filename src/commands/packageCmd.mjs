@@ -1,7 +1,7 @@
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { validateArtifact } from '../vendor/validator/validate.mjs';
-import { loadArtifactDir } from '../lib/artifactFiles.mjs';
+import { loadArtifactDir, skippedNotice } from '../lib/artifactFiles.mjs';
 import { buildZip } from '../lib/zip.mjs';
 
 /**
@@ -9,7 +9,8 @@ import { buildZip } from '../lib/zip.mjs';
  * saves the round trip), then zip EXACTLY the contract-shaped file set into
  * `dist/<name>-<version>.zip`, the artifact the studio's upload lane accepts as-is. `dist/` is
  * the build output and nothing else: recreated on every run, so a stale archive from a previous
- * version can never sit beside the fresh one, and gitignored by the scaffold.
+ * version can never sit beside the fresh one, and gitignored by the scaffold. Anything the rules
+ * left out (an image in assets/, a stray script) is listed under the result, never silently.
  */
 export async function packageCmd(args) {
   const dir = resolve(args._[0] ?? '.');
@@ -26,5 +27,6 @@ export async function packageCmd(args) {
   const out = join(outDir, `${manifest.name}-${manifest.version}.zip`);
   writeFileSync(out, buildZip(Object.entries(files).map(([path, content]) => ({ path, content }))));
   console.log(`✓ ${out}`);
+  for (const line of skippedNotice(dir)) console.log(line);
   console.log('  Upload it from your studio (tenant admin → Studio → your template → Versions).');
 }

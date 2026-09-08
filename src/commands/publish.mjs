@@ -1,6 +1,6 @@
 import { resolve } from 'node:path';
 import { validateArtifact } from '../vendor/validator/validate.mjs';
-import { loadArtifactDir } from '../lib/artifactFiles.mjs';
+import { loadArtifactDir, skippedNotice } from '../lib/artifactFiles.mjs';
 import { buildZip } from '../lib/zip.mjs';
 import { accessToken, api, apiBase, loadCredentials, requireCredentials } from '../lib/auth.mjs';
 
@@ -44,6 +44,7 @@ export async function publish(args) {
   }
   const zip = buildZip(Object.entries(files).map(([path, content]) => ({ path, content })));
   console.log(`✓ ${manifest.name} ${manifest.version} validated, uploading${ci ? ' from CI' : ''}…`);
+  for (const line of skippedNotice(dir)) console.log(line);
 
   if (ci) {
     await publishFromCi(args, zip);

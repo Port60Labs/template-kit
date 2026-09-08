@@ -172,3 +172,29 @@ test('DRIFT GUARD: vendored contract/engine/validator match charity-site byte fo
   assert.equal(readFileSync(resolve(import.meta.dirname, '../starter/manifest.json'), 'utf8'),
     starterManifest, 'starter drifted — run npm run sync-vendor');
 });
+
+test('package lists the files a template cannot carry, and leaves them out of the zip', () => {
+  const dir = join(mkdtempSync(join(tmpdir(), 'p60kit-')), 'with-photos');
+  try {
+    run(['create', dir, '--name', 'with-photos']);
+    // A clean scaffold has nothing to report.
+    assert.doesNotMatch(run(['package', dir]), /left out/);
+
+    mkdirSync(join(dir, 'assets', 'images'), { recursive: true });
+    writeFileSync(join(dir, 'assets', 'hero.jpg'), 'not really a jpeg');
+    writeFileSync(join(dir, 'assets', 'images', 'texture.png'), 'not really a png');
+    writeFileSync(join(dir, 'sections', 'notes.txt'), 'todo');
+    writeFileSync(join(dir, 'logo.svg'), '<svg/>');
+    writeFileSync(join(dir, 'assets', '.DS_Store'), ''); // platform noise, never reported
+
+    const out = run(['package', dir]);
+    assert.match(out, /left out \(not part of a template\): assets\/hero\.jpg, assets\/images\/texture\.png, logo\.svg, sections\/notes\.txt/);
+    assert.match(out, /guides\/publishing\/#what-the-zip-contains/);
+    const zip = readFileSync(join(dir, 'dist', 'with-photos-0.1.0.zip'));
+    assert.ok(zip.includes(Buffer.from('assets/theme.css')));
+    assert.ok(!zip.includes(Buffer.from('hero.jpg')));
+    assert.ok(!zip.includes(Buffer.from('notes.txt')));
+  } finally {
+    rmSync(resolve(dir, '..'), { recursive: true, force: true });
+  }
+});
