@@ -332,6 +332,29 @@ input:focus {
   font-weight: 800;
 }
 
+/* Compact forms for crowded headers. The `nav` behaviour steps is-fit-1..3 onto a template's nav
+   root when its row wraps or overflows (docs/template-behaviours.md); these are the platform's
+   defaults for what the island gives up at each step, the way Shopify's Shop button shrinks to
+   its mark: first the Port60 ID wordmark, then the text, leaving the person icon with its
+   accessible label intact. A template restyles by matching the same classes. */
+[data-p60-nav].is-fit-1 .nav-p60-signin .p60-mark {
+  display: none;
+}
+[data-p60-nav].is-fit-2 .nav-p60-signin .nav-p60-signin-label,
+[data-p60-nav].is-fit-2 .nav-account-name,
+[data-p60-nav].is-fit-2 .nav-account-caret {
+  display: none;
+}
+[data-p60-nav].is-fit-2 .nav-p60-signin.nav-p60-signin,
+[data-p60-nav].is-fit-2 .nav-account-toggle.nav-account-toggle.nav-account-toggle {
+  padding-left: 0.7rem;
+  padding-right: 0.7rem;
+}
+[data-p60-nav].is-fit-2 .nav-account-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
 /* Members account pill (signed in) — a clear "this is your account" affordance, weighted between
    plain nav links and the Donate CTA. The menu anchors right (it's the last nav item).
    `.open` mirrors hover/focus for touch. Unscoped — island chrome, identical in any template's

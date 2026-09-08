@@ -34,7 +34,11 @@
         ".nav-account",
         ".nav-account-toggle",
         ".nav-account-menu",
-        ".p60-mark"
+        ".p60-mark",
+        ".nav-p60-signin-label",
+        ".nav-account-name",
+        ".nav-account-caret",
+        ".nav-account-icon"
       ]
     },
     {

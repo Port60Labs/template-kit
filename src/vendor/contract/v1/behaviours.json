@@ -17,9 +17,9 @@
       "name": "counter",
       "status": "available",
       "label": "Animated counter",
-      "description": "Counts the element's number up from zero when first revealed. The static text IS the final formatted value (the no-JS render); data-p60-count carries the numeric target the engine animates to, grouped with the page locale. Reduced motion: the final number shows immediately.",
+      "description": "Counts the element's figure up from zero when first revealed. The static text IS the final value, typed exactly as it should read (\"£20\", \"95%\", \"1,200\", \"2.5k\"): the engine animates only the first run of digits and keeps the prefix, suffix, grouping and decimal places as typed, restoring the exact text on the last frame. A numeric attribute value (legacy) overrides the target; the text still sets the format. Reduced motion: the final figure shows immediately.",
       "attributes": [
-        { "attr": "data-p60-count", "value": "the numeric target, digits only" },
+        { "attr": "data-p60-count", "value": "none: the element's own text is the target and the format; or a numeric target (legacy)" },
         { "attr": "data-p60-count-duration", "value": "optional ms, capped at 4000 (default 1200)" }
       ],
       "stateClasses": ["is-revealed"],
@@ -129,7 +129,7 @@
       "name": "nav",
       "status": "available",
       "label": "Navigation",
-      "description": "Your menu, made robust. You design the menu (markup, every pixel, the breakpoint); the engine supplies the interaction CSS :hover cannot: data-p60-nav on each nav root (several allowed), data-p60-nav-item on each group holding a data-p60-nav-toggle control and a data-p60-nav-menu panel (nesting allowed). Hover-capable pointers get hover intent (a short delay to open, a grace period to close) so crossing the gap between a toggle and its panel never closes it; keyboard, touch and pen toggle on the control (Enter/click, ArrowDown opens and focuses the first link; a mouse click on an already-hovered parent link navigates); Escape closes and returns focus to the toggle; a click outside or focus moving away closes; one item stays open per level and aria-expanded is kept honest. The burger: data-p60-nav-burger on a button whose aria-controls (or the attribute value) names the stacked panel; the engine toggles is-open on both, closes on Escape (returning focus), on a real navigation inside the panel, on an outside click, and when the burger disappears at a wider viewport. State is is-open on the item, the panel and the burger; under .p60-js show a panel only on is-open and keep your :hover/:focus-within rules scoped to html:not(.p60-js) for the no-JS render.",
+      "description": "Your menu, made robust. You design the menu (markup, every pixel, the breakpoint); the engine supplies the interaction CSS :hover cannot: data-p60-nav on each nav root (several allowed), data-p60-nav-item on each group holding a data-p60-nav-toggle control and a data-p60-nav-menu panel (nesting allowed). Hover-capable pointers get hover intent (a short delay to open, a grace period to close) so crossing the gap between a toggle and its panel never closes it; keyboard, touch and pen toggle on the control (Enter/click, ArrowDown opens and focuses the first link; a mouse click on an already-hovered parent link navigates); Escape closes and returns focus to the toggle; a click outside or focus moving away closes; one item stays open per level and aria-expanded is kept honest. The burger: data-p60-nav-burger on a button whose aria-controls (or the attribute value) names the stacked panel; the engine toggles is-open on both, closes on Escape (returning focus), on a real navigation inside the panel, on an outside click, and when the burger disappears at a wider viewport. State is is-open on the item, the panel and the burger; under .p60-js show a panel only on is-open and keep your :hover/:focus-within rules scoped to html:not(.p60-js) for the no-JS render. Fit steps: when the root's row wraps or overflows, the engine steps is-fit-1, is-fit-2, is-fit-3 onto the root until it fits, re-measured on resize and once fonts settle, never on a stacked (column) nav; the platform's defaults shrink the member_menu pill at each step (the Port60 ID wordmark, then the text, leaving the person icon with its accessible label), and a template maps the same classes to anything else it wants to give up before the burger.",
       "attributes": [
         { "attr": "data-p60-nav", "value": "none; a nav root, several allowed" },
         { "attr": "data-p60-nav-item", "value": "none; a group holding one toggle and one menu, nestable" },
@@ -137,7 +137,7 @@
         { "attr": "data-p60-nav-menu", "value": "none; the item's panel" },
         { "attr": "data-p60-nav-burger", "value": "none, or the id of the panel when aria-controls is absent" }
       ],
-      "stateClasses": ["is-open"],
+      "stateClasses": ["is-open", "is-fit-1", "is-fit-2", "is-fit-3"],
       "cssVars": []
     }
   ]
