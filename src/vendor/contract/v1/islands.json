@@ -283,10 +283,10 @@
       ]
     },
     {
-      "name": "primary_action",
-      "label": "Primary action",
+      "name": "primary_action_widget",
+      "label": "Primary action widget",
       "status": "available",
-      "description": "The composite for the site focus: mounts the donation widget or the volunteer sign-up according to what the charity chose to lead with (site.focus), so a template places one static island and the choice moves without a variable name. Both widgets wear .action-card; .donate-card and .volunteer-card carry kind-specific treatment. A template that wants a different layout per kind branches on section.primary.kind and places donation_widget or volunteer_signup directly.",
+      "description": "The widget that leads the site. It IS the donation widget when the charity chose giving to lead, the volunteer sign-up when volunteering leads, and nothing when the charity chose no widget in the hero; site.focus tells you which ('donate', 'volunteer' or 'none'). Place {% island 'primary_action_widget' %} in the home hero's widget slot INSTEAD of donation_widget whenever your template declares supports.focus: the platform decides which widget renders, the template never does, and the charity's switch moves it without a template change. Both widgets wear .action-card for shared treatment; .donate-card and .volunteer-card carry kind-specific styling. A template that wants a different layout per kind may branch on section.primary.kind and place donation_widget or volunteer_signup itself, but then it owns the switch.",
       "params": [],
       "stylingApi": [
         ".action-card",

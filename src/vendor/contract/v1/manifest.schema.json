@@ -185,7 +185,7 @@
               "volunteer"
             ]
           },
-          "description": "The site-focus kinds this template can LEAD with (docs/volunteering.md). Declaring 'volunteer' means the home hero places the composite primary_action island (or branches on section.primary.kind), so the volunteer sign-up can take the widget slot; the picker marks templates that cannot lead with volunteering. Templates that predate the setting keep rendering the donation widget, since donate is the default."
+          "description": "The site-focus kinds this template can LEAD with (docs/volunteering.md). Declaring 'volunteer' means the home hero places the primary_action_widget island (the widget that becomes the donation widget or the volunteer sign-up as the charity chooses) or branches on section.primary.kind, so the volunteer sign-up can take the widget slot; the picker marks templates that cannot lead with volunteering. Templates that predate the setting keep rendering the donation widget, since donate is the default."
         }
       }
     },

@@ -68,8 +68,8 @@
       </div>
     </div>
     <aside id="donate">
-      {%- comment -%} The site focus decides which widget leads (section.primary); the composite island mounts it. {%- endcomment -%}
-      {% island 'primary_action' %}
+      {%- comment -%} The site focus decides which widget leads (section.primary); this island becomes it: the donation widget or the volunteer sign-up. {%- endcomment -%}
+      {% island 'primary_action_widget' %}
     </aside>
   </div>
 </section>
@@ -108,7 +108,7 @@
     </div>
     {% unless section.actionStyle == 'button' or section.givingStyle == 'button' %}
     <aside id="donate">
-      {% island 'primary_action' %}
+      {% island 'primary_action_widget' %}
     </aside>
     {% endunless %}
   </div>

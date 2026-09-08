@@ -132,7 +132,9 @@ export async function dev(args) {
         fixtureImageBase,
         previewContent,
         contentImageOrigins: imageOriginsOf(previewContent),
-        surface: surfaceFor(req.url ?? '/')
+        surface: surfaceFor(req.url ?? '/'),
+        // ?focus=donate|volunteer|none: what leads, so the hero shows each widget and its buttons.
+        focus: url.searchParams.get('focus') ?? undefined
       });
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
       res.end(html);

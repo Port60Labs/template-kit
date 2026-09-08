@@ -100,7 +100,7 @@ export async function validateArtifact(files) {
       newsletter: () => islands.has('newsletter_signup'),
       i18n: () => islands.has('language_switch'),
       search: () => islands.has('search'),
-      volunteering: () => islands.has('volunteer_signup') || islands.has('primary_action')
+      volunteering: () => islands.has('volunteer_signup') || islands.has('primary_action_widget')
     };
     for (const capability of manifest?.requiresCapabilities ?? []) {
       if (!capabilitySurface[capability]?.()) {
@@ -110,14 +110,15 @@ export async function validateArtifact(files) {
   }
 
   // Site focus honesty (docs/volunteering.md): a template that claims it can lead with
-  // volunteering must give the volunteer sign-up a way into the hero, either the composite
-  // primary_action island or the volunteer_signup island placed directly.
+  // volunteering must give the volunteer sign-up a way into the hero, either the
+  // primary_action_widget island (which becomes the sign-up when volunteering leads) or the
+  // volunteer_signup island placed directly.
   {
     const focusKinds = new Set(manifest?.supports?.focus ?? []);
     if (focusKinds.has('volunteer')) {
       const liquidSource = Object.entries(files).filter(([path]) => path.endsWith('.liquid')).map(([, s]) => s).join('\n');
-      if (!/island\s+['"]primary_action['"]/.test(liquidSource) && !/island\s+['"]volunteer_signup['"]/.test(liquidSource)) {
-        errors.push("manifest: supports.focus lists 'volunteer' but no section places {% island 'primary_action' %} (or 'volunteer_signup'), so the site could never lead with volunteering");
+      if (!/island\s+['"]primary_action_widget['"]/.test(liquidSource) && !/island\s+['"]volunteer_signup['"]/.test(liquidSource)) {
+        errors.push("manifest: supports.focus lists 'volunteer' but no section places {% island 'primary_action_widget' %} (or 'volunteer_signup'), so the site could never lead with volunteering");
       }
     }
   }

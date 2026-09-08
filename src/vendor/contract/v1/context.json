@@ -31,7 +31,7 @@
         "section",
         "layout"
       ],
-      "description": "What leads on the site: 'donate' (default) or 'volunteer'. The charity's one switch (docs/volunteering.md 'Site focus'); everything below follows from it."
+      "description": "What the primary_action_widget island becomes: 'donate' (default, the donation widget), 'volunteer' (the volunteer sign-up) or 'none' (the charity chose no widget in the hero). The charity's one switch (docs/volunteering.md 'Site focus'); everything below follows from it."
     },
     {
       "path": "site.actions",
@@ -46,7 +46,7 @@
       "availableIn": [
         "section"
       ],
-      "description": "homeHero only: the leading action { kind, label, href }, the same as site.actions.primary. Render it as a widget with {% island 'primary_action' %} when section.actionStyle is 'widget'."
+      "description": "homeHero only: the leading action { kind, label, href }, the same as site.actions.primary. Render it as a widget with {% island 'primary_action_widget' %} when section.actionStyle is 'widget'; that island becomes this action's widget."
     },
     {
       "path": "section.secondary",

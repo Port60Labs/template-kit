@@ -17,6 +17,7 @@ import islandRegistry from '../contract/v1/islands.json' with { type: 'json' };
 import contextContract from '../contract/v1/context.json' with { type: 'json' };
 import { resolveFixtureArt } from './fixture-art.mjs';
 import { buildSiteFixture, applyPreviewContent } from './site-context.mjs';
+import { normaliseFocus, previewActions, withResolvedActions, applyFocus } from './focus.mjs';
 
 // Fixture imagery resolved for the SEALED studio render (p60fixture: refs become inline-SVG data
 // URIs the network-dead CSP can show). The dev preview may instead resolve them to the platform
@@ -143,8 +144,16 @@ function islandSkeleton(name, ctx = {}, fx = STUDIO_FX) {
         <label class="newsletter-label">Email address</label><div class="newsletter-fields"><input class="newsletter-email" type="email" disabled><button class="newsletter-submit" type="button" disabled>Join our newsletter</button></div>
         <label class="newsletter-consent"><input type="checkbox" disabled><span>Email me about our work and appeals.</span></label>
       </form>`;
-    case 'primary_action':
-      return islandSkeleton('donation_widget', ctx, fx).replace('data-p60-preview-island="donation_widget"', 'data-p60-preview-island="primary_action"');
+    case 'primary_action_widget':
+      // What this island becomes follows the preview's focus (fixtures.focus, from ?focus= on the
+      // dev server): the volunteer sign-up, nothing, or the default, the donation widget.
+      if (fixtures.focus === 'volunteer') {
+        return islandSkeleton('volunteer_signup', ctx, fx).replace('data-p60-preview-island="volunteer_signup"', 'data-p60-preview-island="primary_action_widget"');
+      }
+      if (fixtures.focus === 'none') {
+        return `<div class="p60-preview-empty" data-p60-preview-island="primary_action_widget">${previewNote(name)}<p>No widget here: this charity leads with buttons only (site.focus is 'none').</p></div>`;
+      }
+      return islandSkeleton('donation_widget', ctx, fx).replace('data-p60-preview-island="donation_widget"', 'data-p60-preview-island="primary_action_widget"');
     case 'volunteer_signup':
       return `<section class="donate-card vol-card" data-p60-preview-island="volunteer_signup">
         ${previewNote(name)}
@@ -359,18 +368,27 @@ const SURFACES = {
 /** The routed dev preview's surface names (plus 'home'). */
 export const PREVIEW_SURFACES = ['home', ...Object.keys(SURFACES)];
 
-function surfaceBar(active) {
+function surfaceBar(active, focus = 'donate') {
+  const withFocus = (href) => (focus === 'donate' ? href : `${href}${href.includes('?') ? '&' : '?'}focus=${focus}`);
   const link = (name, href) =>
-    `<a href="${href}"${name === active ? ' style="font-weight:700;text-decoration:underline"' : ''}>${name}</a>`;
+    `<a href="${withFocus(href)}"${name === active ? ' style="font-weight:700;text-decoration:underline"' : ''}>${name}</a>`;
   const links = [
     link('home', '/'), link('events', '/events'), link('event', '/events?event=fixture'),
     link('services', '/services'), link('service', '/services?service=fixture'),
     link('donate', '/donate'), link('articles', '/articles'), link('article', '/articles/fixture'),
     link('campaigns', '/campaigns'), link('campaign', '/campaigns/fixture'), link('course', '/courses'),
-    `<a href="/model" style="margin-left:auto;font-weight:700">site.content model →</a>`,
+    `<a href="${withFocus('/model')}" style="margin-left:auto;font-weight:700">site.content model →</a>`,
   ];
+  // What leads: the charity's switch, here as three links, so a developer sees the hero widget as
+  // the donation widget, as the volunteer sign-up, or absent, with the buttons following each time.
+  const focusLink = (value, label) =>
+    `<a href="${value === 'donate' ? '/' : `/?focus=${value}`}"${value === focus ? ' style="font-weight:700;text-decoration:underline"' : ''}>${label}</a>`;
+  const focusLinks = [focusLink('donate', 'giving'), focusLink('volunteer', 'volunteering'), focusLink('none', 'buttons only')];
   return `<nav class="p60-preview-surfaces" aria-label="Preview surfaces" style="position:sticky;top:0;z-index:99;display:flex;gap:12px;flex-wrap:wrap;padding:8px 14px;font:12px/1.4 system-ui,sans-serif;background:#0b1220;color:#e6e9f2;opacity:.94">
     <strong style="letter-spacing:.06em;text-transform:uppercase;font-size:10px">Surfaces</strong>${links.join('')}
+    <span style="flex-basis:100%;height:0"></span>
+    <strong style="letter-spacing:.06em;text-transform:uppercase;font-size:10px">Leads with</strong>${focusLinks.join('')}
+    <span style="opacity:.7">the hero widget becomes the donation widget, the volunteer sign-up, or nothing; the buttons follow</span>
   </nav>`;
 }
 
@@ -420,12 +438,17 @@ export async function renderStudioPreview(files, options = {}) {
   // imagery to the platform CDN instead of inline-SVG art (the dev-richer half of the split).
   const artOptions = options.fixtureImageBase ? { imageBase: options.fixtureImageBase } : null;
   let fx = artOptions ? resolveFixtureArt(contextContract.fixtures, artOptions) : STUDIO_FX;
+  // What leads (docs/volunteering.md 'Site focus'): the dev server passes ?focus=; the studio
+  // renders the platform default. The island skeletons read it from the fixtures they are handed.
+  const focus = normaliseFocus(options.focus);
+  const actions = previewActions(focus);
+  fx = { ...fx, focus };
   // The one content tree (content model v1): about composed from this manifest's declared
   // sections, dev preview-content overlaid when the kit passes it (validated there), imagery
   // resolved exactly like the rest of the fixtures.
-  const site = resolveFixtureArt(
+  const site = applyFocus(resolveFixtureArt(
     applyPreviewContent(buildSiteFixture(manifest), options.previewContent ?? null),
-    artOptions ?? {});
+    artOptions ?? {}), actions);
   const brand = site.brand ?? fx.brand;
   // With a content override, the TREE is the source of truth for every fixture view: the routed
   // platform skeletons and island skeletons re-derive their slices from the overridden site, so
@@ -481,8 +504,12 @@ export async function renderStudioPreview(files, options = {}) {
       const entry = catalogueByType.get(type);
       const source = files[`sections/${type}.liquid`];
       if (!entry || source == null) continue;
+      const sample = artOptions ? resolveFixtureArt(entry.sample ?? {}, artOptions) : resolveFixtureArt(entry.sample ?? {});
       const context = {
-        section: artOptions ? resolveFixtureArt(entry.sample ?? {}, artOptions) : resolveFixtureArt(entry.sample ?? {}),
+        // The home hero carries the resolved actions exactly as the platform hands them over, so a
+        // developer sees the widget AND the button that pairs with it. The catalogue sample's
+        // givingStyle is dropped here: in the preview the focus decides the style.
+        section: type === 'homeHero' ? withResolvedActions({ ...sample, givingStyle: undefined, actionStyle: undefined }, actions) : sample,
         brand,
         site,
         ...(fx.sections?.[type] ?? {})
@@ -580,7 +607,7 @@ export async function renderStudioPreview(files, options = {}) {
 <style>${themeCss}</style>
 </head>
 <body ${attrs}>
-${options.surface ? surfaceBar(surface) : ''}
+${options.surface ? surfaceBar(surface, focus) : ''}
 ${bodyHtml}
 ${runtime ? `<script>${runtime}\np60Behaviors.initBehaviors();</script>` : ''}
 </body>
