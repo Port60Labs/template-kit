@@ -8,6 +8,7 @@
       "description": "The full donation flow for the tenant's quick-give cause: suggested amounts, custom amount, donor details, Gift Aid opt-in, payment. All payment/compliance behaviour is platform-owned.",
       "params": [],
       "stylingApi": [
+        ".action-card",
         ".donate-card",
         ".donate-head",
         ".donate-sub",
@@ -242,6 +243,55 @@
         ".impact-map-card-summary",
         ".impact-map-card-cta",
         ".impact-map-empty"
+      ]
+    },
+    {
+      "name": "volunteer_signup",
+      "label": "Volunteer sign-up",
+      "status": "preview",
+      "description": "The volunteer sign-up flow: what to help with (general, then the events and campaigns that need people), when (only when the opportunity runs in shifts), a few details, then confirmation by a charity-branded email that also signs the volunteer in. Shares the donation widget's card vocabulary so a themed donate card themes this too; the vol-* classes cover what is specific to asking for help.",
+      "params": [],
+      "stylingApi": [
+        ".donate-card",
+        ".action-card",
+        ".vol-body",
+        ".volunteer-card",
+        ".vol-card",
+        ".vol-chosen",
+        ".vol-search",
+        ".vol-list",
+        ".vol-group",
+        ".vol-group-label",
+        ".vol-option",
+        ".vol-option-main",
+        ".vol-option-summary",
+        ".vol-option-meta",
+        ".vol-needed",
+        ".vol-shift-count",
+        ".vol-form",
+        ".vol-availability",
+        ".vol-chips",
+        ".vol-chip",
+        ".vol-confirm",
+        ".vol-optional",
+        ".vol-why",
+        ".vol-extra",
+        ".vol-summary",
+        ".vol-signed-in",
+        ".vol-summary-needed",
+        ".vol-field-error"
+      ]
+    },
+    {
+      "name": "primary_action",
+      "label": "Primary action",
+      "status": "available",
+      "description": "The composite for the site focus: mounts the donation widget or the volunteer sign-up according to what the charity chose to lead with (site.focus), so a template places one static island and the choice moves without a variable name. Both widgets wear .action-card; .donate-card and .volunteer-card carry kind-specific treatment. A template that wants a different layout per kind branches on section.primary.kind and places donation_widget or volunteer_signup directly.",
+      "params": [],
+      "stylingApi": [
+        ".action-card",
+        ".donate-card",
+        ".volunteer-card"
       ]
     }
   ]

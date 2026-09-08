@@ -237,7 +237,7 @@
           "name": "images",
           "kind": "items",
           "required": false,
-          "description": "Hero photographs (0–6, uploaded through the platform pipeline). One = a main image; several = rotation material, a template with supports.heroImagery renders at least the first and MAY place the hero_carousel island (or a CSS scroll strip) for the rest. Like every field: absent means the template's designed no-photo state, never a placeholder.",
+          "description": "Hero photographs (0\u20136, uploaded through the platform pipeline). One = a main image; several = rotation material, a template with supports.heroImagery renders at least the first and MAY place the hero_carousel island (or a CSS scroll strip) for the rest. Like every field: absent means the template's designed no-photo state, never a placeholder.",
           "itemFields": [
             {
               "name": "imageUrl",
@@ -360,16 +360,16 @@
         "items": [
           {
             "imageUrl": "p60fixture:impact/parcel",
-            "title": "£10 · A family food parcel",
+            "title": "\u00a310 \u00b7 A family food parcel",
             "description": "Three days of meals, toiletries and a bag of fresh produce from the garden."
           },
           {
-            "icon": "🔥",
-            "title": "£25 · A warm week",
+            "icon": "\ud83d\udd25",
+            "title": "\u00a325 \u00b7 A warm week",
             "description": "Heating top-ups for a household choosing between eating and heating."
           },
           {
-            "title": "£50 · A month of youth club",
+            "title": "\u00a350 \u00b7 A month of youth club",
             "description": "Coaching, kit and hot food for a young person, four evenings a week."
           }
         ]
@@ -513,7 +513,7 @@
       "pages": [
         "home"
       ],
-      "description": "Big headline numbers, the at-a-glance impact band. Values are author-entered text (write them exactly as they should read).",
+      "description": "Big headline numbers, the at-a-glance impact band. Values are author-entered text (write them exactly as they should read), or, per item, a live figure the platform counts (`source`).",
       "fields": [
         {
           "name": "eyebrow",
@@ -544,6 +544,18 @@
               "kind": "text",
               "required": true,
               "description": "What it counts (e.g. meals served)."
+            },
+            {
+              "name": "source",
+              "kind": "select",
+              "required": false,
+              "options": [
+                "volunteers.active",
+                "volunteers.hoursThisYear",
+                "volunteers.opportunitiesOpen",
+                "volunteers.needed"
+              ],
+              "description": "A figure the platform counts rather than the author types (volunteers who helped in the last twelve months, hours logged this year, opportunities open now, volunteers still needed). When set, `value` is replaced at render with the live count, formatted for the site's locale; templates render `value` exactly as before."
             }
           ]
         }

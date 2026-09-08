@@ -26,6 +26,50 @@
       "description": "Navigation: items (curated main or platform-derived), footer, derived, the flat-era nav shape, re-addressed."
     },
     {
+      "path": "site.focus",
+      "availableIn": [
+        "section",
+        "layout"
+      ],
+      "description": "What leads on the site: 'donate' (default) or 'volunteer'. The charity's one switch (docs/volunteering.md 'Site focus'); everything below follows from it."
+    },
+    {
+      "path": "site.actions",
+      "availableIn": [
+        "section",
+        "layout"
+      ],
+      "description": "The two resolved actions: primary { kind, label, href } is the focus (the widget in the hero); secondary is the other action (the header button). Both always exist."
+    },
+    {
+      "path": "section.primary",
+      "availableIn": [
+        "section"
+      ],
+      "description": "homeHero only: the leading action { kind, label, href }, the same as site.actions.primary. Render it as a widget with {% island 'primary_action' %} when section.actionStyle is 'widget'."
+    },
+    {
+      "path": "section.secondary",
+      "availableIn": [
+        "section"
+      ],
+      "description": "homeHero only: the other action { kind, label, href }, the same as site.actions.secondary; the header button carries it."
+    },
+    {
+      "path": "section.action",
+      "availableIn": [
+        "section"
+      ],
+      "description": "homeHero only: the hero's own button { kind, label, href }: the action whose widget is NOT on the page (donation widget present, the button is Volunteer; volunteer widget present, the button is Donate), or the leading action when actionStyle is 'button'. Render it as the first hero button unless the author set primaryLabel / primaryHref; the second button stays the author's story link."
+    },
+    {
+      "path": "section.actionStyle",
+      "availableIn": [
+        "section"
+      ],
+      "description": "homeHero only: 'widget' (the leading action's widget sits in the hero) or 'button' (copy only, the primary button is the way in). The old givingStyle value is kept as an alias ('form' = 'widget')."
+    },
+    {
       "path": "site.socials",
       "availableIn": [
         "section",
@@ -208,7 +252,7 @@
       "availableIn": [
         "layout"
       ],
-      "description": "Platform key (facebook, instagram, x, …).",
+      "description": "Platform key (facebook, instagram, x, \u2026).",
       "deprecated": true
     },
     {
@@ -1029,7 +1073,7 @@
           },
           {
             "code": "ar",
-            "label": "العربية",
+            "label": "\u0627\u0644\u0639\u0631\u0628\u064a\u0629",
             "direction": "rtl"
           }
         ]
@@ -1914,7 +1958,7 @@
           },
           {
             "code": "ar",
-            "label": "العربية",
+            "label": "\u0627\u0644\u0639\u0631\u0628\u064a\u0629",
             "direction": "rtl"
           }
         ]
@@ -2382,6 +2426,19 @@
           }
         ],
         "about": []
+      },
+      "focus": "donate",
+      "actions": {
+        "primary": {
+          "kind": "donate",
+          "label": "Donate",
+          "href": "/donate"
+        },
+        "secondary": {
+          "kind": "volunteer",
+          "label": "Volunteer",
+          "href": "/volunteer"
+        }
       }
     }
   }

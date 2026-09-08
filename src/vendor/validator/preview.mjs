@@ -143,6 +143,17 @@ function islandSkeleton(name, ctx = {}, fx = STUDIO_FX) {
         <label class="newsletter-label">Email address</label><div class="newsletter-fields"><input class="newsletter-email" type="email" disabled><button class="newsletter-submit" type="button" disabled>Join our newsletter</button></div>
         <label class="newsletter-consent"><input type="checkbox" disabled><span>Email me about our work and appeals.</span></label>
       </form>`;
+    case 'primary_action':
+      return islandSkeleton('donation_widget', ctx, fx).replace('data-p60-preview-island="donation_widget"', 'data-p60-preview-island="primary_action"');
+    case 'volunteer_signup':
+      return `<section class="donate-card vol-card" data-p60-preview-island="volunteer_signup">
+        ${previewNote(name)}
+        <header class="donate-head"><h2>Volunteer with us</h2><p class="donate-sub">Where would you like to help?</p></header>
+        <div class="vol-list">
+          <div class="vol-group"><p class="vol-group-label">General</p><button class="vol-option" type="button" disabled><span class="vol-option-main"><strong>Help out where needed</strong><span class="vol-option-summary">A few hours a month, wherever the team needs a hand.</span></span><span class="vol-option-meta"><span class="vol-needed">Everyone welcome</span></span></button></div>
+          <div class="vol-group"><p class="vol-group-label">Events</p><button class="vol-option" type="button" disabled><span class="vol-option-main"><strong>Spring fair stewards</strong><span class="vol-option-summary">Welcome visitors and keep the day running.</span></span><span class="vol-option-meta"><span class="vol-needed">6 volunteers needed</span><span class="vol-shift-count">3 shifts</span></span></button></div>
+        </div>
+      </section>`;
     case 'language_switch':
       return `<label class="language-switch" data-p60-preview-island="language_switch">${previewNote(name)}<span class="language-switch-label">Language</span><select class="language-switch-select" disabled><option>English</option><option>Cymraeg</option><option>العربية</option></select></label>`;
     case 'search':

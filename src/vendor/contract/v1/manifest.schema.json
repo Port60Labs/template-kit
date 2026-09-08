@@ -4,7 +4,12 @@
   "title": "Port60 template manifest (contract v1)",
   "type": "object",
   "additionalProperties": false,
-  "required": ["name", "version", "format", "supports"],
+  "required": [
+    "name",
+    "version",
+    "format",
+    "supports"
+  ],
   "properties": {
     "name": {
       "type": "string",
@@ -18,11 +23,20 @@
     },
     "format": {
       "type": "string",
-      "enum": ["port60-liquid@1"],
+      "enum": [
+        "port60-liquid@1"
+      ],
       "description": "The dialect/contract major this template is written against."
     },
-    "label": { "type": "string", "maxLength": 60, "description": "Human-readable name shown in pickers." },
-    "description": { "type": "string", "maxLength": 300 },
+    "label": {
+      "type": "string",
+      "maxLength": 60,
+      "description": "Human-readable name shown in pickers."
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 300
+    },
     "requiresCapabilities": {
       "type": "array",
       "items": {
@@ -52,7 +66,15 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": ["general", "mosque", "church", "appeal-charity", "pta", "community", "training"]
+        "enum": [
+          "general",
+          "mosque",
+          "church",
+          "appeal-charity",
+          "pta",
+          "community",
+          "training"
+        ]
       },
       "uniqueItems": true,
       "default": [],
@@ -66,25 +88,38 @@
     "supports": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["pages", "sections"],
+      "required": [
+        "pages",
+        "sections"
+      ],
       "properties": {
         "pages": {
           "type": "array",
-          "items": { "type": "string", "enum": ["home", "about"] },
+          "items": {
+            "type": "string",
+            "enum": [
+              "home",
+              "about"
+            ]
+          },
           "minItems": 1,
           "uniqueItems": true,
           "description": "Section based page bodies this template renders from sections/{type}.liquid. Contract v1 supports home and about. This is independent of layout chrome and route-specific pageTemplates."
         },
         "sections": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "minItems": 1,
           "uniqueItems": true,
           "description": "Section types this template ships renderers for (sections/{type}.liquid). Unsupported types are omitted at render, never an error."
         },
         "islands": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "uniqueItems": true,
           "default": [],
           "description": "Islands this template places. Every {% island %} name must be listed here AND exist in the platform island registry."
@@ -96,7 +131,15 @@
         },
         "pageTemplates": {
           "type": "array",
-          "items": { "type": "string", "enum": ["events", "course", "articles", "article"] },
+          "items": {
+            "type": "string",
+            "enum": [
+              "events",
+              "course",
+              "articles",
+              "article"
+            ]
+          },
           "uniqueItems": true,
           "default": [],
           "description": "Route-specific data views rendered from pages/{page}.liquid with documented context. Events and articles own listings; course and article own detail presentation. Event transactions, course enrolment, article engagement, comments, identity and consent stay platform-owned islands. Requires supports.layout; without an entry the platform body renders inside the template chrome."
@@ -115,10 +158,34 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": ["reveal", "counter", "progress", "countdown", "accordion", "carousel", "stickyHeader", "stickyCta", "lightbox", "tabs", "nav"]
+            "enum": [
+              "reveal",
+              "counter",
+              "progress",
+              "countdown",
+              "accordion",
+              "carousel",
+              "stickyHeader",
+              "stickyCta",
+              "lightbox",
+              "tabs",
+              "nav"
+            ]
           },
           "uniqueItems": true,
           "description": "Engine-attached behaviours this template's markup opts into via data-p60-* attributes (see the behaviour catalogue). Templates never ship JavaScript; declaring here is what makes the engine wire the markup, and the validator proves declaration and usage agree in both directions."
+        },
+        "focus": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "donate",
+              "volunteer"
+            ]
+          },
+          "description": "The site-focus kinds this template can LEAD with (docs/volunteering.md). Declaring 'volunteer' means the home hero places the composite primary_action island (or branches on section.primary.kind), so the volunteer sign-up can take the widget slot; the picker marks templates that cannot lead with volunteering. Templates that predate the setting keep rendering the donation widget, since donate is the default."
         }
       }
     },
@@ -130,7 +197,10 @@
         "hero": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["idealAspect", "minWidth"],
+          "required": [
+            "idealAspect",
+            "minWidth"
+          ],
           "properties": {
             "idealAspect": {
               "type": "string",
@@ -166,7 +236,10 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["name", "values"],
+        "required": [
+          "name",
+          "values"
+        ],
         "properties": {
           "name": {
             "type": "string",
@@ -176,14 +249,18 @@
           "values": {
             "type": "object",
             "minProperties": 1,
-            "propertyNames": { "pattern": "^[a-zA-Z][a-zA-Z0-9]{0,39}$" },
-            "additionalProperties": { "type": "string" },
-            "description": "Knob key → value. Every key must be a declared settings knob; select values must be listed options; font values must be catalogue families."
+            "propertyNames": {
+              "pattern": "^[a-zA-Z][a-zA-Z0-9]{0,39}$"
+            },
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Knob key \u2192 value. Every key must be a declared settings knob; select values must be listed options; font values must be catalogue families."
           }
         }
       },
       "default": [],
-      "description": "One-click LOOKS: author-named bundles of knob values (scheme + fonts + width…) applied together. Everything remains individually adjustable afterwards."
+      "description": "One-click LOOKS: author-named bundles of knob values (scheme + fonts + width\u2026) applied together. Everything remains individually adjustable afterwards."
     },
     "settings": {
       "type": "object",
@@ -194,21 +271,51 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["key", "kind", "label"],
+            "required": [
+              "key",
+              "kind",
+              "label"
+            ],
             "properties": {
-              "key": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9]{0,39}$" },
-              "kind": { "type": "string", "enum": ["color", "select", "toggle", "font"] },
-              "label": { "type": "string", "maxLength": 60 },
+              "key": {
+                "type": "string",
+                "pattern": "^[a-zA-Z][a-zA-Z0-9]{0,39}$"
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "color",
+                  "select",
+                  "toggle",
+                  "font"
+                ]
+              },
+              "label": {
+                "type": "string",
+                "maxLength": 60
+              },
               "default": {},
-              "options": { "type": "array", "items": { "type": "string" } },
+              "options": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
               "group": {
                 "type": "string",
-                "enum": ["typography", "looks"],
-                "description": "Where the admin surfaces this knob: 'typography' → the Typography section beside the font slots; 'looks' → the Looks section with the one-click bundles (colour schemes and accent dials belong there, and ungrouped color knobs plus a knob keyed 'scheme' default there anyway); other ungrouped knobs render under Template options."
+                "enum": [
+                  "typography",
+                  "looks"
+                ],
+                "description": "Where the admin surfaces this knob: 'typography' \u2192 the Typography section beside the font slots; 'looks' \u2192 the Looks section with the one-click bundles (colour schemes and accent dials belong there, and ungrouped color knobs plus a knob keyed 'scheme' default there anyway); other ungrouped knobs render under Template options."
               },
               "weights": {
                 "type": "array",
-                "items": { "type": "integer", "minimum": 100, "maximum": 1000 },
+                "items": {
+                  "type": "integer",
+                  "minimum": 100,
+                  "maximum": 1000
+                },
                 "uniqueItems": true,
                 "description": "FONT knobs only: the weights this template's typographic system uses for the slot. The host requests these for the tenant's chosen family (clamped to the family's real weights). The tenant picks the FAMILY; weights, sizes and tracking stay template-owned."
               }

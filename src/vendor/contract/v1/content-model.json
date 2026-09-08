@@ -3,8 +3,15 @@
   "version": "1.0",
   "root": "site",
   "siblings": {
-    "description": "site.brand, site.nav, site.socials and site.locale carry the SAME shapes documented in context.json for the flat era; the tree re-addresses them, it does not reshape them.",
-    "keys": ["brand", "nav", "socials", "locale"]
+    "description": "site.brand, site.nav, site.socials and site.locale carry the SAME shapes documented in context.json for the flat era; the tree re-addresses them, it does not reshape them. site.focus ('donate' | 'volunteer') and site.actions ({ primary, secondary } as { kind, label, href }) are the site-focus switch (docs/volunteering.md): which action leads as the widget in the hero and which is the one button; both documented in context.json.",
+    "keys": [
+      "brand",
+      "nav",
+      "socials",
+      "locale",
+      "focus",
+      "actions"
+    ]
   },
   "collections": {
     "services": {
@@ -13,12 +20,34 @@
       "moreHref": "/services",
       "description": "The organisation's published content pages (the services CMS), newest curation order first.",
       "item": {
-        "id": { "type": "string", "since": "1.0" },
-        "title": { "type": "string", "since": "1.0", "max": 200 },
-        "slug": { "type": "string", "since": "1.0" },
-        "summary": { "type": "string", "since": "1.0", "nullable": true, "max": 500 },
-        "imageUrl": { "type": "string", "since": "1.0", "nullable": true },
-        "href": { "type": "string", "since": "1.0" }
+        "id": {
+          "type": "string",
+          "since": "1.0"
+        },
+        "title": {
+          "type": "string",
+          "since": "1.0",
+          "max": 200
+        },
+        "slug": {
+          "type": "string",
+          "since": "1.0"
+        },
+        "summary": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true,
+          "max": 500
+        },
+        "imageUrl": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true
+        },
+        "href": {
+          "type": "string",
+          "since": "1.0"
+        }
       }
     },
     "events": {
@@ -27,20 +56,76 @@
       "moreHref": "/events",
       "description": "Published events, soonest first. `registrationMode` is an OPEN enum: INFO, RSVP and TICKETED exist today and new modes will arrive; branch on the ones you style and fall back for the rest.",
       "item": {
-        "id": { "type": "string", "since": "1.0" },
-        "name": { "type": "string", "since": "1.0", "max": 200 },
-        "description": { "type": "string", "since": "1.0", "nullable": true, "max": 200 },
-        "registrationMode": { "type": "string", "since": "1.0", "enumOpen": ["INFO", "RSVP", "TICKETED"] },
-        "startsAt": { "type": "string", "since": "1.0" },
-        "endsAt": { "type": "string", "since": "1.0", "nullable": true },
-        "venueName": { "type": "string", "since": "1.0", "nullable": true, "max": 200 },
-        "online": { "type": "boolean", "since": "1.0" },
-        "imageUrl": { "type": "string", "since": "1.0", "nullable": true },
-        "onSale": { "type": "boolean", "since": "1.0" },
-        "soldOut": { "type": "boolean", "since": "1.0" },
-        "priceFrom": { "type": "number", "since": "1.0", "nullable": true },
-        "currency": { "type": "string", "since": "1.0", "nullable": true },
-        "detailHref": { "type": "string", "since": "1.0" }
+        "id": {
+          "type": "string",
+          "since": "1.0"
+        },
+        "name": {
+          "type": "string",
+          "since": "1.0",
+          "max": 200
+        },
+        "description": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true,
+          "max": 200
+        },
+        "registrationMode": {
+          "type": "string",
+          "since": "1.0",
+          "enumOpen": [
+            "INFO",
+            "RSVP",
+            "TICKETED"
+          ]
+        },
+        "startsAt": {
+          "type": "string",
+          "since": "1.0"
+        },
+        "endsAt": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true
+        },
+        "venueName": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true,
+          "max": 200
+        },
+        "online": {
+          "type": "boolean",
+          "since": "1.0"
+        },
+        "imageUrl": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true
+        },
+        "onSale": {
+          "type": "boolean",
+          "since": "1.0"
+        },
+        "soldOut": {
+          "type": "boolean",
+          "since": "1.0"
+        },
+        "priceFrom": {
+          "type": "number",
+          "since": "1.0",
+          "nullable": true
+        },
+        "currency": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true
+        },
+        "detailHref": {
+          "type": "string",
+          "since": "1.0"
+        }
       }
     },
     "articles": {
@@ -49,17 +134,59 @@
       "moreHref": "/articles/all",
       "description": "Published articles, newest first. Detail bodies stay editor-owned sanitised richtext on the article page BY DESIGN; the card model carries everything a listing needs.",
       "item": {
-        "id": { "type": "string", "since": "1.0" },
-        "title": { "type": "string", "since": "1.0", "max": 200 },
-        "slug": { "type": "string", "since": "1.0" },
-        "excerpt": { "type": "string", "since": "1.0", "nullable": true, "max": 500 },
-        "imageUrl": { "type": "string", "since": "1.0", "nullable": true },
-        "authorName": { "type": "string", "since": "1.0", "nullable": true, "max": 120 },
-        "authorRole": { "type": "string", "since": "1.0", "nullable": true, "max": 120 },
-        "categories": { "type": "string[]", "since": "1.0" },
-        "publishedAt": { "type": "string", "since": "1.0" },
-        "readingMinutes": { "type": "number", "since": "1.0", "nullable": true },
-        "href": { "type": "string", "since": "1.0" }
+        "id": {
+          "type": "string",
+          "since": "1.0"
+        },
+        "title": {
+          "type": "string",
+          "since": "1.0",
+          "max": 200
+        },
+        "slug": {
+          "type": "string",
+          "since": "1.0"
+        },
+        "excerpt": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true,
+          "max": 500
+        },
+        "imageUrl": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true
+        },
+        "authorName": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true,
+          "max": 120
+        },
+        "authorRole": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true,
+          "max": 120
+        },
+        "categories": {
+          "type": "string[]",
+          "since": "1.0"
+        },
+        "publishedAt": {
+          "type": "string",
+          "since": "1.0"
+        },
+        "readingMinutes": {
+          "type": "number",
+          "since": "1.0",
+          "nullable": true
+        },
+        "href": {
+          "type": "string",
+          "since": "1.0"
+        }
       }
     },
     "campaigns": {
@@ -68,11 +195,30 @@
       "moreHref": "/campaigns",
       "description": "Live campaigns, curation order.",
       "item": {
-        "id": { "type": "string", "since": "1.0" },
-        "title": { "type": "string", "since": "1.0", "max": 200 },
-        "href": { "type": "string", "since": "1.0" },
-        "summary": { "type": "string", "since": "1.0", "nullable": true, "max": 500 },
-        "imageUrl": { "type": "string", "since": "1.0", "nullable": true }
+        "id": {
+          "type": "string",
+          "since": "1.0"
+        },
+        "title": {
+          "type": "string",
+          "since": "1.0",
+          "max": 200
+        },
+        "href": {
+          "type": "string",
+          "since": "1.0"
+        },
+        "summary": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true,
+          "max": 500
+        },
+        "imageUrl": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true
+        }
       }
     },
     "causes": {
@@ -81,16 +227,54 @@
       "moreHref": "/donate",
       "description": "Causes currently accepting donations, quick-give first. `paymentOptions` mirrors the public cause contract.",
       "item": {
-        "id": { "type": "string", "since": "1.0" },
-        "title": { "type": "string", "since": "1.0", "max": 200 },
-        "slug": { "type": "string", "since": "1.0" },
-        "description": { "type": "string", "since": "1.0", "nullable": true, "max": 500 },
-        "imageUrl": { "type": "string", "since": "1.0", "nullable": true },
-        "targetAmount": { "type": "number", "since": "1.0", "nullable": true },
-        "raisedAmount": { "type": "number", "since": "1.0", "nullable": true },
-        "progressPercentage": { "type": "number", "since": "1.0", "nullable": true },
-        "href": { "type": "string", "since": "1.0" },
-        "paymentOptions": { "type": "object", "since": "1.0", "nullable": true }
+        "id": {
+          "type": "string",
+          "since": "1.0"
+        },
+        "title": {
+          "type": "string",
+          "since": "1.0",
+          "max": 200
+        },
+        "slug": {
+          "type": "string",
+          "since": "1.0"
+        },
+        "description": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true,
+          "max": 500
+        },
+        "imageUrl": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true
+        },
+        "targetAmount": {
+          "type": "number",
+          "since": "1.0",
+          "nullable": true
+        },
+        "raisedAmount": {
+          "type": "number",
+          "since": "1.0",
+          "nullable": true
+        },
+        "progressPercentage": {
+          "type": "number",
+          "since": "1.0",
+          "nullable": true
+        },
+        "href": {
+          "type": "string",
+          "since": "1.0"
+        },
+        "paymentOptions": {
+          "type": "object",
+          "since": "1.0",
+          "nullable": true
+        }
       }
     },
     "courses": {
@@ -99,16 +283,59 @@
       "moreHref": "/courses",
       "description": "Enrollable courses. The long-form About body is sanitised richtext on the course page, never in cards.",
       "item": {
-        "id": { "type": "string", "since": "1.0" },
-        "title": { "type": "string", "since": "1.0", "max": 200 },
-        "description": { "type": "string", "since": "1.0", "nullable": true, "max": 500 },
-        "imageUrl": { "type": "string", "since": "1.0", "nullable": true },
-        "venue": { "type": "string", "since": "1.0", "nullable": true, "max": 200 },
-        "audience": { "type": "string", "since": "1.0", "enumOpen": ["ADULT", "CHILD", "FAMILY"] },
-        "priceFrom": { "type": "number", "since": "1.0", "nullable": true },
-        "currency": { "type": "string", "since": "1.0", "nullable": true },
-        "soldOut": { "type": "boolean", "since": "1.0" },
-        "href": { "type": "string", "since": "1.0" }
+        "id": {
+          "type": "string",
+          "since": "1.0"
+        },
+        "title": {
+          "type": "string",
+          "since": "1.0",
+          "max": 200
+        },
+        "description": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true,
+          "max": 500
+        },
+        "imageUrl": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true
+        },
+        "venue": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true,
+          "max": 200
+        },
+        "audience": {
+          "type": "string",
+          "since": "1.0",
+          "enumOpen": [
+            "ADULT",
+            "CHILD",
+            "FAMILY"
+          ]
+        },
+        "priceFrom": {
+          "type": "number",
+          "since": "1.0",
+          "nullable": true
+        },
+        "currency": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true
+        },
+        "soldOut": {
+          "type": "boolean",
+          "since": "1.0"
+        },
+        "href": {
+          "type": "string",
+          "since": "1.0"
+        }
       }
     },
     "resources": {
@@ -117,13 +344,39 @@
       "moreHref": "/resources",
       "description": "Published documents, grouped by folder.",
       "item": {
-        "id": { "type": "string", "since": "1.0" },
-        "title": { "type": "string", "since": "1.0", "max": 200 },
-        "folder": { "type": "string", "since": "1.0", "nullable": true },
-        "url": { "type": "string", "since": "1.0" },
-        "contentType": { "type": "string", "since": "1.0", "nullable": true },
-        "bytes": { "type": "number", "since": "1.0", "nullable": true },
-        "publishedAt": { "type": "string", "since": "1.0", "nullable": true }
+        "id": {
+          "type": "string",
+          "since": "1.0"
+        },
+        "title": {
+          "type": "string",
+          "since": "1.0",
+          "max": 200
+        },
+        "folder": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true
+        },
+        "url": {
+          "type": "string",
+          "since": "1.0"
+        },
+        "contentType": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true
+        },
+        "bytes": {
+          "type": "number",
+          "since": "1.0",
+          "nullable": true
+        },
+        "publishedAt": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true
+        }
       }
     },
     "locations": {
@@ -132,13 +385,40 @@
       "moreHref": "/locations",
       "description": "The organisation's physical places, primary first.",
       "item": {
-        "id": { "type": "string", "since": "1.0" },
-        "name": { "type": "string", "since": "1.0", "max": 200 },
-        "address": { "type": "string", "since": "1.0", "nullable": true, "max": 500 },
-        "latitude": { "type": "number", "since": "1.0", "nullable": true },
-        "longitude": { "type": "number", "since": "1.0", "nullable": true },
-        "primary": { "type": "boolean", "since": "1.0" },
-        "directionsHref": { "type": "string", "since": "1.0", "nullable": true }
+        "id": {
+          "type": "string",
+          "since": "1.0"
+        },
+        "name": {
+          "type": "string",
+          "since": "1.0",
+          "max": 200
+        },
+        "address": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true,
+          "max": 500
+        },
+        "latitude": {
+          "type": "number",
+          "since": "1.0",
+          "nullable": true
+        },
+        "longitude": {
+          "type": "number",
+          "since": "1.0",
+          "nullable": true
+        },
+        "primary": {
+          "type": "boolean",
+          "since": "1.0"
+        },
+        "directionsHref": {
+          "type": "string",
+          "since": "1.0",
+          "nullable": true
+        }
       }
     },
     "schedules": {
@@ -147,8 +427,17 @@
       "moreHref": null,
       "description": "TYPE-DERIVED recurring schedules. `type` is an OPEN enum; 'worship' is the first (its shape is the layout worship contract: times, labels, today, next). Other institutions arrive as new types; render the types you know, ignore the rest.",
       "item": {
-        "type": { "type": "string", "since": "1.0", "enumOpen": ["worship"] },
-        "content": { "type": "object", "since": "1.0" }
+        "type": {
+          "type": "string",
+          "since": "1.0",
+          "enumOpen": [
+            "worship"
+          ]
+        },
+        "content": {
+          "type": "object",
+          "since": "1.0"
+        }
       }
     },
     "about": {
@@ -157,8 +446,15 @@
       "moreHref": null,
       "description": "The admin-authored page composition: the ordered sections of the home/about surface. `type` is the section catalogue's OPEN enum; `content` is that section type's fields. This is what `section.*` re-addresses; a mega-page template can walk it directly.",
       "item": {
-        "type": { "type": "string", "since": "1.0", "enumOpen": [] },
-        "content": { "type": "object", "since": "1.0" }
+        "type": {
+          "type": "string",
+          "since": "1.0",
+          "enumOpen": []
+        },
+        "content": {
+          "type": "object",
+          "since": "1.0"
+        }
       }
     }
   }
