@@ -140,6 +140,7 @@ export async function validateArtifact(files) {
       stickyCta: [/data-p60-sticky-cta\b/, 'data-p60-sticky-cta'],
       lightbox: [/data-p60-lightbox\b/, 'data-p60-lightbox'],
       tabs: [/data-p60-tabs\b/, 'data-p60-tabs'],
+      nav: [/data-p60-nav\b/, 'data-p60-nav'],
     };
     for (const name of declaredBehaviours) {
       const primary = PRIMARY_ATTR[name];
@@ -161,6 +162,13 @@ export async function validateArtifact(files) {
     if (/data-p60-tabs\b/.test(liquidSource)
         && (!/data-p60-tab(?!s)\b/.test(liquidSource) || !/data-p60-panel\b/.test(liquidSource))) {
       errors.push("behaviour 'tabs': a data-p60-tabs container needs data-p60-tab controls and data-p60-panel panels");
+    }
+    if (/data-p60-nav-item\b/.test(liquidSource)
+        && (!/data-p60-nav-toggle\b/.test(liquidSource) || !/data-p60-nav-menu\b/.test(liquidSource))) {
+      errors.push("behaviour 'nav': a data-p60-nav-item group needs a data-p60-nav-toggle control and a data-p60-nav-menu panel");
+    }
+    if (/data-p60-nav-(item|burger)\b/.test(liquidSource) && !/data-p60-nav(?!-)\b/.test(liquidSource)) {
+      errors.push("behaviour 'nav': data-p60-nav-item and data-p60-nav-burger need a data-p60-nav root around the menu");
     }
   }
 

@@ -124,6 +124,21 @@
       "stateClasses": ["is-active"],
       "cssVars": ["--p60-carousel-index"],
       "injects": [".p60-carousel-dots", ".p60-carousel-dot", ".p60-carousel-dot--active"]
+    },
+    {
+      "name": "nav",
+      "status": "available",
+      "label": "Navigation",
+      "description": "Your menu, made robust. You design the menu (markup, every pixel, the breakpoint); the engine supplies the interaction CSS :hover cannot: data-p60-nav on each nav root (several allowed), data-p60-nav-item on each group holding a data-p60-nav-toggle control and a data-p60-nav-menu panel (nesting allowed). Hover-capable pointers get hover intent (a short delay to open, a grace period to close) so crossing the gap between a toggle and its panel never closes it; keyboard, touch and pen toggle on the control (Enter/click, ArrowDown opens and focuses the first link; a mouse click on an already-hovered parent link navigates); Escape closes and returns focus to the toggle; a click outside or focus moving away closes; one item stays open per level and aria-expanded is kept honest. The burger: data-p60-nav-burger on a button whose aria-controls (or the attribute value) names the stacked panel; the engine toggles is-open on both, closes on Escape (returning focus), on a real navigation inside the panel, on an outside click, and when the burger disappears at a wider viewport. State is is-open on the item, the panel and the burger; under .p60-js show a panel only on is-open and keep your :hover/:focus-within rules scoped to html:not(.p60-js) for the no-JS render.",
+      "attributes": [
+        { "attr": "data-p60-nav", "value": "none; a nav root, several allowed" },
+        { "attr": "data-p60-nav-item", "value": "none; a group holding one toggle and one menu, nestable" },
+        { "attr": "data-p60-nav-toggle", "value": "none; the item's control (a link or button)" },
+        { "attr": "data-p60-nav-menu", "value": "none; the item's panel" },
+        { "attr": "data-p60-nav-burger", "value": "none, or the id of the panel when aria-controls is absent" }
+      ],
+      "stateClasses": ["is-open"],
+      "cssVars": []
     }
   ]
 }

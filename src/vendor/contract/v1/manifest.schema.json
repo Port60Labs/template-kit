@@ -115,7 +115,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": ["reveal", "counter", "progress", "countdown", "accordion", "carousel", "stickyHeader", "stickyCta", "lightbox", "tabs"]
+            "enum": ["reveal", "counter", "progress", "countdown", "accordion", "carousel", "stickyHeader", "stickyCta", "lightbox", "tabs", "nav"]
           },
           "uniqueItems": true,
           "description": "Engine-attached behaviours this template's markup opts into via data-p60-* attributes (see the behaviour catalogue). Templates never ship JavaScript; declaring here is what makes the engine wire the markup, and the validator proves declaration and usage agree in both directions."
