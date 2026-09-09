@@ -185,6 +185,16 @@ export async function validateArtifact(files) {
     if (/data-p60-nav-(item|burger)\b/.test(liquidSource) && !/data-p60-nav(?!-)\b/.test(liquidSource)) {
       errors.push("behaviour 'nav': data-p60-nav-item and data-p60-nav-burger need a data-p60-nav root around the menu");
     }
+    if (/data-p60-show-more(?!-)\b/.test(liquidSource)
+        && (!/data-p60-show-more-item\b/.test(liquidSource) || !/data-p60-show-more-toggle\b/.test(liquidSource))) {
+      errors.push("behaviour 'showMore': a data-p60-show-more list needs data-p60-show-more-item entries and a data-p60-show-more-toggle button");
+    }
+    if (/data-p60-show-more-toggle\b/.test(liquidSource) && !/<button\b[^>]*data-p60-show-more-toggle\b/.test(liquidSource)) {
+      errors.push("behaviour 'showMore': data-p60-show-more-toggle belongs on a <button> (a link would navigate; a div would not be operable)");
+    }
+    if (/data-p60-scrollspy\b/.test(liquidSource) && !/href=["']#[^"'\s]/.test(liquidSource)) {
+      errors.push("behaviour 'scrollspy': a data-p60-scrollspy menu needs links to in-page anchors (href=\"#section-id\")");
+    }
   }
 
   // Font knobs: the default family must be a real catalogue entry (the tenant-unset render uses

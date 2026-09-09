@@ -8,11 +8,21 @@
       "primaryAttribute": "data-p60-reveal",
       "description": "Adds is-revealed when the element first enters the viewport; the template's CSS does the actual motion. data-p60-reveal-group on a container staggers its children by stamping --p60-reveal-index on each (use it in a transition-delay calc). Reduced motion: is-revealed applies immediately on load.",
       "attributes": [
-        { "attr": "data-p60-reveal", "value": "optional variant name for the CSS to key on" },
-        { "attr": "data-p60-reveal-group", "value": "none; staggers direct children" }
+        {
+          "attr": "data-p60-reveal",
+          "value": "optional variant name for the CSS to key on"
+        },
+        {
+          "attr": "data-p60-reveal-group",
+          "value": "none; staggers direct children"
+        }
       ],
-      "stateClasses": ["is-revealed"],
-      "cssVars": ["--p60-reveal-index"]
+      "stateClasses": [
+        "is-revealed"
+      ],
+      "cssVars": [
+        "--p60-reveal-index"
+      ]
     },
     {
       "name": "counter",
@@ -21,10 +31,18 @@
       "primaryAttribute": "data-p60-count",
       "description": "Counts the element's figure up from zero when first revealed. The static text IS the final value, typed exactly as it should read (\"£20\", \"95%\", \"1,200\", \"2.5k\"): the engine animates only the first run of digits and keeps the prefix, suffix, grouping and decimal places as typed, restoring the exact text on the last frame. A numeric attribute value (legacy) overrides the target; the text still sets the format. Reduced motion: the final figure shows immediately.",
       "attributes": [
-        { "attr": "data-p60-count", "value": "none: the element's own text is the target and the format; or a numeric target (legacy)" },
-        { "attr": "data-p60-count-duration", "value": "optional ms, capped at 4000 (default 1200)" }
+        {
+          "attr": "data-p60-count",
+          "value": "none: the element's own text is the target and the format; or a numeric target (legacy)"
+        },
+        {
+          "attr": "data-p60-count-duration",
+          "value": "optional ms, capped at 4000 (default 1200)"
+        }
       ],
-      "stateClasses": ["is-revealed"],
+      "stateClasses": [
+        "is-revealed"
+      ],
       "cssVars": []
     },
     {
@@ -34,9 +52,14 @@
       "primaryAttribute": "data-p60-progress",
       "description": "Animates the marked element's width from zero to its authored width when first revealed. The authored width (inline style or CSS) is the target and the no-JS render. Reduced motion: the authored width stands untouched.",
       "attributes": [
-        { "attr": "data-p60-progress", "value": "none; the element's own width is the target" }
+        {
+          "attr": "data-p60-progress",
+          "value": "none; the element's own width is the target"
+        }
       ],
-      "stateClasses": ["is-revealed"],
+      "stateClasses": [
+        "is-revealed"
+      ],
       "cssVars": []
     },
     {
@@ -46,11 +69,22 @@
       "primaryAttribute": "data-p60-countdown",
       "description": "Replaces the element's content with a live compact remainder to data-p60-until (\"3d 12h 45m\"). The static content is the authored date text (the no-JS render). On expiry the engine adds is-elapsed and swaps to data-p60-elapsed-text when provided. Countdowns keep ticking under reduced motion: they are information, not decoration. v1 unit labels are compact and language-neutral (d/h/m/s).",
       "attributes": [
-        { "attr": "data-p60-countdown", "value": "segments: dhms, dhm (default) or hm" },
-        { "attr": "data-p60-until", "value": "ISO-8601 instant, required" },
-        { "attr": "data-p60-elapsed-text", "value": "optional text shown once elapsed" }
+        {
+          "attr": "data-p60-countdown",
+          "value": "segments: dhms, dhm (default) or hm"
+        },
+        {
+          "attr": "data-p60-until",
+          "value": "ISO-8601 instant, required"
+        },
+        {
+          "attr": "data-p60-elapsed-text",
+          "value": "optional text shown once elapsed"
+        }
       ],
-      "stateClasses": ["is-elapsed"],
+      "stateClasses": [
+        "is-elapsed"
+      ],
       "cssVars": []
     },
     {
@@ -60,9 +94,14 @@
       "primaryAttribute": "data-p60-accordion",
       "description": "On a container of native details elements: exclusive-open (opening one closes the others) plus smooth height animation. data-p60-accordion=\"multi\" keeps independent opening. Built on details/summary so the no-JS render is already functional and semantics are free. Reduced motion: no height animation, instant toggle.",
       "attributes": [
-        { "attr": "data-p60-accordion", "value": "none for exclusive-open; \"multi\" for independent" }
+        {
+          "attr": "data-p60-accordion",
+          "value": "none for exclusive-open; \"multi\" for independent"
+        }
       ],
-      "stateClasses": ["is-open"],
+      "stateClasses": [
+        "is-open"
+      ],
       "cssVars": []
     },
     {
@@ -72,9 +111,15 @@
       "primaryAttribute": "data-p60-sticky-header",
       "description": "State classes for scroll-aware headers: past a small threshold the engine adds is-condensed; with the \"auto-hide\" value, scrolling down past 160px adds is-hidden and scrolling up removes it. The engine only ever toggles classes (rAF-throttled), what condensing or hiding looks like, and whether it animates, is entirely the template's CSS (gate transitions behind prefers-reduced-motion yourself; the classes always apply because a condensed header is layout, not decoration).",
       "attributes": [
-        { "attr": "data-p60-sticky-header", "value": "none for condense-only; \"auto-hide\" adds the hide-on-scroll-down pair" }
+        {
+          "attr": "data-p60-sticky-header",
+          "value": "none for condense-only; \"auto-hide\" adds the hide-on-scroll-down pair"
+        }
       ],
-      "stateClasses": ["is-condensed", "is-hidden"],
+      "stateClasses": [
+        "is-condensed",
+        "is-hidden"
+      ],
       "cssVars": []
     },
     {
@@ -84,9 +129,14 @@
       "primaryAttribute": "data-p60-sticky-cta",
       "description": "Adds is-stuck once the visitor scrolls past the threshold (the attribute value in px, default 480) and removes it above. The bar should DUPLICATE an action that already exists in the page (a donate button, a ticket link); because of that, this is the one behaviour whose element may be hidden unconditionally in CSS rather than .p60-js-scoped: a no-JS visitor loses nothing; the original action is still on the page.",
       "attributes": [
-        { "attr": "data-p60-sticky-cta", "value": "optional scroll threshold in px (default 480)" }
+        {
+          "attr": "data-p60-sticky-cta",
+          "value": "optional scroll threshold in px (default 480)"
+        }
       ],
-      "stateClasses": ["is-stuck"],
+      "stateClasses": [
+        "is-stuck"
+      ],
       "cssVars": []
     },
     {
@@ -96,13 +146,31 @@
       "primaryAttribute": "data-p60-lightbox",
       "description": "On a group container: each data-p60-lightbox-item is an anchor whose href is the full image (the no-JS render simply navigates to it, already functional). The engine intercepts the click and opens an injected overlay (.p60-lightbox) with the image, a caption from data-p60-caption or the thumbnail's alt, a close button, backdrop and Escape close, arrow-key prev/next within the group, and a focus trap. Reduced motion: no transition on the overlay (the engine sets none; style the steady state).",
       "attributes": [
-        { "attr": "data-p60-lightbox", "value": "none; the group container" },
-        { "attr": "data-p60-lightbox-item", "value": "none; on each anchor to a full image" },
-        { "attr": "data-p60-caption", "value": "optional caption text on an item" }
+        {
+          "attr": "data-p60-lightbox",
+          "value": "none; the group container"
+        },
+        {
+          "attr": "data-p60-lightbox-item",
+          "value": "none; on each anchor to a full image"
+        },
+        {
+          "attr": "data-p60-caption",
+          "value": "optional caption text on an item"
+        }
       ],
-      "stateClasses": ["is-open"],
+      "stateClasses": [
+        "is-open"
+      ],
       "cssVars": [],
-      "injects": [".p60-lightbox", ".p60-lightbox-img", ".p60-lightbox-caption", ".p60-lightbox-close", ".p60-lightbox-prev", ".p60-lightbox-next"]
+      "injects": [
+        ".p60-lightbox",
+        ".p60-lightbox-img",
+        ".p60-lightbox-caption",
+        ".p60-lightbox-close",
+        ".p60-lightbox-prev",
+        ".p60-lightbox-next"
+      ]
     },
     {
       "name": "tabs",
@@ -111,11 +179,22 @@
       "primaryAttribute": "data-p60-tabs",
       "description": "data-p60-tab=\"key\" on each tab control and data-p60-panel=\"key\" on each panel, inside a data-p60-tabs container. The engine wires the tablist/tab/tabpanel roles, aria-selected, roving tabindex, arrow/Home/End keys, toggles is-active on the active pair and hides inactive panels with the hidden attribute, so the no-JS render shows every panel stacked and complete, with no CSS scoping needed. The first tab (or the one authored with is-active) starts active.",
       "attributes": [
-        { "attr": "data-p60-tabs", "value": "none; the container" },
-        { "attr": "data-p60-tab", "value": "the key of the panel this control activates" },
-        { "attr": "data-p60-panel", "value": "the key matching its control" }
+        {
+          "attr": "data-p60-tabs",
+          "value": "none; the container"
+        },
+        {
+          "attr": "data-p60-tab",
+          "value": "the key of the panel this control activates"
+        },
+        {
+          "attr": "data-p60-panel",
+          "value": "the key matching its control"
+        }
       ],
-      "stateClasses": ["is-active"],
+      "stateClasses": [
+        "is-active"
+      ],
       "cssVars": []
     },
     {
@@ -123,17 +202,109 @@
       "status": "available",
       "label": "Carousel",
       "primaryAttribute": "data-p60-carousel",
-      "description": "On a container with one data-p60-slide per child: the engine manages is-active across slides, injects a dots nav (.p60-carousel-dots with one button per slide), wires optional template-provided data-p60-carousel-prev/data-p60-carousel-next controls, adds swipe, keyboard arrows, pause on hover and focus, and hides inactive slides from assistive tech. Value \"auto\" enables auto-advance (data-p60-interval ms, min 3000, default 6000); reduced motion disables auto-advance while controls keep working. The engine stamps --p60-carousel-index on the container for track-translate designs; class-based fade on is-active is the simplest pattern. CSS hiding non-active slides MUST be .p60-js-scoped so the no-JS render shows all slides.",
+      "description": "On a container with one data-p60-slide per child: the engine manages is-active across slides, injects a dots nav (.p60-carousel-dots with one button per slide), wires optional template-provided data-p60-carousel-prev/data-p60-carousel-next controls, adds swipe, keyboard arrows, and hides inactive slides from assistive tech. Value \"auto\" enables auto-advance (data-p60-interval ms, min 3000, default 6000) and injects a rotation control (.p60-carousel-pause, first in the carousel's tab order) following the WAI-ARIA carousel pattern: hovering pauses and leaving resumes, keyboard focus entering the carousel stops rotation and leaving does not restart it, and the control is the only way back; is-paused sits on the carousel while rotation is stopped. Reduced motion disables auto-advance and the control while every other control keeps working. The engine stamps --p60-carousel-index on the container for track-translate designs; class-based fade on is-active is the simplest pattern. CSS hiding non-active slides MUST be .p60-js-scoped so the no-JS render shows all slides.",
       "attributes": [
-        { "attr": "data-p60-carousel", "value": "none for manual; \"auto\" for auto-advance" },
-        { "attr": "data-p60-slide", "value": "none; one per slide child" },
-        { "attr": "data-p60-interval", "value": "optional auto-advance ms, min 3000 (default 6000)" },
-        { "attr": "data-p60-carousel-prev", "value": "none; optional template-provided control" },
-        { "attr": "data-p60-carousel-next", "value": "none; optional template-provided control" }
+        {
+          "attr": "data-p60-carousel",
+          "value": "none for manual; \"auto\" for auto-advance"
+        },
+        {
+          "attr": "data-p60-slide",
+          "value": "none; one per slide child"
+        },
+        {
+          "attr": "data-p60-interval",
+          "value": "optional auto-advance ms, min 3000 (default 6000)"
+        },
+        {
+          "attr": "data-p60-carousel-prev",
+          "value": "none; optional template-provided control"
+        },
+        {
+          "attr": "data-p60-carousel-next",
+          "value": "none; optional template-provided control"
+        }
       ],
-      "stateClasses": ["is-active"],
-      "cssVars": ["--p60-carousel-index"],
-      "injects": [".p60-carousel-dots", ".p60-carousel-dot", ".p60-carousel-dot--active"]
+      "stateClasses": [
+        "is-active",
+        "is-paused"
+      ],
+      "cssVars": [
+        "--p60-carousel-index"
+      ],
+      "injects": [
+        ".p60-carousel-dots",
+        ".p60-carousel-dot",
+        ".p60-carousel-dot--active",
+        ".p60-carousel-pause",
+        ".p60-carousel-pause--stopped"
+      ]
+    },
+    {
+      "name": "readingProgress",
+      "status": "available",
+      "label": "Reading progress",
+      "primaryAttribute": "data-p60-reading-progress",
+      "description": "A reading-position indicator. The engine writes --p60-reading-progress (0 to 1) on the marked element and keeps a progressbar role honest (aria-valuenow 0 to 100, an accessible name of \"Reading progress\" unless the template gives one); the bar's shape and motion are the template's CSS. With data-p60-reading-target naming an element's id the reading is that element's extent, otherwise the whole document; a target the page does not have leaves the bar static. is-started once past zero, is-complete at the end. Information, not decoration: it keeps updating under reduced motion. The bar is pure enhancement, so it may be hidden unconditionally in CSS: a no-JS visitor loses nothing.",
+      "attributes": [
+        {
+          "attr": "data-p60-reading-progress",
+          "value": "none; the indicator element"
+        },
+        {
+          "attr": "data-p60-reading-target",
+          "value": "optional id of the element whose extent is the reading (default: the document)"
+        }
+      ],
+      "stateClasses": [
+        "is-started",
+        "is-complete"
+      ],
+      "cssVars": [
+        "--p60-reading-progress"
+      ]
+    },
+    {
+      "name": "showMore",
+      "status": "available",
+      "label": "Show more and less",
+      "primaryAttribute": "data-p60-show-more",
+      "description": "A list that starts short. On a container whose entries carry data-p60-show-more-item and which holds (or is named by aria-controls from) a data-p60-show-more-toggle button: the engine hides every item past the visible count with the hidden attribute, so the no-JS render shows the complete list and needs no CSS scoping; the toggle expands and collapses, aria-expanded stays honest, is-expanded sits on the container, and a toggle whose attribute carries a value swaps its text to that value while expanded. A list with nothing to hide hides its toggle: there is never a dead control. Author the toggle to show only under .p60-js.",
+      "attributes": [
+        {
+          "attr": "data-p60-show-more",
+          "value": "optional number of items shown while collapsed (default 6)"
+        },
+        {
+          "attr": "data-p60-show-more-item",
+          "value": "none; on each entry"
+        },
+        {
+          "attr": "data-p60-show-more-toggle",
+          "value": "none, or the label to show while expanded; on a button inside the list or pointing at it with aria-controls"
+        }
+      ],
+      "stateClasses": [
+        "is-expanded"
+      ],
+      "cssVars": []
+    },
+    {
+      "name": "scrollspy",
+      "status": "available",
+      "label": "Scrollspy",
+      "primaryAttribute": "data-p60-scrollspy",
+      "description": "On a menu of in-page links (href=\"#id\"): the link whose section is being read gets is-current and aria-current=\"location\", where the current section is the target furthest down the page whose top has passed the activation line (the attribute value in px from the top of the viewport, default 96). Links keep navigating and nothing ever moves focus; links whose target is not on the page are ignored, and a menu with no targets is left alone. Information, not decoration: it keeps updating under reduced motion.",
+      "attributes": [
+        {
+          "attr": "data-p60-scrollspy",
+          "value": "none, or the activation line in px (default 96); on the menu"
+        }
+      ],
+      "stateClasses": [
+        "is-current"
+      ],
+      "cssVars": []
     },
     {
       "name": "nav",
@@ -142,13 +313,33 @@
       "primaryAttribute": "data-p60-nav",
       "description": "Your menu, made robust. You design the menu (markup, every pixel, the breakpoint); the engine supplies the interaction CSS :hover cannot: data-p60-nav on each nav root (several allowed), data-p60-nav-item on each group holding a data-p60-nav-toggle control and a data-p60-nav-menu panel (nesting allowed). Hover-capable pointers get hover intent (a short delay to open, a grace period to close) so crossing the gap between a toggle and its panel never closes it; keyboard, touch and pen toggle on the control (Enter/click, ArrowDown opens and focuses the first link; a mouse click on an already-hovered parent link navigates); Escape closes and returns focus to the toggle; a click outside or focus moving away closes; one item stays open per level and aria-expanded is kept honest. The burger: data-p60-nav-burger on a button whose aria-controls (or the attribute value) names the stacked panel; the engine toggles is-open on both, closes on Escape (returning focus), on a real navigation inside the panel, on an outside click, and when the burger disappears at a wider viewport. State is is-open on the item, the panel and the burger; under .p60-js show a panel only on is-open and keep your :hover/:focus-within rules scoped to html:not(.p60-js) for the no-JS render. Fit steps: when the root's row wraps or overflows, the engine steps is-fit-1, is-fit-2, is-fit-3 onto the root until it fits, re-measured on resize and once fonts settle, never on a stacked (column) nav; the platform's defaults shrink the member_menu pill at each step (the Port60 ID wordmark, then the text, leaving the person icon with its accessible label), and a template maps the same classes to anything else it wants to give up before the burger.",
       "attributes": [
-        { "attr": "data-p60-nav", "value": "none; a nav root, several allowed" },
-        { "attr": "data-p60-nav-item", "value": "none; a group holding one toggle and one menu, nestable" },
-        { "attr": "data-p60-nav-toggle", "value": "none; the item's control (a link or button)" },
-        { "attr": "data-p60-nav-menu", "value": "none; the item's panel" },
-        { "attr": "data-p60-nav-burger", "value": "none, or the id of the panel when aria-controls is absent" }
+        {
+          "attr": "data-p60-nav",
+          "value": "none; a nav root, several allowed"
+        },
+        {
+          "attr": "data-p60-nav-item",
+          "value": "none; a group holding one toggle and one menu, nestable"
+        },
+        {
+          "attr": "data-p60-nav-toggle",
+          "value": "none; the item's control (a link or button)"
+        },
+        {
+          "attr": "data-p60-nav-menu",
+          "value": "none; the item's panel"
+        },
+        {
+          "attr": "data-p60-nav-burger",
+          "value": "none, or the id of the panel when aria-controls is absent"
+        }
       ],
-      "stateClasses": ["is-open", "is-fit-1", "is-fit-2", "is-fit-3"],
+      "stateClasses": [
+        "is-open",
+        "is-fit-1",
+        "is-fit-2",
+        "is-fit-3"
+      ],
       "cssVars": []
     }
   ]

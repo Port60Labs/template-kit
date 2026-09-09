@@ -1,6 +1,7 @@
 import { createServer } from 'node:http';
-import { watch, readFileSync } from 'node:fs';
+import { watch, readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { surfaceFor, knobOverridesFromQuery, previewAssetPath, previewAssetType } from '../lib/previewOptions.mjs';
 import { renderStudioPreview } from '../vendor/validator/preview.mjs';
 import { validateArtifact } from '../vendor/validator/validate.mjs';
 import { applyPreviewContent, buildSiteFixture, validatePreviewContent } from '../vendor/validator/site-context.mjs';
@@ -69,9 +70,11 @@ function imageOriginsOf(json) {
 /**
  * `dev <dir> [--port 4400]`, the local preview: your template over the contract's kind fixtures,
  * the SAME render the studio and reviewers see (islands as fixture-hydrated skeletons,
- * network-dead CSP). ONE addition over the studio render: the platform's own behaviour runtime is
- * inlined, so data-p60-* carousels, reveals and tabs run for real locally, the only script the
- * document can execute. Files are re-read on every request, so a browser refresh is the hot
+ * network-dead CSP), composed per page from supports.pages. Dev-only widenings over the studio
+ * render, each one something production does: the platform's own behaviour runtime is inlined
+ * (the only script the document can execute), webfonts load from the provider mirror, a Look or
+ * a knob can be switched from the query, and a preview/ folder beside the template serves the
+ * author's own imagery. Files are re-read on every request, so a browser refresh is the hot
  * reload; file changes also re-run validation into the terminal, the human watches the page,
  * the agent watches the JSON.
  */
@@ -96,27 +99,30 @@ export async function dev(args) {
     // An older vendored copy without the runtime, the preview degrades to the CSS approximation.
   }
 
-  // The preview is ROUTED: nav links land on real surfaces, so an author sees every platform
-  // page wearing their chrome, their own page template where they ship one, the platform's
-  // fixture skeleton where the page is platform-owned (ticket purchase, donate, campaigns).
-  const surfaceFor = (rawUrl) => {
-    const url = new URL(rawUrl, 'http://preview.local');
-    const path = url.pathname.replace(/\/+$/, '') || '/';
-    if (path === '/events') return url.searchParams.has('event') ? 'event' : 'events';
-    if (path === '/services') return url.searchParams.has('service') ? 'service' : 'services';
-    if (path === '/donate') return 'donate';
-    if (path === '/articles' || path === '/articles/all') return 'articles';
-    if (path.startsWith('/articles/')) return 'article';
-    if (path === '/campaigns') return 'campaigns';
-    if (path.startsWith('/campaigns/')) return 'campaign';
-    if (path === '/courses') return 'course';
-    return 'home';
-  };
+  // The preview is ROUTED (lib/previewOptions.mjs): nav links land on real surfaces, so an author
+  // sees every platform page wearing their chrome, their own page template where they ship one,
+  // the platform's fixture skeleton where the page is platform-owned (ticket purchase, donate,
+  // campaigns), and /about as its own composition. A preview/ folder beside the template is
+  // served at /preview/<file> for the author's own imagery (never packaged).
+  const previewFolder = existsSync(join(dir, 'preview'));
 
   const server = createServer(async (req, res) => {
     try {
       const files = loadArtifactDir(dir);
       const url = new URL(req.url ?? '/', 'http://preview.local');
+      if (url.pathname.startsWith('/preview/')) {
+        // The author's own imagery, and nothing else: a path that does not resolve to an image
+        // inside preview/ is a plain 404, so a broken image URL reads as one in the browser.
+        const asset = previewFolder ? previewAssetPath(dir, url.pathname) : null;
+        if (!asset) {
+          res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' });
+          res.end('not found: only image files inside the template\'s preview/ folder are served here');
+          return;
+        }
+        res.writeHead(200, { 'Content-Type': previewAssetType(asset), 'Cache-Control': 'no-store' });
+        res.end(readFileSync(asset));
+        return;
+      }
       if (url.pathname === '/model') {
         // The model, where the developer lives: the registry beside the LIVE data this preview
         // renders (preview-content.json overlay included).
@@ -127,6 +133,11 @@ export async function dev(args) {
         return;
       }
       const previewContent = loadPreviewContent(dir, contentPath);
+      const manifest = JSON.parse(files['manifest.json'] ?? '{}');
+      // ?look=<name> applies one of the manifest's Looks; ?p60s-<key>=<value> sets one knob, the
+      // way Appearance does for a charity. Values are checked against each knob's kind in the
+      // renderer, exactly as production checks them.
+      const { knobs, look } = knobOverridesFromQuery(manifest, url.searchParams);
       const html = await renderStudioPreview(files, {
         behaviorsRuntime,
         fixtureImageBase,
@@ -134,7 +145,12 @@ export async function dev(args) {
         contentImageOrigins: imageOriginsOf(previewContent),
         surface: surfaceFor(req.url ?? '/'),
         // ?focus=donate|volunteer|none: what leads, so the hero shows each widget and its buttons.
-        focus: url.searchParams.get('focus') ?? undefined
+        focus: url.searchParams.get('focus') ?? undefined,
+        knobs,
+        look,
+        // Dev-only widenings of the sealed studio render: real webfonts, and the preview/ folder.
+        webfonts: true,
+        localImages: previewFolder
       });
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
       res.end(html);

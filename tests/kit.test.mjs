@@ -150,7 +150,12 @@ test('DRIFT GUARD: vendored contract/engine/validator match charity-site byte fo
     ['validator/validate.mjs', 'validator/validate.mjs'],
     ['validator/preview.mjs', 'validator/preview.mjs'],
     ['validator/behaviors-runtime.js', 'validator/behaviors-runtime.js'],
-    ['validator/platform-base.css', 'validator/platform-base.css']
+    ['validator/platform-base.css', 'validator/platform-base.css'],
+    ['validator/site-context.mjs', 'validator/site-context.mjs'],
+    ['validator/icons.mjs', 'validator/icons.mjs'],
+    ['validator/fonts.mjs', 'validator/fonts.mjs'],
+    ['validator/focus.mjs', 'validator/focus.mjs'],
+    ['validator/fixture-art.mjs', 'validator/fixture-art.mjs']
   ];
   for (const [srcRel, venRel] of pairs) {
     const src = join(site, srcRel);
