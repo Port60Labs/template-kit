@@ -4709,3 +4709,26 @@ textarea.p60-form-control {
   border-radius: 10px; margin: 0 0 10px; }
 .impact-map-popup-card .impact-map-card-image { width: calc(100% + 32px); margin: -14px -16px 10px;
   border-radius: calc(var(--radius-sm) - 1px) calc(var(--radius-sm) - 1px) 0 0; }
+
+/* ---- Public listings (docs/reference/public-listings.md) ----
+   Every list is one page at a time; these are the shared "more" affordances: the SSR pager on
+   the campaigns index, the events filter row's gap, and the volunteer chooser's "Show more" row. */
+.listing-pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.75rem;
+}
+.listing-pager-status {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.event-filters-gap {
+  flex: 1 1 auto;
+}
+.vol-more {
+  justify-content: center;
+  text-align: center;
+}
