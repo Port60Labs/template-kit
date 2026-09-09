@@ -28,6 +28,19 @@ const Ajv = Ajv2020.default ?? Ajv2020;
 
 export { dialect as contractDialect, sectionCatalogue, islandRegistry, contextContract, behaviourCatalogue };
 
+// The behaviour to opt-in-attribute map is DERIVED from the catalogue (FR-5): `primaryAttribute` on
+// each entry feeds the checks below, the generated reference and the kit, so adding a behaviour is
+// one catalogue entry plus its runtime initialiser. The trailing word boundary keeps the original
+// semantics: a companion attribute that starts with the primary one (data-p60-reveal-group,
+// data-p60-nav-item) counts as the behaviour in use.
+const escapeRegExp = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+export const BEHAVIOUR_PRIMARY_ATTR = Object.fromEntries(
+  behaviourCatalogue.behaviours.map((b) => [b.name, b.primaryAttribute])
+);
+const PRIMARY_ATTR = Object.fromEntries(
+  behaviourCatalogue.behaviours.map((b) => [b.name, [new RegExp(`${escapeRegExp(b.primaryAttribute)}\\b`), b.primaryAttribute]])
+);
+
 // Templates are markup and attributes, NEVER code (docs/template-behaviours.md). These are hard
 // errors over the RAW liquid source — even inside comments, because there is no legitimate reason
 // for the tokens to appear at all. The handler pattern names real DOM event families rather than
@@ -144,19 +157,6 @@ export async function validateArtifact(files) {
       .filter(([path]) => path.endsWith('.liquid'))
       .map(([, source]) => source)
       .join('\n');
-    const PRIMARY_ATTR = {
-      reveal: [/data-p60-reveal\b/, 'data-p60-reveal'],
-      counter: [/data-p60-count\b/, 'data-p60-count'],
-      progress: [/data-p60-progress\b/, 'data-p60-progress'],
-      countdown: [/data-p60-countdown\b/, 'data-p60-countdown'],
-      accordion: [/data-p60-accordion\b/, 'data-p60-accordion'],
-      carousel: [/data-p60-carousel\b/, 'data-p60-carousel'],
-      stickyHeader: [/data-p60-sticky-header\b/, 'data-p60-sticky-header'],
-      stickyCta: [/data-p60-sticky-cta\b/, 'data-p60-sticky-cta'],
-      lightbox: [/data-p60-lightbox\b/, 'data-p60-lightbox'],
-      tabs: [/data-p60-tabs\b/, 'data-p60-tabs'],
-      nav: [/data-p60-nav\b/, 'data-p60-nav'],
-    };
     for (const name of declaredBehaviours) {
       const primary = PRIMARY_ATTR[name];
       if (primary && !primary[0].test(liquidSource)) {
