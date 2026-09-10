@@ -3,7 +3,7 @@
   chrome classes (.site-header/.site-nav/…) so the base mechanics (sticky header, burger
   breakpoint, dropdown hover) apply, and emits the documented behaviour attributes
   (data-nav-burger, #site-nav) so the platform tail script wires the mobile burger. Identity is
-  PLACED, never rebuilt: {% island 'member_menu' %}. The footer derives everything from brand/nav, no fabricated copy (derive or omit).
+  PLACED, never rebuilt: {% island 'member_menu' %} and {% island 'search' %}. The footer derives everything from brand/nav, no fabricated copy (derive or omit).
 {% endcomment %}
 <header class="site-header">
   <div class="container header-inner">
@@ -42,6 +42,7 @@
           <a href="{{ item.href }}"{% if item.external %} target="_blank" rel="noopener"{% endif %}>{{ item.label }}</a>
         {% endif %}
       {% endfor %}
+      {% island 'search' %}
       {% island 'member_menu' %}
     </nav>
   </div>

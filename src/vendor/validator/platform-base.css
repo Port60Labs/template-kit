@@ -4761,6 +4761,12 @@ textarea.p60-form-control {
   padding: 0.55rem 0.95rem;
   border-radius: 999px;
 }
+/* Named in every theme: the placeholder is the theme's ink at half strength, never the generic
+   muted grey, which vanishes on a dark masthead. */
+.site-search-input::placeholder {
+  color: color-mix(in srgb, var(--ink) 55%, transparent);
+  opacity: 1;
+}
 .site-search-submit {
   padding: 0.55rem 0.95rem;
   border: 1px solid var(--line);
@@ -4855,39 +4861,56 @@ textarea.p60-form-control {
   margin: 0 0 0.35rem;
 }
 /* In the primary nav the box stays compact and grows on focus; Enter searches, so the button rests. */
-.site-nav .site-search {
+/* In a header nav the box is compact and grows on focus; the submit button is the Enter key.
+   Keyed off default's .site-nav AND the layout behaviour API's #site-nav (in attribute form on
+   purpose: class-level specificity, so a template can still override with two classes of its own),
+   so every artifact template's primary nav gets the same compact box whatever its class is called. */
+.site-nav .site-search,
+[id="site-nav"] .site-search {
   margin-inline-start: 0.35rem;
 }
-.site-nav .site-search-input {
+.site-nav .site-search-input,
+[id="site-nav"] .site-search-input {
   width: 9rem;
   min-width: 0;
   padding: 0.45rem 0.85rem;
   font-size: 0.92rem;
   transition: width 0.16s ease;
 }
-.site-nav .site-search-input:focus {
+.site-nav .site-search-input:focus,
+[id="site-nav"] .site-search-input:focus {
   width: 12.5rem;
 }
-.site-nav .site-search-submit {
+.site-nav .site-search-submit,
+[id="site-nav"] .site-search-submit {
   display: none;
 }
 .site-nav .site-search-results,
+[id="site-nav"] .site-search-results,
 .site-nav .site-search-empty,
-.site-nav .site-search-corrected {
+[id="site-nav"] .site-search-empty,
+.site-nav .site-search-corrected,
+[id="site-nav"] .site-search-corrected {
   right: 0;
   left: auto;
 }
 @media (max-width: 860px) {
-  .site-nav .site-search {
+  .site-nav .site-search,
+  [id="site-nav"] .site-search {
     margin: 0.5rem 0;
   }
   .site-nav .site-search-input,
-  .site-nav .site-search-input:focus {
+  [id="site-nav"] .site-search-input,
+  .site-nav .site-search-input:focus,
+  [id="site-nav"] .site-search-input:focus {
     width: 100%;
   }
   .site-nav .site-search-results,
+  [id="site-nav"] .site-search-results,
   .site-nav .site-search-empty,
-  .site-nav .site-search-corrected {
+  [id="site-nav"] .site-search-empty,
+  .site-nav .site-search-corrected,
+  [id="site-nav"] .site-search-corrected {
     position: static;
     min-width: 0;
     box-shadow: none;

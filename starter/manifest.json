@@ -1,6 +1,6 @@
 {
   "name": "starter",
-  "version": "1.12.0",
+  "version": "1.13.0",
   "format": "port60-liquid@1",
   "label": "Starter",
   "description": "The reference template for the Port60 dialect, the developer docs' worked example and the base to copy when building your own. 1.1.0 adds the layout slot: the template owns the header, navigation and footer chrome.",
@@ -23,7 +23,8 @@
       "member_menu",
       "hero_carousel",
       "map",
-      "primary_action_widget"
+      "primary_action_widget",
+      "search"
     ],
     "layout": true,
     "heroImagery": true,
@@ -53,7 +54,7 @@
       }
     ]
   },
-  "changelog": "Adds the impact map section: pin your located work on a themed map of where you work.",
+  "changelog": "Places the site search box in the header: a typeahead across events, articles, services, campaigns, appeals, volunteering and documents, with the results page at /search.",
   "imagery": {
     "hero": {
       "idealAspect": "16:9",
