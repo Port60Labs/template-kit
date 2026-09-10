@@ -191,7 +191,7 @@
       "name": "search",
       "label": "Site search",
       "status": "available",
-      "description": "Searches published articles, programmes, events and public resources. It reads public projections only and cannot search member, payment, private media or admin data.",
+      "description": "The site's search box: a typeahead over the platform's search index (articles, events, services, campaigns, appeals, volunteering and public documents; published and live rows only, never member, payment, private media or admin data). Suggestions are the things themselves, grouped by kind, each a direct link, with a matched-text line when the hit was in the body; Enter or the last row goes to the platform's /search results page. An accessible combobox: the active suggestion carries is-active. Where the box sits is the template's decision.",
       "params": [],
       "stylingApi": [
         ".site-search",
@@ -205,7 +205,11 @@
         ".site-search-kind",
         ".site-search-link",
         ".site-search-summary",
-        ".site-search-empty"
+        ".site-search-empty",
+        ".site-search-title",
+        ".site-search-context",
+        ".site-search-more",
+        ".site-search-corrected"
       ]
     },
     {

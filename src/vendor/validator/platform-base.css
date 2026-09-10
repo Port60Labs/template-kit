@@ -4732,3 +4732,216 @@ textarea.p60-form-control {
   justify-content: center;
   text-align: center;
 }
+
+/* ---- Site search (docs/search.md) ----
+   The typeahead island (a template places it; the platform styles the box and its suggestions)
+   and the platform's /search results page. Suggestions are a listbox under the box: the kind
+   label, the title, a date or place, and the matched-text line with the hit words emphasised. */
+.site-search {
+  position: relative;
+}
+.site-search-form {
+  margin: 0;
+}
+.site-search-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.site-search-fields {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.site-search-input {
+  min-width: 12rem;
+  padding: 0.55rem 0.95rem;
+  border-radius: 999px;
+}
+.site-search-submit {
+  padding: 0.55rem 0.95rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 600;
+  cursor: pointer;
+}
+.site-search-submit:hover {
+  background: var(--bg-tint);
+}
+.site-search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 70;
+  min-width: min(26rem, calc(100vw - 2rem));
+  max-height: 70vh;
+  overflow: auto;
+  margin: 0.35rem 0 0;
+  padding: 0.4rem;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  text-align: left;
+}
+.site-search-link {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.6rem;
+  row-gap: 0.15rem;
+  align-items: baseline;
+  padding: 0.55rem 0.65rem;
+  border-radius: 10px;
+  color: var(--ink);
+  font-weight: 500;
+}
+.site-search-result.is-active .site-search-link,
+.site-search-link:hover {
+  background: var(--bg-tint);
+}
+.site-search-kind {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.site-search-title {
+  font-weight: 600;
+}
+.site-search-context,
+.site-search-summary {
+  grid-column: 2;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+.site-search-summary mark {
+  background: transparent;
+  color: var(--ink);
+  font-weight: 700;
+}
+.site-search-more .site-search-link {
+  grid-template-columns: 1fr;
+  color: var(--primary);
+  font-weight: 600;
+}
+.site-search-empty,
+.site-search-corrected {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 70;
+  min-width: min(26rem, calc(100vw - 2rem));
+  margin: 0.35rem 0 0;
+  padding: 0.65rem 0.8rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  font-size: 0.9rem;
+  color: var(--muted);
+  text-align: left;
+}
+.site-search-corrected {
+  top: auto;
+  bottom: 100%;
+  margin: 0 0 0.35rem;
+}
+/* In the primary nav the box stays compact and grows on focus; Enter searches, so the button rests. */
+.site-nav .site-search {
+  margin-inline-start: 0.35rem;
+}
+.site-nav .site-search-input {
+  width: 9rem;
+  min-width: 0;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.92rem;
+  transition: width 0.16s ease;
+}
+.site-nav .site-search-input:focus {
+  width: 12.5rem;
+}
+.site-nav .site-search-submit {
+  display: none;
+}
+.site-nav .site-search-results,
+.site-nav .site-search-empty,
+.site-nav .site-search-corrected {
+  right: 0;
+  left: auto;
+}
+@media (max-width: 860px) {
+  .site-nav .site-search {
+    margin: 0.5rem 0;
+  }
+  .site-nav .site-search-input,
+  .site-nav .site-search-input:focus {
+    width: 100%;
+  }
+  .site-nav .site-search-results,
+  .site-nav .site-search-empty,
+  .site-nav .site-search-corrected {
+    position: static;
+    min-width: 0;
+    box-shadow: none;
+  }
+}
+
+/* The results page: breadcrumb rows, full width like every page body. */
+.search-hits {
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.search-hit {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.search-hit-crumb {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.search-hit-title {
+  display: inline-block;
+  margin-top: 0.2rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+.search-hit-title:hover {
+  text-decoration: underline;
+}
+.search-hit-snippet {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+}
+.search-hit-snippet mark {
+  background: transparent;
+  color: var(--ink);
+  font-weight: 700;
+}
+.search-corrected,
+.search-empty {
+  color: var(--muted);
+}
+.search-filters {
+  margin-top: 1rem;
+}
+.search-page-box {
+  max-width: 40rem;
+  margin: 1rem 0 1.5rem;
+}
+.search-page-box .site-search-input {
+  flex: 1 1 auto;
+}
