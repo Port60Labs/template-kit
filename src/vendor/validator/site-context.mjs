@@ -1,7 +1,7 @@
-// The `site` tree for validator and preview renders (content model v1 — contract/v1/
+// The `site` tree for validator and preview renders (content model v1, contract/v1/
 // content-model.json): ONE realistic organisation assembled from the canonical fixtures, with
 // `site.content.about` composed per-template from the section catalogue's samples for the
-// manifest's declared sections — the admin-authored page composition, previewed honestly.
+// manifest's declared sections, the admin-authored page composition, previewed honestly.
 import contextContract from '../contract/v1/context.json' with { type: 'json' };
 import sectionCatalogue from '../contract/v1/sections.json' with { type: 'json' };
 
@@ -20,6 +20,18 @@ export const PAGE_KEYS = ['home', 'about'];
  * site's composition is admin-authored, and the preview-content `pages` block plays that role.
  */
 export function composePage(manifest, page) {
+  // The template's own composition when it declares one (stage 4): its order, its choice of
+  // sections, the `optional` ones left out so the preview shows the designed default.
+  const declared = manifest?.compositions?.[page];
+  if (Array.isArray(declared) && declared.length > 0) {
+    return declared
+      .filter((entry) => entry && entry.role !== 'optional')
+      .map((entry) => {
+        const catalogueEntry = catalogueByType.get(entry.type);
+        return catalogueEntry ? { type: entry.type, content: catalogueEntry.sample ?? {} } : null;
+      })
+      .filter(Boolean);
+  }
   return (manifest?.supports?.sections ?? [])
     .map((type) => {
       const entry = catalogueByType.get(type);
@@ -132,7 +144,7 @@ export function validatePreviewContent(json) {
         continue;
       }
       for (const field of Object.keys(items)) {
-        if (field !== 'items') errors.push(`preview-content.json: nav.${field} does not exist — nav carries items`);
+        if (field !== 'items') errors.push(`preview-content.json: nav.${field} does not exist, nav carries items`);
       }
       validateNavItems(items.items, 'nav.items', errors);
       continue;
@@ -159,7 +171,7 @@ export function validatePreviewContent(json) {
       }
       for (const field of Object.keys(items)) {
         if (!BRAND_FIELDS.has(field)) {
-          errors.push(`preview-content.json: brand.${field} does not exist — brand carries ${[...BRAND_FIELDS].join(', ')}`);
+          errors.push(`preview-content.json: brand.${field} does not exist, brand carries ${[...BRAND_FIELDS].join(', ')}`);
         }
       }
       continue;
@@ -174,7 +186,7 @@ export function validatePreviewContent(json) {
       continue;
     }
     if (items.length > model.cap) {
-      errors.push(`preview-content.json: '${name}' holds ${items.length} items — the collection is bounded at ${model.cap}`);
+      errors.push(`preview-content.json: '${name}' holds ${items.length} items, the collection is bounded at ${model.cap}`);
     }
     items.forEach((item, i) => {
       if (item === null || typeof item !== 'object' || Array.isArray(item)) {
@@ -183,7 +195,7 @@ export function validatePreviewContent(json) {
       }
       for (const field of Object.keys(item)) {
         if (!model.item[field]) {
-          errors.push(`preview-content.json: ${name}[${i}].${field} does not exist in the model — a field that does not exist in production cannot exist in a preview`);
+          errors.push(`preview-content.json: ${name}[${i}].${field} does not exist in the model, a field that does not exist in production cannot exist in a preview`);
         }
       }
       for (const [field, spec] of Object.entries(model.item)) {

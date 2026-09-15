@@ -1,11 +1,11 @@
-// FIXTURE ART — the studio's sealed imagery. Fixtures reference imagery as `p60fixture:<kind>/<seed>`
+// FIXTURE ART, the studio's sealed imagery. Fixtures reference imagery as `p60fixture:<kind>/<seed>`
 // and this module resolves every reference before a render: by default to a deterministic inline-SVG
-// scene (a data: URI, so the network-dead studio CSP renders it), or — when the caller passes an
-// `imageBase` — to `<imageBase>/<kind>-<seed>.jpg`, the dev-richer half of the dev-richer /
+// scene (a data: URI, so the network-dead studio CSP renders it), or, when the caller passes an
+// `imageBase`, to `<imageBase>/<kind>-<seed>.jpg`, the dev-richer half of the dev-richer /
 // studio-sealed split (the same shape as the behaviour runtime: the kit's dev server may opt into
 // the one platform CDN host; the studio document never fetches anything).
 //
-// The art is deliberately scenery, not labels: layered gradients, a horizon, soft shapes — enough
+// The art is deliberately scenery, not labels: layered gradients, a horizon, soft shapes, enough
 // composition that cards, carousels and banners read like a real site rather than a wireframe.
 // Deterministic by seed so goldens stay byte-identical run to run.
 
@@ -23,7 +23,7 @@ const PALETTES = {
 
 const SIZES = { wide: [160, 90], photo: [150, 100], portrait: [96, 120] };
 
-// A tiny deterministic PRNG seeded from the reference string — good enough for composition,
+// A tiny deterministic PRNG seeded from the reference string, good enough for composition,
 // stable across runs and platforms.
 function rng(seedText) {
   let h = 2166136261;

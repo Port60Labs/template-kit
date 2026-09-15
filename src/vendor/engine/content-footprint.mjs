@@ -1,6 +1,6 @@
-// CONTENT FOOTPRINTS (content model v1 — docs/template-content-model.md): which site.* paths a
+// CONTENT FOOTPRINTS (content model v1, docs/template-content-model.md): which site.* paths a
 // template touches, decidable at publish because the dialect is closed. Lives in the ENGINE so
-// the production loader computes the same footprint the validator stamps — the render path
+// the production loader computes the same footprint the validator stamps, the render path
 // fetches precisely what a template reads, and the two can never disagree.
 import contentModel from '../contract/v1/content-model.json' with { type: 'json' };
 
@@ -10,7 +10,7 @@ export { contentModel };
 // The dialect is closed, so the site paths a template reads are decidable from its sources: every
 // reference is a literal `site.…` chain (dynamic indexing is refused below, and aliasing the tree
 // itself is refused so a chain can never hide behind a variable). The footprint is collection-
-// granular — `content.events` — because item fields ride the collection fetch.
+// granular, `content.events`, because item fields ride the collection fetch.
 
 const CHAIN = /\bsite((?:\.[A-Za-z_][A-Za-z0-9_-]*|\[\s*'[^']*'\s*\]|\[\s*"[^"]*"\s*\])+)/g;
 const DYNAMIC_INDEX = /\bsite(?:\.[A-Za-z_][A-Za-z0-9_-]*|\[\s*(?:'[^']*'|"[^"]*")\s*\])*\[\s*(?!\s*['"])[^\]]/;
@@ -26,7 +26,7 @@ function segmentsOf(chain) {
 
 /**
  * Extract the content footprint from the artifact's liquid sources.
- * Returns { footprint: string[], minModelVersion: string|null, errors: string[] } — footprint
+ * Returns { footprint: string[], minModelVersion: string|null, errors: string[] }, footprint
  * entries are 'brand' | 'nav' | 'socials' | 'locale' | 'content.<collection>'.
  */
 export function extractContentFootprint(files) {
@@ -38,10 +38,10 @@ export function extractContentFootprint(files) {
   for (const [path, source] of Object.entries(files)) {
     if (!path.endsWith('.liquid')) continue;
     if (DYNAMIC_INDEX.test(source)) {
-      errors.push(`${path}: dynamic indexing into site.* is refused — the content footprint must be decidable at publish. Read a named collection instead.`);
+      errors.push(`${path}: dynamic indexing into site.* is refused, the content footprint must be decidable at publish. Read a named collection instead.`);
     }
     if (BARE_SITE.test(source)) {
-      errors.push(`${path}: aliasing or outputting the bare site tree is refused — reference a named path (site.brand, site.content.<collection>) so the footprint stays decidable.`);
+      errors.push(`${path}: aliasing or outputting the bare site tree is refused, reference a named path (site.brand, site.content.<collection>) so the footprint stays decidable.`);
     }
     let m;
     CHAIN.lastIndex = 0;
@@ -53,17 +53,17 @@ export function extractContentFootprint(files) {
         touched.add(head);
       } else if (head === 'content') {
         if (segs.length < 2) {
-          errors.push(`${path}: references site.content without a collection — name the collection (the footprint must be decidable).`);
+          errors.push(`${path}: references site.content without a collection, name the collection (the footprint must be decidable).`);
           continue;
         }
         const collection = segs[1];
         if (!collections[collection]) {
-          errors.push(`${path}: site.content.${collection} is not in content model ${contentModel.version} — see contract/v1/content-model.json for the collections that exist.`);
+          errors.push(`${path}: site.content.${collection} is not in content model ${contentModel.version}, see contract/v1/content-model.json for the collections that exist.`);
           continue;
         }
         touched.add(`content.${collection}`);
       } else {
-        errors.push(`${path}: site.${head} is not part of the content model — site carries brand, nav, socials, locale and content.*.`);
+        errors.push(`${path}: site.${head} is not part of the content model, site carries brand, nav, socials, locale and content.*.`);
       }
     }
   }

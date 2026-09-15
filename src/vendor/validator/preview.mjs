@@ -1,8 +1,8 @@
 // The STUDIO PREVIEW renderer (developer program T1.3): a validated artifact rendered over the
-// contract's KIND FIXTURES — no tenant, no tenant data, exactly what `template-kit dev` will show
+// contract's KIND FIXTURES, no tenant, no tenant data, exactly what `template-kit dev` will show
 // locally in T3. Deliberately NOT the production TemplateHost path: a studio version must never
 // touch a live site, so this renders from an in-memory file map and the page it produces is
-// self-contained and network-dead — a CSP meta of default-src 'none' means the template's CSS
+// self-contained and network-dead, a CSP meta of default-src 'none' means the template's CSS
 // cannot fetch, beacon or import anything, and the consumer embeds it in a sandboxed iframe.
 // Islands render as realistic, non-interactive fixture skeletons through their public styling
 // classes. Preview HTML carries no runtime and never attempts a platform transaction.
@@ -23,21 +23,21 @@ import { normaliseFocus, previewActions, withResolvedActions, applyFocus } from 
 
 // Fixture imagery resolved for the SEALED studio render (p60fixture: refs become inline-SVG data
 // URIs the network-dead CSP can show). The dev preview may instead resolve them to the platform
-// CDN via options.fixtureImageBase — the dev-richer / studio-sealed split.
+// CDN via options.fixtureImageBase, the dev-richer / studio-sealed split.
 const STUDIO_FX = resolveFixtureArt(contextContract.fixtures);
 
 const escapeHtml = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-// The platform base stylesheet — production loads it on EVERY template page before the theme, so
+// The platform base stylesheet, production loads it on EVERY template page before the theme, so
 // the preview does too: islands and platform components arrive with their real baseline look,
 // wearing the template's tokens, and the theme restyles over it exactly as in production.
-// (Generated copy of src/styles/global.css — scripts/build-preview-base.mjs.)
+// (Generated copy of src/styles/global.css, scripts/build-preview-base.mjs.)
 let PLATFORM_BASE = '';
 try {
   PLATFORM_BASE = readFileSync(join(import.meta.dirname, 'platform-base.css'), 'utf8');
 } catch {
-  // An older vendored copy without the file — the preview degrades to theme-only styling.
+  // An older vendored copy without the file, the preview degrades to theme-only styling.
 }
 
 function previewNote(name) {
@@ -73,7 +73,7 @@ function islandSkeleton(name, ctx = {}, fx = STUDIO_FX) {
         <p class="donate-note">Secure payment provided by Port60</p>
       </section>`;
     case 'member_menu':
-      // Lives INSIDE the nav row, so the wrapper stays inline and the badge trails the button —
+      // Lives INSIDE the nav row, so the wrapper stays inline and the badge trails the button,
       // block layout here read as a stray element between the nav's last link and Sign in.
       return `<div data-p60-preview-island="member_menu" style="display:inline-flex;align-items:center;gap:8px">
         <button class="nav-p60-signin" type="button" disabled><span class="p60-mark" aria-hidden="true">P</span> Sign in</button>
@@ -127,7 +127,7 @@ function islandSkeleton(name, ctx = {}, fx = STUDIO_FX) {
         <div class="article-comments-gate"><p class="article-comments-note">Sign in to join the conversation.</p></div>
       </section>`;
     case 'hero_carousel': {
-      // Hydrated from the surrounding section's images (the homeHero sample fixture) — real
+      // Hydrated from the surrounding section's images (the homeHero sample fixture), real
       // slides through the real styling API, CSS-crossfaded by the preview so it reads as alive.
       const images = Array.isArray(ctx.section?.images) ? ctx.section.images.filter((i) => i?.imageUrl) : [];
       const slides = images.length > 0
@@ -170,7 +170,7 @@ function islandSkeleton(name, ctx = {}, fx = STUDIO_FX) {
     case 'search':
       return `<div class="site-search" data-p60-preview-island="search">${previewNote(name)}<form class="site-search-form"><label class="site-search-label">Search this site</label><div class="site-search-fields"><input class="site-search-input" type="search" disabled><button class="site-search-submit" type="button" disabled>Search</button></div></form><ul class="site-search-results"><li class="site-search-result"><span class="site-search-kind">Article</span><a class="site-search-link" href="#">The Community Garden Opens Its Gates</a><p class="site-search-summary">Two years of digging and Saturday mornings in the rain: the Foundry Lane garden is open.</p></li></ul></div>`;
     case 'map': {
-      // The impact-map skeleton: the fixture's points projected onto a token-themed canvas —
+      // The impact-map skeleton: the fixture's points projected onto a token-themed canvas,
       // the same fallback rendering production uses until the platform tile layer is configured.
       const im = fx.sections?.impactMap?.impactMap ?? { title: 'Impact map', points: [] };
       const pts = im.points ?? [];
@@ -204,11 +204,11 @@ function islandSkeleton(name, ctx = {}, fx = STUDIO_FX) {
 // The ROUTED dev preview's answer to "what does X look like in my theme": each platform-owned
 // page as a fixture skeleton through the PRODUCTION class names, so the platform base + the
 // theme's tokens style it exactly as live, wrapped by the template's own layout. Never
-// interactive — the same posture as island skeletons. Where the theme ships its own page
+// interactive, the same posture as island skeletons. Where the theme ships its own page
 // template for a surface (events, course, articles, article), that template renders instead.
 
 function surfaceDivider(label) {
-  return `<div class="p60-preview-divider" role="note">platform page: ${escapeHtml(label)} — styled by your tokens and chrome</div>`;
+  return `<div class="p60-preview-divider" role="note">platform page: ${escapeHtml(label)}, styled by your tokens and chrome</div>`;
 }
 
 function eventsListingSkeleton(fx = STUDIO_FX) {
@@ -336,7 +336,7 @@ function serviceDetailSkeleton(fx = STUDIO_FX) {
       <h1>${escapeHtml(service.title)}</h1>
       ${service.summary ? `<p>${escapeHtml(service.summary)}</p>` : ''}
       <p>Content pages are written in the workspace's WYSIWYG editor and arrive as sanitised
-      HTML — headings, lists, images and embeds render here styled by your theme's typography.</p>
+      HTML, headings, lists, images and embeds render here styled by your theme's typography.</p>
     </article>
   </div></section>`;
 }
@@ -456,7 +456,7 @@ function knobValues(manifest, overrides = {}) {
 
 /**
  * Renders the artifact's declared sections (sample fixtures) inside its layout (when declared)
- * and returns a complete, self-contained HTML document. Throws on parse/render failure — callers
+ * and returns a complete, self-contained HTML document. Throws on parse/render failure, callers
  * preview only versions the validator has already passed, so a throw here is a bug report, not
  * a user flow.
  */
@@ -524,7 +524,7 @@ export async function renderStudioPreview(files, options = {}) {
   let contentHtml;
   if (surface !== 'home' && SURFACES[surface]) {
     // A routed platform surface: the theme's own page template when it ships one, else the
-    // platform-page fixture skeleton — either way inside the theme's layout below.
+    // platform-page fixture skeleton, either way inside the theme's layout below.
     const def = SURFACES[surface];
     const templateSource = def.template ? files[`pages/${def.template}.liquid`] : null;
     const fixture = def.template ? fx.pages?.[def.template] : null;
@@ -562,7 +562,7 @@ export async function renderStudioPreview(files, options = {}) {
           ...(fx.sections?.[type] ?? {})
         };
         const rendered = await liquid.parseAndRender(source, context);
-        // Island skeletons see the SAME context the section rendered with — that is what lets the
+        // Island skeletons see the SAME context the section rendered with, that is what lets the
         // hero carousel skeleton hydrate from the section's own photo fixtures.
         out.push(partsToHtml(rendered, '', context, fx));
       }
@@ -581,7 +581,7 @@ export async function renderStudioPreview(files, options = {}) {
       }
     }
 
-    // Declared page templates render too (over their page fixtures) — the loop an author lives in
+    // Declared page templates render too (over their page fixtures), the loop an author lives in
     // covers every surface they ship, not just home sections. The routed dev preview ALSO serves
     // each at its own path; this keeps the studio's single document complete.
     for (const page of surface === 'about' ? [] : (manifest?.supports?.pageTemplates ?? [])) {
@@ -625,7 +625,7 @@ export async function renderStudioPreview(files, options = {}) {
 
   // The kit's dev server passes the platform's own behaviour runtime (a self-contained bundle) so
   // authors see their carousels, reveals and tabs living locally. The document stays network-dead
-  // — the ONLY script it can run is the inline platform bundle; studio and demo previews pass
+  //, the ONLY script it can run is the inline platform bundle; studio and demo previews pass
   // nothing and keep the fully script-free CSP. Without the runtime, a CSS-only crossfade
   // approximates behaviour carousels so a static preview still reads as alive.
   const runtime = options.behaviorsRuntime ?? null;
@@ -667,7 +667,7 @@ export async function renderStudioPreview(files, options = {}) {
 <meta http-equiv="Content-Security-Policy" content="${csp}">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 ${fontLinks}
-<title>${escapeHtml(manifest?.label ?? manifest?.name ?? 'Template preview')} — studio preview</title>
+<title>${escapeHtml(manifest?.label ?? manifest?.name ?? 'Template preview')}, studio preview</title>
 <style>${vars ? `:root { ${vars} }` : ''}
 .p60-preview-badge { display: inline-flex; align-items: center; width: fit-content; margin: 0 0 8px;
   border: 1px solid currentColor; border-radius: 999px; padding: 3px 8px; font: 600 10px/1.2 system-ui, sans-serif;

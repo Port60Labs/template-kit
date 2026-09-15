@@ -5,6 +5,7 @@
   "label": "Starter",
   "description": "The reference template for the Port60 dialect, the developer docs' worked example and the base to copy when building your own. 1.1.0 adds the layout slot: the template owns the header, navigation and footer chrome.",
   "supports": {
+    "navigationHighlights": false,
     "pages": [
       "home",
       "about"
@@ -35,6 +36,44 @@
     "focus": [
       "donate",
       "volunteer"
+    ]
+  },
+  "compositions": {
+    "home": [
+      {
+        "type": "homeHero",
+        "role": "core"
+      },
+      {
+        "type": "campaigns",
+        "role": "recommended"
+      },
+      {
+        "type": "impactMap",
+        "role": "optional"
+      },
+      {
+        "type": "cta",
+        "role": "recommended"
+      }
+    ],
+    "about": [
+      {
+        "type": "hero",
+        "role": "core"
+      },
+      {
+        "type": "values",
+        "role": "recommended"
+      },
+      {
+        "type": "people",
+        "role": "optional"
+      },
+      {
+        "type": "cta",
+        "role": "recommended"
+      }
     ]
   },
   "settings": {

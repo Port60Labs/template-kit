@@ -81,18 +81,40 @@
   "sectionTypes": [
     "appealGrid",
     "articles",
+    "campaigns",
     "cta",
     "emergency",
     "events",
     "hero",
     "homeHero",
     "impact",
+    "impactMap",
+    "locations",
     "people",
+    "programmes",
+    "resources",
     "stats",
     "values",
     "whatsOn"
   ],
   "islands": {
+    "article_comments": [
+      ".article-comment",
+      ".article-comment-form",
+      ".article-comment-head",
+      ".article-comment-list",
+      ".article-comments",
+      ".article-comments-gate",
+      ".article-comments-note"
+    ],
+    "article_engagement": [
+      ".article-engage",
+      ".article-share-btn",
+      ".article-share-copied",
+      ".article-share-group",
+      ".article-share-word",
+      ".article-views"
+    ],
     "course_enrol": [
       ".course-enrol",
       ".course-pay-panel",
@@ -102,6 +124,7 @@
       ".course-variant-list"
     ],
     "donation_widget": [
+      ".action-card",
       ".amount-grid",
       ".amount-list",
       ".amount-option",
@@ -123,15 +146,30 @@
       ".carousel-slide",
       ".events-carousel"
     ],
+    "form": [
+      ".public-form",
+      ".public-form-check",
+      ".public-form-field",
+      ".public-form-head",
+      ".public-form-message",
+      ".public-form-privacy",
+      ".public-form-submit"
+    ],
     "hero_carousel": [
       ".hero-carousel",
       ".hero-dot",
       ".hero-dot--active",
       ".hero-dots",
       ".hero-slide",
+      ".hero-slide--active",
       ".hero-slide-img",
       ".hero-slide-scrim",
       ".hero-slides"
+    ],
+    "language_switch": [
+      ".language-switch",
+      ".language-switch-label",
+      ".language-switch-select"
     ],
     "latest_articles": [
       ".article-card",
@@ -139,12 +177,69 @@
       ".article-grid",
       ".article-strip-cta"
     ],
+    "map": [
+      ".impact-map",
+      ".impact-map-canvas",
+      ".impact-map-card",
+      ".impact-map-card-cta",
+      ".impact-map-card-kind",
+      ".impact-map-card-summary",
+      ".impact-map-card-title",
+      ".impact-map-empty",
+      ".impact-map-head",
+      ".impact-map-intro",
+      ".impact-map-pin",
+      ".impact-map-pin--active"
+    ],
     "member_menu": [
       ".nav-account",
+      ".nav-account-caret",
+      ".nav-account-icon",
       ".nav-account-menu",
+      ".nav-account-name",
       ".nav-account-toggle",
       ".nav-p60-signin",
+      ".nav-p60-signin-label",
       ".p60-mark"
+    ],
+    "newsletter_signup": [
+      ".newsletter-consent",
+      ".newsletter-email",
+      ".newsletter-fields",
+      ".newsletter-label",
+      ".newsletter-message",
+      ".newsletter-signup",
+      ".newsletter-submit"
+    ],
+    "next_prayer": [
+      ".next-prayer",
+      ".next-prayer-countdown",
+      ".next-prayer-label",
+      ".next-prayer-name",
+      ".next-prayer-time"
+    ],
+    "primary_action_widget": [
+      ".action-card",
+      ".donate-card",
+      ".volunteer-card"
+    ],
+    "search": [
+      ".site-search",
+      ".site-search-context",
+      ".site-search-corrected",
+      ".site-search-empty",
+      ".site-search-fields",
+      ".site-search-form",
+      ".site-search-input",
+      ".site-search-kind",
+      ".site-search-label",
+      ".site-search-link",
+      ".site-search-more",
+      ".site-search-result",
+      ".site-search-results",
+      ".site-search-submit",
+      ".site-search-summary",
+      ".site-search-title"
     ],
     "whats_on_strip": [
       ".info-event-chip",
@@ -153,6 +248,12 @@
     ]
   },
   "contextVariables": {
+    "article": [
+      "page:article"
+    ],
+    "articles": [
+      "page:articles"
+    ],
     "brand.footerLogoUrl": [
       "layout"
     ],
@@ -169,6 +270,36 @@
     "brand.tagline": [
       "layout",
       "section"
+    ],
+    "campaigns": [
+      "section:campaigns"
+    ],
+    "campaigns[].href": [
+      "section:campaigns"
+    ],
+    "campaigns[].imageUrl": [
+      "section:campaigns"
+    ],
+    "campaigns[].summary": [
+      "section:campaigns"
+    ],
+    "campaigns[].title": [
+      "section:campaigns"
+    ],
+    "campaignsLabel": [
+      "section:campaigns"
+    ],
+    "categories": [
+      "page:article",
+      "page:articles"
+    ],
+    "causes": [
+      "section:appealGrid",
+      "section:emergency"
+    ],
+    "causes[]": [
+      "section:appealGrid",
+      "section:emergency"
     ],
     "course": [
       "page:course"
@@ -288,6 +419,30 @@
     "latestArticles[].title": [
       "section:articles"
     ],
+    "locale": [
+      "layout"
+    ],
+    "locale.code": [
+      "layout"
+    ],
+    "locale.direction": [
+      "layout"
+    ],
+    "locale.languages": [
+      "layout"
+    ],
+    "locations": [
+      "section:locations"
+    ],
+    "locations[]": [
+      "section:locations"
+    ],
+    "nav.derived": [
+      "layout"
+    ],
+    "nav.footer": [
+      "layout"
+    ],
     "nav.items": [
       "layout"
     ],
@@ -297,13 +452,90 @@
     "nav.items[].cta": [
       "layout"
     ],
+    "nav.items[].description": [
+      "layout"
+    ],
+    "nav.items[].external": [
+      "layout"
+    ],
+    "nav.items[].group": [
+      "layout"
+    ],
     "nav.items[].href": [
+      "layout"
+    ],
+    "nav.items[].imageUrl": [
       "layout"
     ],
     "nav.items[].label": [
       "layout"
     ],
+    "nav.items[].megaMenu": [
+      "layout"
+    ],
+    "relatedArticles": [
+      "page:article"
+    ],
+    "resources": [
+      "section:resources"
+    ],
+    "resources[]": [
+      "section:resources"
+    ],
     "section": [
+      "section"
+    ],
+    "section.action": [
+      "section"
+    ],
+    "section.actionStyle": [
+      "section"
+    ],
+    "section.primary": [
+      "section"
+    ],
+    "section.secondary": [
+      "section"
+    ],
+    "selectedCategory": [
+      "page:articles"
+    ],
+    "services": [
+      "section:programmes"
+    ],
+    "services[]": [
+      "section:programmes"
+    ],
+    "site": [
+      "layout",
+      "section"
+    ],
+    "site.actions": [
+      "layout",
+      "section"
+    ],
+    "site.brand": [
+      "layout",
+      "section"
+    ],
+    "site.content": [
+      "layout",
+      "section"
+    ],
+    "site.focus": [
+      "layout",
+      "section"
+    ],
+    "site.locale": [
+      "layout",
+      "section"
+    ],
+    "site.nav": [
+      "layout",
+      "section"
+    ],
+    "site.socials": [
+      "layout",
       "section"
     ],
     "socials": [
@@ -327,10 +559,22 @@
     "worship.congregationLabel": [
       "layout"
     ],
+    "worship.hijri": [
+      "layout"
+    ],
     "worship.href": [
       "layout"
     ],
+    "worship.jumah": [
+      "layout"
+    ],
+    "worship.next": [
+      "layout"
+    ],
     "worship.note": [
+      "layout"
+    ],
+    "worship.observances": [
       "layout"
     ],
     "worship.times": [
@@ -356,6 +600,9 @@
     "--ink",
     "--line",
     "--line-strong",
+    "--map-mode",
+    "--map-projection",
+    "--marker",
     "--muted",
     "--primary",
     "--primary-soft",
@@ -393,6 +640,8 @@
     "Inter",
     "Josefin Sans",
     "Jost",
+    "KFGQPC HAFS Uthmanic Script",
+    "KFGQPC Nastaleeq",
     "Karla",
     "Lato",
     "Libre Baskerville",
@@ -431,6 +680,7 @@
     ],
     "properties": [
       "changelog",
+      "compositions",
       "description",
       "fonts",
       "format",
@@ -438,7 +688,9 @@
       "label",
       "looks",
       "name",
+      "requiresCapabilities",
       "settings",
+      "suitsProfiles",
       "supports",
       "version"
     ]

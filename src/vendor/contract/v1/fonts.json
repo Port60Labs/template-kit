@@ -1,5 +1,5 @@
 {
- "description": "The curated font catalogue behind `font` settings knobs. The tenant picks a FAMILY; the template's typographic system (weights, sizes, tracking) is author-owned, the host requests the template's declared weights for the chosen family, clamped to the family's real weights below (nearest wins). Curated, not the raw Google catalogue: every family here is open-licence (OFL/Apache), quality-checked, and tagged so non-technical admins choose by vibe. Served from Bunny Fonts (a privacy-first, EU-hosted drop-in mirror of the Google Fonts catalogue, same families, same css2 API). Additive-only within a contract major; never remove a family (published sites reference them).",
+ "description": "The curated font catalogue behind `font` settings knobs. A family marked `hosted` is served by the platform itself (charity-site public/fonts, declared in global.css) and never requested from the provider. The tenant picks a FAMILY; the template's typographic system (weights, sizes, tracking) is author-owned, the host requests the template's declared weights for the chosen family, clamped to the family's real weights below (nearest wins). Curated, not the raw Google catalogue: every family here is open-licence (OFL/Apache), quality-checked, and tagged so non-technical admins choose by vibe. Served from Bunny Fonts (a privacy-first, EU-hosted drop-in mirror of the Google Fonts catalogue, same families, same css2 API). Additive-only within a contract major; never remove a family (published sites reference them).",
  "provider": {
   "cssBase": "https://fonts.bunny.net/css2",
   "preconnect": "https://fonts.bunny.net"
@@ -62,6 +62,8 @@
   { "name": "Amiri", "category": "arabic", "tags": ["arabic", "serif", "classic"], "weights": [400, 700], "stack": "serif" },
   { "name": "Noto Kufi Arabic", "category": "arabic", "tags": ["arabic", "sans", "geometric"], "weights": [300, 400, 500, 600, 700], "stack": "sans-serif" },
   { "name": "Noto Naskh Arabic", "category": "arabic", "tags": ["arabic", "serif", "readable"], "weights": [400, 500, 600, 700], "stack": "serif" },
-  { "name": "Scheherazade New", "category": "arabic", "tags": ["arabic", "serif", "traditional"], "weights": [400, 500, 600, 700], "stack": "serif" }
+  { "name": "Scheherazade New", "category": "arabic", "tags": ["arabic", "serif", "traditional"], "weights": [400, 500, 600, 700], "stack": "serif" },
+  { "name": "KFGQPC HAFS Uthmanic Script", "category": "arabic", "tags": ["arabic", "naskh", "quran", "mushaf"], "weights": [400], "stack": "serif", "hosted": true },
+  { "name": "KFGQPC Nastaleeq", "category": "arabic", "tags": ["arabic", "nastaliq", "quran", "mushaf"], "weights": [400], "stack": "serif", "hosted": true }
  ]
 }

@@ -1,6 +1,6 @@
 // Applies the Port60 dialect (contract/v1/dialect.json) to a LiquidJS instance. Plain JS on purpose:
 // this exact module is imported by BOTH the rendering engine (Vite-bundled into charity-site) and the
-// Node conformance validator (scripts/validate-template.mjs) — one enforcement implementation, so the
+// Node conformance validator (scripts/validate-template.mjs), one enforcement implementation, so the
 // validator can never disagree with production rendering. The dialect object is passed IN (parsed
 // JSON); this module does no file loading.
 
@@ -8,7 +8,7 @@
 export const ISLAND_MARK_START = '\u0000P60_ISLAND:';
 export const ISLAND_MARK_END = '\u0000';
 
-/** The layout's {% content %} slot rides the island marker protocol under a reserved name — the
+/** The layout's {% content %} slot rides the island marker protocol under a reserved name, the
  *  slash makes collision with registry island names (snake_case words) impossible. */
 export const CONTENT_SLOT = 'P60/content';
 
@@ -45,12 +45,12 @@ export function configureDialect(liquid, dialect, islandNames) {
     async render(ctx) {
       const name = String(await this.liquid.evalValue(this.args, ctx));
       if (!islandNames.has(name)) {
-        return ''; // unknown island — omitted at render; rejected at publish by the validator
+        return ''; // unknown island, omitted at render; rejected at publish by the validator
       }
       return `${ISLAND_MARK_START}${name}${ISLAND_MARK_END}`;
     }
   });
-  // {% content %} — the layout's page slot (contract v1, roadmap 8.2). Registered everywhere; a
+  // {% content %}, the layout's page slot (contract v1, roadmap 8.2). Registered everywhere; a
   // section that emits it is rejected by the validator and stripped by the section renderer.
   liquid.registerTag('content', {
     parse() {},

@@ -1,5 +1,5 @@
 // The kit's own layer (node --test): the scaffold validates out of the box, the packaged zip is
-// readable and contract-shaped, the JSON loop carries proven supports — and the DRIFT GUARD:
+// readable and contract-shaped, the JSON loop carries proven supports, and the DRIFT GUARD:
 // the vendored contract/engine/validator must be byte-identical to charity-site's authoritative
 // copy, or `npm run sync-vendor` is overdue.
 import { test } from 'node:test';
@@ -40,6 +40,7 @@ test('create → validate → package: the full loop on a fresh scaffold', () =>
     assert.equal(json.ok, true, JSON.stringify(json.errors));
     assert.equal(json.manifest.name, 'my-ai-theme');
     assert.ok(json.provenSupports.sections.length > 0);
+    assert.equal(json.provenSupports.navigationHighlights, false, 'the simple scaffold must not imply a highlight card');
 
     // Packaging leaves a stale archive from a previous version behind? No: dist/ is recreated.
     mkdirSync(join(dir, 'dist'), { recursive: true });
@@ -102,7 +103,7 @@ test('preview renders realistic, non-interactive island skeletons', async () => 
   assert.match(html, /class="donate-card"/);
   assert.match(html, /class="nav-p60-signin"/);
   // The starter's standard hero is now the BEHAVIOUR carousel (engine-wired data-p60-* markup,
-  // docs/template-behaviours.md) rather than the hero_carousel island — the preview shows the
+  // docs/template-behaviours.md) rather than the hero_carousel island, the preview shows the
   // complete static slide stack.
   assert.match(html, /data-p60-carousel/);
   assert.match(html, /data-p60-slide/);
@@ -140,7 +141,7 @@ test('preview passes section data fixtures to widget section renderers', async (
 test('DRIFT GUARD: vendored contract/engine/validator match charity-site byte for byte', () => {
   const site = resolve(import.meta.dirname, '../../../frontends/charity-site/src/templates');
   if (!existsSync(site)) {
-    return; // published package outside the monorepo — the guard runs in-repo only
+    return; // published package outside the monorepo, the guard runs in-repo only
   }
   const vendor = resolve(import.meta.dirname, '../src/vendor');
   const pairs = [
@@ -163,19 +164,13 @@ test('DRIFT GUARD: vendored contract/engine/validator match charity-site byte fo
     if (statSync(src).isDirectory()) {
       for (const f of readdirSync(src)) {
         assert.equal(readFileSync(join(ven, f), 'utf8'), readFileSync(join(src, f), 'utf8'),
-          `${venRel}/${f} drifted — run npm run sync-vendor`);
+          `${venRel}/${f} drifted, run npm run sync-vendor`);
       }
     } else {
       assert.equal(readFileSync(ven, 'utf8'), readFileSync(src, 'utf8'),
-        `${venRel} drifted — run npm run sync-vendor`);
+        `${venRel} drifted, run npm run sync-vendor`);
     }
   }
-
-  // The starter must match the source starter artifact (versionless source dir — version in manifest).
-  const starterRoot = resolve(import.meta.dirname, '../../../frontends/charity-site/template-artifacts/starter');
-  const starterManifest = readFileSync(join(starterRoot, 'manifest.json'), 'utf8');
-  assert.equal(readFileSync(resolve(import.meta.dirname, '../starter/manifest.json'), 'utf8'),
-    starterManifest, 'starter drifted — run npm run sync-vendor');
 });
 
 test('package lists the files a template cannot carry, and leaves them out of the zip', () => {

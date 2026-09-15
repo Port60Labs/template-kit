@@ -69,6 +69,9 @@ platform accepts it; if it fails here, the upload will fail identically.
   platform still owns the document head, consent and identity.
 - \`supports.pages\` owns section based bodies for \`home\` and \`about\` through the declared
   renderers in \`sections/\`.
+- \`compositions\` owns each page's preferred order: the section types the design is built around,
+  each \`core\`, \`recommended\` or \`optional\`. An organisation may reorder, add or remove;
+  removing a core section warns them, it never stops them.
 - \`supports.pageTemplates: ["events"]\` owns the events listing only. Event details, RSVP and
   ticket purchase remain platform owned.
 - \`supports.pageTemplates: ["course"]\` owns a course detail presentation only. The course
@@ -124,6 +127,13 @@ excludes it, and conformance proofs always run on the canonical fixtures.
 - Navigation can contain two levels below a top item. Render every supplied child and branch on
   optional \`group\`, \`description\`, \`imageUrl\` and \`megaMenu\` promo metadata. Never hardcode
   menu groups that are not in \`nav\`.
+- Navigation highlights are optional design support, not implied by the \`nav\` behaviour.
+  Declare \`supports.navigationHighlights: true\` only when your layout renders one supplied
+  \`site.nav.items[].megaMenu.promo\` card per expanded top-level menu. Otherwise declare false.
+  The platform resolves linked content into \`title\`, \`text\`, \`href\`, \`label\` and optional
+  \`imageUrl\`; no entity lookup belongs in a template. Preserve a text-only card when its image
+  is absent, omit an absent card and keep normal navigation links. Validation proves the explicit
+  declaration; missing declarations never enable the editor feature automatically.
 - Dynamic sections include appeals (\`causes\`), programmes (\`services\`), resources and
   locations. Derive or omit when a collection is empty and use the supplied URLs rather than
   constructing routes.

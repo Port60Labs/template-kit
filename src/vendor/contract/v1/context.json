@@ -220,7 +220,7 @@
       "availableIn": [
         "layout"
       ],
-      "description": "Optional mega-menu presentation metadata on a top-level item: columns (2 to 4) and an optional promo object with title, text, href, label and imageUrl. It is content only; the template owns hover, focus and responsive presentation in CSS.",
+      "description": "Optional presentation metadata on a top-level item. promo is at most one resolved navigation highlight with title, text, href, label and optional imageUrl, never an array. A linked course, event or campaign and a custom card produce the same fields; templates never fetch the linked record. Declare supports.navigationHighlights only when the layout renders this card and safely omits absent data. columns (2 to 4) is legacy metadata; responsive column layout belongs to the template.",
       "deprecated": true
     },
     {

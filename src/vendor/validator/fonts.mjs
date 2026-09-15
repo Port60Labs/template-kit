@@ -14,10 +14,19 @@ export function knownFamily(name) {
   return typeof name === 'string' && byName.has(name) ? name : null;
 }
 
-/** The CSS font-family value for a slot: quoted family plus its honest generic fallback. */
+/** The platform's Arabic faces, the same rule and order as the engine's fonts.ts: the preview base
+ *  stylesheet (a generated copy of global.css) declares each as a unicode-range @font-face, so every
+ *  slot names them first unless the chosen family is itself an Arabic one. */
+export const ARABIC_FACES = ['KFGQPC HAFS Uthmanic Script', 'IBM Plex Sans Arabic'];
+const ARABIC_PREFIX = ARABIC_FACES.map((f) => `'${f}'`).join(', ');
+
+/** The CSS font-family value for a slot: the platform Arabic faces (unless the family IS an Arabic
+ *  one), the quoted family, then its honest generic fallback. */
 export function fontStackFor(name) {
   const family = byName.get(name);
-  return family ? `'${family.name}', ${family.stack}` : `'${name}', sans-serif`;
+  if (!family) return `${ARABIC_PREFIX}, '${name}', sans-serif`;
+  const arabicFirst = family.category === 'arabic' ? '' : `${ARABIC_PREFIX}, `;
+  return `${arabicFirst}'${family.name}', ${family.stack}`;
 }
 
 function nearestWeight(target, available) {
@@ -35,7 +44,8 @@ export function fontCssHref(slots) {
   const weightsByFamily = new Map();
   for (const slot of slots) {
     const family = byName.get(slot.family);
-    if (!family) continue;
+    // A platform-hosted family is declared in global.css (served from /fonts/), never fetched.
+    if (!family || family.hosted) continue;
     const set = weightsByFamily.get(family.name) ?? new Set();
     const asked = slot.weights?.length > 0 ? slot.weights : [400, 700];
     for (const weight of asked) set.add(nearestWeight(weight, family.weights));

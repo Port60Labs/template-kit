@@ -1,4 +1,4 @@
-// LiquidJS DoS budgets — ONE definition for the production engine, the validator and the studio
+// LiquidJS DoS budgets. ONE definition for the production engine, the validator and the studio
 // preview, so "validated ⇒ renders in production" includes the resource ceiling. Third-party
 // templates run in the shared SSR process (developer program T1.3): without these, an untrusted
 // `{% for %}`/`{% capture %}` burns CPU/memory for every tenant on the box. The numbers are far

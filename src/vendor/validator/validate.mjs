@@ -1,6 +1,6 @@
 // The Port60 template CONFORMANCE VALIDATOR as a PURE MODULE (developer program T1.3): the same
-// checks the publish-time CLI has always run, callable with an in-memory file map — no fs, no
-// argv, no process.exit — so the studio upload lane (an HTTP endpoint) and the CLI share ONE
+// checks the publish-time CLI has always run, callable with an in-memory file map, no fs, no
+// argv, no process.exit, so the studio upload lane (an HTTP endpoint) and the CLI share ONE
 // implementation, and "validated ⇒ renders in production" keeps holding: the Liquid instance is
 // configured identically to the engine's, dialect enforcement is the same shared module, and the
 // render budgets here match production's.
@@ -23,6 +23,7 @@ import fontCatalogue from '../contract/v1/fonts.json' with { type: 'json' };
 import layoutContract from '../contract/v1/layout.json' with { type: 'json' };
 import behaviourCatalogue from '../contract/v1/behaviours.json' with { type: 'json' };
 import { buildSiteFixture, extractContentFootprint, contentModel } from './site-context.mjs';
+import { proveNavigationHighlights } from './navigation-highlights.mjs';
 
 const Ajv = Ajv2020.default ?? Ajv2020;
 
@@ -42,7 +43,7 @@ const PRIMARY_ATTR = Object.fromEntries(
 );
 
 // Templates are markup and attributes, NEVER code (docs/template-behaviours.md). These are hard
-// errors over the RAW liquid source — even inside comments, because there is no legitimate reason
+// errors over the RAW liquid source, even inside comments, because there is no legitimate reason
 // for the tokens to appear at all. The handler pattern names real DOM event families rather than
 // matching any on* word, so attributes like `once` or `online` never false-positive.
 const FORBIDDEN_MARKUP = [
@@ -62,7 +63,7 @@ export async function validateArtifact(files) {
   // 1. Manifest against the schema.
   let manifest = null;
   if (!has('manifest.json')) {
-    return { errors: ['manifest.json is missing — every artifact starts with its manifest'], warnings, manifest };
+    return { errors: ['manifest.json is missing, every artifact starts with its manifest'], warnings, manifest };
   }
   try {
     manifest = JSON.parse(read('manifest.json'));
@@ -70,9 +71,9 @@ export async function validateArtifact(files) {
     return { errors: [`manifest.json unreadable: ${e.message}`], warnings, manifest: null };
   }
   // preview-content.json is a DEV-ONLY data override: package excludes it and the intake
-  // refuses it — an artifact must never carry data, only shape.
+  // refuses it, an artifact must never carry data, only shape.
   if (has('preview-content.json')) {
-    errors.push('preview-content.json: development preview data never ships in an artifact — remove it (package excludes it automatically)');
+    errors.push('preview-content.json: development preview data never ships in an artifact, remove it (package excludes it automatically)');
   }
 
   // Content model v1: the footprint is decidable from the sources (closed dialect); unknown
@@ -136,14 +137,14 @@ export async function validateArtifact(files) {
     }
   }
 
-  // Markup and attributes, NEVER code — the machine-enforced JavaScript ban over every liquid
+  // Markup and attributes, NEVER code, the machine-enforced JavaScript ban over every liquid
   // source (docs/template-behaviours.md). Behaviour is engine-owned; a template wanting motion
   // declares supports.behaviors and uses the data-p60-* grammar.
   for (const [path, source] of Object.entries(files)) {
     if (!path.endsWith('.liquid')) continue;
     for (const [pattern, what] of FORBIDDEN_MARKUP) {
       if (pattern.test(source)) {
-        errors.push(`${path}: contains ${what} — templates are markup and attributes, never code (behaviour is engine-owned; see the behaviour catalogue)`);
+        errors.push(`${path}: contains ${what}, templates are markup and attributes, never code (behaviour is engine-owned; see the behaviour catalogue)`);
       }
     }
   }
@@ -211,7 +212,7 @@ export async function validateArtifact(files) {
     }
   }
 
-  // Looks: every value must target a declared knob and be valid for it — a look that half-applies
+  // Looks: every value must target a declared knob and be valid for it, a look that half-applies
   // would leave the tenant in a state no author designed.
   {
     const knobByKey = new Map((manifest?.settings?.schema ?? []).map((k) => [k.key, k]));
@@ -253,11 +254,11 @@ export async function validateArtifact(files) {
 
   // Author-renderable widget sections (the flip): each carries a curated data context; a template
   // either places the section's DEFAULT ISLAND (which owns rendering + empty states) or renders
-  // the data itself — in which case both directions are proven behaviourally (the worship
+  // the data itself, in which case both directions are proven behaviourally (the worship
   // pattern): the populated fixture's sentinel must appear, and the EMPTY context must render it
-  // away (derive or omit — nothing invented, nothing dangling).
+  // away (derive or omit, nothing invented, nothing dangling).
   // Sentinels are DERIVED from the canonical fixtures (the first item's display field), never
-  // hardcoded — the fixture data is free to become richer without touching a proof, and a proof
+  // hardcoded, the fixture data is free to become richer without touching a proof, and a proof
   // can never drift from the data it renders.
   const sentinelOf = (type, dataKey, field) =>
     (contextContract.fixtures.sections?.[type]?.[dataKey] ?? [])[0]?.[field] ?? null;
@@ -270,7 +271,31 @@ export async function validateArtifact(files) {
     locations: { island: null, dataKey: 'locations', sentinel: sentinelOf('locations', 'locations', 'name') }
   };
 
-  // 2–4. Sections: catalogue membership, parse, fixture renders.
+  // 2b. Compositions (site editor stage 4): each page must be a supported page, each type a
+  // supported section the catalogue assigns to that page, listed once, with a role.
+  const compositions = manifest?.compositions ?? {};
+  for (const [page, entries] of Object.entries(compositions)) {
+    if (!(manifest?.supports?.pages ?? []).includes(page)) {
+      errors.push(`compositions.${page}: not in supports.pages`);
+      continue;
+    }
+    const seen = new Set();
+    for (const entry of entries ?? []) {
+      const type = entry?.type;
+      if (!(manifest?.supports?.sections ?? []).includes(type)) {
+        errors.push(`compositions.${page}: '${type}' is not in supports.sections`);
+        continue;
+      }
+      const catalogueEntry = catalogueByType.get(type);
+      if (catalogueEntry && !(catalogueEntry.pages ?? []).includes(page)) {
+        errors.push(`compositions.${page}: '${type}' is not a ${page} page section in the catalogue`);
+      }
+      if (seen.has(type)) errors.push(`compositions.${page}: '${type}' is listed twice`);
+      seen.add(type);
+    }
+  }
+
+  // 2-4. Sections: catalogue membership, parse, fixture renders.
   for (const type of manifest?.supports?.sections ?? []) {
     const entry = catalogueByType.get(type);
     if (!entry) {
@@ -286,7 +311,7 @@ export async function validateArtifact(files) {
     try {
       parsed = liquid.parse(read(file));
     } catch (e) {
-      errors.push(`section '${type}': does not parse under the dialect — ${e.message}`);
+      errors.push(`section '${type}': does not parse under the dialect, ${e.message}`);
       continue;
     }
     // Widget-section proof (independent of the minimal/sample loop): island placed → the island
@@ -307,8 +332,8 @@ export async function validateArtifact(files) {
           if (widget.sentinel && !populated.includes(widget.sentinel)) {
             errors.push(
               widget.island
-                ? `section '${type}': neither places the ${widget.island} island nor renders the ${widget.dataKey} context — render the data (the fixture's "${widget.sentinel}" must appear) or place the island`
-                : `section '${type}': does not render the ${widget.dataKey} context — the fixture's "${widget.sentinel}" must appear`
+                ? `section '${type}': neither places the ${widget.island} island nor renders the ${widget.dataKey} context, render the data (the fixture's "${widget.sentinel}" must appear) or place the island`
+                : `section '${type}': does not render the ${widget.dataKey} context, the fixture's "${widget.sentinel}" must appear`
             );
           }
           const empty = await liquid.render(parsed, {
@@ -318,14 +343,14 @@ export async function validateArtifact(files) {
             [widget.dataKey]: []
           });
           if (widget.sentinel && empty.includes(widget.sentinel)) {
-            errors.push(`section '${type}': still shows fixture content with an empty ${widget.dataKey} — content must come from the context`);
+            errors.push(`section '${type}': still shows fixture content with an empty ${widget.dataKey}, content must come from the context`);
           }
           if (/\bundefined\b|\bnull\b/.test(empty.replace(/data-[a-z-]+="[^"]*"/g, ''))) {
-            errors.push(`section '${type}': renders 'undefined'/'null' literals when ${widget.dataKey} is empty — guard the empty case (derive or omit)`);
+            errors.push(`section '${type}': renders 'undefined'/'null' literals when ${widget.dataKey} is empty, guard the empty case (derive or omit)`);
           }
         }
       } catch (e) {
-        errors.push(`section '${type}': failed rendering the ${widget.dataKey} context fixtures — ${e.message}`);
+        errors.push(`section '${type}': failed rendering the ${widget.dataKey} context fixtures, ${e.message}`);
       }
     }
     for (const fixtureName of ['minimal', 'sample']) {
@@ -359,45 +384,48 @@ export async function validateArtifact(files) {
         }
         for (const part of splitIslandParts(html)) {
           if (part.island === CONTENT_SLOT) {
-            errors.push(`section '${type}': uses {% content %} — that tag is layout-only`);
+            errors.push(`section '${type}': uses {% content %}, that tag is layout-only`);
           } else if (part.island) {
             placedIslands.add(part.island);
           }
         }
       } catch (e) {
-        errors.push(`section '${type}': failed rendering the ${fixtureName} fixture — ${e.message}`);
+        errors.push(`section '${type}': failed rendering the ${fixtureName} fixture, ${e.message}`);
       }
     }
   }
 
   // Hero-imagery honesty, checked BEHAVIOURALLY (the worship pattern). The homeHero sample
   // fixture carries photographs whose data URIs embed a quote-free marker that survives HTML
-  // escaping, so "does the rendered hero display the tenant's photos?" is a substring check —
+  // escaping, so "does the rendered hero display the tenant's photos?" is a substring check,
   // and with several photos, placing the hero_carousel island IS displaying them (the island
   // renders the slides at runtime). The single-photo path is proven separately: images[0] must
   // appear directly. Declaration and behaviour must agree; the choosers badge photo-led tenants
   // by supports.heroImagery. Legacy imageUrl-only renderers never match (the fixture's photos
-  // ride `images`), so they pass undeclared — they just don't earn the badge.
+  // ride `images`), so they pass undeclared, they just don't earn the badge.
   {
     const declaresHero = manifest?.supports?.heroImagery === true;
     if (declaresHero && !(manifest?.supports?.sections ?? []).includes('homeHero')) {
-      errors.push('manifest: supports.heroImagery requires the homeHero section — the photographs live on it');
+      errors.push('manifest: supports.heroImagery requires the homeHero section, the photographs live on it');
     } else if (homeHeroMultiShows !== null) {
       if (declaresHero && !homeHeroMultiShows) {
         errors.push('homeHero: manifest declares supports.heroImagery but the rendered section neither displays the images fixture nor places the hero_carousel island');
       }
       if (declaresHero && !homeHeroSingleShows) {
-        errors.push('homeHero: supports.heroImagery must render a SINGLE photograph directly (images[0], treated, never raw) — the carousel island only covers 2+');
+        errors.push('homeHero: supports.heroImagery must render a SINGLE photograph directly (images[0], treated, never raw), the carousel island only covers 2+');
       }
       if (!declaresHero && (homeHeroMultiShows || homeHeroSingleShows)) {
-        errors.push('homeHero: renders the hero photographs but the manifest does not declare supports.heroImagery — declare it so the choosers can badge it');
+        errors.push('homeHero: renders the hero photographs but the manifest does not declare supports.heroImagery, declare it so the choosers can badge it');
       }
     }
   }
 
   // 7. Layout (when declared): parse + render the layout fixture + exactly one content slot.
   if (manifest?.supports?.worship && !manifest?.supports?.layout) {
-    errors.push('manifest: supports.worship requires supports.layout — the worship rail is layout chrome');
+    errors.push('manifest: supports.worship requires supports.layout, the worship rail is layout chrome');
+  }
+  if (manifest?.supports?.navigationHighlights && !manifest?.supports?.layout) {
+    errors.push('manifest: supports.navigationHighlights requires supports.layout, highlights belong to navigation chrome');
   }
   if (manifest?.supports?.layout) {
     if (!has('layout.liquid')) {
@@ -407,7 +435,7 @@ export async function validateArtifact(files) {
       try {
         parsedLayout = liquid.parse(read('layout.liquid'));
       } catch (e) {
-        errors.push(`layout: does not parse under the dialect — ${e.message}`);
+        errors.push(`layout: does not parse under the dialect, ${e.message}`);
       }
       if (parsedLayout) {
         try {
@@ -429,11 +457,22 @@ export async function validateArtifact(files) {
             errors.push(`layout: must contain exactly one {% content %} slot (found ${contentSlots})`);
           }
           if (!layoutIslands.includes('member_menu')) {
-            warnings.push("layout: no {% island 'member_menu' %} — member sign-in will be unreachable on tenants that allow sign-ups; place it in your header");
+            warnings.push("layout: no {% island 'member_menu' %}, member sign-in will be unreachable on tenants that allow sign-ups; place it in your header");
           }
 
+          const highlights = await proveNavigationHighlights((nav) => liquid.render(parsedLayout, {
+            site: { ...siteFx, nav },
+            brand: contextContract.fixtures.brand,
+            nav,
+            socials: contextContract.fixtures.layout.socials ?? [],
+            worship: contextContract.fixtures.layout.worship ?? null,
+            locale: contextContract.fixtures.layout.locale
+          }), manifest?.supports?.navigationHighlights);
+          errors.push(...highlights.errors);
+          warnings.push(...highlights.warnings);
+
           // Two-sided worship honesty, checked BEHAVIOURALLY: does the rendered layout actually
-          // display the worship fixture's times? Declaration and behaviour must agree — the
+          // display the worship fixture's times? Declaration and behaviour must agree, the
           // choosers steer worship-enabled tenants by supports.worship, so a false declaration
           // either hides their times (undeclared but rendered is fine to fix by declaring) or
           // promises a rail that never appears.
@@ -441,10 +480,10 @@ export async function validateArtifact(files) {
           if (worshipProbe) {
             const rendersWorship = html.includes(worshipProbe);
             if (manifest?.supports?.worship && !rendersWorship) {
-              errors.push('layout: manifest declares supports.worship but the rendered layout does not display the worship fixture times — the rail never appears');
+              errors.push('layout: manifest declares supports.worship but the rendered layout does not display the worship fixture times, the rail never appears');
             }
             if (!manifest?.supports?.worship && rendersWorship) {
-              errors.push('layout: renders the worship rail but the manifest does not declare supports.worship — declare it so the choosers can badge it');
+              errors.push('layout: renders the worship rail but the manifest does not declare supports.worship, declare it so the choosers can badge it');
             }
             if (manifest?.supports?.worship) {
               const nullHtml = await liquid.render(parsedLayout, {
@@ -457,17 +496,17 @@ export async function validateArtifact(files) {
                 locale: contextContract.fixtures.layout.locale
               });
               if (nullHtml.includes(worshipProbe)) {
-                errors.push('layout: worship rail content appears even when `worship` is null — always branch on it (tenants without a schedule must not see a rail)');
+                errors.push('layout: worship rail content appears even when `worship` is null, always branch on it (tenants without a schedule must not see a rail)');
               }
             }
           }
         } catch (e) {
-          errors.push(`layout: failed rendering the layout fixture — ${e.message}`);
+          errors.push(`layout: failed rendering the layout fixture, ${e.message}`);
         }
       }
     }
   } else if (has('layout.liquid')) {
-    warnings.push('layout.liquid present but manifest.supports.layout is not true — it will be ignored');
+    warnings.push('layout.liquid present but manifest.supports.layout is not true, it will be ignored');
   }
 
   // 8. Page templates (when declared): file exists, parses, renders the page's data fixture.
@@ -486,20 +525,20 @@ export async function validateArtifact(files) {
     try {
       parsedPage = liquid.parse(read(pageFile));
     } catch (e) {
-      errors.push(`page template '${pageName}': does not parse under the dialect — ${e.message}`);
+      errors.push(`page template '${pageName}': does not parse under the dialect, ${e.message}`);
       continue;
     }
     try {
       const html = await liquid.render(parsedPage, { ...fixture, site: siteFx, brand: contextContract.fixtures.brand });
       for (const part of splitIslandParts(html)) {
         if (part.island === CONTENT_SLOT) {
-          errors.push(`page template '${pageName}': uses {% content %} — that tag is layout-only`);
+          errors.push(`page template '${pageName}': uses {% content %}, that tag is layout-only`);
         } else if (part.island) {
           placedIslands.add(part.island);
         }
       }
     } catch (e) {
-      errors.push(`page template '${pageName}': failed rendering the page fixture — ${e.message}`);
+      errors.push(`page template '${pageName}': failed rendering the page fixture, ${e.message}`);
     }
   }
 
@@ -513,18 +552,18 @@ export async function validateArtifact(files) {
     if (!allIslands.has(name)) {
       errors.push(`island '${name}': not in the platform island registry`);
     } else if (!availableIslands.has(name)) {
-      warnings.push(`island '${name}': registry status is 'planned' — it will render nothing until available`);
+      warnings.push(`island '${name}': registry status is 'planned', it will render nothing until available`);
     }
   }
 
   // 6. Theme.
   if (!has('assets/theme.css') || read('assets/theme.css').trim() === '') {
-    errors.push('assets/theme.css missing or empty — a template must ship its look');
+    errors.push('assets/theme.css missing or empty, a template must ship its look');
   }
 
   // 6b. Layout contract (contract/v1/layout.json). Platform pages render through the content SEAM
   // (.container / .full); a template STYLES those to place content, never a parallel content container.
-  // The rule is DATA — the seam token, the allowed selectors and the message all come from the contract
+  // The rule is DATA, the seam token, the allowed selectors and the message all come from the contract
   // file; this only implements the check KIND (a non-seam selector sizing its width off the token).
   {
     const css = has('assets/theme.css') ? read('assets/theme.css') : '';
@@ -552,7 +591,7 @@ export async function validateArtifact(files) {
   }
 
   // Open enums, proven survivable (content model v1 discipline 2): a template whose footprint
-  // reads site.content.events must survive a registration mode it has never heard of — new modes
+  // reads site.content.events must survive a registration mode it has never heard of, new modes
   // WILL arrive within the major. No throw, and no undefined/null literal leaking into markup.
   if (contentAnalysis.footprint.includes('content.events')) {
     const futureEvent = {
@@ -573,10 +612,10 @@ export async function validateArtifact(files) {
           site: doctored
         });
         if (/\bundefined\b|\bnull\b/.test(html.replace(/data-[a-z-]+="[^"]*"/g, ''))) {
-          errors.push(`section '${type}': renders 'undefined'/'null' literals for an unknown event registrationMode — the enum is OPEN, branch on the modes you style and fall back for the rest`);
+          errors.push(`section '${type}': renders 'undefined'/'null' literals for an unknown event registrationMode, the enum is OPEN, branch on the modes you style and fall back for the rest`);
         }
       } catch (e) {
-        errors.push(`section '${type}': failed rendering an unknown event registrationMode — the enum is OPEN and new modes will arrive (${e.message})`);
+        errors.push(`section '${type}': failed rendering an unknown event registrationMode, the enum is OPEN and new modes will arrive (${e.message})`);
       }
     }
   }

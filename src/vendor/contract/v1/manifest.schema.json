@@ -149,6 +149,11 @@
           "default": false,
           "description": "True when the layout renders the `worship` context (the prayer/service-times rail). Declared honesty: the choosers badge worship-enabled tenants toward looks that show their times, and warn on looks that don't. Requires supports.layout; the layout must actually branch on `worship`."
         },
+        "navigationHighlights": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when the layout displays the optional single site.nav.items[].megaMenu.promo card inside each expanded top-level menu. Requires supports.layout. The validator proves title, text, image and linked label render together; image-free and absent highlights must remain safe. The platform resolves linked courses, events and campaigns into the same promo fields as custom highlights. This flag does not enable a general mega menu or control column counts. Missing or false disables highlight editing for this exact template version."
+        },
         "heroImagery": {
           "type": "boolean",
           "default": false,
@@ -264,6 +269,28 @@
       },
       "default": [],
       "description": "One-click LOOKS: author-named bundles of knob values (scheme + fonts + width\u2026) applied together. Everything remains individually adjustable afterwards."
+    },
+    "compositions": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The template's preferred composition per supported page (site editor stage 4): the ordered section types it designs the page around, each with a role. `core` sections carry the design (removing one warns, never locks), `recommended` ones are on by default, `optional` ones are offered. A page a tenant never edited renders this composition; the Pages editor offers it as the order to reset to.",
+      "propertyNames": { "enum": ["home", "about"] },
+      "patternProperties": {
+        "^(home|about)$": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["type", "role"],
+            "properties": {
+              "type": { "type": "string", "minLength": 1, "maxLength": 50, "description": "A section type from supports.sections." },
+              "role": { "type": "string", "enum": ["core", "recommended", "optional"], "description": "core: the design depends on it; recommended: on by default; optional: offered." }
+            }
+          }
+        }
+      }
     },
     "settings": {
       "type": "object",
