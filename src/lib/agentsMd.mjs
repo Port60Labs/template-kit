@@ -134,6 +134,13 @@ excludes it, and conformance proofs always run on the canonical fixtures.
   \`imageUrl\`; no entity lookup belongs in a template. Preserve a text-only card when its image
   is absent, omit an absent card and keep normal navigation links. Validation proves the explicit
   declaration; missing declarations never enable the editor feature automatically.
+- Field markers are optional and additive: mark the node that shows a field with
+  \`data-p60-field="title"\`, or \`data-p60-field="items.{{ forloop.index0 }}.label"\` for an
+  entry in a list, and declare \`supports.fieldMarkers: true\`. The charity then types into the
+  real heading on the page instead of into a side panel. The address is the field's name inside
+  that section's own content, and the marked node holds that field and nothing else, so wrap the
+  value in a span when punctuation or other copy sits beside it. Mark what you like; the editor
+  puts a caret only in plain text, and a marker naming nothing is a warning, never a failure.
 - Dynamic sections include appeals (\`causes\`), programmes (\`services\`), resources and
   locations. Derive or omit when a collection is empty and use the supplied URLs rather than
   constructing routes.

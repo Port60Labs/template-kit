@@ -1,6 +1,6 @@
 <section class="lq-values">
   <div class="container">
-    <h2>{{ section.heading | default: "What guides us" }}</h2>
+    <h2 data-p60-field="heading">{{ section.heading | default: "What guides us" }}</h2>
     {% comment %}
       data-p60-reveal-group: the engine stamps --p60-reveal-index on each child and adds
       is-revealed when the rail scrolls into view, the stagger and motion are OURS, in theme.css,
@@ -10,8 +10,8 @@
       {% for item in section.items %}
       <li>
         <span class="lq-value-dot"></span>
-        <h3>{{ item.title }}</h3>
-        <p>{{ item.description }}</p>
+        <h3 data-p60-field="items.{{ forloop.index0 }}.title">{{ item.title }}</h3>
+        <p data-p60-field="items.{{ forloop.index0 }}.description">{{ item.description }}</p>
       </li>
       {% endfor %}
     </ol>

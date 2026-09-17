@@ -1,11 +1,12 @@
 {
   "name": "starter",
-  "version": "1.13.0",
+  "version": "1.14.0",
   "format": "port60-liquid@1",
   "label": "Starter",
   "description": "The reference template for the Port60 dialect, the developer docs' worked example and the base to copy when building your own. 1.1.0 adds the layout slot: the template owns the header, navigation and footer chrome.",
   "supports": {
     "navigationHighlights": false,
+    "fieldMarkers": true,
     "pages": [
       "home",
       "about"
@@ -93,7 +94,7 @@
       }
     ]
   },
-  "changelog": "Places the site search box in the header: a typeahead across events, articles, services, campaigns, appeals, volunteering and documents, with the results page at /search.",
+  "changelog": "Marks which node shows which field (data-p60-field), so the editor puts the caret on the page itself instead of in a side panel.",
   "imagery": {
     "hero": {
       "idealAspect": "16:9",

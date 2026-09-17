@@ -38,9 +38,9 @@
     {% if heroCount > 1 %}{% island 'hero_carousel' %}{% else %}<div class="lq-vista-scrim" aria-hidden="true"></div>{% endif %}
     <div class="lq-vista-copy">
       <div class="container">
-        <p class="lq-kicker">{{ section.eyebrow | default: site.brand.name }}</p>
-        <h1>{{ section.title | default: site.brand.tagline | default: site.brand.name }}</h1>
-        {% if section.lead %}<p class="lq-homehero-lead">{{ section.lead }}</p>{% endif %}
+        <p class="lq-kicker" data-p60-field="eyebrow">{{ section.eyebrow | default: site.brand.name }}</p>
+        <h1 data-p60-field="title">{{ section.title | default: site.brand.tagline | default: site.brand.name }}</h1>
+        {% if section.lead %}<p class="lq-homehero-lead" data-p60-field="lead">{{ section.lead }}</p>{% endif %}
         <div class="lq-homehero-actions">
           <a class="button button-primary" href="{{ section.primaryHref | default: '/donate' }}">{{ section.primaryLabel | default: 'Donate now' }}</a>
           <a class="button" href="{{ section.secondaryHref | default: '/about' }}">{{ section.secondaryLabel | default: 'Our story' }}</a>
@@ -59,9 +59,9 @@
   </div>
   <div class="container lq-homehero-inner lq-vista-overlap">
     <div>
-      <p class="lq-kicker">{{ section.eyebrow | default: site.brand.name }}</p>
-      <h1>{{ section.title | default: site.brand.tagline | default: site.brand.name }}</h1>
-      {% if section.lead %}<p class="lq-homehero-lead">{{ section.lead }}</p>{% endif %}
+      <p class="lq-kicker" data-p60-field="eyebrow">{{ section.eyebrow | default: site.brand.name }}</p>
+      <h1 data-p60-field="title">{{ section.title | default: site.brand.tagline | default: site.brand.name }}</h1>
+      {% if section.lead %}<p class="lq-homehero-lead" data-p60-field="lead">{{ section.lead }}</p>{% endif %}
       <div class="lq-homehero-actions">
         {% if section.action or section.primaryLabel %}<a class="button button-primary" href="{{ section.primaryHref | default: section.action.href | default: '#donate' }}">{{ section.primaryLabel | default: section.action.label | default: 'Donate now' }}</a>{% endif %}
         <a class="button" href="{{ section.secondaryHref | default: '/about' }}">{{ section.secondaryLabel | default: 'Our story' }}</a>
@@ -94,9 +94,9 @@
   {% endif %}
   <div class="container lq-homehero-inner">
     <div>
-      <p class="lq-kicker">{{ section.eyebrow | default: site.brand.name }}</p>
-      <h1>{{ section.title | default: site.brand.tagline | default: site.brand.name }}</h1>
-      {% if section.lead %}<p class="lq-homehero-lead">{{ section.lead }}</p>{% endif %}
+      <p class="lq-kicker" data-p60-field="eyebrow">{{ section.eyebrow | default: site.brand.name }}</p>
+      <h1 data-p60-field="title">{{ section.title | default: site.brand.tagline | default: site.brand.name }}</h1>
+      {% if section.lead %}<p class="lq-homehero-lead" data-p60-field="lead">{{ section.lead }}</p>{% endif %}
       <div class="lq-homehero-actions">
         {% if section.actionStyle == 'button' or section.givingStyle == 'button' %}
         {% if section.action or section.primaryLabel %}<a class="button button-primary" href="{{ section.primaryHref | default: section.action.href | default: '/donate' }}">{{ section.primaryLabel | default: section.action.label | default: 'Donate now' }}</a>{% endif %}

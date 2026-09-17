@@ -1,7 +1,14 @@
+{% comment %}
+  FIELD MARKERS (supports.fieldMarkers): data-p60-field says which node shows which field, and the
+  editor puts the caret there instead of in a side panel. Two rules. The address is the field's
+  name inside this section's own content. The marked node holds that field and nothing else, so
+  wrap the value in a span when there is punctuation or other copy beside it (people.liquid shows
+  one). Marking is optional and additive: an unmarked template is edited in the panel as before.
+{% endcomment %}
 <section class="lq-hero">
   <div class="container">
-    {% if section.eyebrow %}<p class="lq-kicker">{{ section.eyebrow }}</p>{% endif %}
-    <h1>{{ section.title }}</h1>
+    {% if section.eyebrow %}<p class="lq-kicker" data-p60-field="eyebrow">{{ section.eyebrow }}</p>{% endif %}
+    <h1 data-p60-field="title">{{ section.title }}</h1>
     <div class="lq-hero-body">{{ section.bodyHtml | raw }}</div>
   </div>
 </section>

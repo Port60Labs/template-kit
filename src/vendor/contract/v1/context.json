@@ -591,7 +591,7 @@
       "availableIn": [
         "section:campaigns"
       ],
-      "description": "What the tenant calls their campaigns section (\"Campaigns\" by default), the heading fallback.",
+      "description": "The platform word for the campaigns collection (\"Campaigns\"), the section's heading fallback. It does not vary: a tenant's own word for a link lives in their menu.",
       "deprecated": true
     },
     {

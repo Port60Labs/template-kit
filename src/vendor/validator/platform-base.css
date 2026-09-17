@@ -623,6 +623,32 @@ a.eyebrow:hover {
   max-width: 640px;
 }
 
+.campaign-form {
+  margin-block: 2rem;
+}
+
+/* An embedded form belongs to the campaign, not a second page inside it. */
+.p60-form--embedded {
+  padding: clamp(1rem, 3vw, 2rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm, 12px);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.p60-form--embedded .p60-form-control {
+  background: var(--bg);
+  border-color: color-mix(in srgb, var(--ink) 35%, var(--surface));
+}
+
+.p60-form--embedded .p60-form-control:focus {
+  border-color: var(--primary);
+}
+
+.p60-form--embedded > :last-child {
+  margin-block-end: 0;
+}
+
 .p60-form-intro {
   color: var(--muted);
   margin: 0 0 1.5rem;
@@ -634,6 +660,18 @@ a.eyebrow:hover {
 
 .p60-form-field {
   margin-bottom: 1.15rem;
+}
+
+.p60-form-respondent {
+  min-inline-size: 0;
+  border: 0;
+  padding: 0 0 0.5rem;
+  margin: 0 0 1.5rem;
+  border-block-end: 1px solid var(--line);
+}
+
+.p60-form-respondent > legend {
+  margin-block-end: 1rem;
 }
 
 .p60-form-label {
@@ -717,9 +755,16 @@ textarea.p60-form-control {
   width: 1.05rem;
   height: 1.05rem;
   flex: 0 0 auto;
-  margin: 0.15rem 0 0;
-  accent-color: var(--primary);
+  margin: 0.25rem 0 0;
+  padding: 0;
+  accent-color: var(--accent, var(--primary));
   cursor: pointer;
+}
+
+.p60-form-check input:is([type='checkbox'], [type='radio']):focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  box-shadow: none;
 }
 
 .p60-form-check.has-error span {
@@ -4162,6 +4207,8 @@ textarea.p60-form-control {
 }
 .member-course-attendance li:last-child { border-bottom: none; }
 .member-course-attendance li.is-absent { opacity: 0.7; }
+/* Which class this mark was, for a learner who attends more than one. */
+.member-course-attendance-class { display: block; font-size: 0.8em; font-style: normal; opacity: 0.75; }
 
 /* C1.9 breaks (informational) + C1.8 course materials (presigned downloads). */
 .member-course-breaks {

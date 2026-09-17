@@ -395,6 +395,48 @@ export async function validateArtifact(files) {
     }
   }
 
+  // 5. FIELD MARKERS: which node shows which field, so the editor can put the caret on the page
+  // instead of in a side panel. Source-level, like behaviours: a marker often sits inside a
+  // content-dependent branch the fixtures never take, and its presence in the source is the honest
+  // proof. A marker is an address inside that section's own content: `title`, or `items.0.label`
+  // for a list, where the index is usually a Liquid expression and stands for any position.
+  {
+    const MARKER = /data-p60-field="([^"]*)"/g;
+    const fieldsOf = (type) => new Map((catalogueByType.get(type)?.fields ?? []).map((f) => [f.name, f]));
+    const marked = [];
+    for (const type of manifest?.supports?.sections ?? []) {
+      const source = has(`sections/${type}.liquid`) ? read(`sections/${type}.liquid`) : '';
+      const fields = fieldsOf(type);
+      for (const [, raw] of source.matchAll(MARKER)) {
+        marked.push(type);
+        // An index written as Liquid stands for whichever item this is.
+        const steps = raw.replace(/\{\{[^}]*\}\}/g, '#').split('.');
+        const field = fields.get(steps[0]);
+        const named = steps.length === 1
+          ? Boolean(field) && field.kind !== 'items'
+          : steps.length === 3
+            && Boolean(field) && field.kind === 'items'
+            && (steps[1] === '#' || /^\d+$/.test(steps[1]))
+            && (field.itemFields ?? []).some((f) => f.name === steps[2]);
+        if (!named) {
+          warnings.push(`section '${type}': data-p60-field="${raw}" does not name a field of this section, the editor will ignore it (a field of ${type}, or items.<index>.<field> for a list)`);
+        }
+      }
+    }
+    for (const [path, source] of Object.entries(files)) {
+      if (path.endsWith('.liquid') && !path.startsWith('sections/') && MARKER.test(source)) {
+        warnings.push(`${path}: data-p60-field marks a section's own content, and there is none here; the editor ignores markers outside sections/`);
+      }
+      MARKER.lastIndex = 0;
+    }
+    if (manifest?.supports?.fieldMarkers && marked.length === 0) {
+      errors.push('manifest: supports.fieldMarkers is declared but no section marks a field, the editor would offer typing on the page and find nothing to type into');
+    }
+    if (!manifest?.supports?.fieldMarkers && marked.length > 0) {
+      warnings.push('manifest: sections carry data-p60-field markers but supports.fieldMarkers is not declared, declare it so the editor offers typing on the page');
+    }
+  }
+
   // Hero-imagery honesty, checked BEHAVIOURALLY (the worship pattern). The homeHero sample
   // fixture carries photographs whose data URIs embed a quote-free marker that survives HTML
   // escaping, so "does the rendered hero display the tenant's photos?" is a substring check,

@@ -7,8 +7,8 @@
 {% if site.content.campaigns.size > 0 %}
 <section class="lq-site.content.campaigns">
   <div class="container">
-    <h2>{{ section.heading | default: campaignsLabel }}</h2>
-    {% if section.text %}<p>{{ section.text }}</p>{% endif %}
+    <h2 data-p60-field="heading">{{ section.heading | default: campaignsLabel }}</h2>
+    {% if section.text %}<p data-p60-field="text">{{ section.text }}</p>{% endif %}
     <ul class="lq-campaign-list">
       {% for campaign in site.content.campaigns %}
       <li class="lq-campaign">

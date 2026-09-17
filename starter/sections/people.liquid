@@ -7,18 +7,19 @@
   <div class="container">
     {% if section.eyebrow or section.heading or section.text %}
     <div class="lq-section-head">
-      {% if section.eyebrow %}<p class="lq-kicker">{{ section.eyebrow }}</p>{% endif %}
-      {% if section.heading %}<h2>{{ section.heading }}</h2>{% endif %}
-      {% if section.text %}<p class="lq-muted">{{ section.text }}</p>{% endif %}
+      {% if section.eyebrow %}<p class="lq-kicker" data-p60-field="eyebrow">{{ section.eyebrow }}</p>{% endif %}
+      {% if section.heading %}<h2 data-p60-field="heading">{{ section.heading }}</h2>{% endif %}
+      {% if section.text %}<p class="lq-muted" data-p60-field="text">{{ section.text }}</p>{% endif %}
     </div>
     {% endif %}
     <div class="lq-people">
       {% for person in section.items %}
       <article class="lq-person">
         {% if person.imageUrl %}<img class="lq-person-photo" src="{{ person.imageUrl }}" alt="" loading="lazy">{% endif %}
-        <h3>{{ person.name }}</h3>
-        <p class="lq-person-role">{{ person.role }}</p>
-        {% if person.statement %}<p class="lq-person-statement">“{{ person.statement }}”</p>{% endif %}
+        <h3 data-p60-field="items.{{ forloop.index0 }}.name">{{ person.name }}</h3>
+        <p class="lq-person-role" data-p60-field="items.{{ forloop.index0 }}.role">{{ person.role }}</p>
+        {%- comment -%} The quotation marks are ours, so the marker goes on a span holding the statement alone. {%- endcomment -%}
+        {% if person.statement %}<p class="lq-person-statement">“<span data-p60-field="items.{{ forloop.index0 }}.statement">{{ person.statement }}</span>”</p>{% endif %}
       </article>
       {% endfor %}
     </div>

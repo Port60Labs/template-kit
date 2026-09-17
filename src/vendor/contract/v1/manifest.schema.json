@@ -154,6 +154,12 @@
           "default": false,
           "description": "True when the layout displays the optional single site.nav.items[].megaMenu.promo card inside each expanded top-level menu. Requires supports.layout. The validator proves title, text, image and linked label render together; image-free and absent highlights must remain safe. The platform resolves linked courses, events and campaigns into the same promo fields as custom highlights. This flag does not enable a general mega menu or control column counts. Missing or false disables highlight editing for this exact template version."
         },
+        "fieldMarkers": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when the sections mark which node shows which field with data-p60-field, so the editor can put the caret on the page instead of in a side panel. The address is inside that section's own content: data-p60-field=\"title\", or data-p60-field=\"items.{{ forloop.index0 }}.label\" for an entry in a list. Purely additive: the attribute is markup, the contract is untouched, and a template that marks nothing keeps the section-level editor. The validator reads the marks from the source and warns on any that does not name a field of that section. Missing or false leaves this exact template version editing in the panel.",
+          "$comment": "Follows the navigationHighlights pattern: declared honesty, proven by the validator."
+        },
         "heroImagery": {
           "type": "boolean",
           "default": false,
