@@ -13,11 +13,22 @@ function fixture() {
   return root;
 }
 test('the scaffold includes preview configuration and creates a deterministic split release', async () => {
-  const root = fixture(), bundle = await buildReleaseBundle(root);
+  const root = fixture();
+  const layout = join(root, 'layout.liquid');
+  writeFileSync(layout, readFileSync(layout, 'utf8').replace('{% content %}', "{% island 'search' %}{% content %}"));
+  const bundle = await buildReleaseBundle(root);
   assert.ok(bundle.files['template/manifest.json']);
   assert.ok(bundle.files['preview/manifest.json']);
   assert.ok(bundle.files['release.json']);
   assert.equal(bundle.release.artifactHash, bundle.demo.artifactHash);
+  for (const look of bundle.demo.looks) {
+    assert.match(look.thumbnail.path, /^gallery\/\d+-[a-f0-9]{16}\.webp$/);
+    assert.equal(look.thumbnail.width, 960); assert.equal(look.thumbnail.height, 600);
+    const poster = bundle.files['preview/' + look.thumbnail.path];
+    assert.equal(poster.contentType, 'image/webp');
+    assert.ok(poster.bytes.length <= 160 * 1024);
+    assert.equal(poster.bytes.toString('ascii', 8, 12), 'WEBP');
+  }
   assert.deepEqual((await buildReleaseBundle(root)).release, bundle.release);
   for (const item of bundle.release.files) {
     assert.equal(item.sha256, digest(bundle.files[item.path].bytes));
@@ -30,6 +41,8 @@ test('the scaffold includes preview configuration and creates a deterministic sp
   const doc = new JSDOM(bundle.files['preview/' + bundle.demo.looks[0].path].bytes.toString());
   assert.equal(doc.window.document.querySelectorAll('script').length, 1);
   assert.equal(doc.window.document.querySelectorAll('a[href], form[action], iframe, input:not(:disabled)').length, 0);
+  assert.ok(doc.window.document.querySelector('[data-p60-preview-island="search"] .site-search-form'));
+  assert.equal(doc.window.document.querySelectorAll('[data-p60-preview-island="search"] .site-search-results').length, 0);
   const csp = doc.window.document.querySelector('[http-equiv="Content-Security-Policy"]').content;
   assert.match(csp, /connect-src 'none'/);
   assert.match(csp, /script-src 'sha256-/);

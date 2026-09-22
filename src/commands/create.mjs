@@ -51,7 +51,8 @@ export function create(args) {
       validate: 'p60-template-kit validate .',
       'validate:json': 'p60-template-kit validate . --json',
       package: 'p60-template-kit package .',
-      release: 'p60-template-kit release .'
+      release: 'p60-template-kit release .',
+      'preview:setup': 'p60-template-kit setup-previews'
     },
     devDependencies: {
       '@port60/template-kit': `^${KIT_PACKAGE.version}`
@@ -67,6 +68,7 @@ Start with \`npm install\`, then:
 - \`npm run validate\`, conformance against the platform contract
 - \`npm run package\`, the uploadable zip in \`dist/\` (recreated on every run)
 - \`npm run release\`, separate runtime and designer-preview folders in \`dist/release/\`
+- \`npm run preview:setup\`, install the pinned browser before your first release build
 - \`preview/config.json\` selects author sample content and widget state; put optional
   author images in \`preview/media/\` and reference them as \`p60preview:filename.jpg\`.
 

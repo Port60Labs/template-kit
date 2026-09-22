@@ -21,5 +21,6 @@ jobs:
       # Trusted publishing needs a current npm client.
       - run: npm install -g npm@latest
       - run: npm ci
+      - run: node bin/cli.mjs setup-previews --with-deps
       - run: npm test
       - run: npm publish

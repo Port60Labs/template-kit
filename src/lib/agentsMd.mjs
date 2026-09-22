@@ -17,6 +17,7 @@ Never relabel v1 without migrating its reads. Published name/version identities 
 - npm run dev previews all supported pages locally.
 - npm run package validates and writes the uploadable zip.
 - npm run release builds a store release with separate template/ and preview/ bundles.
+- p60-template-kit setup-previews installs the pinned build browser once (CI: --with-deps).
 - Check all Looks, empty states, long text and mobile layouts. Validation is not visual QA.
 
 ## Artifact shape
@@ -30,6 +31,13 @@ author JPEG/PNG/WebP imagery in preview/media/ and use p60preview:filename refer
 content. The release builder seals every Look and publishes that imagery only in the separate
 preview/ bundle. Runtime package/publish ZIPs never contain it. Studio preview-bundle intake is
 separate from the first-party store release lane. Use platform media URLs in runtime content.
+
+Release automatically captures each Look as a 960x600 WebP under preview/gallery/, from a
+1440x900 desktop render. Do not author separate screenshots. Posters have a 160 KiB cap;
+HTML, images and metadata remain beside them. The gallery loads posters; details load HTML.
+The build needs Chromium plus access to fonts.bunny.net, and refuses failed required assets.
+Use the same kit/browser/OS for immutable-upload retries; bump the version for changed output.
+Arabic-specific poster font fidelity is deferred, not proof of Arabic-locale conformance.
 
 ## The only public site tree
 

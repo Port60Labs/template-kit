@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { JSDOM } from 'jsdom';
 import { loadArtifactDir } from './artifactFiles.mjs';
 import { designerPalette } from './designerPalette.mjs';
+import { createPosterRenderer, POSTER_WIDTH, POSTER_HEIGHT } from './galleryPosters.mjs';
 import { validateNewArtifact } from '../vendor/validator/validate.mjs';
 import { renderStudioPreview } from '../vendor/validator/preview-v2.mjs';
 import { composePage, validatePreviewContent } from '../vendor/validator/site-context-v2.mjs';
@@ -94,6 +95,8 @@ export async function buildReleaseBundle(directory) {
         [...carousel.querySelectorAll('[data-p60-slide]')].filter(slide => slide.closest('[data-p60-carousel]') === carousel).forEach((slide, i) => slide.classList.toggle('is-active', i === 0));
       });
       doc.querySelectorAll('script, iframe, object, embed, base, .p60-preview-surfaces, .p60-preview-badge, .p60-preview-divider').forEach(node => node.remove());
+      // A design impression shows idle search, not the validator's open sample results.
+      doc.querySelectorAll('[data-p60-preview-island="search"] .site-search-results').forEach(node => node.remove());
       doc.querySelectorAll('*').forEach(node => {
         for (const attr of [...node.attributes]) if (/^on/i.test(attr.name)) node.removeAttribute(attr.name);
       });
@@ -120,6 +123,15 @@ export async function buildReleaseBundle(directory) {
       demo.looks.push({ name: look.name, path, values: look.values, colours: designerPalette(doc) });
     } finally { dom.window.close(); }
   }
+  const posters = await createPosterRenderer(files);
+  try {
+    for (const [index, look] of demo.looks.entries()) {
+      const bytes = await posters.render(look.path);
+      const path = `gallery/${index}-${digest(bytes).slice(0, 16)}.webp`;
+      add(`preview/${path}`, bytes, 'image/webp');
+      look.thumbnail = { path, width: POSTER_WIDTH, height: POSTER_HEIGHT };
+    }
+  } finally { await posters.close(); }
   add('preview/manifest.json', JSON.stringify(demo, null, 2) + '\n', 'application/json');
   const inventory = Object.entries(files).sort(([a], [b]) => a.localeCompare(b)).map(([path, file]) => ({ path, size: file.bytes.length, sha256: file.sha256, contentType: file.contentType }));
   if (inventory.reduce((sum, file) => sum + file.size, 0) > MAX_BUNDLE) throw new Error('Release exceeds 24 MiB');
