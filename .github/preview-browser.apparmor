@@ -1,0 +1,8 @@
+# Hosted CI only: permit user namespaces for the kit's downloaded headless browser.
+# Chromium's sandbox remains enabled; other executables keep Ubuntu's default policy.
+abi <abi/4.0>,
+include <tunables/global>
+
+profile port60-preview-browser /home/runner/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux64/chrome-headless-shell flags=(unconfined) {
+  userns,
+}

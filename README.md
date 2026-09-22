@@ -79,6 +79,13 @@ and writes a 960x600 WebP to `preview/gallery/`, capped at 160 KiB. No separate 
 authoring or upload is needed. The gallery uses these images; opening a design loads its HTML.
 The pinned browser is a build dependency only, never part of the live website.
 
+Linux capture requires a working Chromium sandbox. Ubuntu 24.04 hosted CI installs the
+repository's browser-path-scoped AppArmor profile to allow its user namespaces.
+No `--no-sandbox` or global AppArmor disablement is used. On another Linux
+host, configure an administrator-approved sandbox according to
+[Chromium's guidance](https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md).
+Browser installation alone does not change the host's security policy.
+
 Only packaged preview assets and fonts.bunny.net are accessible during capture. Failed required
 imagery or Latin fonts stop generation. Arabic-specific poster font fidelity is deferred;
 full previews and live-site typography are unchanged. Preserve the same kit/browser/OS for

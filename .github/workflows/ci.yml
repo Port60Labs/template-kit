@@ -6,9 +6,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-24.04
-    env:
-      # Use the runner's existing SUID helper; retain Chromium and Ubuntu sandboxing.
-      CHROME_DEVEL_SANDBOX: /opt/google/chrome/chrome-sandbox
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -16,6 +13,8 @@ jobs:
           node-version: 24
       - run: npm ci
       - run: node bin/cli.mjs setup-previews --with-deps
-      - name: Verify the runner's sandbox helper
-        run: test -u "$CHROME_DEVEL_SANDBOX" && test -x "$CHROME_DEVEL_SANDBOX"
+      - name: Enable the browser sandbox for this CI executable only
+        run: |
+          sudo install -o root -g root -m 644 .github/preview-browser.apparmor /etc/apparmor.d/port60-preview-browser
+          sudo apparmor_parser -r /etc/apparmor.d/port60-preview-browser
       - run: npm test
