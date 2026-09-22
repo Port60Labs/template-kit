@@ -4,13 +4,14 @@
   platform's published site.content.campaigns; hrefs are platform-derived, always link via campaign.href.
   Derive or omit: nothing renders when no campaign is live.
 {% endcomment %}
-{% if site.content.campaigns.size > 0 %}
+{% if site.content.campaigns.items.size > 0 %}
 <section class="lq-site.content.campaigns">
   <div class="container">
-    <h2 data-p60-field="heading">{{ section.heading | default: campaignsLabel }}</h2>
-    {% if section.text %}<p data-p60-field="text">{{ section.text }}</p>{% endif %}
+    {% if section.eyebrow != nil and section.eyebrow != '' %}<p class="lq-kicker" data-p60-field="eyebrow">{{ section.eyebrow }}</p>{% endif %}
+    {% if section.title == nil %}<h2>{{ site.content.campaigns.label }}</h2>{% elsif section.title != '' %}<h2 data-p60-field="title">{{ section.title }}</h2>{% endif %}
+    {% if section.subtitle != nil and section.subtitle != '' %}<p data-p60-field="subtitle">{{ section.subtitle }}</p>{% endif %}
     <ul class="lq-campaign-list">
-      {% for campaign in site.content.campaigns %}
+      {% for campaign in site.content.campaigns.items %}
       <li class="lq-campaign">
         <h3>{{ campaign.title }}</h3>
         {% if campaign.summary %}<p>{{ campaign.summary }}</p>{% endif %}

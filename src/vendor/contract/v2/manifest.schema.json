@@ -1,0 +1,388 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://developers.port60.com/schemas/template-manifest-v2.json",
+  "title": "Port60 template manifest (contract v2)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "version",
+    "format",
+    "supports"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{1,48}[a-z0-9]$",
+      "description": "The template's identity, lowercase, hyphenated, stable across versions."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(?:-dev\\.\\d+)?$",
+      "description": "Semver. Stable versions are immutable once submitted. Owner-only development versions use x.y.z-dev.N, remain non-promotable, and may be replaced before creating a stable release."
+    },
+    "format": {
+      "type": "string",
+      "enum": [
+        "port60-liquid@2"
+      ],
+      "description": "The dialect/contract major this template is written against."
+    },
+    "label": {
+      "type": "string",
+      "maxLength": 60,
+      "description": "Human-readable name shown in pickers."
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 300
+    },
+    "requiresCapabilities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "giving",
+          "appeals",
+          "worship",
+          "courses",
+          "membership",
+          "events",
+          "articles",
+          "services",
+          "forms",
+          "newsletter",
+          "i18n",
+          "search",
+          "documents"
+        ]
+      },
+      "uniqueItems": true,
+      "default": [],
+      "description": "Platform capabilities this design needs in order to work as intended. This is a catalogue matching signal, never an entitlement grant. The validator checks that each declared capability has a corresponding section, page template, island or context surface."
+    },
+    "suitsProfiles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "general",
+          "mosque",
+          "church",
+          "appeal-charity",
+          "pta",
+          "community",
+          "training"
+        ]
+      },
+      "uniqueItems": true,
+      "default": [],
+      "description": "Organisation profiles this design was composed for. An empty list means the template is general purpose. Profiles improve catalogue recommendations but do not hide or unlock features."
+    },
+    "changelog": {
+      "type": "string",
+      "maxLength": 300,
+      "description": "One human line describing what THIS version changed, shown on the Appearance update nudge."
+    },
+    "supports": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pages",
+        "sections"
+      ],
+      "properties": {
+        "pages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "home",
+              "about"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Section based page bodies this template renders from sections/{type}.liquid. Contract v1 supports home and about. This is independent of layout chrome and route-specific pageTemplates."
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Section types this template ships renderers for (sections/{type}.liquid). Unsupported types are omitted at render, never an error."
+        },
+        "islands": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true,
+          "default": [],
+          "description": "Islands this template places. Every {% island %} name must be listed here AND exist in the platform island registry."
+        },
+        "layout": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when the template ships layout.liquid and owns the page chrome (header/nav/footer). The platform still owns <head>, consent, and identity, see the layouts guide."
+        },
+        "pageTemplates": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "events",
+              "articles",
+              "courses",
+              "campaigns",
+              "services",
+              "article",
+              "course"
+            ]
+          },
+          "uniqueItems": true,
+          "default": [],
+          "description": "Route-specific data views rendered from pages/{page}.liquid with documented context. Events and articles own listings; course and article own detail presentation. Event transactions, course enrolment, article engagement, comments, identity and consent stay platform-owned islands. Requires supports.layout; without an entry the platform body renders inside the template chrome."
+        },
+        "worship": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when the layout renders the `worship` context (the prayer/service-times rail). Declared honesty: the choosers badge worship-enabled tenants toward looks that show their times, and warn on looks that don't. Requires supports.layout; the layout must actually branch on `worship`."
+        },
+        "navigationHighlights": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when the layout displays the optional single site.nav.items[].megaMenu.promo card inside each expanded top-level menu. Requires supports.layout. The validator proves title, text, image and linked label render together; image-free and absent highlights must remain safe. The platform resolves linked courses, events and campaigns into the same promo fields as custom highlights. This flag does not enable a general mega menu or control column counts. Missing or false disables highlight editing for this exact template version."
+        },
+        "fieldMarkers": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when the sections mark which node shows which field with data-p60-field, so the editor can put the caret on the page instead of in a side panel. The address is inside that section's own content: data-p60-field=\"title\", or data-p60-field=\"items.{{ forloop.index0 }}.label\" for an entry in a list. Purely additive: the attribute is markup, the contract is untouched, and a template that marks nothing keeps the section-level editor. The validator reads the marks from the source and warns on any that does not name a field of that section. Missing or false leaves this exact template version editing in the panel.",
+          "$comment": "Follows the navigationHighlights pattern: declared honesty, proven by the validator."
+        },
+        "heroImagery": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when the homeHero renderer displays the tenant's hero photographs (homeHero.images, legacy imageUrl), always under a TREATMENT built from the template's own palette variables (scrim/tint/blend), never raw. Declared honesty, proven behaviourally at validation: the choosers badge photo-led tenants toward templates that show their images and warn on ones that won't. Requires the homeHero section among supports.sections."
+        },
+        "behaviors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "reveal",
+              "counter",
+              "progress",
+              "countdown",
+              "accordion",
+              "carousel",
+              "stickyHeader",
+              "stickyCta",
+              "lightbox",
+              "tabs",
+              "readingProgress",
+              "showMore",
+              "scrollspy",
+              "nav"
+            ]
+          },
+          "uniqueItems": true,
+          "description": "Engine-attached behaviours this template's markup opts into via data-p60-* attributes (see the behaviour catalogue). Templates never ship JavaScript; declaring here is what makes the engine wire the markup, and the validator proves declaration and usage agree in both directions."
+        },
+        "focus": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "donate",
+              "volunteer"
+            ]
+          },
+          "description": "The site-focus kinds this template can LEAD with (docs/volunteering.md). Declaring 'volunteer' means the home hero places the primary_action_widget island (the widget that becomes the donation widget or the volunteer sign-up as the charity chooses) or branches on section.primary.kind, so the volunteer sign-up can take the widget slot; the picker marks templates that cannot lead with volunteering. Templates that predate the setting keep rendering the donation widget, since donate is the default."
+        }
+      }
+    },
+    "imagery": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The template's OWN image advice, surfaced beside uploads in the charity's editor, a design statement (what shape suits THIS composition), advisory only, never enforced. Entity images (events, courses, articles) are platform-scoped instead: see the contract's imagery.json envelopes.",
+      "properties": {
+        "hero": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "idealAspect",
+            "minWidth"
+          ],
+          "properties": {
+            "idealAspect": {
+              "type": "string",
+              "pattern": "^\\d+:\\d+$",
+              "description": "The aspect this hero composes best with, e.g. \"16:9\"."
+            },
+            "minWidth": {
+              "type": "integer",
+              "minimum": 800,
+              "description": "Below this pixel width the photo may look soft full-bleed."
+            },
+            "note": {
+              "type": "string",
+              "maxLength": 240,
+              "description": "One human line of advice, e.g. how panoramas or portraits behave in this hero."
+            }
+          }
+        }
+      }
+    },
+    "fonts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^https://fonts\\.googleapis\\.com/css2\\?"
+      },
+      "default": [],
+      "description": "Webfont stylesheet URLs the platform loads in <head> (with preconnects, never a CSS @import). Google Fonts css2 URLs only."
+    },
+    "looks": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "values"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 40,
+            "description": "The look's evocative, author-chosen name, shown as a one-click chip in Appearance."
+          },
+          "values": {
+            "type": "object",
+            "minProperties": 1,
+            "propertyNames": {
+              "pattern": "^[a-zA-Z][a-zA-Z0-9]{0,39}$"
+            },
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Knob key → value. Every key must be a declared settings knob; select values must be listed options; font values must be catalogue families."
+          }
+        }
+      },
+      "default": [],
+      "description": "One-click LOOKS: author-named bundles of knob values (scheme + fonts + width…) applied together. Everything remains individually adjustable afterwards."
+    },
+    "compositions": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The template's preferred composition per supported page (site editor stage 4): the ordered section types it designs the page around, each with a role. `core` sections carry the design (removing one warns, never locks), `recommended` ones are on by default, `optional` ones are offered. A page a tenant never edited renders this composition; the Pages editor offers it as the order to reset to.",
+      "propertyNames": {
+        "enum": [
+          "home",
+          "about"
+        ]
+      },
+      "patternProperties": {
+        "^(home|about)$": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "role"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 50,
+                "description": "A section type from supports.sections."
+              },
+              "role": {
+                "type": "string",
+                "enum": [
+                  "core",
+                  "recommended",
+                  "optional"
+                ],
+                "description": "core: the design depends on it; recommended: on by default; optional: offered."
+              }
+            }
+          }
+        }
+      }
+    },
+    "settings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "key",
+              "kind",
+              "label"
+            ],
+            "properties": {
+              "key": {
+                "type": "string",
+                "pattern": "^[a-zA-Z][a-zA-Z0-9]{0,39}$"
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "color",
+                  "select",
+                  "toggle",
+                  "font"
+                ]
+              },
+              "label": {
+                "type": "string",
+                "maxLength": 60
+              },
+              "default": {},
+              "options": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "group": {
+                "type": "string",
+                "enum": [
+                  "typography",
+                  "looks"
+                ],
+                "description": "Where the admin surfaces this knob: 'typography' → the Typography section beside the font slots; 'looks' → the Looks section with the one-click bundles (colour schemes and accent dials belong there, and ungrouped color knobs plus a knob keyed 'scheme' default there anyway); other ungrouped knobs render under Template options."
+              },
+              "weights": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 100,
+                  "maximum": 1000
+                },
+                "uniqueItems": true,
+                "description": "FONT knobs only: the weights this template's typographic system uses for the slot. The host requests these for the tenant's chosen family (clamped to the family's real weights). The tenant picks the FAMILY; weights, sizes and tracking stay template-owned."
+              }
+            }
+          },
+          "description": "The template's own theming knobs (colour schemes etc.), rendered as an editor in Appearance/get-started; values land in site-config config.theme."
+        }
+      }
+    }
+  }
+}

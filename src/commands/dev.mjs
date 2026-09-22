@@ -3,9 +3,9 @@ import { watch, readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { surfaceFor, knobOverridesFromQuery, previewAssetPath, previewAssetType } from '../lib/previewOptions.mjs';
 import { renderStudioPreview } from '../vendor/validator/preview.mjs';
-import { validateArtifact } from '../vendor/validator/validate.mjs';
-import { applyPreviewContent, buildSiteFixture, validatePreviewContent } from '../vendor/validator/site-context.mjs';
-import { renderModelReferenceHtml } from '../vendor/validator/model-reference.mjs';
+import { validateNewArtifact as validateArtifact } from '../vendor/validator/validate.mjs';
+import { applyPreviewContent, buildSiteFixture, validatePreviewContent } from '../vendor/validator/site-context-v2.mjs';
+import { renderModelReferenceHtml } from '../vendor/validator/model-reference-v2.mjs';
 import { loadArtifactDir } from '../lib/artifactFiles.mjs';
 import { join } from 'node:path';
 
@@ -80,6 +80,12 @@ function imageOriginsOf(json) {
  */
 export async function dev(args) {
   const dir = resolve(args._[0] ?? '.');
+  const initialManifest = JSON.parse(loadArtifactDir(dir)['manifest.json'] ?? '{}');
+  if (initialManifest.format !== 'port60-liquid@2') {
+    console.error('✗ Kit 1.0.0 requires port60-liquid@2. Existing v1 pins remain supported by the platform, not by the new authoring kit.');
+    process.exitCode = 1;
+    return;
+  }
   const port = Number(args.port ?? 4400);
   // The dev-richer half of the imagery split: point P60_FIXTURE_IMAGES at the platform's fixture
   // imagery base and the preview loads photographic fixtures from that ONE origin instead of the

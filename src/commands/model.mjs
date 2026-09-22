@@ -1,4 +1,4 @@
-import { contentModel } from '../vendor/engine/content-footprint.mjs';
+import { contentModelV2 as contentModel } from '../vendor/engine/content-footprint.mjs';
 
 /**
  * `model [--json]`, the content model, in hand. Prints every `site.content.*` collection with
@@ -15,7 +15,7 @@ export function model(args) {
   console.log('site also carries: ' + contentModel.siblings.keys.map((k) => `site.${k}`).join(', '));
   console.log('');
   for (const [name, collection] of Object.entries(contentModel.collections)) {
-    const more = collection.moreHref ? ` · more at ${collection.moreHref}` : '';
+    const more = collection.shape === 'envelope' ? ' · {label, href, items, pagination}' : ' · array';
     console.log(`site.content.${name}  (bounded at ${collection.cap}${more}, since ${collection.since})`);
     for (const [field, spec] of Object.entries(collection.item)) {
       const notes = [
@@ -27,7 +27,7 @@ export function model(args) {
     }
     console.log('');
   }
-  console.log('Rules: collections are bounded (link onward via moreHref); enums are open (branch and');
+  console.log('Rules: collections are bounded (link onward via href and pagination); enums are open (branch and');
   console.log('fall back); nullable fields need a branch; the model only grows. Your footprint and');
   console.log('minimum model version are computed at publish, you never declare them. Live examples:');
   console.log('the /model page on your dev preview.');

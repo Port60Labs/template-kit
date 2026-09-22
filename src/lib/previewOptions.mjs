@@ -16,7 +16,7 @@ export function surfaceFor(rawUrl) {
   if (path.startsWith('/articles/')) return 'article';
   if (path === '/campaigns') return 'campaigns';
   if (path.startsWith('/campaigns/')) return 'campaign';
-  if (path === '/courses') return 'course';
+  if (path === '/courses') return url.searchParams.has('course') ? 'course' : 'courses';
   return 'home';
 }
 

@@ -1,6 +1,6 @@
 import { existsSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { buildSiteFixture, composePage, validatePreviewContent } from '../vendor/validator/site-context.mjs';
+import { buildSiteFixture, composePage, validatePreviewContent } from '../vendor/validator/site-context-v2.mjs';
 import { loadArtifactDir } from '../lib/artifactFiles.mjs';
 
 /**
@@ -34,9 +34,10 @@ export function content(args) {
   }
   const data = {
     brand: site.brand,
-    nav: { items: site.nav?.items ?? [] },
+    nav: site.nav,
+    actions: site.actions,
     ...(manifest ? { pages: { home: composePage(manifest, 'home'), about: composePage(manifest, 'about') } } : {}),
-    ...Object.fromEntries(Object.entries(site.content).filter(([name]) => name !== 'about'))
+    ...site.content
   };
   const problems = validatePreviewContent(data);
   if (problems.length > 0) {

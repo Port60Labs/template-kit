@@ -1,0 +1,1569 @@
+{
+  "description": "Contract v2 public context. Templates receive site plus the current section authored content or explicitly documented record detail. No flat collection aliases, focus aliases, generated navigation CTA, independent locations or content.about exist.",
+  "variables": [
+    {
+      "path": "site",
+      "availableIn": [
+        "section",
+        "layout",
+        "page"
+      ],
+      "description": "site: see site.schema.json and content-model.json for the exact v2 shape."
+    },
+    {
+      "path": "site.brand",
+      "availableIn": [
+        "section",
+        "layout",
+        "page"
+      ],
+      "description": "site.brand: see site.schema.json and content-model.json for the exact v2 shape."
+    },
+    {
+      "path": "site.nav",
+      "availableIn": [
+        "section",
+        "layout",
+        "page"
+      ],
+      "description": "site.nav: see site.schema.json and content-model.json for the exact v2 shape."
+    },
+    {
+      "path": "site.socials",
+      "availableIn": [
+        "section",
+        "layout",
+        "page"
+      ],
+      "description": "site.socials: see site.schema.json and content-model.json for the exact v2 shape."
+    },
+    {
+      "path": "site.locale",
+      "availableIn": [
+        "section",
+        "layout",
+        "page"
+      ],
+      "description": "site.locale: see site.schema.json and content-model.json for the exact v2 shape."
+    },
+    {
+      "path": "site.actions",
+      "availableIn": [
+        "section",
+        "layout",
+        "page"
+      ],
+      "description": "site.actions: see site.schema.json and content-model.json for the exact v2 shape."
+    },
+    {
+      "path": "site.page",
+      "availableIn": [
+        "section",
+        "layout",
+        "page"
+      ],
+      "description": "Current render only: key, path and stable-keyed section composition."
+    },
+    {
+      "path": "site.content",
+      "availableIn": [
+        "section",
+        "layout",
+        "page"
+      ],
+      "description": "site.content: see site.schema.json and content-model.json for the exact v2 shape."
+    },
+    {
+      "path": "site.content.services",
+      "availableIn": [
+        "section",
+        "layout",
+        "page"
+      ],
+      "description": "site.content.services: see site.schema.json and content-model.json for the exact v2 shape."
+    },
+    {
+      "path": "site.content.events",
+      "availableIn": [
+        "section",
+        "layout",
+        "page"
+      ],
+      "description": "site.content.events: see site.schema.json and content-model.json for the exact v2 shape."
+    },
+    {
+      "path": "site.content.articles",
+      "availableIn": [
+        "section",
+        "layout",
+        "page"
+      ],
+      "description": "site.content.articles: see site.schema.json and content-model.json for the exact v2 shape."
+    },
+    {
+      "path": "site.content.campaigns",
+      "availableIn": [
+        "section",
+        "layout",
+        "page"
+      ],
+      "description": "site.content.campaigns: see site.schema.json and content-model.json for the exact v2 shape."
+    },
+    {
+      "path": "site.content.causes",
+      "availableIn": [
+        "section",
+        "layout",
+        "page"
+      ],
+      "description": "site.content.causes: see site.schema.json and content-model.json for the exact v2 shape."
+    },
+    {
+      "path": "site.content.courses",
+      "availableIn": [
+        "section",
+        "layout",
+        "page"
+      ],
+      "description": "site.content.courses: see site.schema.json and content-model.json for the exact v2 shape."
+    },
+    {
+      "path": "site.content.documents",
+      "availableIn": [
+        "section",
+        "layout",
+        "page"
+      ],
+      "description": "site.content.documents: see site.schema.json and content-model.json for the exact v2 shape."
+    },
+    {
+      "path": "site.content.schedules",
+      "availableIn": [
+        "section",
+        "layout",
+        "page"
+      ],
+      "description": "site.content.schedules: see site.schema.json and content-model.json for the exact v2 shape."
+    },
+    {
+      "path": "section",
+      "availableIn": [
+        "section"
+      ],
+      "description": "This section instance's authored content. Field markers name only these fields, never source records or generated collection labels."
+    },
+    {
+      "path": "article",
+      "availableIn": [
+        "page:article"
+      ],
+      "description": "The current source-authored Article detail, including sanitised bodyHtml. Render bodyHtml with the raw filter. A body may contain side by side content: a div.p60-cols.p60-cols-2 or .p60-cols-3 block of div.p60-col panes (a pane may carry .p60-col-boxed). The platform stylesheet lays the panes out as a grid and stacks them under 720px on every page, template pages included; a template may restyle the gap, the breakpoint or the boxed look. Engagement remains platform-owned."
+    },
+    {
+      "path": "course",
+      "availableIn": [
+        "page:course"
+      ],
+      "description": "The current source-authored Course detail, including sanitised aboutHtml. Enrolment remains platform-owned."
+    },
+    {
+      "path": "impactMap",
+      "availableIn": [
+        "section:impactMap"
+      ],
+      "description": "The selected map, including its own title, introduction, viewport and points. No global locations collection."
+    }
+  ],
+  "fixtures": {
+    "brand": {
+      "name": "The Lantern Trust",
+      "tagline": "Neighbours, looked after.",
+      "logoUrl": null,
+      "logoType": "full",
+      "footerLogoUrl": null
+    },
+    "site": {
+      "brand": {
+        "name": "The Lantern Trust",
+        "tagline": "Neighbours, looked after.",
+        "logoUrl": null,
+        "logoType": "full",
+        "footerLogoUrl": null
+      },
+      "nav": {
+        "header": [
+          {
+            "label": "Home",
+            "href": "/",
+            "kind": "link"
+          },
+          {
+            "label": "About us",
+            "href": "/about",
+            "kind": "link"
+          },
+          {
+            "label": "Events",
+            "href": "/events",
+            "kind": "link"
+          },
+          {
+            "label": "Services",
+            "href": "/services",
+            "children": [
+              {
+                "label": "Food bank",
+                "href": "/services?service=food-bank",
+                "group": "Support",
+                "description": "Emergency food parcels and practical advice.",
+                "kind": "link"
+              },
+              {
+                "label": "Community",
+                "href": null,
+                "group": "Get involved",
+                "children": [
+                  {
+                    "label": "Youth club",
+                    "href": "/services?service=youth-club",
+                    "kind": "link"
+                  }
+                ],
+                "kind": "group"
+              }
+            ],
+            "kind": "link",
+            "megaMenu": {
+              "promo": {
+                "title": "Visit this week",
+                "text": "Find a programme and meet the team.",
+                "href": "/services",
+                "label": "Explore services"
+              }
+            }
+          }
+        ],
+        "footer": [
+          {
+            "label": "About us",
+            "href": "/about",
+            "kind": "link"
+          },
+          {
+            "label": "Contact",
+            "href": "https://example.org/contact",
+            "external": true,
+            "kind": "link"
+          },
+          {
+            "label": "Our work",
+            "href": null,
+            "children": [
+              {
+                "label": "Food bank",
+                "href": "/services?service=food-bank",
+                "kind": "link"
+              }
+            ],
+            "kind": "group"
+          }
+        ]
+      },
+      "socials": [
+        {
+          "platform": "facebook",
+          "url": "https://facebook.com/lanterntrust",
+          "iconSvg": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/></svg>"
+        },
+        {
+          "platform": "instagram",
+          "url": "https://instagram.com/lanterntrust",
+          "iconSvg": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"5\"/></svg>"
+        },
+        {
+          "platform": "youtube",
+          "url": "https://youtube.com/@lanterntrust",
+          "iconSvg": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><polygon points=\"10,8 16,12 10,16\"/></svg>"
+        }
+      ],
+      "locale": {
+        "code": "en",
+        "direction": "ltr",
+        "languages": [
+          {
+            "code": "en",
+            "label": "English",
+            "direction": "ltr"
+          },
+          {
+            "code": "cy",
+            "label": "Cymraeg",
+            "direction": "ltr"
+          },
+          {
+            "code": "ar",
+            "label": "العربية",
+            "direction": "rtl"
+          }
+        ]
+      },
+      "content": {
+        "services": {
+          "label": "Services",
+          "href": "/services",
+          "items": [
+            {
+              "id": "66666666-6666-6666-6666-666666666661",
+              "title": "Food Bank",
+              "slug": "food-bank",
+              "summary": "Emergency parcels, no referral needed, from the Foundry Lane depot every weekday morning.",
+              "imageUrl": "p60fixture:service/foodbank",
+              "href": "/services?service=food-bank"
+            },
+            {
+              "id": "66666666-6666-6666-6666-666666666662",
+              "title": "Youth Club",
+              "slug": "youth-club",
+              "summary": "Sports, cooking and somewhere to be for ages 10 to 16, four evenings a week.",
+              "imageUrl": "p60fixture:service/youthclub",
+              "href": "/services?service=youth-club"
+            },
+            {
+              "id": "66666666-6666-6666-6666-666666666663",
+              "title": "Money Advice",
+              "slug": "money-advice",
+              "summary": "Free, confidential help with debt, benefits and the letters that keep you up at night.",
+              "imageUrl": "p60fixture:service/advice",
+              "href": "/services?service=money-advice"
+            },
+            {
+              "id": "66666666-6666-6666-6666-666666666664",
+              "title": "Community Garden",
+              "slug": "community-garden",
+              "summary": "Twenty-two raised beds, a greenhouse and a seed library, open to every Alderford household.",
+              "imageUrl": "p60fixture:service/garden",
+              "href": "/services?service=community-garden"
+            },
+            {
+              "id": "66666666-6666-6666-6666-666666666665",
+              "title": "Warm Spaces",
+              "slug": "warm-spaces",
+              "summary": "Our hall, open and heated through winter, with tea, wifi and company.",
+              "imageUrl": "p60fixture:service/warmspace",
+              "href": "/services?service=warm-spaces"
+            }
+          ],
+          "pagination": null
+        },
+        "events": {
+          "label": "Events",
+          "href": "/events",
+          "items": [
+            {
+              "id": "22222222-2222-2222-2222-222222222222",
+              "name": "The Lantern Gala",
+              "description": "Our biggest night of the year: supper, music from the Alderford Community Choir, and the annual lantern walk along the river to close.",
+              "registrationMode": "TICKETED",
+              "startsAt": "2030-09-20T19:00:00Z",
+              "endsAt": null,
+              "venueName": "The Maltings, Alderford",
+              "online": false,
+              "imageUrl": "p60fixture:event/gala",
+              "onSale": true,
+              "soldOut": false,
+              "priceFrom": 25,
+              "currency": "GBP",
+              "detailHref": "/events?event=22222222-2222-2222-2222-222222222222"
+            },
+            {
+              "id": "44444444-4444-4444-4444-444444444444",
+              "name": "Riverside Harvest Supper",
+              "description": "A long-table supper on the Aldern meadow, cooked by our kitchen volunteers with produce from the community garden.",
+              "registrationMode": "TICKETED",
+              "startsAt": "2030-10-04T18:30:00Z",
+              "endsAt": "2030-10-04T22:00:00Z",
+              "venueName": "Aldern Meadow",
+              "online": false,
+              "imageUrl": "p60fixture:event/harvest",
+              "onSale": true,
+              "soldOut": false,
+              "priceFrom": 12.5,
+              "currency": "GBP",
+              "detailHref": "/events?event=44444444-4444-4444-4444-444444444444"
+            },
+            {
+              "id": "55555555-5555-5555-5555-555555555555",
+              "name": "Volunteer Welcome Evening",
+              "description": "Meet the team, hear where help is needed most this season, and find a role that fits the time you have.",
+              "registrationMode": "RSVP",
+              "startsAt": "2030-09-03T18:00:00Z",
+              "endsAt": "2030-09-03T19:30:00Z",
+              "venueName": "Foundry Lane Hub",
+              "online": false,
+              "imageUrl": "p60fixture:event/welcome",
+              "onSale": true,
+              "soldOut": false,
+              "priceFrom": null,
+              "currency": null,
+              "detailHref": "/events?event=55555555-5555-5555-5555-555555555555"
+            },
+            {
+              "id": "66666666-6666-6666-6666-666666666666",
+              "name": "Warm Space Wednesdays",
+              "description": "Our hall is open, warm and stocked with tea every Wednesday through the cold months. No booking, no questions, everyone welcome.",
+              "registrationMode": "INFO",
+              "startsAt": "2030-11-06T10:00:00Z",
+              "endsAt": "2030-11-06T15:00:00Z",
+              "venueName": "St Chad's Hall",
+              "online": false,
+              "imageUrl": null,
+              "onSale": true,
+              "soldOut": false,
+              "priceFrom": null,
+              "currency": null,
+              "detailHref": "/events?event=66666666-6666-6666-6666-666666666666"
+            },
+            {
+              "id": "77777777-7777-7777-7777-777777777777",
+              "name": "Money Advice Drop-in",
+              "description": "A quiet hour with our trained advisers. Bring letters you are worried about; we will work through them together.",
+              "registrationMode": "INFO",
+              "startsAt": "2030-09-12T10:00:00Z",
+              "endsAt": "2030-09-12T12:00:00Z",
+              "venueName": null,
+              "online": true,
+              "imageUrl": null,
+              "onSale": true,
+              "soldOut": false,
+              "priceFrom": null,
+              "currency": null,
+              "detailHref": "/events?event=77777777-7777-7777-7777-777777777777"
+            },
+            {
+              "id": "88888888-8888-8888-8888-888888888888",
+              "name": "Winter Fair",
+              "description": "Stalls, carols and the grand raffle in aid of the Winter Appeal. Free entry; every stall staffed by volunteers.",
+              "registrationMode": "TICKETED",
+              "startsAt": "2030-12-07T11:00:00Z",
+              "endsAt": "2030-12-07T16:00:00Z",
+              "venueName": "Alderford Market Square",
+              "online": false,
+              "imageUrl": "p60fixture:event/winterfair",
+              "onSale": true,
+              "soldOut": true,
+              "priceFrom": 0,
+              "currency": "GBP",
+              "detailHref": "/events?event=88888888-8888-8888-8888-888888888888"
+            }
+          ],
+          "pagination": null
+        },
+        "articles": {
+          "label": "Articles",
+          "href": "/articles/all",
+          "items": [
+            {
+              "id": "88888888-8888-8888-8888-888888888888",
+              "title": "The Community Garden Opens Its Gates",
+              "slug": "community-garden-opens",
+              "excerpt": "Two years of digging, fundraising and Saturday mornings in the rain: the Foundry Lane garden is finally open to everyone.",
+              "imageUrl": "p60fixture:article/garden",
+              "authorName": "Amina Khan",
+              "authorRole": "Community Editor",
+              "categories": [
+                "News"
+              ],
+              "publishedAt": "2030-04-12T09:00:00Z",
+              "readingMinutes": 5,
+              "href": "/articles/community-garden-opens"
+            },
+            {
+              "id": "99999999-9999-9999-9999-999999999999",
+              "title": "What a Food Parcel Actually Holds",
+              "slug": "what-a-food-parcel-holds",
+              "excerpt": "People imagine tins and pasta. The real list is longer, more personal, and put together with more care than you might think.",
+              "imageUrl": "p60fixture:article/parcel",
+              "authorName": "Derek Osei",
+              "authorRole": "Food Bank Lead",
+              "categories": [
+                "Stories"
+              ],
+              "publishedAt": "2030-03-28T09:00:00Z",
+              "readingMinutes": 6,
+              "href": "/articles/what-a-food-parcel-holds"
+            },
+            {
+              "id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+              "title": "Meet the Wednesday Kitchen Crew",
+              "slug": "wednesday-kitchen-crew",
+              "excerpt": "Eleven volunteers, one borrowed oven, and a hundred and forty hot meals a week. The kitchen crew tell it in their own words.",
+              "imageUrl": "p60fixture:people/kitchen",
+              "authorName": "Amina Khan",
+              "authorRole": "Community Editor",
+              "categories": [
+                "Stories"
+              ],
+              "publishedAt": "2030-03-02T09:00:00Z",
+              "readingMinutes": 7,
+              "href": "/articles/wednesday-kitchen-crew"
+            },
+            {
+              "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+              "title": "Winter Appeal: Where Your Money Went",
+              "slug": "winter-appeal-report",
+              "excerpt": "You gave 18,400 pounds in eight weeks. Here is the line-by-line account of what it paid for, and what we learned.",
+              "imageUrl": "p60fixture:campaign/winterreport",
+              "authorName": "Priya Sharma",
+              "authorRole": "Trustee",
+              "categories": [
+                "News"
+              ],
+              "publishedAt": "2030-02-14T09:00:00Z",
+              "readingMinutes": 8,
+              "href": "/articles/winter-appeal-report"
+            },
+            {
+              "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+              "title": "Five Things Our Money Advisers Wish You Knew",
+              "slug": "money-advice-five-things",
+              "excerpt": "The advice team see the same worries again and again. Most of them have a fix that takes less than an hour.",
+              "imageUrl": null,
+              "authorName": "Tom Bradley",
+              "authorRole": "Advice Service",
+              "categories": [
+                "Guides"
+              ],
+              "publishedAt": "2030-01-30T09:00:00Z",
+              "readingMinutes": 4,
+              "href": "/articles/money-advice-five-things"
+            },
+            {
+              "id": "dddddddd-dddd-dddd-dddd-dddddddddddd",
+              "title": "A Year of Warm Spaces, in Numbers",
+              "slug": "warm-spaces-in-numbers",
+              "excerpt": "Fourteen hundred visits, ninety regulars, and one chess league nobody planned. What happens when you just open the door.",
+              "imageUrl": "p60fixture:service/warmspace",
+              "authorName": "Amina Khan",
+              "authorRole": "Community Editor",
+              "categories": [
+                "News"
+              ],
+              "publishedAt": "2030-01-08T09:00:00Z",
+              "readingMinutes": 5,
+              "href": "/articles/warm-spaces-in-numbers"
+            }
+          ],
+          "pagination": null
+        },
+        "campaigns": {
+          "label": "Campaigns",
+          "href": "/campaigns",
+          "items": [
+            {
+              "id": "99999999-9999-9999-9999-999999999991",
+              "title": "Keep the 27 Bus",
+              "slug": "keep-the-27-bus",
+              "href": "/campaigns/keep-the-27-bus",
+              "summary": "The only bus serving the Fenwick estate is set to be cut. Add your name before the consultation closes.",
+              "imageUrl": "p60fixture:campaign/bus"
+            },
+            {
+              "id": "99999999-9999-9999-9999-999999999992",
+              "title": "A Defibrillator on Every Street",
+              "slug": "defibrillator-every-street",
+              "href": "/campaigns/defibrillator-every-street",
+              "summary": "We are raising for twelve more public defibrillators and training two hundred neighbours to use them.",
+              "imageUrl": "p60fixture:campaign/defib"
+            },
+            {
+              "id": "99999999-9999-9999-9999-999999999993",
+              "title": "Alderford Housing Survey",
+              "slug": "housing-survey",
+              "href": "/campaigns/housing-survey",
+              "summary": null,
+              "imageUrl": null
+            }
+          ],
+          "pagination": null
+        },
+        "causes": {
+          "label": "Causes",
+          "href": "/donate",
+          "items": [
+            {
+              "id": "55555555-5555-5555-5555-555555555550",
+              "title": "Flood Response Appeal",
+              "slug": "flood-response",
+              "description": "The Aldern broke its banks on Sunday. Thirty households need dry bedding, dehumidifiers and somewhere warm now.",
+              "imageUrl": "p60fixture:cause/flood",
+              "targetAmount": 50000,
+              "raisedAmount": 18750,
+              "progressPercentage": 38,
+              "href": "/donate/flood-response",
+              "paymentOptions": {
+                "oneOff": true,
+                "recurringCard": true,
+                "directDebit": true
+              }
+            },
+            {
+              "id": "55555555-5555-5555-5555-555555555551",
+              "title": "Winter Appeal",
+              "slug": "winter-appeal",
+              "description": "Heating top-ups, warm bedding and a hot meal for the households the cold hits hardest.",
+              "imageUrl": "p60fixture:cause/winter",
+              "targetAmount": 20000,
+              "raisedAmount": 12500,
+              "progressPercentage": 63,
+              "href": "/donate/winter-appeal",
+              "paymentOptions": {
+                "oneOff": true,
+                "recurringCard": true,
+                "directDebit": false
+              }
+            },
+            {
+              "id": "55555555-5555-5555-5555-555555555552",
+              "title": "Food Bank Fund",
+              "slug": "food-bank-fund",
+              "description": "Keeps the shelves stocked between donation drives. Ten pounds fills a family parcel.",
+              "imageUrl": "p60fixture:cause/foodbank",
+              "targetAmount": 15000,
+              "raisedAmount": 9800,
+              "progressPercentage": 65,
+              "href": "/donate/food-bank-fund",
+              "paymentOptions": {
+                "oneOff": true,
+                "recurringCard": true,
+                "directDebit": true
+              }
+            },
+            {
+              "id": "55555555-5555-5555-5555-555555555553",
+              "title": "Youth Club Futures",
+              "slug": "youth-club-futures",
+              "description": "Coaching, kit and trips for the seventy young people who come through our doors each week.",
+              "imageUrl": "p60fixture:cause/youth",
+              "targetAmount": 8000,
+              "raisedAmount": 2150,
+              "progressPercentage": 27,
+              "href": "/donate/youth-club-futures",
+              "paymentOptions": {
+                "oneOff": true,
+                "recurringCard": false,
+                "directDebit": false
+              }
+            }
+          ],
+          "pagination": null
+        },
+        "courses": {
+          "label": "Courses",
+          "href": "/courses",
+          "items": [
+            {
+              "id": "33333333-3333-3333-3333-333333333333",
+              "title": "Junior Athletics",
+              "description": "Weekly athletics for children aged 7 to 12, coached by qualified volunteers at the King's Park track.",
+              "imageUrl": "p60fixture:course/athletics",
+              "venue": "King's Park track",
+              "audience": "CHILD",
+              "priceFrom": 15,
+              "currency": "GBP",
+              "soldOut": false,
+              "href": "/courses"
+            }
+          ],
+          "pagination": null
+        },
+        "documents": {
+          "label": "Documents",
+          "href": null,
+          "items": [
+            {
+              "id": "88888888-8888-8888-8888-888888888881",
+              "title": "Annual report 2029.pdf",
+              "folder": "Reports",
+              "url": "/fixture/annual-report-2029.pdf",
+              "contentType": "application/pdf",
+              "bytes": 1245760,
+              "publishedAt": "2030-02-01T10:00:00Z"
+            },
+            {
+              "id": "88888888-8888-8888-8888-888888888882",
+              "title": "Safeguarding policy.pdf",
+              "folder": "Policies",
+              "url": "/fixture/safeguarding-policy.pdf",
+              "contentType": "application/pdf",
+              "bytes": 384000,
+              "publishedAt": "2029-11-12T10:00:00Z"
+            },
+            {
+              "id": "88888888-8888-8888-8888-888888888883",
+              "title": "Volunteer handbook.pdf",
+              "folder": "Volunteering",
+              "url": "/fixture/volunteer-handbook.pdf",
+              "contentType": "application/pdf",
+              "bytes": 942080,
+              "publishedAt": "2030-01-20T10:00:00Z"
+            },
+            {
+              "id": "88888888-8888-8888-8888-888888888884",
+              "title": "Hall hire form.pdf",
+              "folder": "Forms",
+              "url": "/fixture/hall-hire-form.pdf",
+              "contentType": "application/pdf",
+              "bytes": 128000,
+              "publishedAt": "2029-09-02T10:00:00Z"
+            }
+          ],
+          "pagination": null
+        },
+        "schedules": [
+          {
+            "type": "worship",
+            "content": {
+              "times": [
+                {
+                  "name": "Fajr",
+                  "begins": "03:20",
+                  "congregation": "04:00"
+                },
+                {
+                  "name": "Zuhr",
+                  "begins": "13:11",
+                  "congregation": "13:30"
+                },
+                {
+                  "name": "Asr",
+                  "begins": "18:30",
+                  "congregation": "19:00"
+                },
+                {
+                  "name": "Maghrib",
+                  "begins": "21:04",
+                  "congregation": "21:04"
+                },
+                {
+                  "name": "Isha",
+                  "begins": "22:12",
+                  "congregation": "22:30"
+                }
+              ],
+              "beginsLabel": "Begins",
+              "congregationLabel": "Jama'at",
+              "note": "Jum'a 13:15 & 14:15",
+              "href": "/services?service=prayer-times",
+              "today": "24 July 2026",
+              "todayAlt": "11 Safar 1448",
+              "next": {
+                "name": "Asr",
+                "begins": "18:30",
+                "congregation": "19:00",
+                "target": "2030-07-24T19:00:00+01:00"
+              },
+              "jumah": [
+                {
+                  "name": "Jum'a 1",
+                  "begins": null,
+                  "congregation": "13:15"
+                },
+                {
+                  "name": "Jum'a 2",
+                  "begins": null,
+                  "congregation": "14:15"
+                }
+              ],
+              "hijri": {
+                "display": "11 Safar 1448"
+              },
+              "observances": [
+                {
+                  "name": "Community iftar",
+                  "date": "2 March 2030",
+                  "href": "/events"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "actions": {
+        "header": {
+          "kind": "volunteer",
+          "label": "Volunteer",
+          "href": "/volunteer"
+        },
+        "hero": {
+          "kind": "donate",
+          "label": "Donate",
+          "href": "/donate"
+        },
+        "widget": "donate"
+      },
+      "page": {
+        "key": "home",
+        "path": "/",
+        "sections": []
+      }
+    },
+    "layout": {
+      "brand": {
+        "name": "The Lantern Trust",
+        "tagline": "Neighbours, looked after.",
+        "logoUrl": null,
+        "logoType": "full",
+        "footerLogoUrl": null
+      },
+      "nav": {
+        "header": [
+          {
+            "label": "Home",
+            "href": "/",
+            "kind": "link"
+          },
+          {
+            "label": "About us",
+            "href": "/about",
+            "kind": "link"
+          },
+          {
+            "label": "Events",
+            "href": "/events",
+            "kind": "link"
+          },
+          {
+            "label": "Services",
+            "href": "/services",
+            "children": [
+              {
+                "label": "Food bank",
+                "href": "/services?service=food-bank",
+                "group": "Support",
+                "description": "Emergency food parcels and practical advice.",
+                "kind": "link"
+              },
+              {
+                "label": "Community",
+                "href": null,
+                "group": "Get involved",
+                "children": [
+                  {
+                    "label": "Youth club",
+                    "href": "/services?service=youth-club",
+                    "kind": "link"
+                  }
+                ],
+                "kind": "group"
+              }
+            ],
+            "kind": "link",
+            "megaMenu": {
+              "promo": {
+                "title": "Visit this week",
+                "text": "Find a programme and meet the team.",
+                "href": "/services",
+                "label": "Explore services"
+              }
+            }
+          }
+        ],
+        "footer": [
+          {
+            "label": "About us",
+            "href": "/about",
+            "kind": "link"
+          },
+          {
+            "label": "Contact",
+            "href": "https://example.org/contact",
+            "external": true,
+            "kind": "link"
+          },
+          {
+            "label": "Our work",
+            "href": null,
+            "children": [
+              {
+                "label": "Food bank",
+                "href": "/services?service=food-bank",
+                "kind": "link"
+              }
+            ],
+            "kind": "group"
+          }
+        ]
+      },
+      "socials": [
+        {
+          "platform": "facebook",
+          "url": "https://facebook.com/lanterntrust",
+          "iconSvg": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/></svg>"
+        },
+        {
+          "platform": "instagram",
+          "url": "https://instagram.com/lanterntrust",
+          "iconSvg": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"5\"/></svg>"
+        },
+        {
+          "platform": "youtube",
+          "url": "https://youtube.com/@lanterntrust",
+          "iconSvg": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><polygon points=\"10,8 16,12 10,16\"/></svg>"
+        }
+      ],
+      "locale": {
+        "code": "en",
+        "direction": "ltr",
+        "languages": [
+          {
+            "code": "en",
+            "label": "English",
+            "direction": "ltr"
+          },
+          {
+            "code": "cy",
+            "label": "Cymraeg",
+            "direction": "ltr"
+          },
+          {
+            "code": "ar",
+            "label": "العربية",
+            "direction": "rtl"
+          }
+        ]
+      },
+      "worship": {
+        "times": [
+          {
+            "name": "Fajr",
+            "begins": "03:20",
+            "congregation": "04:00"
+          },
+          {
+            "name": "Zuhr",
+            "begins": "13:11",
+            "congregation": "13:30"
+          },
+          {
+            "name": "Asr",
+            "begins": "18:30",
+            "congregation": "19:00"
+          },
+          {
+            "name": "Maghrib",
+            "begins": "21:04",
+            "congregation": "21:04"
+          },
+          {
+            "name": "Isha",
+            "begins": "22:12",
+            "congregation": "22:30"
+          }
+        ],
+        "beginsLabel": "Begins",
+        "congregationLabel": "Jama'at",
+        "note": "Jum'a 13:15 & 14:15",
+        "href": "/services?service=prayer-times",
+        "today": "24 July 2026",
+        "todayAlt": "11 Safar 1448",
+        "next": {
+          "name": "Asr",
+          "begins": "18:30",
+          "congregation": "19:00",
+          "target": "2030-07-24T19:00:00+01:00"
+        },
+        "jumah": [
+          {
+            "name": "Jum'a 1",
+            "begins": null,
+            "congregation": "13:15"
+          },
+          {
+            "name": "Jum'a 2",
+            "begins": null,
+            "congregation": "14:15"
+          }
+        ],
+        "hijri": {
+          "display": "11 Safar 1448"
+        },
+        "observances": [
+          {
+            "name": "Community iftar",
+            "date": "2 March 2030",
+            "href": "/events"
+          }
+        ]
+      }
+    },
+    "sections": {
+      "impactMap": {
+        "impactMap": {
+          "slug": "our-work",
+          "title": "Where the Trust works",
+          "intro": "Every marker is a real place in Alderford.",
+          "viewport": {
+            "centerLat": 53.7995,
+            "centerLng": -1.552,
+            "zoom": 14
+          },
+          "points": [
+            {
+              "latitude": 53.8008,
+              "longitude": -1.5491,
+              "kind": "LOCATION",
+              "title": "Foundry Lane Hub",
+              "summary": "The front door: food bank depot, advice desk and the volunteer office.",
+              "imageUrl": null,
+              "href": null
+            },
+            {
+              "latitude": 53.8014,
+              "longitude": -1.5502,
+              "kind": "CAUSE",
+              "title": "Community Garden",
+              "summary": "Twenty-two raised beds and a seed library, open to every household.",
+              "imageUrl": null,
+              "href": "/donate/food-bank-fund"
+            },
+            {
+              "latitude": 53.7975,
+              "longitude": -1.5562,
+              "kind": "EVENT",
+              "title": "Warm Space Wednesdays",
+              "summary": "St Chad's Hall, open and heated all winter.",
+              "imageUrl": null,
+              "href": "/events?event=66666666-6666-6666-6666-666666666666"
+            },
+            {
+              "latitude": 53.7969,
+              "longitude": -1.5474,
+              "kind": "CAMPAIGN",
+              "title": "Keep the 27 Bus",
+              "summary": "The only bus serving the Fenwick estate is set to be cut.",
+              "imageUrl": null,
+              "href": "/campaigns/keep-the-27-bus"
+            }
+          ]
+        }
+      }
+    },
+    "pages": {
+      "article": {
+        "article": {
+          "id": "88888888-8888-8888-8888-888888888888",
+          "title": "The Community Garden Opens Its Gates",
+          "slug": "community-garden-opens",
+          "excerpt": "Two years of digging, fundraising and Saturday mornings in the rain: the Foundry Lane garden is finally open to everyone.",
+          "imageUrl": "p60fixture:article/garden",
+          "authorName": "Amina Khan",
+          "authorRole": "Community Editor",
+          "categories": [
+            "News"
+          ],
+          "publishedAt": "2030-04-12T09:00:00Z",
+          "readingMinutes": 5,
+          "viewCount": 412,
+          "likeCount": 38,
+          "commentCount": 9,
+          "href": "/articles/community-garden-opens",
+          "updatedAt": "2030-04-12T10:00:00Z",
+          "bodyHtml": "<h2>A shared place to grow</h2><p>The gates opened at ten. By half past, every raised bed had a family around it, the tool shed had a queue, and somebody had already claimed the sunny corner by the wall for tomatoes.</p><p>The Foundry Lane garden has been two years in the making. It began as a patch of rubble behind the old ironworks, offered to us on a peppercorn lease after the Winter Fair of 2028, and it has been built almost entirely by volunteer weekends since: twenty-two raised beds, a wheelchair-accessible path, a rainwater store, and a greenhouse pieced together from three donated ones.</p><blockquote><p>I have lived on this street forty years and never once stood on this ground. Now my grandchildren grow beans here.</p></blockquote><h2>What happens next</h2><div class=\"p60-cols p60-cols-2\"><div class=\"p60-col\"><h3>This season</h3><p>The beds are allocated, but the garden is not finished, and it is not meant to be. The growers' committee has three priorities:</p><ul><li>A covered seating area, so the garden works in the rain it will certainly get</li><li>Weekly sessions with the youth club, growing the salads the kitchen crew cook with</li><li>A seed library in the old gatehouse, free to any Alderford household</li></ul></div><div class=\"p60-col p60-col-boxed\"><h3>Open every day</h3><p>The gate is unlocked from eight until dusk. Tools live in the shed by the greenhouse, and the kettle is always on in the gatehouse on a Saturday morning.</p></div></div><p>If you can lay a slab, mend a frame or simply keep a kettle going, the volunteer team would love to hear from you. And if you just want somewhere green to sit, the gate is open every day until dusk.</p><h3>Thank you</h3><p>To the eighty-one people who gave to the garden appeal, the six local firms who lent tools and time, and the council officers who said yes when it mattered: this one is yours as much as ours.</p>",
+          "allowComments": true
+        }
+      },
+      "course": {
+        "course": {
+          "id": "33333333-3333-3333-3333-333333333333",
+          "title": "Junior Athletics",
+          "description": "Weekly athletics for children aged 7 to 12, coached by qualified volunteers at the King's Park track.",
+          "aboutHtml": "<h2>What we do</h2><p>Track and field fundamentals in a friendly, coached setting: warm-ups, drills, and a different discipline every week.</p><ul><li>Sprints, relays and middle distance</li><li>Long jump, high jump and throws</li><li>A club mini-meet at the end of every term</li></ul><h2>What to bring</h2><p>Trainers, a water bottle and a waterproof. Everything else, including spikes for the older group, is provided.</p>",
+          "imageUrl": "p60fixture:course/athletics",
+          "venue": "King's Park track",
+          "audience": "CHILD",
+          "billingMode": "ROLLING",
+          "termStart": null,
+          "termEnd": null,
+          "currency": "GBP",
+          "priceFrom": 15,
+          "soldOut": false,
+          "backHref": "/courses"
+        }
+      },
+      "services": {
+        "collection": {
+          "label": "Services",
+          "href": "/services",
+          "items": [
+            {
+              "id": "66666666-6666-6666-6666-666666666661",
+              "title": "Food Bank",
+              "slug": "food-bank",
+              "summary": "Emergency parcels, no referral needed, from the Foundry Lane depot every weekday morning.",
+              "imageUrl": "p60fixture:service/foodbank",
+              "href": "/services?service=food-bank"
+            },
+            {
+              "id": "66666666-6666-6666-6666-666666666662",
+              "title": "Youth Club",
+              "slug": "youth-club",
+              "summary": "Sports, cooking and somewhere to be for ages 10 to 16, four evenings a week.",
+              "imageUrl": "p60fixture:service/youthclub",
+              "href": "/services?service=youth-club"
+            },
+            {
+              "id": "66666666-6666-6666-6666-666666666663",
+              "title": "Money Advice",
+              "slug": "money-advice",
+              "summary": "Free, confidential help with debt, benefits and the letters that keep you up at night.",
+              "imageUrl": "p60fixture:service/advice",
+              "href": "/services?service=money-advice"
+            },
+            {
+              "id": "66666666-6666-6666-6666-666666666664",
+              "title": "Community Garden",
+              "slug": "community-garden",
+              "summary": "Twenty-two raised beds, a greenhouse and a seed library, open to every Alderford household.",
+              "imageUrl": "p60fixture:service/garden",
+              "href": "/services?service=community-garden"
+            },
+            {
+              "id": "66666666-6666-6666-6666-666666666665",
+              "title": "Warm Spaces",
+              "slug": "warm-spaces",
+              "summary": "Our hall, open and heated through winter, with tea, wifi and company.",
+              "imageUrl": "p60fixture:service/warmspace",
+              "href": "/services?service=warm-spaces"
+            }
+          ],
+          "pagination": {
+            "page": 0,
+            "size": 2,
+            "totalElements": 3,
+            "totalPages": 2,
+            "nextHref": "/services?page=1",
+            "previousHref": null
+          }
+        }
+      },
+      "events": {
+        "collection": {
+          "label": "Events",
+          "href": "/events",
+          "items": [
+            {
+              "id": "22222222-2222-2222-2222-222222222222",
+              "name": "The Lantern Gala",
+              "description": "Our biggest night of the year: supper, music from the Alderford Community Choir, and the annual lantern walk along the river to close.",
+              "registrationMode": "TICKETED",
+              "startsAt": "2030-09-20T19:00:00Z",
+              "endsAt": null,
+              "venueName": "The Maltings, Alderford",
+              "online": false,
+              "imageUrl": "p60fixture:event/gala",
+              "onSale": true,
+              "soldOut": false,
+              "priceFrom": 25,
+              "currency": "GBP",
+              "detailHref": "/events?event=22222222-2222-2222-2222-222222222222"
+            },
+            {
+              "id": "44444444-4444-4444-4444-444444444444",
+              "name": "Riverside Harvest Supper",
+              "description": "A long-table supper on the Aldern meadow, cooked by our kitchen volunteers with produce from the community garden.",
+              "registrationMode": "TICKETED",
+              "startsAt": "2030-10-04T18:30:00Z",
+              "endsAt": "2030-10-04T22:00:00Z",
+              "venueName": "Aldern Meadow",
+              "online": false,
+              "imageUrl": "p60fixture:event/harvest",
+              "onSale": true,
+              "soldOut": false,
+              "priceFrom": 12.5,
+              "currency": "GBP",
+              "detailHref": "/events?event=44444444-4444-4444-4444-444444444444"
+            },
+            {
+              "id": "55555555-5555-5555-5555-555555555555",
+              "name": "Volunteer Welcome Evening",
+              "description": "Meet the team, hear where help is needed most this season, and find a role that fits the time you have.",
+              "registrationMode": "RSVP",
+              "startsAt": "2030-09-03T18:00:00Z",
+              "endsAt": "2030-09-03T19:30:00Z",
+              "venueName": "Foundry Lane Hub",
+              "online": false,
+              "imageUrl": "p60fixture:event/welcome",
+              "onSale": true,
+              "soldOut": false,
+              "priceFrom": null,
+              "currency": null,
+              "detailHref": "/events?event=55555555-5555-5555-5555-555555555555"
+            },
+            {
+              "id": "66666666-6666-6666-6666-666666666666",
+              "name": "Warm Space Wednesdays",
+              "description": "Our hall is open, warm and stocked with tea every Wednesday through the cold months. No booking, no questions, everyone welcome.",
+              "registrationMode": "INFO",
+              "startsAt": "2030-11-06T10:00:00Z",
+              "endsAt": "2030-11-06T15:00:00Z",
+              "venueName": "St Chad's Hall",
+              "online": false,
+              "imageUrl": null,
+              "onSale": true,
+              "soldOut": false,
+              "priceFrom": null,
+              "currency": null,
+              "detailHref": "/events?event=66666666-6666-6666-6666-666666666666"
+            },
+            {
+              "id": "77777777-7777-7777-7777-777777777777",
+              "name": "Money Advice Drop-in",
+              "description": "A quiet hour with our trained advisers. Bring letters you are worried about; we will work through them together.",
+              "registrationMode": "INFO",
+              "startsAt": "2030-09-12T10:00:00Z",
+              "endsAt": "2030-09-12T12:00:00Z",
+              "venueName": null,
+              "online": true,
+              "imageUrl": null,
+              "onSale": true,
+              "soldOut": false,
+              "priceFrom": null,
+              "currency": null,
+              "detailHref": "/events?event=77777777-7777-7777-7777-777777777777"
+            },
+            {
+              "id": "88888888-8888-8888-8888-888888888888",
+              "name": "Winter Fair",
+              "description": "Stalls, carols and the grand raffle in aid of the Winter Appeal. Free entry; every stall staffed by volunteers.",
+              "registrationMode": "TICKETED",
+              "startsAt": "2030-12-07T11:00:00Z",
+              "endsAt": "2030-12-07T16:00:00Z",
+              "venueName": "Alderford Market Square",
+              "online": false,
+              "imageUrl": "p60fixture:event/winterfair",
+              "onSale": true,
+              "soldOut": true,
+              "priceFrom": 0,
+              "currency": "GBP",
+              "detailHref": "/events?event=88888888-8888-8888-8888-888888888888"
+            }
+          ],
+          "pagination": {
+            "page": 0,
+            "size": 2,
+            "totalElements": 3,
+            "totalPages": 2,
+            "nextHref": "/events?page=1",
+            "previousHref": null
+          }
+        }
+      },
+      "articles": {
+        "collection": {
+          "label": "Articles",
+          "href": "/articles/all",
+          "items": [
+            {
+              "id": "88888888-8888-8888-8888-888888888888",
+              "title": "The Community Garden Opens Its Gates",
+              "slug": "community-garden-opens",
+              "excerpt": "Two years of digging, fundraising and Saturday mornings in the rain: the Foundry Lane garden is finally open to everyone.",
+              "imageUrl": "p60fixture:article/garden",
+              "authorName": "Amina Khan",
+              "authorRole": "Community Editor",
+              "categories": [
+                "News"
+              ],
+              "publishedAt": "2030-04-12T09:00:00Z",
+              "readingMinutes": 5,
+              "href": "/articles/community-garden-opens"
+            },
+            {
+              "id": "99999999-9999-9999-9999-999999999999",
+              "title": "What a Food Parcel Actually Holds",
+              "slug": "what-a-food-parcel-holds",
+              "excerpt": "People imagine tins and pasta. The real list is longer, more personal, and put together with more care than you might think.",
+              "imageUrl": "p60fixture:article/parcel",
+              "authorName": "Derek Osei",
+              "authorRole": "Food Bank Lead",
+              "categories": [
+                "Stories"
+              ],
+              "publishedAt": "2030-03-28T09:00:00Z",
+              "readingMinutes": 6,
+              "href": "/articles/what-a-food-parcel-holds"
+            },
+            {
+              "id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+              "title": "Meet the Wednesday Kitchen Crew",
+              "slug": "wednesday-kitchen-crew",
+              "excerpt": "Eleven volunteers, one borrowed oven, and a hundred and forty hot meals a week. The kitchen crew tell it in their own words.",
+              "imageUrl": "p60fixture:people/kitchen",
+              "authorName": "Amina Khan",
+              "authorRole": "Community Editor",
+              "categories": [
+                "Stories"
+              ],
+              "publishedAt": "2030-03-02T09:00:00Z",
+              "readingMinutes": 7,
+              "href": "/articles/wednesday-kitchen-crew"
+            },
+            {
+              "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+              "title": "Winter Appeal: Where Your Money Went",
+              "slug": "winter-appeal-report",
+              "excerpt": "You gave 18,400 pounds in eight weeks. Here is the line-by-line account of what it paid for, and what we learned.",
+              "imageUrl": "p60fixture:campaign/winterreport",
+              "authorName": "Priya Sharma",
+              "authorRole": "Trustee",
+              "categories": [
+                "News"
+              ],
+              "publishedAt": "2030-02-14T09:00:00Z",
+              "readingMinutes": 8,
+              "href": "/articles/winter-appeal-report"
+            },
+            {
+              "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+              "title": "Five Things Our Money Advisers Wish You Knew",
+              "slug": "money-advice-five-things",
+              "excerpt": "The advice team see the same worries again and again. Most of them have a fix that takes less than an hour.",
+              "imageUrl": null,
+              "authorName": "Tom Bradley",
+              "authorRole": "Advice Service",
+              "categories": [
+                "Guides"
+              ],
+              "publishedAt": "2030-01-30T09:00:00Z",
+              "readingMinutes": 4,
+              "href": "/articles/money-advice-five-things"
+            },
+            {
+              "id": "dddddddd-dddd-dddd-dddd-dddddddddddd",
+              "title": "A Year of Warm Spaces, in Numbers",
+              "slug": "warm-spaces-in-numbers",
+              "excerpt": "Fourteen hundred visits, ninety regulars, and one chess league nobody planned. What happens when you just open the door.",
+              "imageUrl": "p60fixture:service/warmspace",
+              "authorName": "Amina Khan",
+              "authorRole": "Community Editor",
+              "categories": [
+                "News"
+              ],
+              "publishedAt": "2030-01-08T09:00:00Z",
+              "readingMinutes": 5,
+              "href": "/articles/warm-spaces-in-numbers"
+            }
+          ],
+          "pagination": {
+            "page": 0,
+            "size": 2,
+            "totalElements": 3,
+            "totalPages": 2,
+            "nextHref": "/articles/all?page=1",
+            "previousHref": null
+          }
+        }
+      },
+      "campaigns": {
+        "collection": {
+          "label": "Campaigns",
+          "href": "/campaigns",
+          "items": [
+            {
+              "id": "99999999-9999-9999-9999-999999999991",
+              "title": "Keep the 27 Bus",
+              "slug": "keep-the-27-bus",
+              "href": "/campaigns/keep-the-27-bus",
+              "summary": "The only bus serving the Fenwick estate is set to be cut. Add your name before the consultation closes.",
+              "imageUrl": "p60fixture:campaign/bus"
+            },
+            {
+              "id": "99999999-9999-9999-9999-999999999992",
+              "title": "A Defibrillator on Every Street",
+              "slug": "defibrillator-every-street",
+              "href": "/campaigns/defibrillator-every-street",
+              "summary": "We are raising for twelve more public defibrillators and training two hundred neighbours to use them.",
+              "imageUrl": "p60fixture:campaign/defib"
+            },
+            {
+              "id": "99999999-9999-9999-9999-999999999993",
+              "title": "Alderford Housing Survey",
+              "slug": "housing-survey",
+              "href": "/campaigns/housing-survey",
+              "summary": null,
+              "imageUrl": null
+            }
+          ],
+          "pagination": {
+            "page": 0,
+            "size": 2,
+            "totalElements": 3,
+            "totalPages": 2,
+            "nextHref": "/campaigns?page=1",
+            "previousHref": null
+          }
+        }
+      },
+      "causes": {
+        "collection": {
+          "label": "Causes",
+          "href": "/donate",
+          "items": [
+            {
+              "id": "55555555-5555-5555-5555-555555555550",
+              "title": "Flood Response Appeal",
+              "slug": "flood-response",
+              "description": "The Aldern broke its banks on Sunday. Thirty households need dry bedding, dehumidifiers and somewhere warm now.",
+              "imageUrl": "p60fixture:cause/flood",
+              "targetAmount": 50000,
+              "raisedAmount": 18750,
+              "progressPercentage": 38,
+              "href": "/donate/flood-response",
+              "paymentOptions": {
+                "oneOff": true,
+                "recurringCard": true,
+                "directDebit": true
+              }
+            },
+            {
+              "id": "55555555-5555-5555-5555-555555555551",
+              "title": "Winter Appeal",
+              "slug": "winter-appeal",
+              "description": "Heating top-ups, warm bedding and a hot meal for the households the cold hits hardest.",
+              "imageUrl": "p60fixture:cause/winter",
+              "targetAmount": 20000,
+              "raisedAmount": 12500,
+              "progressPercentage": 63,
+              "href": "/donate/winter-appeal",
+              "paymentOptions": {
+                "oneOff": true,
+                "recurringCard": true,
+                "directDebit": false
+              }
+            },
+            {
+              "id": "55555555-5555-5555-5555-555555555552",
+              "title": "Food Bank Fund",
+              "slug": "food-bank-fund",
+              "description": "Keeps the shelves stocked between donation drives. Ten pounds fills a family parcel.",
+              "imageUrl": "p60fixture:cause/foodbank",
+              "targetAmount": 15000,
+              "raisedAmount": 9800,
+              "progressPercentage": 65,
+              "href": "/donate/food-bank-fund",
+              "paymentOptions": {
+                "oneOff": true,
+                "recurringCard": true,
+                "directDebit": true
+              }
+            },
+            {
+              "id": "55555555-5555-5555-5555-555555555553",
+              "title": "Youth Club Futures",
+              "slug": "youth-club-futures",
+              "description": "Coaching, kit and trips for the seventy young people who come through our doors each week.",
+              "imageUrl": "p60fixture:cause/youth",
+              "targetAmount": 8000,
+              "raisedAmount": 2150,
+              "progressPercentage": 27,
+              "href": "/donate/youth-club-futures",
+              "paymentOptions": {
+                "oneOff": true,
+                "recurringCard": false,
+                "directDebit": false
+              }
+            }
+          ],
+          "pagination": {
+            "page": 0,
+            "size": 2,
+            "totalElements": 3,
+            "totalPages": 2,
+            "nextHref": "/donate?page=1",
+            "previousHref": null
+          }
+        }
+      },
+      "courses": {
+        "collection": {
+          "label": "Courses",
+          "href": "/courses",
+          "items": [
+            {
+              "id": "33333333-3333-3333-3333-333333333333",
+              "title": "Junior Athletics",
+              "description": "Weekly athletics for children aged 7 to 12, coached by qualified volunteers at the King's Park track.",
+              "imageUrl": "p60fixture:course/athletics",
+              "venue": "King's Park track",
+              "audience": "CHILD",
+              "priceFrom": 15,
+              "currency": "GBP",
+              "soldOut": false,
+              "href": "/courses"
+            }
+          ],
+          "pagination": {
+            "page": 0,
+            "size": 2,
+            "totalElements": 3,
+            "totalPages": 2,
+            "nextHref": "/courses?page=1",
+            "previousHref": null
+          }
+        }
+      },
+      "documents": {
+        "collection": {
+          "label": "Documents",
+          "href": null,
+          "items": [
+            {
+              "id": "88888888-8888-8888-8888-888888888881",
+              "title": "Annual report 2029.pdf",
+              "folder": "Reports",
+              "url": "/fixture/annual-report-2029.pdf",
+              "contentType": "application/pdf",
+              "bytes": 1245760,
+              "publishedAt": "2030-02-01T10:00:00Z"
+            },
+            {
+              "id": "88888888-8888-8888-8888-888888888882",
+              "title": "Safeguarding policy.pdf",
+              "folder": "Policies",
+              "url": "/fixture/safeguarding-policy.pdf",
+              "contentType": "application/pdf",
+              "bytes": 384000,
+              "publishedAt": "2029-11-12T10:00:00Z"
+            },
+            {
+              "id": "88888888-8888-8888-8888-888888888883",
+              "title": "Volunteer handbook.pdf",
+              "folder": "Volunteering",
+              "url": "/fixture/volunteer-handbook.pdf",
+              "contentType": "application/pdf",
+              "bytes": 942080,
+              "publishedAt": "2030-01-20T10:00:00Z"
+            },
+            {
+              "id": "88888888-8888-8888-8888-888888888884",
+              "title": "Hall hire form.pdf",
+              "folder": "Forms",
+              "url": "/fixture/hall-hire-form.pdf",
+              "contentType": "application/pdf",
+              "bytes": 128000,
+              "publishedAt": "2029-09-02T10:00:00Z"
+            }
+          ],
+          "pagination": {
+            "page": 0,
+            "size": 2,
+            "totalElements": 3,
+            "totalPages": 2,
+            "nextHref": "/?page=1",
+            "previousHref": null
+          }
+        }
+      }
+    }
+  }
+}

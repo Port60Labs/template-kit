@@ -33,6 +33,7 @@ newer contract asks of you.
 | `dev [dir]` | Live preview over the contract's sample fixtures; validation re-runs on save. |
 | `validate [dir] [--json]` | The exact checks the platform runs at upload. `--json` emits `{ok, errors, warnings, provenSupports}`. |
 | `package [dir]` | Validate, then build the contract-shaped zip the studio accepts as-is. |
+| `release [dir]` | Build separate runtime and independent designer-preview folders for a trusted store release. Does not upload. |
 | `model [--json]` | The content model, in hand; `--json` for agents. |
 | `content [dir]` | Eject the model's data as your editable copy; render it with `dev --content`. |
 | `upgrade [dir]` | Latest kit + contract for an existing template; re-briefs and re-validates. |
@@ -48,9 +49,27 @@ See the [AI quickstart](https://developers.port60.com/guides/ai-quickstart/).
 
 ## The contract
 
-The vendored contract in `src/vendor/contract` is the **Charity Platform contract v1**, the
-platform's first product surface. The dialect, validation rules and this toolchain are
-platform-wide; future Port60 products ship their own contract packs for the same kit.
+Kit 1.0.0 authors **port60-liquid@2**, content model **2.0**, using the contract under
+`src/vendor/contract/v2`. Collection envelopes, independent header/footer navigation,
+resolved actions and page-scoped sections are explicit. V1 sources need a deliberate migration,
+not a manifest-only relabel. Historical v1 contracts remain frozen for existing platform pins.
+
+## Designer previews
+
+The scaffold creates `preview/config.json` and `preview/media/`. Optional `content` points to
+fictional v2 sample JSON relative to `preview/`; omission uses contract fixtures. `focus` is
+`none`, `donate` or `volunteer`. Use approved local JPEG, PNG or WebP images via
+`p60preview:filename.jpg` and retain provenance with the source. Never use selecting-tenant data.
+
+`npm run release` writes `dist/release/NAME/VERSION/`: lightweight `template/` files, separate
+`preview/` HTML/media/metadata, and a `release.json` completion record. Every Look is generated
+from actual Liquid/CSS with matching palettes. Existing output is refused. Limits are 24 Looks,
+2 MiB per image/page and 24 MiB per release. Demo forms, navigation and transactions are inactive.
+
+The first-party publisher uploads completion last. The catalogue supplies matching preview
+metadata to tenant-admin; charity-site reads only runtime files. Previews are not bundled into
+admin and do not become tenant content. Preview-only changes also need a new template version.
+The Studio ZIP `package`/`publish` path remains separate and runtime-only.
 
 Full documentation: [developers.port60.com](https://developers.port60.com)
 

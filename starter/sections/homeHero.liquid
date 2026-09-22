@@ -2,7 +2,7 @@
   The home opener, and the REFERENCE IMPLEMENTATION of supports.heroImagery. Rules worth
   copying:
 
-  1. EVERY field is optional. Copy derives from brand (| default) or omits; no photos means the
+  1. EVERY field is optional. The host resolves inherited copy; explicit blanks omit; no photos means the
      designed gradient below, never a placeholder image.
   2. Photos are NEVER placed raw. The treatments in theme.css lay scrims built from the palette
      variables (color-mix over var(--bg)/var(--bg-tint)), so any uploaded photograph is toned
@@ -14,6 +14,10 @@
      toward the photo's own shape (height-clamped) so a wide landscape stays entirely visible,
      with your copy stacked after the band.
 {% endcomment %}
+{% assign heroButtonLabel = site.actions.hero.label %}
+{% assign heroButtonHref = site.actions.hero.href %}
+{% if section.primaryLabel != nil %}{% assign heroButtonLabel = section.primaryLabel %}{% endif %}
+{% if section.primaryHref != nil %}{% assign heroButtonHref = section.primaryHref %}{% endif %}
 {% assign heroCount = section.images | size %}
 {% if heroCount == 1 %}
   {% assign heroPhoto = section.images.first.imageUrl %}
@@ -31,19 +35,19 @@
 {% endif %}
 {% assign heroFraming = section.photoFraming | default: 'fill' %}
 {% if heroCount > 0 and heroFraming == 'whole' %}
-{% if section.actionStyle == 'button' or section.givingStyle == 'button' %}
+{% if section.actionStyle == 'button' %}
 <section class="lq-homehero lq-homehero--vista{% if heroCount > 1 %} lq-homehero--carousel{% endif %}">
   <div class="lq-vista">
     <img class="lq-vista-sizer" src="{{ section.images.first.imageUrl }}" alt="{{ section.images.first.alt }}" style="object-position: {{ heroFocus }}" fetchpriority="high" decoding="async">
     {% if heroCount > 1 %}{% island 'hero_carousel' %}{% else %}<div class="lq-vista-scrim" aria-hidden="true"></div>{% endif %}
     <div class="lq-vista-copy">
       <div class="container">
-        <p class="lq-kicker" data-p60-field="eyebrow">{{ section.eyebrow | default: site.brand.name }}</p>
-        <h1 data-p60-field="title">{{ section.title | default: site.brand.tagline | default: site.brand.name }}</h1>
+        {% if section.eyebrow != nil and section.eyebrow != '' %}<p class="lq-kicker" data-p60-field="eyebrow">{{ section.eyebrow }}</p>{% endif %}
+        {% if section.title != nil and section.title != '' %}<h1 data-p60-field="title">{{ section.title }}</h1>{% endif %}
         {% if section.lead %}<p class="lq-homehero-lead" data-p60-field="lead">{{ section.lead }}</p>{% endif %}
         <div class="lq-homehero-actions">
-          <a class="button button-primary" href="{{ section.primaryHref | default: '/donate' }}">{{ section.primaryLabel | default: 'Donate now' }}</a>
-          <a class="button" href="{{ section.secondaryHref | default: '/about' }}">{{ section.secondaryLabel | default: 'Our story' }}</a>
+        {% if heroButtonLabel != nil and heroButtonLabel != '' and heroButtonHref != nil and heroButtonHref != '' %}<a class="button button-primary" href="{{ heroButtonHref }}">{% if section.primaryLabel != nil %}<span data-p60-field="primaryLabel">{{ section.primaryLabel }}</span>{% else %}{{ heroButtonLabel }}{% endif %}</a>{% endif %}
+        {% if section.secondaryLabel != nil and section.secondaryLabel != '' and section.secondaryHref != nil and section.secondaryHref != '' %}<a class="button" href="{{ section.secondaryHref }}"><span data-p60-field="secondaryLabel">{{ section.secondaryLabel }}</span></a>{% endif %}
         </div>
       </div>
     </div>
@@ -59,18 +63,18 @@
   </div>
   <div class="container lq-homehero-inner lq-vista-overlap">
     <div>
-      <p class="lq-kicker" data-p60-field="eyebrow">{{ section.eyebrow | default: site.brand.name }}</p>
-      <h1 data-p60-field="title">{{ section.title | default: site.brand.tagline | default: site.brand.name }}</h1>
+      {% if section.eyebrow != nil and section.eyebrow != '' %}<p class="lq-kicker" data-p60-field="eyebrow">{{ section.eyebrow }}</p>{% endif %}
+      {% if section.title != nil and section.title != '' %}<h1 data-p60-field="title">{{ section.title }}</h1>{% endif %}
       {% if section.lead %}<p class="lq-homehero-lead" data-p60-field="lead">{{ section.lead }}</p>{% endif %}
       <div class="lq-homehero-actions">
-        {% if section.action or section.primaryLabel %}<a class="button button-primary" href="{{ section.primaryHref | default: section.action.href | default: '#donate' }}">{{ section.primaryLabel | default: section.action.label | default: 'Donate now' }}</a>{% endif %}
-        <a class="button" href="{{ section.secondaryHref | default: '/about' }}">{{ section.secondaryLabel | default: 'Our story' }}</a>
+        {% if heroButtonLabel != nil and heroButtonLabel != '' and heroButtonHref != nil and heroButtonHref != '' %}<a class="button button-primary" href="{{ heroButtonHref }}">{% if section.primaryLabel != nil %}<span data-p60-field="primaryLabel">{{ section.primaryLabel }}</span>{% else %}{{ heroButtonLabel }}{% endif %}</a>{% endif %}
+        {% if section.secondaryLabel != nil and section.secondaryLabel != '' and section.secondaryHref != nil and section.secondaryHref != '' %}<a class="button" href="{{ section.secondaryHref }}"><span data-p60-field="secondaryLabel">{{ section.secondaryLabel }}</span></a>{% endif %}
       </div>
     </div>
-    <aside id="donate">
-      {%- comment -%} The site focus decides which widget leads (section.primary); this island becomes it: the donation widget or the volunteer sign-up. {%- endcomment -%}
+    {% if site.actions.widget != nil and site.actions.widget != 'none' %}<aside id="donate">
+      {%- comment -%} site.actions.widget selects the platform widget. The template places it without changing that choice. {%- endcomment -%}
       {% island 'primary_action_widget' %}
-    </aside>
+    </aside>{% endif %}
   </div>
 </section>
 {% endif %}
@@ -94,23 +98,23 @@
   {% endif %}
   <div class="container lq-homehero-inner">
     <div>
-      <p class="lq-kicker" data-p60-field="eyebrow">{{ section.eyebrow | default: site.brand.name }}</p>
-      <h1 data-p60-field="title">{{ section.title | default: site.brand.tagline | default: site.brand.name }}</h1>
+      {% if section.eyebrow != nil and section.eyebrow != '' %}<p class="lq-kicker" data-p60-field="eyebrow">{{ section.eyebrow }}</p>{% endif %}
+      {% if section.title != nil and section.title != '' %}<h1 data-p60-field="title">{{ section.title }}</h1>{% endif %}
       {% if section.lead %}<p class="lq-homehero-lead" data-p60-field="lead">{{ section.lead }}</p>{% endif %}
       <div class="lq-homehero-actions">
-        {% if section.actionStyle == 'button' or section.givingStyle == 'button' %}
-        {% if section.action or section.primaryLabel %}<a class="button button-primary" href="{{ section.primaryHref | default: section.action.href | default: '/donate' }}">{{ section.primaryLabel | default: section.action.label | default: 'Donate now' }}</a>{% endif %}
+        {% if section.actionStyle == 'button' %}
+        {% if heroButtonLabel != nil and heroButtonLabel != '' and heroButtonHref != nil and heroButtonHref != '' %}<a class="button button-primary" href="{{ heroButtonHref }}">{% if section.primaryLabel != nil %}<span data-p60-field="primaryLabel">{{ section.primaryLabel }}</span>{% else %}{{ heroButtonLabel }}{% endif %}</a>{% endif %}
         {% else %}
-        {% if section.action or section.primaryLabel %}<a class="button button-primary" href="{{ section.primaryHref | default: section.action.href | default: '#donate' }}">{{ section.primaryLabel | default: section.action.label | default: 'Donate now' }}</a>{% endif %}
+        {% if heroButtonLabel != nil and heroButtonLabel != '' and heroButtonHref != nil and heroButtonHref != '' %}<a class="button button-primary" href="{{ heroButtonHref }}">{% if section.primaryLabel != nil %}<span data-p60-field="primaryLabel">{{ section.primaryLabel }}</span>{% else %}{{ heroButtonLabel }}{% endif %}</a>{% endif %}
         {% endif %}
-        <a class="button" href="{{ section.secondaryHref | default: '/about' }}">{{ section.secondaryLabel | default: 'Our story' }}</a>
+        {% if section.secondaryLabel != nil and section.secondaryLabel != '' and section.secondaryHref != nil and section.secondaryHref != '' %}<a class="button" href="{{ section.secondaryHref }}"><span data-p60-field="secondaryLabel">{{ section.secondaryLabel }}</span></a>{% endif %}
       </div>
     </div>
-    {% unless section.actionStyle == 'button' or section.givingStyle == 'button' %}
+    {% if section.actionStyle != 'button' and site.actions.widget != nil and site.actions.widget != 'none' %}
     <aside id="donate">
       {% island 'primary_action_widget' %}
     </aside>
-    {% endunless %}
+    {% endif %}
   </div>
 </section>
 {% endif %}

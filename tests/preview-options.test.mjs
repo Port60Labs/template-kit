@@ -17,6 +17,9 @@ test('routing: /about is its own surface, unknown paths are home', () => {
   assert.equal(surfaceFor('/'), 'home');
   assert.equal(surfaceFor('/whatever'), 'home');
   assert.equal(surfaceFor('/events?event=x'), 'event');
+  assert.equal(surfaceFor('/courses'), 'courses');
+  assert.equal(surfaceFor('/courses/?page=2'), 'courses');
+  assert.equal(surfaceFor('/courses?course=x'), 'course');
 });
 
 test('knobs from the query: a Look is a bundle, a single knob wins over it, unknown names are ignored', () => {
@@ -50,10 +53,16 @@ test('content eject carries the menu and the page compositions beside the collec
   execFileSync(process.execPath, [CLI, 'create', dir, '--name', 'eject-theme', '--label', 'Eject'], { encoding: 'utf8' });
   execFileSync(process.execPath, [CLI, 'content', dir], { encoding: 'utf8' });
   const data = JSON.parse(readFileSync(join(dir, 'preview-content.json'), 'utf8'));
-  assert.ok(Array.isArray(data.nav.items) && data.nav.items.length > 0);
+  assert.ok(Array.isArray(data.nav.header) && data.nav.header.length > 0);
+  assert.ok(Array.isArray(data.nav.footer));
+  assert.equal(data.nav.items, undefined);
   assert.ok(Array.isArray(data.pages.home) && data.pages.home.some((s) => s.type === 'homeHero'));
   assert.ok(Array.isArray(data.pages.about) && data.pages.about.some((s) => s.type === 'values'));
-  assert.ok(data.pages.home.every((s) => s.content && typeof s.content === 'object'), 'each section ejects with its copy');
+  assert.ok(data.pages.home.every((s) => s.key && s.content && typeof s.content === 'object'), 'each section ejects with a stable key and its copy');
   assert.equal(data.about, undefined, 'about itself is derived, never ejected');
-  assert.ok(Array.isArray(data.events));
+  assert.ok(Array.isArray(data.events.items));
+  assert.equal(typeof data.events.label, 'string');
+  assert.equal(data.events.pagination, null);
+  assert.equal(data.documents.href, null);
+  assert.equal(data.locations, undefined);
 });

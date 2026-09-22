@@ -19,7 +19,7 @@ export function create(args) {
   const name = (args.name ?? basename(target)).toLowerCase();
   if (!NAME_PATTERN.test(name)) {
     console.error(`✗ '${name}' is not a valid template name (lowercase letters, digits, hyphens, `
-        + '3–50 chars, starting with a letter). Pass --name.');
+        + '3 to 50 chars, starting with a letter). Pass --name.');
     process.exit(1);
   }
   if (existsSync(join(target, 'manifest.json'))) {
@@ -50,7 +50,8 @@ export function create(args) {
       dev: 'p60-template-kit dev .',
       validate: 'p60-template-kit validate .',
       'validate:json': 'p60-template-kit validate . --json',
-      package: 'p60-template-kit package .'
+      package: 'p60-template-kit package .',
+      release: 'p60-template-kit release .'
     },
     devDependencies: {
       '@port60/template-kit': `^${KIT_PACKAGE.version}`
@@ -58,11 +59,16 @@ export function create(args) {
   }, null, 2) + '\n');
   writeFileSync(join(target, 'README.md'), `# ${label}
 
-A Port60 site template. Start with \`npm install\`, then:
+A Port60 site template using \`port60-liquid@2\`, content model \`2.0\` and kit \`1.0.0\`.
+Existing v1 platform pins keep historical support; this kit accepts v2 authoring only.
+Start with \`npm install\`, then:
 
 - \`npm run dev\`, live preview at http://localhost:4400
 - \`npm run validate\`, conformance against the platform contract
 - \`npm run package\`, the uploadable zip in \`dist/\` (recreated on every run)
+- \`npm run release\`, separate runtime and designer-preview folders in \`dist/release/\`
+- \`preview/config.json\` selects author sample content and widget state; put optional
+  author images in \`preview/media/\` and reference them as \`p60preview:filename.jpg\`.
 
 **Working with an AI agent?** Point it at this directory, \`AGENTS.md\` (and \`CLAUDE.md\`)
 brief it on the contract, the rules and the validate loop.

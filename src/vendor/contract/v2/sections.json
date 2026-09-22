@@ -1,0 +1,947 @@
+{
+  "description": "The closed v2 section catalogue. Stable section keys identify instances. Authored copy is distinct from resolved public records. Absent collection titles inherit; explicitly empty titles stay hidden.",
+  "sections": [
+    {
+      "type": "hero",
+      "label": "Hero banner",
+      "pages": [
+        "about"
+      ],
+      "description": "The page opener: a headline with an optional kicker and sanitised rich-text intro.",
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Short kicker above the headline."
+        },
+        {
+          "name": "title",
+          "kind": "text",
+          "required": true,
+          "description": "The headline."
+        },
+        {
+          "name": "bodyHtml",
+          "kind": "richtext",
+          "required": false,
+          "description": "Sanitised HTML intro, render with the raw filter."
+        }
+      ],
+      "minimal": {
+        "title": "Our story"
+      },
+      "sample": {
+        "eyebrow": "About us",
+        "title": "Neighbours, looked after.",
+        "bodyHtml": "<p>The Lantern Trust began in 2011 with a soup pot, a borrowed hall and a belief that nobody in Alderford should face a hard winter alone. Today we run a food bank, a youth club, an advice service and a community garden, powered by more than a hundred volunteers.</p>"
+      }
+    },
+    {
+      "type": "values",
+      "label": "Values / list",
+      "pages": [
+        "about"
+      ],
+      "description": "A set of principles shown as cards or a numbered list, per the template.",
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Short kicker above the heading."
+        },
+        {
+          "name": "heading",
+          "kind": "text",
+          "required": false,
+          "description": "The section heading."
+        },
+        {
+          "name": "items",
+          "kind": "items",
+          "required": true,
+          "description": "The value entries.",
+          "itemFields": [
+            {
+              "name": "title",
+              "kind": "text",
+              "required": true,
+              "description": "The value's name."
+            },
+            {
+              "name": "description",
+              "kind": "text",
+              "required": true,
+              "description": "One sentence describing it."
+            },
+            {
+              "name": "icon",
+              "kind": "icon",
+              "required": false,
+              "description": "Optional emoji/icon."
+            }
+          ]
+        }
+      ],
+      "minimal": {
+        "items": [
+          {
+            "title": "Transparency",
+            "description": "Every pound is tracked and reported."
+          }
+        ]
+      },
+      "sample": {
+        "eyebrow": "What we stand for",
+        "heading": "Our values",
+        "items": [
+          {
+            "title": "Openness",
+            "description": "Every pound is tracked, reported and published in our annual accounts."
+          },
+          {
+            "title": "Dignity",
+            "description": "No referrals, no means tests at the door. If you say you need help, that is enough."
+          },
+          {
+            "title": "Neighbourliness",
+            "description": "We work alongside people, not for them. Most of our volunteers first came to us for help."
+          }
+        ]
+      }
+    },
+    {
+      "type": "cta",
+      "label": "Call to action",
+      "pages": [
+        "home",
+        "about"
+      ],
+      "description": "A closing band: heading, optional line, one button.",
+      "fields": [
+        {
+          "name": "heading",
+          "kind": "text",
+          "required": true,
+          "description": "The band heading."
+        },
+        {
+          "name": "text",
+          "kind": "text",
+          "required": false,
+          "description": "A supporting line."
+        },
+        {
+          "name": "buttonLabel",
+          "kind": "text",
+          "required": true,
+          "description": "The button's label."
+        },
+        {
+          "name": "buttonHref",
+          "kind": "url",
+          "required": true,
+          "description": "The button's destination (scheme-guarded on save). The editor's cause picker writes /donate/{slug} here and records causeId beside it (editor bookkeeping, renderers use buttonHref only and may ignore causeId)."
+        }
+      ],
+      "minimal": {
+        "heading": "Ready to help?",
+        "buttonLabel": "Donate",
+        "buttonHref": "/donate"
+      },
+      "sample": {
+        "heading": "Be somebody's good news today",
+        "text": "A monthly gift keeps the shelves stocked and the hall warm.",
+        "buttonLabel": "Donate now",
+        "buttonHref": "/#donate"
+      }
+    },
+    {
+      "type": "homeHero",
+      "label": "Home hero",
+      "pages": [
+        "home"
+      ],
+      "description": "The home opener. EVERY field optional: eyebrow/title derive from branding when absent, the lead OMITS when absent (never a fabricated placeholder), buttons fall back to platform defaults.",
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "eyebrow: use the resolved authored value. Preserve explicitly empty copy; do not insert editorial defaults in Liquid."
+        },
+        {
+          "name": "title",
+          "kind": "text",
+          "required": false,
+          "description": "title: use the resolved authored value. Preserve explicitly empty copy; do not insert editorial defaults in Liquid."
+        },
+        {
+          "name": "lead",
+          "kind": "text",
+          "required": false,
+          "description": "lead: use the resolved authored value. Preserve explicitly empty copy; do not insert editorial defaults in Liquid."
+        },
+        {
+          "name": "primaryLabel",
+          "kind": "text",
+          "required": false,
+          "description": "primaryLabel: use the resolved authored value. Preserve explicitly empty copy; do not insert editorial defaults in Liquid."
+        },
+        {
+          "name": "primaryHref",
+          "kind": "url",
+          "required": false,
+          "description": "primaryHref: use the resolved authored value. Preserve explicitly empty copy; do not insert editorial defaults in Liquid."
+        },
+        {
+          "name": "secondaryLabel",
+          "kind": "text",
+          "required": false,
+          "description": "secondaryLabel: use the resolved authored value. Preserve explicitly empty copy; do not insert editorial defaults in Liquid."
+        },
+        {
+          "name": "secondaryHref",
+          "kind": "url",
+          "required": false,
+          "description": "secondaryHref: use the resolved authored value. Preserve explicitly empty copy; do not insert editorial defaults in Liquid."
+        },
+        {
+          "name": "imageUrl",
+          "kind": "image",
+          "required": false,
+          "description": "Background photograph for the hero (uploaded through the platform pipeline). Superseded by `images` when that carries any entry, render imageUrl only when images is absent/empty. The template must TREAT the photo (scrim/tint from its own palette variables), never place it raw, and omit for its designed no-photo state."
+        },
+        {
+          "name": "photoFraming",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "fill",
+            "whole"
+          ],
+          "description": "How hero photographs meet the hero. 'fill' (default): the hero keeps its designed shape and photos crop to fill it (use each photo's focus to pick the surviving slice). 'whole': the hero adapts toward the photo's own shape (height-clamped) so the FULL scene stays visible, the vista treatment for wide landscape photographs; templates overlay or stack their copy accordingly."
+        },
+        {
+          "name": "images",
+          "kind": "items",
+          "required": false,
+          "description": "Hero photographs (0-6, uploaded through the platform pipeline). One = a main image; several = rotation material, a template with supports.heroImagery renders at least the first and MAY place the hero_carousel island (or a CSS scroll strip) for the rest. Like every field: absent means the template's designed no-photo state, never a placeholder.",
+          "itemFields": [
+            {
+              "name": "imageUrl",
+              "kind": "image",
+              "required": true,
+              "description": "The photograph."
+            },
+            {
+              "name": "alt",
+              "kind": "text",
+              "required": false,
+              "description": "Accessible description; empty renders as decorative (alt=\"\")."
+            },
+            {
+              "name": "focus",
+              "kind": "select",
+              "required": false,
+              "options": [
+                "centre",
+                "top",
+                "bottom",
+                "left",
+                "right"
+              ],
+              "description": "Which part of the photograph survives the fill-crop (templates render photos cover-style, so an aspect mismatch crops, this picks the slice that stays). Maps to background-position/object-position; absent means centre."
+            }
+          ]
+        },
+        {
+          "name": "actionStyle",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "widget",
+            "button"
+          ],
+          "description": "How the resolved leading action is presented. The platform supplies site.actions; the template never changes which action or widget the organisation chose."
+        }
+      ],
+      "minimal": {},
+      "sample": {
+        "lead": "We turn everyday generosity into food parcels, warm rooms and open doors across Alderford.",
+        "images": [
+          {
+            "imageUrl": "p60fixture:hero/dusk",
+            "alt": "Volunteers serving supper as the light fades"
+          },
+          {
+            "imageUrl": "p60fixture:hero/river",
+            "alt": "The lantern walk along the River Aldern"
+          },
+          {
+            "imageUrl": "p60fixture:hero/garden",
+            "alt": "Raised beds in the Foundry Lane community garden"
+          }
+        ],
+        "actionStyle": "button"
+      }
+    },
+    {
+      "type": "impact",
+      "label": "Impact cards",
+      "pages": [
+        "home"
+      ],
+      "description": "What gifts make possible, optional intro plus icon/title/description cards. Claims must be truthful for the tenant.",
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Short kicker."
+        },
+        {
+          "name": "heading",
+          "kind": "text",
+          "required": false,
+          "description": "The section heading."
+        },
+        {
+          "name": "text",
+          "kind": "text",
+          "required": false,
+          "description": "An intro line."
+        },
+        {
+          "name": "items",
+          "kind": "items",
+          "required": true,
+          "description": "The impact cards.",
+          "itemFields": [
+            {
+              "name": "imageUrl",
+              "kind": "image",
+              "required": false,
+              "description": "Card image (uploaded through the platform pipeline). Preferred over icon."
+            },
+            {
+              "name": "icon",
+              "kind": "icon",
+              "required": false,
+              "description": "Legacy emoji/icon, superseded by imageUrl; render it only when imageUrl is absent."
+            },
+            {
+              "name": "title",
+              "kind": "text",
+              "required": true,
+              "description": "The card title."
+            },
+            {
+              "name": "description",
+              "kind": "text",
+              "required": true,
+              "description": "One sentence describing it."
+            }
+          ]
+        }
+      ],
+      "minimal": {
+        "items": [
+          {
+            "title": "Warm meals",
+            "description": "Hot meals served at a community kitchen."
+          }
+        ]
+      },
+      "sample": {
+        "eyebrow": "Where your gift goes",
+        "heading": "Real help, made of small acts",
+        "items": [
+          {
+            "imageUrl": "p60fixture:impact/parcel",
+            "title": "£10 · A family food parcel",
+            "description": "Three days of meals, toiletries and a bag of fresh produce from the garden."
+          },
+          {
+            "icon": "🔥",
+            "title": "£25 · A warm week",
+            "description": "Heating top-ups for a household choosing between eating and heating."
+          },
+          {
+            "title": "£50 · A month of youth club",
+            "description": "Coaching, kit and hot food for a young person, four evenings a week."
+          }
+        ]
+      }
+    },
+    {
+      "type": "events",
+      "label": "Events",
+      "pages": [
+        "home"
+      ],
+      "kind": "widget",
+      "description": "Published events across registration modes. Render the supplied bounded site.content.events.items with this placement's authored introduction. Optional motion uses declared behaviours; ticket sales and RSVP stay on the platform-owned detail route supplied by each item.",
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Optional authored label above the section title. Empty means hidden."
+        },
+        {
+          "name": "title",
+          "kind": "text",
+          "required": false,
+          "description": "Absent inherits the public collection label. An explicit empty string hides the title. Otherwise use the authored title exactly."
+        },
+        {
+          "name": "subtitle",
+          "kind": "text",
+          "required": false,
+          "description": "Optional authored introduction. Empty means hidden."
+        }
+      ],
+      "minimal": {},
+      "sample": {
+        "eyebrow": "",
+        "title": "Events",
+        "subtitle": ""
+      },
+      "context": [
+        "events"
+      ]
+    },
+    {
+      "type": "articles",
+      "label": "Latest articles",
+      "pages": [
+        "home"
+      ],
+      "kind": "widget",
+      "description": "Published articles from the supplied bounded site.content.articles.items. Render the records with this placement's authored introduction and link through the supplied item URLs. Article engagement and comments remain platform islands on the detail page.",
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Optional authored label above the section title. Empty means hidden."
+        },
+        {
+          "name": "title",
+          "kind": "text",
+          "required": false,
+          "description": "Absent inherits the public collection label. An explicit empty string hides the title. Otherwise use the authored title exactly."
+        },
+        {
+          "name": "subtitle",
+          "kind": "text",
+          "required": false,
+          "description": "Optional authored introduction. Empty means hidden."
+        }
+      ],
+      "minimal": {},
+      "sample": {
+        "eyebrow": "",
+        "title": "Articles",
+        "subtitle": ""
+      },
+      "context": [
+        "latestArticles"
+      ]
+    },
+    {
+      "type": "campaigns",
+      "label": "Campaigns",
+      "pages": [
+        "home"
+      ],
+      "description": "The tenant's LIVE campaigns (appeals, petitions, surveys) as cards linking to each campaign's page. Render the `campaigns` context your way; render nothing when no campaign is live.",
+      "context": [
+        "campaigns",
+        "campaignsLabel"
+      ],
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Optional authored label above the section title. Empty means hidden."
+        },
+        {
+          "name": "title",
+          "kind": "text",
+          "required": false,
+          "description": "Absent inherits the public collection label. An explicit empty string hides the title. Otherwise use the authored title exactly."
+        },
+        {
+          "name": "subtitle",
+          "kind": "text",
+          "required": false,
+          "description": "Optional authored introduction. Empty means hidden."
+        }
+      ],
+      "minimal": {},
+      "sample": {
+        "eyebrow": "Get involved",
+        "title": "What we are campaigning for",
+        "subtitle": "The changes Alderford is asking for right now, and how to add your voice."
+      }
+    },
+    {
+      "type": "emergency",
+      "label": "Emergency appeal strip",
+      "pages": [
+        "home"
+      ],
+      "description": "A high-urgency full-width strip, one headline, an optional line, one action. For live emergencies and time-critical appeals.",
+      "context": [
+        "causes"
+      ],
+      "fields": [
+        {
+          "name": "heading",
+          "kind": "text",
+          "required": true,
+          "description": "The urgent headline."
+        },
+        {
+          "name": "text",
+          "kind": "text",
+          "required": false,
+          "description": "One supporting line."
+        },
+        {
+          "name": "buttonLabel",
+          "kind": "text",
+          "required": false,
+          "description": "Action label (default: Donate now)."
+        },
+        {
+          "name": "buttonHref",
+          "kind": "url",
+          "required": false,
+          "description": "Action link (default: /donate). Scheme-guarded on save."
+        }
+      ],
+      "minimal": {
+        "heading": "Emergency appeal"
+      },
+      "sample": {
+        "heading": "Flood response appeal",
+        "text": "The Aldern broke its banks on Sunday. Thirty households need dry bedding and warmth now.",
+        "buttonLabel": "Give to the flood response",
+        "buttonHref": "/donate"
+      }
+    },
+    {
+      "type": "stats",
+      "label": "Stats band",
+      "pages": [
+        "home"
+      ],
+      "description": "Big headline numbers, the at-a-glance impact band. Values are author-entered text (write them exactly as they should read), or, per item, a live figure the platform counts (`source`).",
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Short kicker."
+        },
+        {
+          "name": "heading",
+          "kind": "text",
+          "required": false,
+          "description": "The band heading."
+        },
+        {
+          "name": "items",
+          "kind": "items",
+          "required": true,
+          "description": "The stat entries.",
+          "itemFields": [
+            {
+              "name": "value",
+              "kind": "text",
+              "required": true,
+              "description": "The number, as it should read (e.g. 12,000 or 98%)."
+            },
+            {
+              "name": "label",
+              "kind": "text",
+              "required": true,
+              "description": "What it counts (e.g. meals served)."
+            },
+            {
+              "name": "source",
+              "kind": "select",
+              "required": false,
+              "options": [
+                "volunteers.active",
+                "volunteers.hoursThisYear",
+                "volunteers.opportunitiesOpen",
+                "volunteers.needed"
+              ],
+              "description": "A figure the platform counts rather than the author types (volunteers who helped in the last twelve months, hours logged this year, opportunities open now, volunteers still needed). When set, `value` is replaced at render with the live count, formatted for the site's locale; templates render `value` exactly as before."
+            }
+          ]
+        }
+      ],
+      "minimal": {
+        "items": [
+          {
+            "value": "1,200",
+            "label": "meals served"
+          }
+        ]
+      },
+      "sample": {
+        "eyebrow": "Last year",
+        "heading": "What your giving did",
+        "items": [
+          {
+            "value": "9,200",
+            "label": "food parcels packed"
+          },
+          {
+            "value": "1,400",
+            "label": "warm space visits"
+          },
+          {
+            "value": "96p",
+            "label": "of every pound spent in Alderford"
+          }
+        ]
+      }
+    },
+    {
+      "type": "appealGrid",
+      "label": "Appeal cards",
+      "pages": [
+        "home"
+      ],
+      "description": "A grid of appeal/campaign cards, image, title, a line, and a per-card action.",
+      "context": [
+        "causes"
+      ],
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Short kicker."
+        },
+        {
+          "name": "heading",
+          "kind": "text",
+          "required": false,
+          "description": "The section heading."
+        },
+        {
+          "name": "items",
+          "kind": "items",
+          "required": true,
+          "description": "The appeal cards.",
+          "itemFields": [
+            {
+              "name": "imageUrl",
+              "kind": "image",
+              "required": false,
+              "description": "Card photograph (uploaded through the platform pipeline)."
+            },
+            {
+              "name": "title",
+              "kind": "text",
+              "required": true,
+              "description": "The appeal's name."
+            },
+            {
+              "name": "text",
+              "kind": "text",
+              "required": true,
+              "description": "One sentence on what it funds."
+            },
+            {
+              "name": "buttonLabel",
+              "kind": "text",
+              "required": false,
+              "description": "Card action label (default: Donate)."
+            },
+            {
+              "name": "buttonHref",
+              "kind": "url",
+              "required": false,
+              "description": "Card action link (default: /donate). Scheme-guarded on save. The cause picker writes /donate/{slug} and records causeId beside it (editor bookkeeping; renderers use buttonHref only)."
+            }
+          ]
+        }
+      ],
+      "minimal": {
+        "items": [
+          {
+            "title": "Winter appeal",
+            "text": "Warm meals through the coldest months."
+          }
+        ]
+      },
+      "sample": {
+        "eyebrow": "Our appeals",
+        "heading": "Where help is needed most",
+        "items": [
+          {
+            "title": "Winter Appeal",
+            "text": "Heating top-ups, warm bedding and a hot meal through the coldest months.",
+            "buttonLabel": "Support winter",
+            "buttonHref": "/donate"
+          },
+          {
+            "title": "Food Bank Fund",
+            "text": "Ten pounds fills a family parcel and keeps the depot shelves stocked.",
+            "buttonLabel": "Fill a parcel",
+            "buttonHref": "/donate"
+          }
+        ]
+      }
+    },
+    {
+      "type": "services",
+      "label": "Services and programmes",
+      "pages": [
+        "home"
+      ],
+      "description": "The tenant's published services and programmes as a dynamic card collection. Render the services context and omit the section when it is empty.",
+      "context": [
+        "services"
+      ],
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Optional authored label above the section title. Empty means hidden."
+        },
+        {
+          "name": "title",
+          "kind": "text",
+          "required": false,
+          "description": "Absent inherits the public collection label. An explicit empty string hides the title. Otherwise use the authored title exactly."
+        },
+        {
+          "name": "subtitle",
+          "kind": "text",
+          "required": false,
+          "description": "Optional authored introduction. Empty means hidden."
+        }
+      ],
+      "minimal": {},
+      "sample": {
+        "eyebrow": "What we do",
+        "title": "Support that meets you where you are",
+        "subtitle": "Food, advice, activity and company: five programmes, one front door."
+      }
+    },
+    {
+      "type": "documents",
+      "label": "Resource library",
+      "pages": [
+        "home"
+      ],
+      "description": "Public documents from the tenant's media library. The resources context contains PUBLIC documents only; private files and storage metadata never reach Liquid.",
+      "context": [
+        "resources"
+      ],
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Optional authored label above the section title. Empty means hidden."
+        },
+        {
+          "name": "title",
+          "kind": "text",
+          "required": false,
+          "description": "Absent inherits the public collection label. An explicit empty string hides the title. Otherwise use the authored title exactly."
+        },
+        {
+          "name": "subtitle",
+          "kind": "text",
+          "required": false,
+          "description": "Optional authored introduction. Empty means hidden."
+        }
+      ],
+      "minimal": {},
+      "sample": {
+        "eyebrow": "Resources",
+        "title": "Reports and documents",
+        "subtitle": "Our accounts, policies and handbooks, all in one place."
+      }
+    },
+    {
+      "type": "people",
+      "label": "People / team",
+      "pages": [
+        "about"
+      ],
+      "description": "The key people behind the charity, trustees, staff, volunteers, as simple cards: name, position, an optional photograph (uploaded through the platform pipeline) and an optional one-line statement. Templates render a card grid that collapses to a single column on small screens; a card without a photo renders cleanly (initials or plain), never a placeholder face.",
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Short kicker, e.g. Who we are."
+        },
+        {
+          "name": "heading",
+          "kind": "text",
+          "required": false,
+          "description": "The section heading, e.g. Our team."
+        },
+        {
+          "name": "text",
+          "kind": "text",
+          "required": false,
+          "description": "An optional intro line."
+        },
+        {
+          "name": "items",
+          "kind": "items",
+          "required": true,
+          "description": "The people.",
+          "itemFields": [
+            {
+              "name": "name",
+              "kind": "text",
+              "required": true,
+              "description": "The person's name."
+            },
+            {
+              "name": "role",
+              "kind": "text",
+              "required": true,
+              "description": "Their position, e.g. Chair of Trustees."
+            },
+            {
+              "name": "imageUrl",
+              "kind": "image",
+              "required": false,
+              "description": "A photograph (platform pipeline). Absent renders cleanly, never a placeholder face."
+            },
+            {
+              "name": "statement",
+              "kind": "text",
+              "required": false,
+              "description": "One line in their voice, e.g. why they serve."
+            }
+          ]
+        }
+      ],
+      "minimal": {
+        "items": [
+          {
+            "name": "Amina Khan",
+            "role": "Chair of Trustees"
+          }
+        ]
+      },
+      "sample": {
+        "eyebrow": "Who we are",
+        "heading": "The people behind the work",
+        "text": "A small staff team, a board of local trustees, and more than a hundred volunteers, accountable to you.",
+        "items": [
+          {
+            "name": "Priya Sharma",
+            "role": "Chair of Trustees",
+            "imageUrl": "p60fixture:people/priya/portrait",
+            "statement": "Every pound is a trust. We spend it like a neighbour is watching, because one is."
+          },
+          {
+            "name": "Derek Osei",
+            "role": "Food Bank Lead",
+            "imageUrl": "p60fixture:people/derek/portrait"
+          },
+          {
+            "name": "Sara Malik",
+            "role": "Volunteer Coordinator",
+            "statement": "A hundred pairs of hands, one purpose."
+          }
+        ]
+      }
+    },
+    {
+      "type": "impactMap",
+      "label": "Impact map",
+      "pages": [
+        "home"
+      ],
+      "description": "The organisation's impact map: a themed map whose points link existing content (campaigns, causes, articles, events, places), each opening a card derived from the linked thing. Place the `map` island, it brings the map, the points and the cards; your template brings placement and tokens (the island theming contract).",
+      "context": [],
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Short kicker."
+        },
+        {
+          "name": "heading",
+          "kind": "text",
+          "required": false,
+          "description": "The section heading."
+        },
+        {
+          "name": "text",
+          "kind": "text",
+          "required": false,
+          "description": "Optional introduction."
+        },
+        {
+          "name": "mapSlug",
+          "kind": "text",
+          "required": false,
+          "description": "WHICH map renders here, by its address (the Pages editor's placement picker writes it; the Maps area is where maps exist). Absent = the tenant's first published map."
+        }
+      ],
+      "minimal": {},
+      "sample": {
+        "eyebrow": "Where we work",
+        "heading": "Our impact, on the map",
+        "text": "Every marker is a real place: a programme, an appeal, a story. Click one to see what happens there."
+      }
+    },
+    {
+      "type": "courses",
+      "label": "Courses",
+      "pages": [
+        "home"
+      ],
+      "fields": [
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Optional authored label above the section title. Empty means hidden."
+        },
+        {
+          "name": "title",
+          "kind": "text",
+          "required": false,
+          "description": "Absent inherits the public collection label. An explicit empty string hides the title. Otherwise use the authored title exactly."
+        },
+        {
+          "name": "subtitle",
+          "kind": "text",
+          "required": false,
+          "description": "Optional authored introduction. Empty means hidden."
+        }
+      ],
+      "minimal": {},
+      "sample": {
+        "eyebrow": "Learn with us",
+        "title": "Courses",
+        "subtitle": "Published courses from this organisation."
+      }
+    }
+  ]
+}

@@ -25,23 +25,25 @@
       <span aria-hidden="true"></span>
     </button>
 
-    <nav class="site-nav" id="site-nav" aria-label="Primary">
-      {% for item in site.nav.items %}
-        {% if item.children %}
-          <span class="nav-dropdown">
-            <a href="{{ item.href }}" class="nav-dropdown-toggle" aria-haspopup="true">{{ item.label }} ▾</a>
-            <span class="nav-dropdown-menu">
+    <nav class="site-nav" id="site-nav" aria-label="Primary" data-p60-nav>
+      {% for item in site.nav.header %}
+        {% if item.children.size > 0 %}
+          <span class="nav-dropdown" data-p60-nav-item>
+            {% if item.kind == 'group' %}<button type="button" class="nav-dropdown-toggle" data-p60-nav-toggle aria-expanded="false" aria-controls="starter-menu-{{ forloop.index }}">{{ item.label }} ▾</button>{% else %}<a href="{{ item.href }}" class="nav-dropdown-toggle" data-p60-nav-toggle aria-expanded="false" aria-controls="starter-menu-{{ forloop.index }}"{% if item.external %} target="_blank" rel="noopener"{% endif %}>{{ item.label }} ▾</a>{% endif %}
+            <span class="nav-dropdown-menu" id="starter-menu-{{ forloop.index }}" data-p60-nav-menu>
               {% for child in item.children %}
-                <a href="{{ child.href }}"{% if child.external %} target="_blank" rel="noopener"{% endif %}>{{ child.label }}</a>
+                {% if child.kind == 'group' %}<span class="nav-group-label">{{ child.label }}</span>{% else %}<a href="{{ child.href }}"{% if child.external %} target="_blank" rel="noopener"{% endif %}>{{ child.label }}</a>{% endif %}
+                {% for grandchild in child.children %}{% if grandchild.kind == 'group' %}<span class="nav-group-label">{{ grandchild.label }}</span>{% else %}<a href="{{ grandchild.href }}"{% if grandchild.external %} target="_blank" rel="noopener"{% endif %}>{{ grandchild.label }}</a>{% endif %}{% endfor %}
               {% endfor %}
             </span>
           </span>
-        {% elsif item.cta %}
-          <a class="nav-cta" href="{{ item.href }}"{% if item.external %} target="_blank" rel="noopener"{% endif %}>{{ item.label }}</a>
+        {% elsif item.kind == 'group' %}
+          <span class="nav-group-label">{{ item.label }}</span>
         {% else %}
           <a href="{{ item.href }}"{% if item.external %} target="_blank" rel="noopener"{% endif %}>{{ item.label }}</a>
         {% endif %}
       {% endfor %}
+      {% if site.actions.header %}<a class="nav-cta" href="{{ site.actions.header.href }}">{{ site.actions.header.label }}</a>{% endif %}
       {% island 'search' %}
       {% island 'member_menu' %}
     </nav>
@@ -59,19 +61,14 @@
       {% if site.brand.tagline %}<h2>{{ site.brand.tagline }}</h2>{% endif %}
     </div>
     <div class="footer-links">
-      {% comment %} A tenant-curated footer menu when they've built one, else the main site.nav. {% endcomment %}
-      {% if site.nav.footer.size > 0 %}
+      {% comment %} The platform resolves the footer independently; an empty footer stays empty. {% endcomment %}
         {% for item in site.nav.footer %}
-          <a href="{{ item.href }}"{% if item.external %} target="_blank" rel="noopener"{% endif %}>{{ item.label }}</a>
+          {% if item.kind == 'group' %}<span class="nav-group-label">{{ item.label }}</span>{% else %}<a href="{{ item.href }}"{% if item.external %} target="_blank" rel="noopener"{% endif %}>{{ item.label }}</a>{% endif %}
           {% for child in item.children %}
-            <a href="{{ child.href }}"{% if child.external %} target="_blank" rel="noopener"{% endif %}>{{ child.label }}</a>
+            {% if child.kind == 'group' %}<span class="nav-group-label">{{ child.label }}</span>{% else %}<a href="{{ child.href }}"{% if child.external %} target="_blank" rel="noopener"{% endif %}>{{ child.label }}</a>{% endif %}
+            {% for grandchild in child.children %}{% if grandchild.kind == 'group' %}<span class="nav-group-label">{{ grandchild.label }}</span>{% else %}<a href="{{ grandchild.href }}">{{ grandchild.label }}</a>{% endif %}{% endfor %}
           {% endfor %}
         {% endfor %}
-      {% else %}
-        {% for item in site.nav.items %}
-          <a href="{{ item.href }}">{{ item.label }}</a>
-        {% endfor %}
-      {% endif %}
     </div>
   </div>
   <div class="container">

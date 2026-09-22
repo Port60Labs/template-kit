@@ -1,5 +1,5 @@
 import { resolve } from 'node:path';
-import { validateArtifact } from '../vendor/validator/validate.mjs';
+import { validateNewArtifact as validateArtifact } from '../vendor/validator/validate.mjs';
 import { loadArtifactDir } from '../lib/artifactFiles.mjs';
 
 /**

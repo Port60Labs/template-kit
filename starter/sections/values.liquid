@@ -1,6 +1,6 @@
 <section class="lq-values">
   <div class="container">
-    <h2 data-p60-field="heading">{{ section.heading | default: "What guides us" }}</h2>
+    {% if section.heading != nil and section.heading != '' %}<h2 data-p60-field="heading">{{ section.heading }}</h2>{% endif %}
     {% comment %}
       data-p60-reveal-group: the engine stamps --p60-reveal-index on each child and adds
       is-revealed when the rail scrolls into view, the stagger and motion are OURS, in theme.css,

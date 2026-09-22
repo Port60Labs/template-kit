@@ -12,6 +12,7 @@ import { upgrade } from '../src/commands/upgrade.mjs';
 import { refresh } from '../src/commands/refresh.mjs';
 import { login, logout, whoami } from '../src/commands/auth.mjs';
 import { publish } from '../src/commands/publish.mjs';
+import { releaseCmd } from '../src/commands/release.mjs';
 
 function parseArgs(argv) {
   const args = { _: [] };
@@ -37,6 +38,9 @@ const [command, ...rest] = process.argv.slice(2);
 const args = parseArgs(rest);
 
 switch (command) {
+  case 'release':
+    await releaseCmd(args);
+    break;
   case 'create':
     create(args);
     break;
@@ -85,6 +89,7 @@ usage:
   p60-template-kit content [dir] [--out file]  eject the model's data as your editable copy
   p60-template-kit validate [dir] [--json]     the platform's exact conformance checks
   p60-template-kit package [dir]               validate + build the uploadable zip
+  p60-template-kit release [dir]               build separate template/ and preview/ store bundles
   p60-template-kit upgrade [dir]               move an existing template to the latest kit
                                                and contract, re-brief, re-validate
   p60-template-kit login                       sign in from the terminal (the browser does the
