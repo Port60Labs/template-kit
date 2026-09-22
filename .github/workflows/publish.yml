@@ -8,7 +8,10 @@ on:
     types: [published]
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    env:
+      # Use the runner's existing SUID helper; retain Chromium and Ubuntu sandboxing.
+      CHROME_DEVEL_SANDBOX: /opt/google/chrome/chrome-sandbox
     permissions:
       contents: read
       id-token: write # the OIDC identity npm verifies
@@ -22,5 +25,7 @@ jobs:
       - run: npm install -g npm@latest
       - run: npm ci
       - run: node bin/cli.mjs setup-previews --with-deps
+      - name: Verify the runner's sandbox helper
+        run: test -u "$CHROME_DEVEL_SANDBOX" && test -x "$CHROME_DEVEL_SANDBOX"
       - run: npm test
       - run: npm publish
