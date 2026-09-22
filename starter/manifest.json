@@ -1,7 +1,7 @@
 {
   "name": "starter",
-  "version": "1.14.0",
-  "format": "port60-liquid@1",
+  "version": "2.0.0",
+  "format": "port60-liquid@2",
   "label": "Starter",
   "description": "The reference template for the Port60 dialect, the developer docs' worked example and the base to copy when building your own. 1.1.0 adds the layout slot: the template owns the header, navigation and footer chrome.",
   "supports": {
@@ -32,7 +32,8 @@
     "heroImagery": true,
     "behaviors": [
       "reveal",
-      "carousel"
+      "carousel",
+      "nav"
     ],
     "focus": [
       "donate",
@@ -94,7 +95,7 @@
       }
     ]
   },
-  "changelog": "Marks which node shows which field (data-p60-field), so the editor puts the caret on the page itself instead of in a side panel.",
+  "changelog": "Uses the v2 site object, resolved header actions and collection envelopes while preserving authored field markers.",
   "imagery": {
     "hero": {
       "idealAspect": "16:9",

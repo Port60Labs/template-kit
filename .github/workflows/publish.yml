@@ -8,7 +8,7 @@ on:
     types: [published]
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
       id-token: write # the OIDC identity npm verifies
@@ -21,5 +21,10 @@ jobs:
       # Trusted publishing needs a current npm client.
       - run: npm install -g npm@latest
       - run: npm ci
+      - run: node bin/cli.mjs setup-previews --with-deps
+      - name: Enable the browser sandbox for this CI executable only
+        run: |
+          sudo install -o root -g root -m 644 .github/preview-browser.apparmor /etc/apparmor.d/port60-preview-browser
+          sudo apparmor_parser -r /etc/apparmor.d/port60-preview-browser
       - run: npm test
       - run: npm publish

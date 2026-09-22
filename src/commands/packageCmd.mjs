@@ -1,6 +1,6 @@
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
-import { validateArtifact } from '../vendor/validator/validate.mjs';
+import { validateNewArtifact as validateArtifact } from '../vendor/validator/validate.mjs';
 import { loadArtifactDir, skippedNotice } from '../lib/artifactFiles.mjs';
 import { buildZip } from '../lib/zip.mjs';
 

@@ -2,9 +2,9 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { agentsMd } from '../lib/agentsMd.mjs';
 import { loadArtifactDir } from '../lib/artifactFiles.mjs';
-import { validateArtifact } from '../vendor/validator/validate.mjs';
-import { contentModel } from '../vendor/engine/content-footprint.mjs';
-import dialect from '../vendor/contract/v1/dialect.json' with { type: 'json' };
+import { validateNewArtifact as validateArtifact } from '../vendor/validator/validate.mjs';
+import { contentModelV2 as contentModel } from '../vendor/engine/content-footprint.mjs';
+import dialect from '../vendor/contract/v2/dialect.json' with { type: 'json' };
 
 const KIT_PACKAGE = JSON.parse(
   readFileSync(resolve(import.meta.dirname, '../../package.json'), 'utf8')
@@ -25,6 +25,11 @@ export async function refresh(args) {
     process.exit(1);
   }
   const manifest = JSON.parse(files['manifest.json']);
+  if (manifest.format !== dialect.format) {
+    console.error(`✗ Kit ${KIT_PACKAGE.version} requires ${dialect.format}. Migrate the template before refreshing its instructions. No files changed.`);
+    process.exitCode = 1;
+    return;
+  }
 
   const briefing = agentsMd(manifest.name);
   writeFileSync(join(dir, 'AGENTS.md'), briefing);

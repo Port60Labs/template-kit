@@ -33,6 +33,8 @@ newer contract asks of you.
 | `dev [dir]` | Live preview over the contract's sample fixtures; validation re-runs on save. |
 | `validate [dir] [--json]` | The exact checks the platform runs at upload. `--json` emits `{ok, errors, warnings, provenSupports}`. |
 | `package [dir]` | Validate, then build the contract-shaped zip the studio accepts as-is. |
+| `release [dir]` | Build separate runtime and independent designer-preview folders for a trusted store release. Does not upload. |
+| `setup-previews [--with-deps]` | Install the pinned headless browser for automatic gallery images. Add `--with-deps` in Linux CI. |
 | `model [--json]` | The content model, in hand; `--json` for agents. |
 | `content [dir]` | Eject the model's data as your editable copy; render it with `dev --content`. |
 | `upgrade [dir]` | Latest kit + contract for an existing template; re-briefs and re-validates. |
@@ -48,9 +50,46 @@ See the [AI quickstart](https://developers.port60.com/guides/ai-quickstart/).
 
 ## The contract
 
-The vendored contract in `src/vendor/contract` is the **Charity Platform contract v1**, the
-platform's first product surface. The dialect, validation rules and this toolchain are
-platform-wide; future Port60 products ship their own contract packs for the same kit.
+Kit 1.0.0 authors **port60-liquid@2**, content model **2.0**, using the contract under
+`src/vendor/contract/v2`. Collection envelopes, independent header/footer navigation,
+resolved actions and page-scoped sections are explicit. V1 sources need a deliberate migration,
+not a manifest-only relabel. Historical v1 contracts remain frozen for existing platform pins.
+
+## Designer previews
+
+The scaffold creates `preview/config.json` and `preview/media/`. Optional `content` points to
+fictional v2 sample JSON relative to `preview/`; omission uses contract fixtures. `focus` is
+`none`, `donate` or `volunteer`. Use approved local JPEG, PNG or WebP images via
+`p60preview:filename.jpg` and retain provenance with the source. Never use selecting-tenant data.
+
+`npm run release` writes `dist/release/NAME/VERSION/`: lightweight `template/` files, separate
+`preview/` HTML/media/metadata, and a `release.json` completion record. Every Look is generated
+from actual Liquid/CSS with matching palettes. Existing output is refused. Limits are 24 Looks,
+2 MiB per image/page and 24 MiB per release. Demo forms, navigation and transactions are inactive.
+
+The first-party publisher uploads completion last. The catalogue supplies matching preview
+metadata to tenant-admin; charity-site reads only runtime files. Previews are not bundled into
+admin and do not become tenant content. Preview-only changes also need a new template version.
+The Studio ZIP `package`/`publish` path remains separate and runtime-only.
+
+Before your first release build, run `npm run preview:setup` in a new scaffold, or
+`p60-template-kit setup-previews` in an existing project. Repeat after upgrading the kit.
+The release builder automatically captures each Look from the actual template at 1440x900
+and writes a 960x600 WebP to `preview/gallery/`, capped at 160 KiB. No separate screenshot
+authoring or upload is needed. The gallery uses these images; opening a design loads its HTML.
+The pinned browser is a build dependency only, never part of the live website.
+
+Linux capture requires a working Chromium sandbox. Ubuntu 24.04 hosted CI installs the
+repository's browser-path-scoped AppArmor profile to allow its user namespaces.
+No `--no-sandbox` or global AppArmor disablement is used. On another Linux
+host, configure an administrator-approved sandbox according to
+[Chromium's guidance](https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md).
+Browser installation alone does not change the host's security policy.
+
+Only packaged preview assets and fonts.bunny.net are accessible during capture. Failed required
+imagery or Latin fonts stop generation. Arabic-specific poster font fidelity is deferred;
+full previews and live-site typography are unchanged. Preserve the same kit/browser/OS for
+immutable upload retries; output changes need a new version, not an overwrite.
 
 Full documentation: [developers.port60.com](https://developers.port60.com)
 

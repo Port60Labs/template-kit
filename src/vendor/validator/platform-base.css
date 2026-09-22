@@ -1403,6 +1403,232 @@ textarea.p60-form-control {
   color: var(--primary-strong);
 }
 
+/* The donation island can sit in a narrow desktop column or a wide checkout.
+   Size its fields from their available space, without changing other islands. */
+.donate-card.donation-widget {
+  padding: 1.25rem;
+  gap: 0.75rem;
+}
+
+.donation-widget .donor-fields {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+}
+
+.donation-widget .giftaid-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+}
+
+.donation-widget .donor-fields > .marketing-optin,
+.donation-widget .giftaid-name-grid > .giftaid-title {
+  grid-column: 1 / -1;
+}
+
+.donation-widget .giftaid-title {
+  inline-size: min(100%, 10rem);
+}
+
+.donation-widget .field,
+.donation-widget .field input,
+.donation-widget .field select,
+.donation-widget .freq-tab {
+  min-inline-size: 0;
+}
+
+.donation-widget .field select {
+  inline-size: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.85rem 0.95rem;
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.donation-widget .field select:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.donation-widget .freq-tabs {
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+}
+
+.donation-widget .freq-tab {
+  overflow-wrap: anywhere;
+}
+
+.donation-widget .donate-change {
+  white-space: normal;
+}
+
+.donation-widget .donation-giftaid-controls {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.donation-widget .donation-giftaid-summary {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.donation-widget .donation-giftaid-summary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* One button surrounds the action and intact wordmark, preserving its clear space. */
+.donation-widget .donation-giftaid-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  min-block-size: 44px;
+  padding: 15px;
+  border: 1px solid color-mix(in srgb, var(--ink) 45%, transparent);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.donation-widget .donation-giftaid-logo {
+  display: block;
+  flex: 0 0 auto;
+  inline-size: 72px;
+  block-size: auto;
+}
+
+.donation-widget .donation-giftaid-action {
+  text-decoration: none;
+}
+
+.donation-widget .donation-giftaid-trigger:hover:not(:disabled) {
+  border-color: var(--ink);
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
+}
+
+.donation-widget .donation-giftaid-trigger:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.donation-widget .donation-giftaid-trigger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Native top layer keeps the optional details clear of template hero clipping and motion. */
+.donation-widget .donation-giftaid-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  inline-size: min(42rem, calc(100% - 2rem));
+  max-inline-size: none;
+  max-block-size: calc(100dvh - 2rem);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  text-align: start;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.donation-widget .donation-giftaid-dialog:not([open]) { display: none; }
+.donation-widget .donation-giftaid-dialog::backdrop { background: rgb(0 0 0 / 0.5); }
+html:has(.donation-giftaid-dialog[open]) { overflow: hidden; }
+
+.donation-widget .donation-giftaid-dialog > form {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  max-block-size: calc(100dvh - 2rem);
+  margin: 0;
+}
+
+.donation-widget .donation-giftaid-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-block-end: 1px solid var(--line);
+}
+
+.donation-widget .donation-giftaid-heading h2 {
+  font-size: clamp(1.25rem, 3vw, 1.6rem);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.donation-widget .donation-giftaid-heading p {
+  color: var(--muted);
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.donation-widget .donation-giftaid-close {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.donation-widget .donation-giftaid-body {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  min-block-size: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.donation-widget .donation-giftaid-dialog .giftaid-declaration { font-size: 0.875rem; line-height: 1.6; }
+
+.donation-widget .donation-giftaid-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-block-start: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.donation-widget .donation-giftaid-actions .button { min-block-size: 2.75rem; }
+.donation-widget .donation-giftaid-dialog :focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+
+@media (max-width: 480px) {
+  .donation-widget .donation-giftaid-dialog {
+    inline-size: calc(100% - 1rem);
+    max-block-size: calc(100dvh - 1rem);
+  }
+  .donation-widget .donation-giftaid-dialog > form { max-block-size: calc(100dvh - 1rem); }
+  .donation-widget .donation-giftaid-heading,
+  .donation-widget .donation-giftaid-body,
+  .donation-widget .donation-giftaid-actions { padding: 1rem; }
+  .donation-widget .donation-giftaid-actions .button { flex: 1; }
+}
+
 .card-host {
   min-height: 2.5rem;
   margin: 0.25rem 0 0.5rem;
@@ -1623,6 +1849,49 @@ textarea.p60-form-control {
   color: var(--ink);
   margin: 0 0 1rem;
 }
+/* Side by side content from the rich-text editor (articles, events, courses). Structure only, and
+   deliberately unscoped so a template page that renders a body with the raw filter gets the same
+   floor: the theme owns the typography inside a pane and may restyle the gap, the breakpoint or the
+   boxed look. Under 720px of page width the panes stack in reading order. Nothing about width or
+   colour is stored with the content; the classes are exact tokens the sanitiser allow-lists. */
+.p60-cols {
+  display: grid;
+  gap: 1.5rem;
+  margin: 1.25rem 0;
+  align-items: start;
+}
+.p60-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.p60-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.p60-col > :first-child {
+  margin-top: 0;
+}
+.p60-col > :last-child {
+  margin-bottom: 0;
+}
+/* A floated image never escapes its pane. */
+.p60-col img,
+.p60-col figure {
+  float: none;
+  max-width: 100%;
+}
+/* The one named look: a box drawn from the theme's own tokens. */
+.p60-col-boxed {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-tint);
+  padding: 1rem 1.15rem;
+}
+@media (max-width: 720px) {
+  .p60-cols {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
 .service-body {
   color: var(--ink);
   line-height: 1.7;
@@ -4164,6 +4433,47 @@ textarea.p60-form-control {
 }
 .member-course-feedback-toggle:hover { opacity: 1; text-decoration: underline; }
 .member-course-feedback-body { margin-top: 0.6rem; display: grid; gap: 0.75rem; }
+/* The course's structure as a family reads it: parts in order, where the class is, whether their
+   learner was there, and the marks the course lets through. Indentation is the only thing that
+   says which level a part sits at, because the composer named the levels. */
+.member-course-structure { margin-top: 0.6rem; display: grid; gap: 0.4rem; }
+.member-course-structure-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.2rem; }
+.member-course-structure-node { display: flex; justify-content: space-between; gap: 0.75rem; padding: 0.15rem 0; }
+.member-course-structure-node.is-heading .member-course-structure-name { font-weight: 600; }
+.member-course-structure-node.is-leaf:not(.is-covered) { opacity: 0.6; }
+.member-course-structure-node.is-current .member-course-structure-name { font-weight: 600; }
+.member-course-structure-now { font-style: normal; font-size: 0.8em; margin-inline-start: 0.4rem; padding: 0 0.4rem; border-radius: 999px; background: color-mix(in srgb, currentColor 12%, transparent); }
+.member-course-structure-state { display: inline-flex; gap: 0.5rem; align-items: baseline; white-space: nowrap; font-size: 0.9em; }
+.member-course-structure-mark { font-style: normal; font-weight: 600; }
+.member-course-structure-completion { margin: 0; font-weight: 600; }
+/* The progress meter: one segment per module, one cell per unit. Fills are the theme's primary so
+   every template recolours it; every state also carries a word, a tick or a hatch, never colour
+   alone. A 2px surface gap separates fills, and the current unit is lit rather than recoloured. */
+.member-course-meter { display: grid; gap: 0.75rem; padding: 0.9rem 1rem; border: 1px solid var(--line); border-radius: 0.75rem; background: color-mix(in srgb, var(--primary) 6%, transparent); }
+.member-course-meter-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 0.5rem 1.25rem; }
+.member-course-meter-hero { display: flex; align-items: baseline; gap: 0.6rem; }
+.member-course-meter-number { font-size: 2.1rem; font-weight: 800; line-height: 1; letter-spacing: -0.02em; color: var(--primary); }
+.member-course-meter-caption { font-size: 0.9rem; color: var(--muted); }
+.member-course-meter-now { display: grid; gap: 0.15rem; font-size: 0.9rem; font-weight: 600; text-align: end; }
+.member-course-meter-presence { font-weight: 400; color: var(--muted); }
+.member-course-meter-bar { display: flex; gap: 0.5rem; align-items: flex-start; }
+.member-course-meter-seg { display: grid; gap: 0.4rem; min-inline-size: 0; }
+.member-course-meter-cells { display: flex; gap: 2px; }
+.member-course-meter-cell { flex: 1 1 0; display: inline-block; min-inline-size: 0.6rem; block-size: 0.85rem; border-radius: 4px; background: color-mix(in srgb, currentColor 14%, transparent); }
+.member-course-meter-cell.is-covered { background: var(--primary); }
+.member-course-meter-cell.is-covered.is-away { background: repeating-linear-gradient(135deg, var(--primary) 0 3px, color-mix(in srgb, var(--primary) 35%, transparent) 3px 6px); }
+.member-course-meter-cell.is-current { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--primary); animation: member-course-meter-pulse 2.4s ease-in-out infinite; }
+@keyframes member-course-meter-pulse { 0%, 100% { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--primary); } 50% { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px color-mix(in srgb, var(--primary) 35%, transparent); } }
+@media (prefers-reduced-motion: reduce) { .member-course-meter-cell.is-current { animation: none; } }
+.member-course-meter-seg-label { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 0.5rem; font-size: 0.8rem; min-inline-size: 0; }
+.member-course-meter-seg-name { font-weight: 600; overflow-wrap: anywhere; }
+.member-course-meter-legend { display: flex; flex-wrap: wrap; gap: 0.35rem 1rem; font-size: 0.75rem; color: var(--muted); }
+.member-course-meter-legend i { display: inline-block; inline-size: 0.9rem; block-size: 0.6rem; vertical-align: middle; margin-inline-end: 0.15rem; }
+.member-course-meter-legend i.is-current { animation: none; }
+.member-course-structure-details summary { cursor: pointer; }
+.member-course-mini { display: block; inline-size: min(14rem, 100%); block-size: 4px; margin-block-start: 0.35rem; border-radius: 999px; background: color-mix(in srgb, currentColor 14%, transparent); overflow: hidden; }
+.member-course-mini-fill { display: block; block-size: 100%; background: var(--primary); border-radius: inherit; }
+@media (max-width: 560px) { .member-course-meter-bar { flex-direction: column; gap: 0.6rem; } .member-course-meter-now { text-align: start; } }
 .member-course-feedback-note {
   border-left: 3px solid currentColor;
   padding: 0.35rem 0 0.35rem 0.75rem;

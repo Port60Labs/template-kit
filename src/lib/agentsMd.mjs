@@ -1,167 +1,113 @@
-// The scaffold's AI-agent briefing (T3, user requirement: the kit must let people put an AI
-// engine on template work and be productive immediately). Written for ANY coding agent, // AGENTS.md is the cross-tool convention and CLAUDE.md carries the identical content for tools
-// that read that name. The briefing is the contract's rules + the iteration loop, so an agent's
-// first move is always the same: read this, edit, validate --json, repeat until clean.
-
+// A contract briefing shared by every generated coding-agent instruction file.
 export function agentsMd(name) {
   return `# Working on the "${name}" Port60 template
 
-You are working on a **Port60 site template**, a small, versioned artifact of Liquid renderers
-and CSS that a charity's site is rendered through. It contains **no application code**: no
-JavaScript, no API calls, no payment logic. Templates decide how a site *looks*; the platform
-owns what it *does*.
+This is a Liquid and CSS artifact, not an application. The platform owns public eligibility,
+routes, consent, authentication, payments and interactive islands. Preserve the design's visual
+identity, authored content and inline editing markers while changing presentation.
 
-## The iteration loop (use this constantly)
+## Versions and iteration
 
-\`\`\`bash
-npm run validate          # human-readable conformance check
-npm run validate:json     # machine-readable: {ok, errors[], warnings[], provenSupports}
-npm run dev               # local preview at http://localhost:4400 (re-renders on refresh)
-npm run package           # validate + produce the uploadable <name>-<version>.zip
-\`\`\`
+Use format port60-liquid@2, content model2.0 and kit1.0.0. Existing v1 platform pins retain
+their historical contract; this kit explicitly rejects v1 for new authoring and uploads.
+Never relabel v1 without migrating its reads. Published name/version identities are immutable.
 
-**After every meaningful edit, run \`npm run validate:json\` and fix every error before moving
-on.** The validator is the exact code the platform runs at upload, if it passes here, the
-platform accepts it; if it fails here, the upload will fail identically.
+- npm run validate:json is the machine-readable feedback loop. Fix all errors after each edit.
+- npm run validate checks the same contract as upload.
+- npm run dev previews all supported pages locally.
+- npm run package validates and writes the uploadable zip.
+- npm run release builds a store release with separate template/ and preview/ bundles.
+- p60-template-kit setup-previews installs the pinned build browser once (CI: --with-deps).
+- Check all Looks, empty states, long text and mobile layouts. Validation is not visual QA.
 
-## The file layout (nothing else is accepted)
+## Artifact shape
 
-- \`manifest.json\`, identity + what you support. \`name\` and \`version\` are immutable
-  identity; bump \`version\` (semver) for every published change.
-- \`layout.liquid\`, the page chrome (header/nav/footer). Must contain **exactly one**
-  \`{% content %}\` slot. Only needed when \`supports.layout\` is true.
-- \`sections/<type>.liquid\`, one renderer per section type you declare in
-  \`supports.sections\`. Charities compose pages from a **closed catalogue** of section types
-  (see \`npm run validate\` output or the docs), you cannot invent new types.
-- \`pages/<page>.liquid\`, optional full-page templates for \`supports.pageTemplates\`.
-- \`assets/theme.css\`, required, your entire look, and the ONLY stylesheet the platform loads
-  (other \`.css\` files under \`assets/\` are packaged but never loaded, so keep everything in
-  it). **No images, no fonts, no JS**: \`package\` and \`publish\` leave them out and list what
-  they left out; the upload refuses them. Photographs belong in the charity's media library;
-  decorative textures go inline in the CSS as data URIs.
+manifest.json declares support. layout.liquid has exactly one {% content %} slot.
+sections/<type>.liquid implements catalogued types; pages/<page>.liquid implements declared
+page templates. assets/theme.css is the only loaded stylesheet. No JavaScript, fonts, API calls,
+remote CSS imports or image files belong in the runtime artifact. preview/ contains independent
+author-demo inputs. Its config.json names a content JSON file and optional widget focus. Put
+author JPEG/PNG/WebP imagery in preview/media/ and use p60preview:filename references in that
+content. The release builder seals every Look and publishes that imagery only in the separate
+preview/ bundle. Runtime package/publish ZIPs never contain it. Studio preview-bundle intake is
+separate from the first-party store release lane. Use platform media URLs in runtime content.
 
-## The rules the validator enforces (do not fight them)
+Release automatically captures each Look as a 960x600 WebP under preview/gallery/, from a
+1440x900 desktop render. Do not author separate screenshots. Posters have a 160 KiB cap;
+HTML, images and metadata remain beside them. The gallery loads posters; details load HTML.
+The build needs Chromium plus access to fonts.bunny.net, and refuses failed required assets.
+Use the same kit/browser/OS for immutable-upload retries; bump the version for changed output.
+Arabic-specific poster font fidelity is deferred, not proof of Arabic-locale conformance.
 
-1. **Escape-by-default.** Every output is HTML-escaped unless you use \`| raw\`, and the only
-   values you may pass through raw are the contract's sanitised richtext fields.
-2. **The dialect is a whitelist.** \`{% include %}\`, \`{% render %}\`, \`{% layout %}\` and
-   several other tags are excluded and fail at parse. Unknown filters throw.
-3. **Islands are placed, never implemented.** Live functionality (donations, sign-in, events) is
-   \`{% island 'donation_widget' %}\` etc. Every island you place must be declared in
-   \`supports.islands\` and exist in the platform registry. Style them via their stable class
-   API; never reimplement them.
-4. **Declared ⇒ rendered, rendered ⇒ declared.** Supports flags are PROVEN behaviourally: if you
-   declare \`supports.worship\` the layout must actually render the worship fixture's times, must
-   hide the rail when \`worship\` is null, and rendering it undeclared is equally an error. The
-   same honesty applies across the contract.
-5. **Render budgets are real.** Runaway loops are killed (~1s per render). Keep renderers simple.
-6. **Context is a whitelist.** Sections see \`{section, brand}\` plus only the collection named by
-   that section in the contract; layouts see \`{brand, nav, socials, worship, locale}\`; page
-   templates see their documented fixture + \`brand\`. Nothing else exists, do not invent
-   variables.
-7. **Capabilities are matching metadata, never entitlements.** Every value in
-   \`requiresCapabilities\` must have a declared section, page template or island that presents it.
-   \`suitsProfiles\` describes design intent and changes catalogue ordering only.
+## The only public site tree
 
-## What each declaration owns
+Read site.brand, site.nav, site.socials, site.locale, site.actions, site.page and site.content.
+No flat brand/nav/collection aliases or site.focus exist. A section also receives section, its
+current instance's raw authored content. Article/course details retain their documented record
+context. impactMap receives the selected map with its contained points, never root locations.
 
-- \`supports.layout\` owns the visible header, navigation and footer around platform pages. The
-  platform still owns the document head, consent and identity.
-- \`supports.pages\` owns section based bodies for \`home\` and \`about\` through the declared
-  renderers in \`sections/\`.
-- \`compositions\` owns each page's preferred order: the section types the design is built around,
-  each \`core\`, \`recommended\` or \`optional\`. An organisation may reorder, add or remove;
-  removing a core section warns them, it never stops them.
-- \`supports.pageTemplates: ["events"]\` owns the events listing only. Event details, RSVP and
-  ticket purchase remain platform owned.
-- \`supports.pageTemplates: ["course"]\` owns a course detail presentation only. The course
-  listing stays platform owned and enrolment remains the \`course_enrol\` island.
-- \`supports.pageTemplates: ["articles"]\` owns the article front page and archive listings.
-- \`supports.pageTemplates: ["article"]\` owns article detail presentation; engagement and
-  comments stay the \`article_engagement\` and \`article_comments\` islands.
-- Other platform routes keep their platform body and render inside your layout. Capability flags
-  expose documented optional context; they do not transfer transaction or route ownership.
+services/events/articles/campaigns/causes/courses/documents are envelopes:
+{label, href, items, pagination}. Iterate site.content.events.items, not the envelope.
+Documents href can be null. Pagination is null outside listings, otherwise it carries page,
+size, totalElements, totalPages, nextHref and previousHref. Use supplied URLs, not guessed routes.
+Only site.content.schedules stays an array. Lists are bounded; enum values are open, so always
+include fallbacks. Nullable values need guards. Metadata-only label/href/pagination reads do
+not fetch items, but whole-envelope aliases do. Dynamic indexing of the site tree is refused.
 
-## The content model
+The current render is site.page = {key, path, sections:[{key,type,content}]}.
+Repeated section types have independent stable keys. Canonical section types include services,
+courses, events and documents. No programmes, whatsOn, infoEvents, resources, locations or
+content.about public aliases exist. Documents remain selected existing public records, never
+an automatically exposed media library. Section support does not confer source entitlements.
 
-Everything you read comes from ONE tree: \`site\`, \`site.brand\`, \`site.nav\`,
-\`site.socials\`, \`site.locale\` and the typed collections under \`site.content.*\`
-(services, events, articles, campaigns, causes, courses, resources, locations,
-schedules, about). Four rules it never breaks, so neither should you:
+## Authored ownership and clearing
 
-- Every collection is BOUNDED (a documented cap plus a \`moreHref\`), link onward, never
-  assume you have everything.
-- Enum fields are OPEN, branch on the values you style and fall back for the rest; the
-  validator proves your template survives values it has never seen.
-- Optional fields are explicitly nullable, always branch.
-- The model only grows. The validator computes your content footprint from the paths you read
-  and stamps the minimum model version at publish; you never declare versions, and dynamic
-  indexing into \`site.content\` is refused so that stays decidable.
+For collection introductions, absent section.title inherits site.content.<collection>.label;
+an explicit empty string hides it; other text overrides it. subtitle and eyebrow are authored.
+Use nil checks, not Liquid default, wherever clearing has meaning. Keep generated labels out
+of raw section content. Mark an authored title only in the nonempty override branch. An inherited
+heading has no data-p60-field marker.
 
-SEE the model: \`npm run dev\` serves the full reference with live example data at \`/model\`;
-\`npx p60-template-kit model --json\` prints the machine-readable registry; the same reference
-lives at https://developers.port60.com/reference/content-model/.
+Declare supports.fieldMarkers:true when showing authored field markers. A marker such as
+data-p60-field="title" or data-p60-field="items.{{ forloop.index0 }}.label" addresses only that
+section's content. Its node must contain exactly the authored value. Use a span when punctuation
+or generated text surrounds it. Never mark source records, generated labels or resolved actions.
 
-Bring your own content and imagery: \`npx p60-template-kit content .\` ejects every collection,
-fully populated, as an editable JSON file; replace the copy and the imageUrl values, then
-\`npx p60-template-kit dev . --content my-org.json\` renders YOUR data (the preview admits
-exactly the image hosts your file names, nothing else).
+## Navigation and actions
 
-You may replace the preview DATA with your own via \`preview-content.json\` beside the
-manifest ({ collection: [items] }, schema-checked, hot-reloaded). The shape is fixed, packaging
-excludes it, and conformance proofs always run on the canonical fixtures.
+site.nav.header and site.nav.footer are independent arrays. kind link has href; kind group has
+null href and children. Use disclosure controls for groups, not fake links. Render two child
+levels and preserve description, imageUrl and optional megaMenu.promo. No derived menus, CTA
+flags or generated columns exist. The template owns responsive menu layout.
+supports.navigationHighlights:true must render supplied promos, including text-only cards,
+without losing normal links. The nav behaviour alone never enables this feature.
+site.actions.header and site.actions.hero are resolved actions or null. site.actions.widget is
+donate, volunteer or none. Do not infer actions from navigation. Authored hero override text
+retains its field marker; resolved fallback actions do not.
 
-## What to build with
+## Safety and design
 
-- Theme via CSS custom properties and the settings knobs you declare in
-  \`manifest.settings.schema\`, they surface in the charity's Appearance editor as
-  \`--p60s-<key>\` variables and \`data-p60s-<key>\` body attributes.
-- Hero photographs (\`homeHero.images\`, when you declare \`supports.heroImagery\`): render one
-  photo directly as a TREATED backdrop (a scrim/tint built from your own palette variables via
-  color-mix, never raw), place the \`hero_carousel\` island for two or more (style its
-  \`.hero-slide-scrim\`), and design the no-photo state as a gradient/colour, never a
-  placeholder. The starter's \`.lq-homehero\` is the reference; the validator checks all of this
-  behaviourally.
-- "Looks" = named one-click bundles of knob values in \`manifest.looks\`.
-- Fonts: only families from the platform font catalogue, declared with the weights you use.
-- Navigation can contain two levels below a top item. Render every supplied child and branch on
-  optional \`group\`, \`description\`, \`imageUrl\` and \`megaMenu\` promo metadata. Never hardcode
-  menu groups that are not in \`nav\`.
-- Navigation highlights are optional design support, not implied by the \`nav\` behaviour.
-  Declare \`supports.navigationHighlights: true\` only when your layout renders one supplied
-  \`site.nav.items[].megaMenu.promo\` card per expanded top-level menu. Otherwise declare false.
-  The platform resolves linked content into \`title\`, \`text\`, \`href\`, \`label\` and optional
-  \`imageUrl\`; no entity lookup belongs in a template. Preserve a text-only card when its image
-  is absent, omit an absent card and keep normal navigation links. Validation proves the explicit
-  declaration; missing declarations never enable the editor feature automatically.
-- Field markers are optional and additive: mark the node that shows a field with
-  \`data-p60-field="title"\`, or \`data-p60-field="items.{{ forloop.index0 }}.label"\` for an
-  entry in a list, and declare \`supports.fieldMarkers: true\`. The charity then types into the
-  real heading on the page instead of into a side panel. The address is the field's name inside
-  that section's own content, and the marked node holds that field and nothing else, so wrap the
-  value in a span when punctuation or other copy sits beside it. Mark what you like; the editor
-  puts a caret only in plain text, and a marker naming nothing is a warning, never a failure.
-- Dynamic sections include appeals (\`causes\`), programmes (\`services\`), resources and
-  locations. Derive or omit when a collection is empty and use the supplied URLs rather than
-  constructing routes.
-- Submission and behaviour surfaces such as \`newsletter_signup\`, \`form\`, \`search\`,
-  \`language_switch\` and \`next_prayer\` are platform islands. Place and style them;
-  never reproduce their API calls or consent behaviour.
-- \`manifest.imagery.hero\` (optional but recommended): declare the photo shape YOUR hero
-  composes best with (\`idealAspect\`, \`minWidth\`, a one-line \`note\`), the charity's editor
-  measures their actual upload against it and advises. Advice, never enforcement.
+- Output is escaped. Use raw only for contract-sanitised richtext.
+- The dialect is whitelisted. include/render/layout and unknown filters are rejected.
+- Place declared islands with {% island 'donation_widget' %}. Style their stable API and never
+  recreate transactions, API calls, forms, identity or consent logic.
+- Render collection envelopes with template markup and declared behaviours. The historical
+  events_carousel, whats_on_strip and latest_articles islands are v1-only and rejected by v2.
+  Collection route continuation belongs to the host, not a second template data fetch or pager.
+- Declare only what you render, and render what you declare. Capability matching is metadata,
+  not a transfer of route ownership or tenant entitlements.
+- Hero photos need a palette scrim, a carousel for multiple photos and a designed no-photo state.
+- Preserve settings and Looks. Use platform fonts and declared CSS tokens.
+- Scope behaviour-dependent hidden content under .p60-js so no-JavaScript stays readable.
+- Keep loops bounded. Test empty collections, cleared text and unknown enum values.
 
-## Which contract this is
+## Data and reference
 
-The section catalogue, islands and fixtures here are the **Charity Platform contract v1**, the
-platform's first product surface. The dialect, the rules above and this toolchain are
-platform-wide; other Port60 products will ship their own contract packs. Do not assume the
-current section list is universal.
-
-## Reference
-
-The full generated reference (sections, islands, context variables, tokens, dialect) lives at
-https://developers.port60.com, also available in one file for agents at
-https://developers.port60.com/llms-full.txt
+p60-template-kit content . writes editable envelope fixtures, independent header/footer menus
+and keyed page compositions. p60-template-kit dev . --content my.json previews those fixtures.
+Overrides are schema-checked, never packaged and never replace canonical conformance fixtures.
+The dev server /model shows live values beside the registry. p60-template-kit model --json
+prints the current model. Generated reference: https://developers.port60.com/reference/content-model/
+Full agent reference: https://developers.port60.com/llms-full.txt
 `;
 }

@@ -100,7 +100,7 @@ test('preview renders realistic, non-interactive island skeletons', async () => 
   const starter = resolve(import.meta.dirname, '../starter');
   const html = await renderStudioPreview(loadArtifactDir(starter));
 
-  assert.match(html, /class="donate-card"/);
+  assert.match(html, /class="donate-card action-card donation-widget"/);
   assert.match(html, /class="nav-p60-signin"/);
   // The starter's standard hero is now the BEHAVIOUR carousel (engine-wired data-p60-* markup,
   // docs/template-behaviours.md) rather than the hero_carousel island, the preview shows the
@@ -144,33 +144,16 @@ test('DRIFT GUARD: vendored contract/engine/validator match charity-site byte fo
     return; // published package outside the monorepo, the guard runs in-repo only
   }
   const vendor = resolve(import.meta.dirname, '../src/vendor');
-  const pairs = [
-    ['contract/v1', 'contract/v1'],
-    ['engine/dialect.mjs', 'engine/dialect.mjs'],
-    ['engine/budgets.mjs', 'engine/budgets.mjs'],
-    ['validator/validate.mjs', 'validator/validate.mjs'],
-    ['validator/preview.mjs', 'validator/preview.mjs'],
-    ['validator/behaviors-runtime.js', 'validator/behaviors-runtime.js'],
-    ['validator/platform-base.css', 'validator/platform-base.css'],
-    ['validator/site-context.mjs', 'validator/site-context.mjs'],
-    ['validator/icons.mjs', 'validator/icons.mjs'],
-    ['validator/fonts.mjs', 'validator/fonts.mjs'],
-    ['validator/focus.mjs', 'validator/focus.mjs'],
-    ['validator/fixture-art.mjs', 'validator/fixture-art.mjs']
-  ];
-  for (const [srcRel, venRel] of pairs) {
-    const src = join(site, srcRel);
-    const ven = join(vendor, venRel);
+  const pairs = ['contract', 'validator', 'engine/dialect.mjs', 'engine/budgets.mjs', 'engine/content-footprint.mjs', 'engine/majors.mjs'];
+  const compare = (relativePath) => {
+    const src = join(site, relativePath);
+    const ven = join(vendor, relativePath);
     if (statSync(src).isDirectory()) {
-      for (const f of readdirSync(src)) {
-        assert.equal(readFileSync(join(ven, f), 'utf8'), readFileSync(join(src, f), 'utf8'),
-          `${venRel}/${f} drifted, run npm run sync-vendor`);
-      }
-    } else {
-      assert.equal(readFileSync(ven, 'utf8'), readFileSync(src, 'utf8'),
-        `${venRel} drifted, run npm run sync-vendor`);
-    }
-  }
+      assert.deepEqual(readdirSync(ven).sort(), readdirSync(src).sort(), relativePath + ' file inventory drifted');
+      for (const name of readdirSync(src)) compare(join(relativePath, name));
+    } else assert.equal(readFileSync(ven, 'utf8'), readFileSync(src, 'utf8'), relativePath + ' drifted, run npm run sync-vendor');
+  };
+  for (const path of pairs) compare(path);
 });
 
 test('package lists the files a template cannot carry, and leaves them out of the zip', () => {

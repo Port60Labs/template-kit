@@ -5,11 +5,16 @@ on:
   pull_request:
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 24
       - run: npm ci
+      - run: node bin/cli.mjs setup-previews --with-deps
+      - name: Enable the browser sandbox for this CI executable only
+        run: |
+          sudo install -o root -g root -m 644 .github/preview-browser.apparmor /etc/apparmor.d/port60-preview-browser
+          sudo apparmor_parser -r /etc/apparmor.d/port60-preview-browser
       - run: npm test
