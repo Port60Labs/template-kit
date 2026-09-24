@@ -1,3 +1,7 @@
+import { readFileSync } from 'node:fs';
+
+const KIT_VERSION = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8')).version;
+
 // A contract briefing shared by every generated coding-agent instruction file.
 export function agentsMd(name) {
   return `# Working on the "${name}" Port60 template
@@ -8,7 +12,7 @@ identity, authored content and inline editing markers while changing presentatio
 
 ## Versions and iteration
 
-Use format port60-liquid@2, content model2.0 and kit1.0.0. Existing v1 platform pins retain
+Use format port60-liquid@2, content model 2.0 and kit ${KIT_VERSION}. Existing v1 platform pins retain
 their historical contract; this kit explicitly rejects v1 for new authoring and uploads.
 Never relabel v1 without migrating its reads. Published name/version identities are immutable.
 
@@ -98,6 +102,11 @@ retains its field marker; resolved fallback actions do not.
   not a transfer of route ownership or tenant entitlements.
 - Hero photos need a palette scrim, a carousel for multiple photos and a designed no-photo state.
 - Preserve settings and Looks. Use platform fonts and declared CSS tokens.
+- The host owns lang/dir and Arabic fonts. Use logical CSS properties. Read site.locale.code.
+- The next coordinated kit release adds t for supported interface phrases and local_date for
+  fixed Gregorian date/datetime formatting in UTC. Do not use these on registry kit 1.0.0.
+  Never translate authored text, infer prayer identities from translated names or convert
+  supplied prayer wall-clock strings. Details: /guides/localisation/ in the developer docs.
 - Scope behaviour-dependent hidden content under .p60-js so no-JavaScript stays readable.
 - Keep loops bounded. Test empty collections, cleared text and unknown enum values.
 

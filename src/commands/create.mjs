@@ -60,7 +60,7 @@ export function create(args) {
   }, null, 2) + '\n');
   writeFileSync(join(target, 'README.md'), `# ${label}
 
-A Port60 site template using \`port60-liquid@2\`, content model \`2.0\` and kit \`1.0.0\`.
+A Port60 site template using \`port60-liquid@2\`, content model \`2.0\` and kit \`${KIT_PACKAGE.version}\`.
 Existing v1 platform pins keep historical support; this kit accepts v2 authoring only.
 Start with \`npm install\`, then:
 

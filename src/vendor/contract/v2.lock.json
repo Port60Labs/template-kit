@@ -92,7 +92,9 @@
         "upcase",
         "url_decode",
         "url_encode",
-        "where"
+        "where",
+        "t",
+        "local_date"
       ],
       "excluded": {
         "tags": [
@@ -2596,7 +2598,7 @@
           "since": "2.0",
           "cap": 4,
           "moreHref": null,
-          "description": "TYPE-DERIVED recurring schedules. `type` is an OPEN enum; 'worship' is the first (its shape is the layout worship contract: times, labels, today, next). Other institutions arrive as new types; render the types you know, ignore the rest.",
+          "description": "TYPE-DERIVED recurring schedules. `type` is an OPEN enum; 'worship' is the first (times, labels, today, next, jumah). Mosque daily times and next may carry a stable `key`: fajr, zuhr, asr, maghrib or isha. Use key for icons, never replace the supplied name. Missing/unknown keys remain readable without an icon. Friday rows are `jumah`, not `jumuah`. Other institutions arrive as new types; render the types you know, ignore the rest.",
           "item": {
             "type": {
               "type": "string",

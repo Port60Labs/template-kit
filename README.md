@@ -50,10 +50,26 @@ See the [AI quickstart](https://developers.port60.com/guides/ai-quickstart/).
 
 ## The contract
 
-Kit 1.0.0 authors **port60-liquid@2**, content model **2.0**, using the contract under
+Kit 1.1.0 authors **port60-liquid@2**, content model **2.0**, using the contract under
 `src/vendor/contract/v2`. Collection envelopes, independent header/footer navigation,
 resolved actions and page-scoped sections are explicit. V1 sources need a deliberate migration,
 not a manifest-only relabel. Historical v1 contracts remain frozen for existing platform pins.
+
+### Added in 1.1.0
+
+The v2 dialect adds `t` and `local_date`, matching the compatible platform host. Use
+`t: site.locale.code` only for supported interface phrases, not tenant-authored content.
+The initial phrase catalogue is Arabic; unknown phrases or languages preserve the supplied
+text. `local_date` formats English, Welsh or Arabic Gregorian dates in UTC with fixed
+`date` and `datetime` styles. It does not convert the tenant's prayer wall-clock times.
+
+Schedule rows can carry stable `key` values for prayer icons, independently of their supplied
+display names. Shared mobile island styling also uses logical offsets for both directions.
+Historical v1 filters and contracts are unchanged. These additions do not imply complete
+Arabic live-island, typography or legal-copy support.
+
+Deploy the compatible host before uploading templates that use the new filters. Kit 1.0.0
+will correctly reject them. See the [localisation guide](https://developers.port60.com/guides/localisation/).
 
 ## Designer previews
 
