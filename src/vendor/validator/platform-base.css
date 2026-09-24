@@ -1064,11 +1064,10 @@ textarea.p60-form-control {
    escapes ANY wrapper depth; layouts here are symmetric, so the sheet lands exactly 0..100vw. */
 @media (max-width: 640px) {
   .donate-card {
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
+    inline-size: 100vw;
+    margin-inline-start: calc(50% - 50vw);
     border-radius: 0;
-    border-left: 0;
-    border-right: 0;
+    border-inline: 0;
     padding: 1.4rem 1.1rem;
   }
 }
@@ -2368,14 +2367,14 @@ html:has(.donation-giftaid-dialog[open]) { overflow: hidden; }
 @media (max-width: 640px) {
   .article-grid {
     display: flex;
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
+    inline-size: 100vw;
+    margin-inline-start: calc(50% - 50vw);
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scroll-snap-type: x proximity;
     gap: 0.9rem;
     padding: 0.2rem 22px 0.6rem;
-    scroll-padding-left: 22px;
+    scroll-padding-inline-start: 22px;
     scrollbar-width: none;
   }
   .article-grid::-webkit-scrollbar { display: none; }
@@ -2779,8 +2778,8 @@ html:has(.donation-giftaid-dialog[open]) { overflow: hidden; }
 @media (max-width: 640px) {
   .events-carousel {
     position: relative;
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
+    inline-size: 100vw;
+    margin-inline-start: calc(50% - 50vw);
     gap: 0;
   }
   .events-carousel .carousel-slide { border-radius: 0; }
@@ -5031,8 +5030,8 @@ html:has(.donation-giftaid-dialog[open]) { overflow: hidden; }
    Cooperative gestures keep page-scrolling safe over the full-width canvas. */
 @media (max-width: 640px) {
   .impact-map-stage {
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
+    inline-size: 100vw;
+    margin-inline-start: calc(50% - 50vw);
     border-radius: 0;
   }
 }

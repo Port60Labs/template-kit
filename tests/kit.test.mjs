@@ -29,6 +29,13 @@ test('create → validate → package: the full loop on a fresh scaffold', () =>
       assert.ok(existsSync(join(dir, f)), `${f} missing`);
     }
     assert.match(readFileSync(join(dir, 'AGENTS.md'), 'utf8'), /validate:json/);
+    const briefing = readFileSync(join(dir, 'AGENTS.md'), 'utf8');
+    assert.ok(briefing.includes(`kit ${KIT_PACKAGE.version}.`), 'agent guidance must name the generating kit version');
+    assert.equal(readFileSync(join(dir, 'CLAUDE.md'), 'utf8'), briefing);
+    assert.ok(
+      readFileSync(join(dir, 'README.md'), 'utf8').includes('kit `' + KIT_PACKAGE.version + '`'),
+      'README guidance must name the generating kit version'
+    );
     const scaffoldPackage = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'));
     assert.equal(
       scaffoldPackage.devDependencies['@port60/template-kit'],
@@ -144,7 +151,7 @@ test('DRIFT GUARD: vendored contract/engine/validator match charity-site byte fo
     return; // published package outside the monorepo, the guard runs in-repo only
   }
   const vendor = resolve(import.meta.dirname, '../src/vendor');
-  const pairs = ['contract', 'validator', 'engine/dialect.mjs', 'engine/budgets.mjs', 'engine/content-footprint.mjs', 'engine/majors.mjs'];
+  const pairs = ['contract', 'validator', 'engine/dialect.mjs', 'engine/locale.mjs', 'engine/budgets.mjs', 'engine/content-footprint.mjs', 'engine/majors.mjs'];
   const compare = (relativePath) => {
     const src = join(site, relativePath);
     const ven = join(vendor, relativePath);

@@ -5,6 +5,8 @@
 // JSON); this module does no file loading.
 
 /** Marker protocol for island placement: the island tag emits these; the renderer splits on them. */
+import { templateMessage, templateDate } from './locale.mjs';
+
 export const ISLAND_MARK_START = '\u0000P60_ISLAND:';
 export const ISLAND_MARK_END = '\u0000';
 
@@ -31,6 +33,8 @@ export function configureDialect(liquid, dialect, islandNames) {
   }
   // Filters LiquidJS ships beyond our whitelist (e.g. its non-standard json/inspect debug filters).
   const allowed = new Set(dialect.filters);
+  if (allowed.has('t')) liquid.registerFilter('t', templateMessage);
+  if (allowed.has('local_date')) liquid.registerFilter('local_date', templateDate);
   for (const name of ['json', 'inspect', 'to_integer', 'normalize_whitespace', 'find', 'find_exp', 'group_by', 'group_by_exp', 'where_exp', 'sum']) {
     if (!allowed.has(name)) {
       liquid.registerFilter(name, () => {
