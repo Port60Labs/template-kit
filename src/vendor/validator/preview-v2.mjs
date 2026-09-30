@@ -115,6 +115,7 @@ function islandSkeleton(name, ctx = {}, fx = STUDIO_FX) {
       return `<section class="hero-carousel" data-p60-preview-island="hero_carousel">
         ${previewNote(name)}
         <div class="hero-slides">${slides}</div>
+        <button class="hero-playback" type="button" aria-label="Pause photographs" disabled><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 5h4v14H7zm6 0h4v14h-4z" /></svg></button>
         <div class="hero-dots" aria-hidden="true">${Array.from({ length: dots }, (_, i) => `<span class="hero-dot${i === 0 ? ' hero-dot--active' : ''}"></span>`).join('')}</div>
       </section>`;
     }
