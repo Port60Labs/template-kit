@@ -106,7 +106,7 @@
       "name": "hero_carousel",
       "label": "Hero image carousel",
       "status": "available",
-      "description": "Rotation for the home hero's photographs (homeHero.images, 2+): auto-advance every ~6s, pauses on hover/focus, honours prefers-reduced-motion (no auto-advance), swipe on touch, dot navigation. The platform owns the motion; the TEMPLATE owns the look, including the tonal treatment: every slide ships an empty .hero-slide-scrim layer over its image, and the template colours it from its OWN palette variables (a colour wash, a blend, a gradient) so any uploaded photo sits inside the template's tones. Renders nothing with fewer than 2 images, single-image and no-image states are the template's own renderer, not this island's.",
+      "description": "Photo-only rotation for homeHero.images (2+): advances every ~6s, pauses on hover and offers persistent Pause/Resume. Keyboard navigation or focus outside that button stops rotation until explicitly resumed. Reduced motion prevents autoplay, including after a live preference change. Supports horizontal touch swipe and direction-aware arrow keys, Home/End, plus optional dot navigation. Templates may hide dots when the .hero-playback control exists. They may reveal playback on photograph hover and keyboard focus, but must retain keyboard reachability, a visible focus indicator and a control that is available without hover on touch devices. This is separate from campaign/content carousels. The platform owns motion; the template styles the frame and the empty .hero-slide-scrim tonal layer using its palette. Fewer than 2 images render nothing: the template owns single/no-image states.",
       "params": [],
       "stylingApi": [
         ".hero-carousel",
@@ -117,7 +117,8 @@
         ".hero-slide-scrim",
         ".hero-dots",
         ".hero-dot",
-        ".hero-dot--active"
+        ".hero-dot--active",
+        ".hero-playback"
       ]
     },
     {

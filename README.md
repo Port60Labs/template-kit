@@ -50,10 +50,18 @@ See the [AI quickstart](https://developers.port60.com/guides/ai-quickstart/).
 
 ## The contract
 
-Kit 1.2.0 authors **port60-liquid@2**, content model **2.0**, using the contract under
+Kit 1.2.1 authors **port60-liquid@2**, content model **2.0**, using the contract under
 `src/vendor/contract/v2`. Collection envelopes, independent header/footer navigation,
 resolved actions and page-scoped sections are explicit. V1 sources need a deliberate migration,
 not a manifest-only relabel. Historical v1 contracts remain frozen for existing platform pins.
+
+### Photo-only hero playback in 1.2.1
+
+The compatible host supplies `.hero-playback` on the `hero_carousel` island. Photo-only
+templates may hide the optional dots and reveal playback on hover or keyboard focus,
+while retaining a reachable control on touch devices. The preview supplies inactive
+geometry only. Campaign/content carousel controls are unchanged. Deploy the compatible
+host before publishing templates that depend on this control.
 
 ### Optional editor controls in 1.2.0
 
