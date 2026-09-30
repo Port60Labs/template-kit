@@ -140,7 +140,7 @@
       "name": "language_switch",
       "label": "Language switch",
       "status": "available",
-      "description": "Switches between the platform's supported public languages while preserving the current route. The host supplies locale and text direction to Liquid and the document element.",
+      "description": "Temporarily inactive: currently renders nothing. Localisation supports a site's language and text direction; translated tenant content and an explicit per-site language choice need a separate opt-in design. The host supplies locale and direction independently. Do not add a replacement visitor selector.",
       "params": [],
       "stylingApi": [
         ".language-switch",

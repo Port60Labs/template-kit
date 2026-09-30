@@ -30,6 +30,7 @@
     ],
     "layout": true,
     "heroImagery": true,
+    "heroImageLimit": 6,
     "behaviors": [
       "reveal",
       "carousel",

@@ -3,6 +3,8 @@ import context from '../contract/v2/context.json' with { type: 'json' };
 import sections from '../contract/v2/sections.json' with { type: 'json' };
 import schema from '../contract/v2/site.schema.json' with { type: 'json' };
 import contentModel from '../contract/v2/content-model.json' with { type: 'json' };
+import { withHeadingAlignment } from '../engine/section-heading-alignment.mjs';
+import { resolvedNavigationMode, withCollectionLinkVisibility } from '../engine/presentation-capabilities.mjs';
 export { extractContentFootprint } from '../engine/content-footprint.mjs';
 export { contentModel };
 
@@ -25,6 +27,10 @@ export function composePage(manifest, page) {
 
 export function buildSiteFixture(manifest, { page = 'home', path } = {}) {
   const site = structuredClone(context.fixtures.site);
+  site.locale.languages = []; // One site's language, not a visitor language catalogue.
+  const headerMode = resolvedNavigationMode(manifest, site.nav.headerMode);
+  if (headerMode === undefined) delete site.nav.headerMode;
+  else site.nav.headerMode = headerMode;
   site.page = { key: page, path: path ?? (page === 'home' ? '/' : `/${page}`), sections: PAGE_KEYS.includes(page) ? composePage(manifest, page) : [] };
   return site;
 }
@@ -56,6 +62,14 @@ function validatePageSections(value, path, errors) {
     for (const [name, fieldValue] of Object.entries(section.content)) {
       const field = fields.get(name);
       if (!field) { errors.push(`${at}.content.${name}: not an authored ${section.type} field`); continue; }
+      if (name === 'headingAlignment' && !field.options?.includes(fieldValue)) {
+        errors.push(`${at}.content.headingAlignment: must be start, center or end; omit it for the template default`);
+        continue;
+      }
+      if (name === 'showCollectionLink') {
+        if (typeof fieldValue !== 'boolean') errors.push(`${at}.content.showCollectionLink: must be a boolean; omit it for the template default`);
+        continue;
+      }
       if (field.kind === 'items') {
         if (!Array.isArray(fieldValue)) { errors.push(`${at}.content.${name}: must be an array`); continue; }
         const itemFields = new Set(field.itemFields.map(item => item.name));
@@ -104,8 +118,9 @@ export function pageComposition(manifest, page, json) {
 }
 
 /** Keep missing fields missing so a generated label never becomes an authored field marker. */
-export function resolveSectionFixture(section, _site) {
-  return structuredClone(section.content ?? {});
+export function resolveSectionFixture(section, _site, manifest) {
+  const content = structuredClone(section.content ?? {});
+  return manifest === undefined ? content : withCollectionLinkVisibility(withHeadingAlignment(content, section.type, manifest), section.type, manifest);
 }
 
 export function emptyCollections(site) {

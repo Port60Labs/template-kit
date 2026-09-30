@@ -70,3 +70,64 @@ test('member preview stays compact and keeps the production responsive label hoo
   assert.doesNotMatch(member, /p60-preview-badge|member menu preview/i);
   assert.equal((member.match(/<button\b/g) ?? []).length, 1);
 });
+
+test('visitor language controls stay absent, including legacy slots and author fixture options', async () => {
+  const candidate = { ...files, 'layout.liquid': `<header>
+    {% if site.locale.languages.size > 1 %}<div data-test-language-wrapper>{% island 'language_switch' %}</div>{% endif %}
+    {% island 'language_switch' %}{% island 'member_menu' %}
+    <span data-test-locale="{{ site.locale.code }}" dir="{{ site.locale.direction }}">{{ site.brand.name }}</span>
+    </header><main>{% content %}</main>` };
+  assert.deepEqual(buildSiteFixture(null).locale.languages, []);
+  for (const code of ['en', 'cy', 'ar']) {
+    const direction = code === 'ar' ? 'rtl' : 'ltr';
+    const previewContent = { ...content(), locale: { code, direction, languages: [
+      { code: 'en', label: 'English', direction: 'ltr' }, { code: 'ar', label: 'العربية', direction: 'rtl' }
+    ] } };
+    const original = structuredClone(previewContent);
+    const html = await renderStudioPreview(candidate, { previewContent });
+    assert.doesNotMatch(html, /data-test-language-wrapper|data-p60-preview-island="language_switch"|<select[^>]*language-switch/);
+    assert.ok(html.includes(`data-test-locale="${code}" dir="${direction}"`));
+    assert.match(html, /data-p60-preview-island="member_menu"/);
+    assert.deepEqual(previewContent, original, 'Old fixture data is not rewritten');
+  }
+  const defaultHtml = await renderStudioPreview(candidate);
+  assert.doesNotMatch(defaultHtml, /data-test-language-wrapper|data-p60-preview-island="language_switch"/);
+});
+
+test('preview resolves explicit navigation modes and leaves unsupported saved preferences untouched', async () => {
+  const manifest = JSON.parse(files['manifest.json']);
+  manifest.supports.navigationModes = { options: ['simple', 'mega'], default: 'mega' };
+  const candidate = { ...files, 'manifest.json': JSON.stringify(manifest),
+    'layout.liquid': '<nav data-p60-navigation-mode="{{ site.nav.headerMode }}">{% for item in site.nav.header %}{{ item.label }}{% endfor %}</nav>{% content %}' };
+  for (const headerMode of [undefined, 'simple', 'mega']) {
+    const previewContent = content();
+    if (headerMode !== undefined) previewContent.nav.headerMode = headerMode;
+    const original = structuredClone(previewContent);
+    const html = await renderStudioPreview(candidate, { previewContent });
+    assert.ok(html.includes('data-p60-navigation-mode="' + (headerMode ?? 'mega') + '"'));
+    assert.deepEqual(previewContent, original);
+  }
+  delete manifest.supports.navigationModes;
+  candidate['manifest.json'] = JSON.stringify(manifest);
+  const previewContent = content(); previewContent.nav.headerMode = 'simple';
+  assert.ok((await renderStudioPreview(candidate, { previewContent })).includes('data-p60-navigation-mode=""'));
+  assert.equal(previewContent.nav.headerMode, 'simple');
+});
+
+test('preview collection hiding shares host projection and keeps heading and records intact', async () => {
+  const manifest = JSON.parse(files['manifest.json']);
+  manifest.supports.sections = ['events'];
+  manifest.supports.sectionCollectionLinkVisibility = ['events'];
+  const candidate = { ...files, 'manifest.json': JSON.stringify(manifest),
+    'sections/events.liquid': '<h2>{{ section.title }}</h2><a data-p60-collection-link href="{{ site.content.events.href }}"{% if section.showCollectionLink == false %} hidden{% endif %}>{{ site.content.events.label }}</a>' };
+  const previewContent = content();
+  previewContent.pages.home = [{ key: 'event-section', type: 'events', content: { title: 'Keep this heading', showCollectionLink: false } }];
+  const original = structuredClone(previewContent);
+  let html = await renderStudioPreview(candidate, { previewContent });
+  assert.match(html, /<h2>Keep this heading<\/h2><a data-p60-collection-link href="\/events" hidden>Events<\/a>/);
+  delete manifest.supports.sectionCollectionLinkVisibility;
+  candidate['manifest.json'] = JSON.stringify(manifest);
+  html = await renderStudioPreview(candidate, { previewContent });
+  assert.match(html, /<h2>Keep this heading<\/h2><a data-p60-collection-link href="\/events">Events<\/a>/);
+  assert.deepEqual(previewContent, original);
+});

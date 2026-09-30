@@ -50,10 +50,36 @@ See the [AI quickstart](https://developers.port60.com/guides/ai-quickstart/).
 
 ## The contract
 
-Kit 1.1.0 authors **port60-liquid@2**, content model **2.0**, using the contract under
+Kit 1.2.0 authors **port60-liquid@2**, content model **2.0**, using the contract under
 `src/vendor/contract/v2`. Collection envelopes, independent header/footer navigation,
 resolved actions and page-scoped sections are explicit. V1 sources need a deliberate migration,
 not a manifest-only relabel. Historical v1 contracts remain frozen for existing platform pins.
+
+### Optional editor controls in 1.2.0
+
+The editor only offers controls supported by the exact selected template version. Declare
+and implement these capabilities together; the validator checks the rendered result:
+
+- `supports.sectionHeadingAlignment`: supported section types and logical `start`, `center`
+  and `end` values. Put `data-p60-heading-align="{{ section.headingAlignment }}"` on the real
+  heading/eyebrow group. Move only that group within existing readable-width containers and
+  gutters at desktop widths of 1024px and above; preserve default and mobile layouts.
+- `supports.navigationModes`: explicit Simple/Mega options and a default, with
+  `data-p60-navigation-mode="{{ site.nav.headerMode }}"` on the real header menu. Both modes
+  preserve the supplied menu tree and destinations. Do not infer support from highlights.
+- `supports.sectionCollectionLinkVisibility`: sections whose existing onward collection link
+  has `data-p60-collection-link`. Keep that anchor in the DOM and add `hidden` only when
+  `section.showCollectionLink == false`, so the editor can reveal it without a page reload.
+- `supports.heroImageLimit`: an integer from 1 to 6 alongside `supports.heroImagery: true`.
+  The limit must reflect actual rendering, not just a carousel declaration. Missing means
+  one photograph; no imagery support means none. Stored photographs are never truncated.
+  Hidden markup and unrelated CSS URL text cannot prove multi-photo capacity.
+
+The compatible host must be deployed before these templates are published. Controls without
+declared support remain unavailable, and older pinned versions keep their existing behaviour.
+The visitor language switch remains dormant pending a separate multilingual-content flow;
+organisation language, RTL/LTR support and interface translation remain available.
+Generated AGENTS.md and CLAUDE.md contain the detailed authoring contract and validation loop.
 
 ### Added in 1.1.0
 

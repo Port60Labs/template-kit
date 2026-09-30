@@ -17,6 +17,7 @@ import islandRegistry from '../contract/v2/islands.json' with { type: 'json' };
 import contextContract from '../contract/v2/context.json' with { type: 'json' };
 import { resolveFixtureArt } from './fixture-art.mjs';
 import { buildSiteFixture, applyPreviewContent, pageComposition, PAGE_KEYS, resolveSectionFixture } from './site-context-v2.mjs';
+import { resolvedNavigationMode } from '../engine/presentation-capabilities.mjs';
 import { withResolvedIcons } from './icons.mjs';
 import { FONT_PROVIDER_ORIGIN, fontCssHref, fontStackFor, knownFamily, toProvider } from './fonts.mjs';
 import { normaliseFocus, previewActions } from './focus.mjs';
@@ -143,7 +144,7 @@ function islandSkeleton(name, ctx = {}, fx = STUDIO_FX) {
         </div>
       </section>`;
     case 'language_switch':
-      return `<label class="language-switch" data-p60-preview-island="language_switch">${previewNote(name)}<span class="language-switch-label">Language</span><select class="language-switch-select" disabled><option>English</option><option>Cymraeg</option><option>العربية</option></select></label>`;
+      return ''; // Compatibility slot, not a promise of translated tenant content.
     case 'search':
       return `<div class="site-search" data-p60-preview-island="search">${previewNote(name)}<form class="site-search-form"><label class="site-search-label">Search this site</label><div class="site-search-fields"><input class="site-search-input" type="search" disabled><button class="site-search-submit" type="button" disabled>Search</button></div></form><ul class="site-search-results"><li class="site-search-result"><span class="site-search-kind">Article</span><a class="site-search-link" href="#">The Community Garden Opens Its Gates</a><p class="site-search-summary">Two years of digging and Saturday mornings in the rain: the Foundry Lane garden is open.</p></li></ul></div>`;
     case 'map': {
@@ -465,6 +466,12 @@ export async function renderStudioPreview(files, options = {}) {
   const treePage = surface;
   const baseSite = buildSiteFixture(manifest, { page: treePage });
   const site = resolveFixtureArt(applyPreviewContent(baseSite, options.previewContent ?? null), artOptions ?? {});
+  // Author fixtures may still carry the old selector options. Match the public host without
+  // changing their chosen locale/direction or mutating their source data.
+  site.locale.languages = [];
+  const headerMode = resolvedNavigationMode(manifest, site.nav.headerMode);
+  if (headerMode === undefined) delete site.nav.headerMode;
+  else site.nav.headerMode = headerMode;
   site.page.sections = PAGE_KEYS.includes(surface) ? pageOf(surface) : [];
   const listingFixture = contextContract.fixtures.pages?.[surface]?.collection;
   if (listingFixture && site.content[surface] && !Object.hasOwn(options.previewContent ?? {}, surface)) {
@@ -525,7 +532,7 @@ export async function renderStudioPreview(files, options = {}) {
         const source = files[`sections/${type}.liquid`];
         if (!entry || source == null) continue;
         const base = artOptions ? resolveFixtureArt(content ?? {}, artOptions) : resolveFixtureArt(content ?? {});
-        const section = resolveSectionFixture({ type, content: base }, site);
+        const section = resolveSectionFixture({ type, content: base }, site, manifest);
         if (type === 'homeHero') {
           const hasAuthoredStyle = options.previewContent?.pages?.[surface]?.some(entry => entry.key === entryInPage.key && Object.hasOwn(entry.content ?? {}, 'actionStyle'));
           section.actionStyle = (hasAuthoredStyle && section.actionStyle === 'button') || site.actions.widget === 'none' ? 'button' : 'widget';

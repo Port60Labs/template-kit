@@ -46,6 +46,8 @@ test('create → validate → package: the full loop on a fresh scaffold', () =>
     const json = JSON.parse(run(['validate', dir, '--json']));
     assert.equal(json.ok, true, JSON.stringify(json.errors));
     assert.equal(json.manifest.name, 'my-ai-theme');
+    assert.equal(JSON.parse(readFileSync(join(dir, 'manifest.json'), 'utf8')).supports.heroImageLimit, 6,
+      'the validated multi-photo scaffold declares its proven capacity');
     assert.ok(json.provenSupports.sections.length > 0);
     assert.equal(json.provenSupports.navigationHighlights, false, 'the simple scaffold must not imply a highlight card');
 
@@ -151,7 +153,7 @@ test('DRIFT GUARD: vendored contract/engine/validator match charity-site byte fo
     return; // published package outside the monorepo, the guard runs in-repo only
   }
   const vendor = resolve(import.meta.dirname, '../src/vendor');
-  const pairs = ['contract', 'validator', 'engine/dialect.mjs', 'engine/locale.mjs', 'engine/budgets.mjs', 'engine/content-footprint.mjs', 'engine/majors.mjs'];
+  const pairs = ['contract', 'validator', 'engine/dialect.mjs', 'engine/locale.mjs', 'engine/budgets.mjs', 'engine/content-footprint.mjs', 'engine/majors.mjs', 'engine/section-heading-alignment.mjs', 'engine/presentation-capabilities.mjs'];
   const compare = (relativePath) => {
     const src = join(site, relativePath);
     const ven = join(vendor, relativePath);
