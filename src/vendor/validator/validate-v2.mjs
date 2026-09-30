@@ -24,6 +24,11 @@ import layoutContract from '../contract/v2/layout.json' with { type: 'json' };
 import behaviourCatalogue from '../contract/v2/behaviours.json' with { type: 'json' };
 import { buildSiteFixture, extractContentFootprint, contentModel, emptyCollections, resolveSectionFixture } from './site-context-v2.mjs';
 import { proveNavigationHighlights } from './navigation-highlights.mjs';
+import { proveHeadingAlignment } from './heading-alignment.mjs';
+import { proveCollectionLinkVisibility } from './collection-link-visibility.mjs';
+import { proveNavigationModes } from './navigation-modes.mjs';
+import { resolvedNavigationMode } from '../engine/presentation-capabilities.mjs';
+import { parsePresentationMarkup } from './presentation-proof.mjs';
 
 const Ajv = Ajv2020.default ?? Ajv2020;
 
@@ -41,6 +46,70 @@ export const BEHAVIOUR_PRIMARY_ATTR = Object.fromEntries(
 const PRIMARY_ATTR = Object.fromEntries(
   behaviourCatalogue.behaviours.map((b) => [b.name, [new RegExp(`${escapeRegExp(b.primaryAttribute)}\\b`), b.primaryAttribute]])
 );
+
+// Inline declarations only: preserve quoted/function values while discarding CSS comments.
+// A URL in a custom property, quoted string or comment is not a rendered background image.
+function heroStyleDeclarations(style = '') {
+  const declarations = [];
+  let value = '', quote = '', depth = 0;
+  const append = () => {
+    const colon = value.indexOf(':');
+    if (colon > 0) declarations.push([value.slice(0, colon).trim().toLowerCase(), value.slice(colon + 1).trim()]);
+    value = '';
+  };
+  for (let index = 0; index < style.length; index++) {
+    const char = style[index];
+    if (char === '\\') { value += char + (style[++index] ?? ''); continue; }
+    if (quote) { value += char; if (char === quote) quote = ''; continue; }
+    if (char === '/' && style[index + 1] === '*') {
+      const end = style.indexOf('*/', index + 2);
+      if (end < 0) break;
+      index = end + 1;
+      continue;
+    }
+    if (char === '"' || char === "'") quote = char;
+    if (char === '(') depth++;
+    if (char === ')') depth = Math.max(0, depth - 1);
+    if (char === ';' && depth === 0) append();
+    else value += char;
+  }
+  append();
+  return declarations;
+}
+
+function heroInlineValue(declarations, properties) {
+  let selected = '', important = false;
+  for (const [property, value] of declarations) {
+    if (!properties.includes(property)) continue;
+    const nextImportant = /!\s*important\s*$/i.test(value);
+    if (!important || nextImportant) {
+      selected = value.replace(/!\s*important\s*$/i, '').trim();
+      important = nextImportant;
+    }
+  }
+  return selected;
+}
+
+function heroNodeCanRender(node) {
+  for (let current = node; current; current = current.parent) {
+    if (['template', 'script', 'style', 'noscript', 'textarea', 'select'].includes(current.tag)
+      || Object.hasOwn(current.attrs, 'hidden')) return false;
+    const declarations = heroStyleDeclarations(current.attrs.style);
+    if (/^none$/i.test(heroInlineValue(declarations, ['display']))
+      || /^(?:hidden|collapse)$/i.test(heroInlineValue(declarations, ['visibility']))
+      || /^0(?:\.0*)?%?$/.test(heroInlineValue(declarations, ['opacity']))) return false;
+    // aria-hidden and inert do not visually hide decorative photographs or carousel slides.
+  }
+  return true;
+}
+
+function heroBackgroundShows(node, imageUrl) {
+  const background = heroInlineValue(heroStyleDeclarations(node.attrs.style), ['background', 'background-image']);
+  for (const match of background.matchAll(/"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|(?<![\w-])url\(\s*(?:"([^"]*)"|'([^']*)'|([^\s)]+))\s*\)/gi)) {
+    if ((match[1] ?? match[2] ?? match[3]) === imageUrl) return true;
+  }
+  return false;
+}
 
 // Templates are markup and attributes, NEVER code (docs/template-behaviours.md). These are hard
 // errors over the RAW liquid source, even inside comments, because there is no legitimate reason
@@ -245,11 +314,20 @@ export async function validateArtifact(files) {
   configureDialect(liquid, dialect, allIslands);
 
   const catalogueByType = new Map(sectionCatalogue.sections.map((s) => [s.type, s]));
+  for (const type of Object.keys(manifest?.supports?.sectionHeadingAlignment ?? {})) {
+    if (!(manifest?.supports?.sections ?? []).includes(type)) {
+      errors.push(`manifest: supports.sectionHeadingAlignment '${type}' must also be declared in supports.sections`);
+    }
+  }
+  for (const type of Array.isArray(manifest?.supports?.sectionCollectionLinkVisibility) ? manifest.supports.sectionCollectionLinkVisibility : []) {
+    if (!(manifest?.supports?.sections ?? []).includes(type)) errors.push(`manifest: supports.sectionCollectionLinkVisibility '${type}' must also be declared in supports.sections`);
+  }
   const declaredIslands = new Set(manifest?.supports?.islands ?? []);
   const placedIslands = new Set();
   // heroImagery proof state (filled by the homeHero renders below).
   let homeHeroMultiShows = null; // sample (several photos): probe in html OR hero_carousel placed
   let homeHeroSingleShows = null; // single-photo variant: probe rendered directly
+  let homeHeroShowsMultiple = false; // explicit multi-photo capability, distinct rendered images
 
   // V2 collection sections render the supplied bounded envelopes, without independently
   // fetching legacy display islands. The populated fixture's sentinel must appear, and the
@@ -310,6 +388,25 @@ export async function validateArtifact(files) {
       errors.push(`section '${type}': does not parse under the dialect, ${e.message}`);
       continue;
     }
+    if (Object.hasOwn(manifest?.supports?.sectionHeadingAlignment ?? {}, type) || /data-p60-heading-align\b/.test(read(file))) {
+      if (!Object.hasOwn(manifest?.supports?.sectionHeadingAlignment ?? {}, type)) {
+        warnings.push(`section '${type}': data-p60-heading-align is inert without supports.sectionHeadingAlignment.${type}; the editor will not offer heading alignment`);
+      }
+      errors.push(...await proveHeadingAlignment(content => liquid.render(parsed, {
+        section: resolveSectionFixture({ type, content }, siteFx, manifest),
+        site: siteFx,
+        ...(contextContract.fixtures.sections?.[type] ?? {})
+      }), entry, manifest?.supports?.sectionHeadingAlignment?.[type], { inheritedHeading: siteFx.content[type]?.label }));
+    }
+    if ((Array.isArray(manifest?.supports?.sectionCollectionLinkVisibility) && manifest.supports.sectionCollectionLinkVisibility.includes(type)) || /data-p60-collection-link\b/.test(read(file))) {
+      const declared = Array.isArray(manifest?.supports?.sectionCollectionLinkVisibility) && manifest.supports.sectionCollectionLinkVisibility.includes(type);
+      const collection = type === 'appealGrid' ? 'causes' : type;
+      errors.push(...await proveCollectionLinkVisibility((content, href) => {
+        const site = { ...siteFx, content: { ...siteFx.content, [collection]: { ...siteFx.content[collection], href } } };
+        return liquid.render(parsed, { section: resolveSectionFixture({ type, content }, site, manifest), site });
+      }, entry, declared));
+      if (!declared) warnings.push(`section '${type}': data-p60-collection-link is inert without supports.sectionCollectionLinkVisibility; the editor will not offer visibility`);
+    }
     // Widget-section proof (independent of the minimal/sample loop): island placed → the island
     // owns everything; hand-rendered → sentinel appears with data, vanishes without.
     const widget = WIDGET_SECTIONS[type];
@@ -317,7 +414,7 @@ export async function validateArtifact(files) {
       const dataFixture = contextContract.fixtures.sections?.[type] ?? {};
       try {
         const populated = await liquid.render(parsed, {
-          section: resolveSectionFixture({ type, content: {} }, siteFx),
+          section: resolveSectionFixture({ type, content: {} }, siteFx, manifest),
           site: siteFx,
           ...dataFixture
         });
@@ -350,7 +447,7 @@ export async function validateArtifact(files) {
       const fixture = entry[fixtureName] ?? {};
       try {
         const html = await liquid.render(parsed, {
-          section: resolveSectionFixture({ type, content: fixture }, siteFx),
+          section: resolveSectionFixture({ type, content: fixture }, siteFx, manifest),
           site: siteFx,
           // Widget data rides the ordinary fixture renders too, so a hand-rendering section
           // doesn't fail the generic pass for want of its context.
@@ -362,6 +459,24 @@ export async function validateArtifact(files) {
           const probe = (fixture.images ?? [])[0]?.imageUrl ?? 'p60fixture:';
           homeHeroMultiShows = html.includes(probe)
             || splitIslandParts(html).some((p) => p.island === 'hero_carousel');
+          // Prove the advertised capacity, not just the two-photo catalogue sample. Real image
+          // attributes prevent comments, copied text or repeated first images from opting in.
+          const limit = manifest?.supports?.heroImageLimit;
+          if (Number.isInteger(limit) && limit > 1 && limit <= 6) {
+            const images = Array.from({ length: limit }, (_, index) => ({
+              ...(fixture.images?.[index % fixture.images.length] ?? {}), imageUrl: `p60fixture:hero-capacity-${index + 1}.jpg`
+            }));
+            const capacity = await liquid.render(parsed, {
+              section: resolveSectionFixture({ type, content: { ...fixture, images } }, siteFx, manifest), site: siteFx
+            });
+            const { root, nodes } = parsePresentationMarkup(capacity);
+            const rendered = [root, ...nodes].filter(heroNodeCanRender);
+            homeHeroShowsMultiple = rendered.some(node => node.children.some(child => typeof child === 'string'
+              && splitIslandParts(child).some(part => part.island === 'hero_carousel')))
+              || images.every(image => rendered.some(node =>
+                (node.tag === 'img' && node.attrs.src === image.imageUrl)
+                || heroBackgroundShows(node, image.imageUrl)));
+          }
           // The single-photo path proven separately: same fixture, first photo only.
           try {
             const single = await liquid.render(parsed, {
@@ -438,6 +553,9 @@ export async function validateArtifact(files) {
   // ride `images`), so they pass undeclared, they just don't earn the badge.
   {
     const declaresHero = manifest?.supports?.heroImagery === true;
+    if (declaresHero && manifest?.supports?.heroImageLimit > 1 && !homeHeroShowsMultiple) {
+      errors.push(`homeHero: supports.heroImageLimit ${manifest.supports.heroImageLimit} must render all ${manifest.supports.heroImageLimit} distinct fixture photographs or place the hero_carousel island`);
+    }
     if (declaresHero && !(manifest?.supports?.sections ?? []).includes('homeHero')) {
       errors.push('manifest: supports.heroImagery requires the homeHero section, the photographs live on it');
     } else if (homeHeroMultiShows !== null) {
@@ -459,6 +577,9 @@ export async function validateArtifact(files) {
   }
   if (manifest?.supports?.navigationHighlights && !manifest?.supports?.layout) {
     errors.push('manifest: supports.navigationHighlights requires supports.layout, highlights belong to navigation chrome');
+  }
+  if (manifest?.supports?.navigationModes && !manifest?.supports?.layout) {
+    errors.push('manifest: supports.navigationModes requires supports.layout');
   }
   if (manifest?.supports?.layout) {
     if (!has('layout.liquid')) {
@@ -488,8 +609,11 @@ export async function validateArtifact(files) {
             warnings.push("layout: no {% island 'member_menu' %}, member sign-in will be unreachable on tenants that allow sign-ups; place it in your header");
           }
 
+          errors.push(...await proveNavigationModes((saved, header) => liquid.render(parsedLayout, {
+            site: { ...siteFx, nav: { ...siteFx.nav, header, headerMode: resolvedNavigationMode(manifest, saved) } }
+          }), manifest?.supports?.navigationModes, read('assets/theme.css') ?? ''));
           const highlights = await proveNavigationHighlights((nav) => liquid.render(parsedLayout, {
-            site: { ...siteFx, nav: { header: nav.items.map(item => ({ ...item, kind: 'link', children: item.children.map(child => ({ ...child, kind: 'link' })) })), footer: [] } },
+            site: { ...siteFx, nav: { ...siteFx.nav, ...(manifest?.supports?.navigationModes ? { headerMode: resolvedNavigationMode(manifest, 'mega') } : {}), header: nav.items.map(item => ({ ...item, kind: 'link', children: item.children.map(child => ({ ...child, kind: 'link' })) })), footer: [] } },
           }), manifest?.supports?.navigationHighlights);
           errors.push(...highlights.errors);
           warnings.push(...highlights.warnings);

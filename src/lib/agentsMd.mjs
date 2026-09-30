@@ -72,12 +72,43 @@ Use nil checks, not Liquid default, wherever clearing has meaning. Keep generate
 of raw section content. Mark an authored title only in the nonempty override branch. An inherited
 heading has no data-p60-field marker.
 
+Heading alignment is an optional per-section capability, not a global theme setting. Declare
+supports.sectionHeadingAlignment as a map, for example {"services":["start","center","end"]}.
+Each key must also be in supports.sections; list only the nonempty, unique subset you implement.
+Place data-p60-heading-align="{{ section.headingAlignment }}" on the actual h1 to h6 heading,
+its eyebrow, or a wrapper containing only that heading and eyebrow. The heading itself must be
+inside/on a matching hook; do not mark the whole section, cards, media, body copy or actions.
+Omit section.headingAlignment for the template's authored default. Never use a Liquid default
+filter or a hardcoded active hook value: absent/unsupported values must leave the design alone.
+Keep the empty hook on every visible heading at the default too, so the first editor choice
+can update immediately. Only omit the heading and its hook together when that copy is hidden.
+The platform applies start/center/end text alignment only at desktop widths (1024px and above).
+Template CSS may position only the heading group within its existing template-owned content
+container and gutters. Preserve its readable width; never widen it to the viewport, remove the
+gutters or move the whole hero copy block. A full-bleed image can stay full bleed independently.
+Introductions, body copy, buttons, cards, images and donation widgets keep their placement and
+alignment. Scope local group-placement rules to that template's heading hook, explicit active
+values and the same desktop breakpoint; do not introduce global margins or a new layout setting.
+Default and mobile keep the template layout. Start/end follow text direction, including RTL.
+Keep field markers and text unchanged; validate every advertised value and visually check every
+Look. Prove visible heading alignment and bounded group placement with readable width retained,
+unchanged surrounding content, reset and mobile; computed text-align alone is not visual proof.
+This capability needs a coordinated host/kit release; keep existing published dependency pins
+until that supporting kit version is available.
+
 Declare supports.fieldMarkers:true when showing authored field markers. A marker such as
 data-p60-field="title" or data-p60-field="items.{{ forloop.index0 }}.label" addresses only that
 section's content. Its node must contain exactly the authored value. Use a span when punctuation
 or generated text surrounds it. Never mark source records, generated labels or resolved actions.
 
 ## Navigation and actions
+
+Optional supports.navigationModes is {options:["simple","mega"],default:"mega"} (either supported
+mode may be the default). It requires supports.layout and both working presentations. Mark the
+header navigation root data-p60-navigation-mode="{{ site.nav.headerMode }}". The host resolves the
+saved choice or declared default; missing capability keeps the historical layout. Do not infer
+support from navigationHighlights. Both modes retain supplied destinations, node order and saved
+metadata. Scope mode CSS to that marker and verify mobile, keyboard and no-JavaScript navigation.
 
 site.nav.header and site.nav.footer are independent arrays. kind link has href; kind group has
 null href and children. Use disclosure controls for groups, not fake links. Render two child
@@ -88,6 +119,14 @@ without losing normal links. The nav behaviour alone never enables this feature.
 site.actions.header and site.actions.hero are resolved actions or null. site.actions.widget is
 donate, volunteer or none. Do not infer actions from navigation. Authored hero override text
 retains its field marker; resolved fallback actions do not.
+
+Optional supports.sectionCollectionLinkVisibility lists supported collection section types with
+an existing onward link. Mark only that anchor data-p60-collection-link, keep its supplied href
+and existing label, and add hidden only when section.showCollectionLink == false. Missing/true
+keeps the default link. Keep the hidden anchor for immediate editor updates; omit it only when
+there is no supplied destination. Do not hide headings, cards or individual record links, invent
+URLs, or add text/position controls. Unsupported saved preferences are retained but not rendered.
+Both presentation capabilities need a coordinated host/kit release, not a speculative registry pin.
 
 ## Safety and design
 
@@ -101,8 +140,17 @@ retains its field marker; resolved fallback actions do not.
 - Declare only what you render, and render what you declare. Capability matching is metadata,
   not a transfer of route ownership or tenant entitlements.
 - Hero photos need a palette scrim, a carousel for multiple photos and a designed no-photo state.
+  Declare supports.heroImagery:true plus supports.heroImageLimit as an integer from 1 to 6
+  matching the homeHero's actual capacity. Missing limit means one photograph; no hero imagery
+  means zero. A limit above one must render every distinct photograph in a fixture of that
+  size or place the hero_carousel island. A generic carousel declaration is not proof.
+  The editor reads the exact selected template version, never the catalogue's latest version.
+  Saved photographs are never truncated on template switches. Publish a new immutable version
+  with this declaration only after the matching host and kit release; preserve existing pins.
 - Preserve settings and Looks. Use platform fonts and declared CSS tokens.
 - The host owns lang/dir and Arabic fonts. Use logical CSS properties. Read site.locale.code.
+- Do not add a visitor language selector. site.locale.languages is currently empty and the
+  legacy language_switch slot renders nothing. Interface catalogues are not translated tenant content.
 - The next coordinated kit release adds t for supported interface phrases and local_date for
   fixed Gregorian date/datetime formatting in UTC. Do not use these on registry kit 1.0.0.
   Never translate authored text, infer prayer identities from translated names or convert

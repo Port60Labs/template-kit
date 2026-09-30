@@ -52,6 +52,10 @@
         "footer"
       ],
       "properties": {
+        "headerMode": {
+          "enum": ["simple", "mega"],
+          "description": "Resolved header presentation only when the exact template declares navigationModes. The host uses the accepted saved preference or the declared default. Omitted for unsupported templates; never inferred from menu shape or highlights."
+        },
         "header": {
           "type": "array",
           "items": {

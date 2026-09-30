@@ -122,6 +122,15 @@ img {
 /* Typography (heading scale/family, paragraph rhythm) is TEMPLATE territory, see
    templates/default/theme.ts for Classic's. The base deliberately styles no bare h1-h4/p. */
 
+/* Explicit per-section heading overrides. Only opt-in heading hooks participate; body copy,
+   cards, islands and grid placement are untouched. An empty hook means the template default.
+   Desktop overrides must not displace the template's mobile/tablet composition. */
+@media (min-width: 1024px) {
+  [data-p60-heading-align="start"] { text-align: start !important; }
+  [data-p60-heading-align="center"] { text-align: center !important; }
+  [data-p60-heading-align="end"] { text-align: end !important; }
+}
+
 input, button, textarea, select {
   font: inherit;
 }
@@ -3758,6 +3767,90 @@ html:has(.donation-giftaid-dialog[open]) { overflow: hidden; }
   font-size: 0.95rem;
   line-height: 1.5;
 }
+
+/* Image credits (docs/imagery, IM-11): platform chrome in every render path, themed from the same
+   surface and border tokens as the consent centre so it reads as the site's own. Closed, a dialog is
+   display:none; the :target rule is the no-JavaScript path, the list shows inline at the page end. */
+.p60-credits {
+  width: 100%;
+  max-width: min(640px, calc(100vw - 2rem));
+  padding: 0;
+  border: 1px solid var(--border, rgba(0, 0, 0, 0.12));
+  border-radius: 16px;
+  background: var(--surface, #fff);
+  color: inherit;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+}
+.p60-credits::backdrop {
+  background: rgba(0, 0, 0, 0.45);
+}
+.p60-credits-inner {
+  padding: 1.1rem 1.3rem;
+}
+.p60-credits-title {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+.p60-credits-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+  max-height: 60vh;
+  overflow: auto;
+}
+.p60-credits-item {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+.p60-credits-thumb {
+  flex: none;
+  width: 3.2rem;
+  height: 2.2rem;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.p60-credits-links {
+  display: block;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+.p60-credits-links a + a::before {
+  content: ' \00b7 ';
+}
+.p60-credits-note {
+  opacity: 0.8;
+}
+.p60-credits-actions {
+  margin: 1rem 0 0;
+  display: flex;
+  justify-content: flex-end;
+}
+.p60-credits-close {
+  font: inherit;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--border, rgba(0, 0, 0, 0.2));
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.p60-credits-fallback {
+  margin: 0;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  text-align: center;
+  opacity: 0.75;
+}
+.p60-credits:target {
+  display: block;
+  position: static;
+  margin: 1rem auto;
+}
 .consent-actions {
   display: flex;
   flex-wrap: wrap;
@@ -5357,3 +5450,6 @@ html:has(.donation-giftaid-dialog[open]) { overflow: hidden; }
 .search-page-box .site-search-input {
   flex: 1 1 auto;
 }
+
+/* A template's inline-flex/block styling must not defeat an editor-hidden onward link. */
+[data-p60-collection-link][hidden] { display: none !important; }

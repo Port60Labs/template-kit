@@ -10,6 +10,17 @@
       "description": "The page opener: a headline with an optional kicker and sanitised rich-text intro.",
       "fields": [
         {
+          "name": "headingAlignment",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "description": "Desktop alignment of the heading and optional eyebrow. The template may position their heading-only group within its existing content container and gutters while preserving readable width. Only applied when this exact template declares supports.sectionHeadingAlignment for this section and option. Absent means template default. Start/end follow the site direction. Below 1024 CSS pixels the template retains its own layout. Introductions, body copy, buttons, cards, images and islands keep their placement and alignment; full-bleed imagery does not widen the heading bounds."
+        },
+        {
           "name": "eyebrow",
           "kind": "text",
           "required": false,
@@ -45,6 +56,17 @@
       ],
       "description": "A set of principles shown as cards or a numbered list, per the template.",
       "fields": [
+        {
+          "name": "headingAlignment",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "description": "Desktop alignment of the heading and optional eyebrow. The template may position their heading-only group within its existing content container and gutters while preserving readable width. Only applied when this exact template declares supports.sectionHeadingAlignment for this section and option. Absent means template default. Start/end follow the site direction. Below 1024 CSS pixels the template retains its own layout. Introductions, body copy, buttons, cards, images and islands keep their placement and alignment; full-bleed imagery does not widen the heading bounds."
+        },
         {
           "name": "eyebrow",
           "kind": "text",
@@ -121,6 +143,17 @@
       "description": "A closing band: heading, optional line, one button.",
       "fields": [
         {
+          "name": "headingAlignment",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "description": "Desktop alignment of the heading and optional eyebrow. The template may position their heading-only group within its existing content container and gutters while preserving readable width. Only applied when this exact template declares supports.sectionHeadingAlignment for this section and option. Absent means template default. Start/end follow the site direction. Below 1024 CSS pixels the template retains its own layout. Introductions, body copy, buttons, cards, images and islands keep their placement and alignment; full-bleed imagery does not widen the heading bounds."
+        },
+        {
           "name": "heading",
           "kind": "text",
           "required": true,
@@ -165,6 +198,17 @@
       ],
       "description": "The home opener. EVERY field optional: eyebrow/title derive from branding when absent, the lead OMITS when absent (never a fabricated placeholder), buttons fall back to platform defaults.",
       "fields": [
+        {
+          "name": "headingAlignment",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "description": "Desktop alignment of the heading and optional eyebrow. The template may position their heading-only group within its existing content container and gutters while preserving readable width. Only applied when this exact template declares supports.sectionHeadingAlignment for this section and option. Absent means template default. Start/end follow the site direction. Below 1024 CSS pixels the template retains its own layout. Introductions, body copy, buttons, cards, images and islands keep their placement and alignment; full-bleed imagery does not widen the heading bounds."
+        },
         {
           "name": "eyebrow",
           "kind": "text",
@@ -227,7 +271,7 @@
           "name": "images",
           "kind": "items",
           "required": false,
-          "description": "Hero photographs (0-6, uploaded through the platform pipeline). One = a main image; several = rotation material, a template with supports.heroImagery renders at least the first and MAY place the hero_carousel island (or a CSS scroll strip) for the rest. Like every field: absent means the template's designed no-photo state, never a placeholder.",
+          "description": "Hero photographs (0-6, uploaded through the platform pipeline). One = a main image; several = rotation material. A template with supports.heroImagery renders at least the first and may place the hero_carousel island (or a CSS scroll strip) for the rest. Declare supports.heroImageLimit above one to offer multiple photographs in the editor; missing means one, and absent heroImagery means zero. Saved photographs survive template switches and are never truncated by this capability. Like every field: absent means the template's designed no-photo state, never a placeholder.",
           "itemFields": [
             {
               "name": "imageUrl",
@@ -295,6 +339,17 @@
       ],
       "description": "What gifts make possible, optional intro plus icon/title/description cards. Claims must be truthful for the tenant.",
       "fields": [
+        {
+          "name": "headingAlignment",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "description": "Desktop alignment of the heading and optional eyebrow. The template may position their heading-only group within its existing content container and gutters while preserving readable width. Only applied when this exact template declares supports.sectionHeadingAlignment for this section and option. Absent means template default. Start/end follow the site direction. Below 1024 CSS pixels the template retains its own layout. Introductions, body copy, buttons, cards, images and islands keep their placement and alignment; full-bleed imagery does not widen the heading bounds."
+        },
         {
           "name": "eyebrow",
           "kind": "text",
@@ -385,6 +440,23 @@
       "description": "Published events across registration modes. Render the supplied bounded site.content.events.items with this placement's authored introduction. Optional motion uses declared behaviours; ticket sales and RSVP stay on the platform-owned detail route supplied by each item.",
       "fields": [
         {
+          "name": "showCollectionLink",
+          "kind": "boolean",
+          "required": false,
+          "description": "Only false hides this placement's existing onward collection link. Missing or true keeps the template default. Requires this exact template to declare supports.sectionCollectionLinkVisibility for this section. Keep a stable data-p60-collection-link anchor and add hidden only for false. The platform-supplied URL and shared label stay unchanged; headings, records and individual card links are unaffected."
+        },
+        {
+          "name": "headingAlignment",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "description": "Desktop alignment of the heading and optional eyebrow. The template may position their heading-only group within its existing content container and gutters while preserving readable width. Only applied when this exact template declares supports.sectionHeadingAlignment for this section and option. Absent means template default. Start/end follow the site direction. Below 1024 CSS pixels the template retains its own layout. Introductions, body copy, buttons, cards, images and islands keep their placement and alignment; full-bleed imagery does not widen the heading bounds."
+        },
+        {
           "name": "eyebrow",
           "kind": "text",
           "required": false,
@@ -422,6 +494,23 @@
       "kind": "widget",
       "description": "Published articles from the supplied bounded site.content.articles.items. Render the records with this placement's authored introduction and link through the supplied item URLs. Article engagement and comments remain platform islands on the detail page.",
       "fields": [
+        {
+          "name": "showCollectionLink",
+          "kind": "boolean",
+          "required": false,
+          "description": "Only false hides this placement's existing onward collection link. Missing or true keeps the template default. Requires this exact template to declare supports.sectionCollectionLinkVisibility for this section. Keep a stable data-p60-collection-link anchor and add hidden only for false. The platform-supplied URL and shared label stay unchanged; headings, records and individual card links are unaffected."
+        },
+        {
+          "name": "headingAlignment",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "description": "Desktop alignment of the heading and optional eyebrow. The template may position their heading-only group within its existing content container and gutters while preserving readable width. Only applied when this exact template declares supports.sectionHeadingAlignment for this section and option. Absent means template default. Start/end follow the site direction. Below 1024 CSS pixels the template retains its own layout. Introductions, body copy, buttons, cards, images and islands keep their placement and alignment; full-bleed imagery does not widen the heading bounds."
+        },
         {
           "name": "eyebrow",
           "kind": "text",
@@ -464,6 +553,23 @@
       ],
       "fields": [
         {
+          "name": "showCollectionLink",
+          "kind": "boolean",
+          "required": false,
+          "description": "Only false hides this placement's existing onward collection link. Missing or true keeps the template default. Requires this exact template to declare supports.sectionCollectionLinkVisibility for this section. Keep a stable data-p60-collection-link anchor and add hidden only for false. The platform-supplied URL and shared label stay unchanged; headings, records and individual card links are unaffected."
+        },
+        {
+          "name": "headingAlignment",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "description": "Desktop alignment of the heading and optional eyebrow. The template may position their heading-only group within its existing content container and gutters while preserving readable width. Only applied when this exact template declares supports.sectionHeadingAlignment for this section and option. Absent means template default. Start/end follow the site direction. Below 1024 CSS pixels the template retains its own layout. Introductions, body copy, buttons, cards, images and islands keep their placement and alignment; full-bleed imagery does not widen the heading bounds."
+        },
+        {
           "name": "eyebrow",
           "kind": "text",
           "required": false,
@@ -500,6 +606,17 @@
         "causes"
       ],
       "fields": [
+        {
+          "name": "headingAlignment",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "description": "Desktop alignment of the heading and optional eyebrow. The template may position their heading-only group within its existing content container and gutters while preserving readable width. Only applied when this exact template declares supports.sectionHeadingAlignment for this section and option. Absent means template default. Start/end follow the site direction. Below 1024 CSS pixels the template retains its own layout. Introductions, body copy, buttons, cards, images and islands keep their placement and alignment; full-bleed imagery does not widen the heading bounds."
+        },
         {
           "name": "heading",
           "kind": "text",
@@ -543,6 +660,17 @@
       ],
       "description": "Big headline numbers, the at-a-glance impact band. Values are author-entered text (write them exactly as they should read), or, per item, a live figure the platform counts (`source`).",
       "fields": [
+        {
+          "name": "headingAlignment",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "description": "Desktop alignment of the heading and optional eyebrow. The template may position their heading-only group within its existing content container and gutters while preserving readable width. Only applied when this exact template declares supports.sectionHeadingAlignment for this section and option. Absent means template default. Start/end follow the site direction. Below 1024 CSS pixels the template retains its own layout. Introductions, body copy, buttons, cards, images and islands keep their placement and alignment; full-bleed imagery does not widen the heading bounds."
+        },
         {
           "name": "eyebrow",
           "kind": "text",
@@ -626,6 +754,23 @@
         "causes"
       ],
       "fields": [
+        {
+          "name": "showCollectionLink",
+          "kind": "boolean",
+          "required": false,
+          "description": "Only false hides this placement's existing onward collection link. Missing or true keeps the template default. Requires this exact template to declare supports.sectionCollectionLinkVisibility for this section. Keep a stable data-p60-collection-link anchor and add hidden only for false. The platform-supplied URL and shared label stay unchanged; headings, records and individual card links are unaffected."
+        },
+        {
+          "name": "headingAlignment",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "description": "Desktop alignment of the heading and optional eyebrow. The template may position their heading-only group within its existing content container and gutters while preserving readable width. Only applied when this exact template declares supports.sectionHeadingAlignment for this section and option. Absent means template default. Start/end follow the site direction. Below 1024 CSS pixels the template retains its own layout. Introductions, body copy, buttons, cards, images and islands keep their placement and alignment; full-bleed imagery does not widen the heading bounds."
+        },
         {
           "name": "eyebrow",
           "kind": "text",
@@ -716,6 +861,23 @@
       ],
       "fields": [
         {
+          "name": "showCollectionLink",
+          "kind": "boolean",
+          "required": false,
+          "description": "Only false hides this placement's existing onward collection link. Missing or true keeps the template default. Requires this exact template to declare supports.sectionCollectionLinkVisibility for this section. Keep a stable data-p60-collection-link anchor and add hidden only for false. The platform-supplied URL and shared label stay unchanged; headings, records and individual card links are unaffected."
+        },
+        {
+          "name": "headingAlignment",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "description": "Desktop alignment of the heading and optional eyebrow. The template may position their heading-only group within its existing content container and gutters while preserving readable width. Only applied when this exact template declares supports.sectionHeadingAlignment for this section and option. Absent means template default. Start/end follow the site direction. Below 1024 CSS pixels the template retains its own layout. Introductions, body copy, buttons, cards, images and islands keep their placement and alignment; full-bleed imagery does not widen the heading bounds."
+        },
+        {
           "name": "eyebrow",
           "kind": "text",
           "required": false,
@@ -753,6 +915,23 @@
       ],
       "fields": [
         {
+          "name": "showCollectionLink",
+          "kind": "boolean",
+          "required": false,
+          "description": "Only false hides this placement's existing onward collection link. Missing or true keeps the template default. Requires this exact template to declare supports.sectionCollectionLinkVisibility for this section. Keep a stable data-p60-collection-link anchor and add hidden only for false. The platform-supplied URL and shared label stay unchanged; headings, records and individual card links are unaffected."
+        },
+        {
+          "name": "headingAlignment",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "description": "Desktop alignment of the heading and optional eyebrow. The template may position their heading-only group within its existing content container and gutters while preserving readable width. Only applied when this exact template declares supports.sectionHeadingAlignment for this section and option. Absent means template default. Start/end follow the site direction. Below 1024 CSS pixels the template retains its own layout. Introductions, body copy, buttons, cards, images and islands keep their placement and alignment; full-bleed imagery does not widen the heading bounds."
+        },
+        {
           "name": "eyebrow",
           "kind": "text",
           "required": false,
@@ -786,6 +965,17 @@
       ],
       "description": "The key people behind the charity, trustees, staff, volunteers, as simple cards: name, position, an optional photograph (uploaded through the platform pipeline) and an optional one-line statement. Templates render a card grid that collapses to a single column on small screens; a card without a photo renders cleanly (initials or plain), never a placeholder face.",
       "fields": [
+        {
+          "name": "headingAlignment",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "description": "Desktop alignment of the heading and optional eyebrow. The template may position their heading-only group within its existing content container and gutters while preserving readable width. Only applied when this exact template declares supports.sectionHeadingAlignment for this section and option. Absent means template default. Start/end follow the site direction. Below 1024 CSS pixels the template retains its own layout. Introductions, body copy, buttons, cards, images and islands keep their placement and alignment; full-bleed imagery does not widen the heading bounds."
+        },
         {
           "name": "eyebrow",
           "kind": "text",
@@ -879,6 +1069,17 @@
       "context": [],
       "fields": [
         {
+          "name": "headingAlignment",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "description": "Desktop alignment of the heading and optional eyebrow. The template may position their heading-only group within its existing content container and gutters while preserving readable width. Only applied when this exact template declares supports.sectionHeadingAlignment for this section and option. Absent means template default. Start/end follow the site direction. Below 1024 CSS pixels the template retains its own layout. Introductions, body copy, buttons, cards, images and islands keep their placement and alignment; full-bleed imagery does not widen the heading bounds."
+        },
+        {
           "name": "eyebrow",
           "kind": "text",
           "required": false,
@@ -917,6 +1118,23 @@
         "home"
       ],
       "fields": [
+        {
+          "name": "showCollectionLink",
+          "kind": "boolean",
+          "required": false,
+          "description": "Only false hides this placement's existing onward collection link. Missing or true keeps the template default. Requires this exact template to declare supports.sectionCollectionLinkVisibility for this section. Keep a stable data-p60-collection-link anchor and add hidden only for false. The platform-supplied URL and shared label stay unchanged; headings, records and individual card links are unaffected."
+        },
+        {
+          "name": "headingAlignment",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "description": "Desktop alignment of the heading and optional eyebrow. The template may position their heading-only group within its existing content container and gutters while preserving readable width. Only applied when this exact template declares supports.sectionHeadingAlignment for this section and option. Absent means template default. Start/end follow the site direction. Below 1024 CSS pixels the template retains its own layout. Introductions, body copy, buttons, cards, images and islands keep their placement and alignment; full-bleed imagery does not widen the heading bounds."
+        },
         {
           "name": "eyebrow",
           "kind": "text",
