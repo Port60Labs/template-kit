@@ -75,6 +75,17 @@ Start with \`npm install\`, then:
 **Working with an AI agent?** Point it at this directory, \`AGENTS.md\` (and \`CLAUDE.md\`)
 brief it on the contract, the rules and the validate loop.
 
+Optional heading sizing and section spacing are independent per section: declare only tested
+choices in \`supports.sectionPresentation\`. Keep \`data-p60-heading-scale\` on the actual
+heading and \`data-p60-section-spacing\` on the natural outer section root, including when
+the heading is hidden. Hooks stay permanently present and empty during inheritance. Define
+responsive font sizes or block-axis root padding in CSS. Never change horizontal gutters,
+card gaps, heights or island internals for spacing. An absent preference inherits;
+reset removes the saved choice. Do not accept arbitrary CSS or numeric sizes. The kit proves
+contract structure, while browser checks must prove visible effects and safe layouts.
+See https://developers.port60.com/guides/sections-and-data/#bounded-heading-size and the
+machine-readable https://developers.port60.com/schemas/template-presentation-v2.json registry.
+
 Docs: https://developers.port60.com
 `);
 

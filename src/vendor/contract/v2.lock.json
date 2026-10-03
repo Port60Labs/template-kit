@@ -94,7 +94,8 @@
         "url_encode",
         "where",
         "t",
-        "local_date"
+        "local_date",
+        "colour_roles"
       ],
       "excluded": {
         "tags": [
@@ -331,6 +332,223 @@
               "default": false,
               "description": "True when the sections mark which node shows which field with data-p60-field, so the editor can put the caret on the page instead of in a side panel. The address is inside that section's own content: data-p60-field=\"title\", or data-p60-field=\"items.{{ forloop.index0 }}.label\" for an entry in a list. Purely additive: the attribute is markup, the contract is untouched, and a template that marks nothing keeps the section-level editor. The validator reads the marks from the source and warns on any that does not name a field of that section. Missing or false leaves this exact template version editing in the panel.",
               "$comment": "Follows the navigationHighlights pattern: declared honesty, proven by the validator."
+            },
+            "sectionFields": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "hero": {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 3,
+                  "uniqueItems": true,
+                  "items": {
+                    "enum": [
+                      "imageUrl",
+                      "imageAlt",
+                      "photoFraming"
+                    ]
+                  },
+                  "allOf": [
+                    {
+                      "contains": {
+                        "const": "imageUrl"
+                      }
+                    },
+                    {
+                      "contains": {
+                        "const": "imageAlt"
+                      }
+                    }
+                  ]
+                }
+              },
+              "description": "Per-section opt-in to optional authored fields in this exact template version. The initial capability is the About introduction photograph: hero must also occur in supports.sections, and imageUrl/imageAlt are declared together. Optional photoFraming adds fill/whole on that photo; absent/reset inherits the author's composition while explicit whole shows the uncropped natural ratio. A fixed-layout photograph can be supported without sectionLayout. Missing support keeps saved photo fields but omits them from rendering and offers no new image picker. Validation proves supplied source/alt, no-photo omission, bounded framing and section ownership."
+            },
+            "sectionPresentation": {
+              "type": "object",
+              "maxProperties": 16,
+              "propertyNames": {
+                "enum": [
+                  "hero",
+                  "values",
+                  "cta",
+                  "homeHero",
+                  "impact",
+                  "events",
+                  "articles",
+                  "campaigns",
+                  "emergency",
+                  "stats",
+                  "appealGrid",
+                  "services",
+                  "documents",
+                  "people",
+                  "impactMap",
+                  "courses"
+                ]
+              },
+              "additionalProperties": {
+                "type": "object",
+                "additionalProperties": false,
+                "minProperties": 1,
+                "properties": {
+                  "sectionLayout": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "options",
+                      "default"
+                    ],
+                    "properties": {
+                      "options": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 3,
+                        "uniqueItems": true,
+                        "items": {
+                          "enum": [
+                            "image-start",
+                            "image-end",
+                            "stacked"
+                          ]
+                        }
+                      },
+                      "default": {
+                        "enum": [
+                          "image-start",
+                          "image-end",
+                          "stacked"
+                        ]
+                      }
+                    },
+                    "description": "Per-section author opt-in for an About introduction with optional authored imagery. Start/end follow site direction. Permanent data-p60-section-layout on the single natural root, with data-p60-layout-has-media only when the photo exists and explicit frame/media/content roles. Token CSS changes only bounded grid tracks and slot placement, never copy, DOM order, imagery, gutters, typography or platform islands. Default/reset keeps inherited styling. Every narrow-screen choice retains authored single-column stacking."
+                  },
+                  "colourTreatment": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "options",
+                      "default"
+                    ],
+                    "properties": {
+                      "options": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 3,
+                        "uniqueItems": true,
+                        "items": {
+                          "enum": [
+                            "standard",
+                            "soft",
+                            "contrast"
+                          ]
+                        }
+                      },
+                      "default": {
+                        "enum": [
+                          "standard",
+                          "soft",
+                          "contrast"
+                        ]
+                      }
+                    },
+                    "description": "Coordinated section paint within the selected Look. Requires a permanent data-p60-colour-treatment on the single natural section root and bounded data-p60-colour-role descendants. Nondefault treatments coordinate root background/text and every marked role, including link/button hover and focus-visible. No shared palette rebinding, images, layout or platform islands. Home hero and impact maps are unsupported. Missing/reset preserves inherited styling."
+                  },
+                  "imageOverlay": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "options",
+                      "default"
+                    ],
+                    "properties": {
+                      "options": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 3,
+                        "uniqueItems": true,
+                        "items": {
+                          "enum": [
+                            "subtle",
+                            "standard",
+                            "strong"
+                          ]
+                        }
+                      },
+                      "default": {
+                        "enum": [
+                          "subtle",
+                          "standard",
+                          "strong"
+                        ]
+                      }
+                    },
+                    "description": "Home hero only. Safe palette-derived decorative photo treatment choices, independently proven for static and carousel imagery, Fill and Whole. Preserve required text-readability scrims. Missing/reset preserves inherited treatment; no source editing, image opacity or geometry changes."
+                  },
+                  "sectionSpacing": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "options",
+                      "default"
+                    ],
+                    "properties": {
+                      "options": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 3,
+                        "uniqueItems": true,
+                        "items": {
+                          "enum": [
+                            "compact",
+                            "standard",
+                            "spacious"
+                          ]
+                        }
+                      },
+                      "default": {
+                        "enum": [
+                          "compact",
+                          "standard",
+                          "spacious"
+                        ]
+                      }
+                    }
+                  },
+                  "headingScale": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "options",
+                      "default"
+                    ],
+                    "properties": {
+                      "options": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 3,
+                        "uniqueItems": true,
+                        "items": {
+                          "enum": [
+                            "compact",
+                            "standard",
+                            "large"
+                          ]
+                        }
+                      },
+                      "default": {
+                        "enum": [
+                          "compact",
+                          "standard",
+                          "large"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "description": "Exact-version opt-in to independent platform-owned section presentation controls. Every key must be in supports.sections and declare at least one known control. Each control's default must occur in its options and describe inherited responsive styling. Saved explicit choices are projected into section.presentation; absence inherits without writing defaults. headingScale requires a permanent data-p60-heading-scale hook on the actual heading and authored font-size CSS. sectionSpacing requires a permanent data-p60-section-spacing hook on the natural outer section root and authored block-axis padding CSS, even without a heading; never alter horizontal gutters, card gaps, heights or island internals. Missing declarations are unsupported. No arbitrary values, conditions or CSS selectors are accepted."
             },
             "sectionHeadingAlignment": {
               "type": "object",
@@ -578,9 +796,11 @@
                     "type": "string",
                     "enum": [
                       "typography",
-                      "looks"
+                      "looks",
+                      "header",
+                      "footer"
                     ],
-                    "description": "Where the admin surfaces this knob: 'typography' → the Typography section beside the font slots; 'looks' → the Looks section with the one-click bundles (colour schemes and accent dials belong there, and ungrouped color knobs plus a knob keyed 'scheme' default there anyway); other ungrouped knobs render under Template options."
+                    "description": "Where the admin surfaces this knob: typography, looks, or the shared header/footer inspector. Header and footer groups explicitly declare template-authored global chrome settings, not a new content source. Every option must have template-owned CSS or markup; omitted groups never imply support. Other ungrouped knobs render under Template options."
                   },
                   "weights": {
                     "type": "array",
@@ -2735,8 +2955,14 @@
           "pages": [
             "about"
           ],
-          "description": "The page opener: a headline with an optional kicker and sanitised rich-text intro.",
+          "description": "The page opener: a headline with an optional kicker, sanitised rich-text intro and one optional author-supported photograph. Photograph support is explicit per section of the exact template; layout choices are a separate capability.",
           "fields": [
+            {
+              "name": "presentation",
+              "kind": "presentation",
+              "required": false,
+              "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+            },
             {
               "name": "headingAlignment",
               "kind": "select",
@@ -2764,7 +2990,29 @@
               "name": "bodyHtml",
               "kind": "richtext",
               "required": false,
-              "description": "Sanitised HTML intro, render with the raw filter."
+              "description": "Sanitised HTML intro, render with the raw filter. A colour-capable introduction renders bodyHtml | colour_roles | raw so semantic descendants receive bounded paint roles without changing content."
+            },
+            {
+              "name": "imageUrl",
+              "kind": "image",
+              "required": false,
+              "description": "Optional introduction photograph. Requires supports.sectionFields.hero to declare imageUrl and imageAlt together. Missing or blank renders no photograph, placeholder or empty media column. Fixed-layout photo support is independent of sectionLayout. Use the supplied safe URL on the actual image, never in inline CSS; unsupported stored values remain saved but do not render."
+            },
+            {
+              "name": "imageAlt",
+              "kind": "text",
+              "required": false,
+              "description": "Plain-text alternative for this introduction photograph, escaped into its alt attribute. Missing or blank means an empty alternative; never invent a description or render it as visible copy. Paired with imageUrl in supports.sectionFields.hero."
+            },
+            {
+              "name": "photoFraming",
+              "kind": "select",
+              "required": false,
+              "options": [
+                "fill",
+                "whole"
+              ],
+              "description": "Optional exact-section photograph framing, declared as a third supports.sectionFields.hero member beside imageUrl/imageAlt. Absent/reset inherits the template's authored image composition, which may crop. Explicit whole shows the full photograph at its natural ratio, width 100% and height auto without a blanket height cap. Fill deliberately crops into an author-bounded aspect ratio. Keep data-p60-photo-framing on the actual img, empty when inherited. Token CSS may change only object-fit and bounded aspect-ratio on that image, never its source, width, grid, copy or neighbours. Home hero semantics are unchanged. Unsupported saved choices remain stored but are not projected."
             }
           ],
           "minimal": {
@@ -2784,6 +3032,12 @@
           ],
           "description": "A set of principles shown as cards or a numbered list, per the template.",
           "fields": [
+            {
+              "name": "presentation",
+              "kind": "presentation",
+              "required": false,
+              "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+            },
             {
               "name": "headingAlignment",
               "kind": "select",
@@ -2871,6 +3125,12 @@
           "description": "A closing band: heading, optional line, one button.",
           "fields": [
             {
+              "name": "presentation",
+              "kind": "presentation",
+              "required": false,
+              "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+            },
+            {
               "name": "headingAlignment",
               "kind": "select",
               "required": false,
@@ -2926,6 +3186,12 @@
           ],
           "description": "The home opener. EVERY field optional: eyebrow/title derive from branding when absent, the lead OMITS when absent (never a fabricated placeholder), buttons fall back to platform defaults.",
           "fields": [
+            {
+              "name": "presentation",
+              "kind": "presentation",
+              "required": false,
+              "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+            },
             {
               "name": "headingAlignment",
               "kind": "select",
@@ -3068,6 +3334,12 @@
           "description": "What gifts make possible, optional intro plus icon/title/description cards. Claims must be truthful for the tenant.",
           "fields": [
             {
+              "name": "presentation",
+              "kind": "presentation",
+              "required": false,
+              "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+            },
+            {
               "name": "headingAlignment",
               "kind": "select",
               "required": false,
@@ -3168,6 +3440,12 @@
           "description": "Published events across registration modes. Render the supplied bounded site.content.events.items with this placement's authored introduction. Optional motion uses declared behaviours; ticket sales and RSVP stay on the platform-owned detail route supplied by each item.",
           "fields": [
             {
+              "name": "presentation",
+              "kind": "presentation",
+              "required": false,
+              "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+            },
+            {
               "name": "showCollectionLink",
               "kind": "boolean",
               "required": false,
@@ -3222,6 +3500,12 @@
           "kind": "widget",
           "description": "Published articles from the supplied bounded site.content.articles.items. Render the records with this placement's authored introduction and link through the supplied item URLs. Article engagement and comments remain platform islands on the detail page.",
           "fields": [
+            {
+              "name": "presentation",
+              "kind": "presentation",
+              "required": false,
+              "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+            },
             {
               "name": "showCollectionLink",
               "kind": "boolean",
@@ -3281,6 +3565,12 @@
           ],
           "fields": [
             {
+              "name": "presentation",
+              "kind": "presentation",
+              "required": false,
+              "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+            },
+            {
               "name": "showCollectionLink",
               "kind": "boolean",
               "required": false,
@@ -3335,6 +3625,12 @@
           ],
           "fields": [
             {
+              "name": "presentation",
+              "kind": "presentation",
+              "required": false,
+              "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+            },
+            {
               "name": "headingAlignment",
               "kind": "select",
               "required": false,
@@ -3388,6 +3684,12 @@
           ],
           "description": "Big headline numbers, the at-a-glance impact band. Values are author-entered text (write them exactly as they should read), or, per item, a live figure the platform counts (`source`).",
           "fields": [
+            {
+              "name": "presentation",
+              "kind": "presentation",
+              "required": false,
+              "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+            },
             {
               "name": "headingAlignment",
               "kind": "select",
@@ -3482,6 +3784,12 @@
             "causes"
           ],
           "fields": [
+            {
+              "name": "presentation",
+              "kind": "presentation",
+              "required": false,
+              "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+            },
             {
               "name": "showCollectionLink",
               "kind": "boolean",
@@ -3589,6 +3897,12 @@
           ],
           "fields": [
             {
+              "name": "presentation",
+              "kind": "presentation",
+              "required": false,
+              "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+            },
+            {
               "name": "showCollectionLink",
               "kind": "boolean",
               "required": false,
@@ -3643,6 +3957,12 @@
           ],
           "fields": [
             {
+              "name": "presentation",
+              "kind": "presentation",
+              "required": false,
+              "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+            },
+            {
               "name": "showCollectionLink",
               "kind": "boolean",
               "required": false,
@@ -3693,6 +4013,12 @@
           ],
           "description": "The key people behind the charity, trustees, staff, volunteers, as simple cards: name, position, an optional photograph (uploaded through the platform pipeline) and an optional one-line statement. Templates render a card grid that collapses to a single column on small screens; a card without a photo renders cleanly (initials or plain), never a placeholder face.",
           "fields": [
+            {
+              "name": "presentation",
+              "kind": "presentation",
+              "required": false,
+              "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+            },
             {
               "name": "headingAlignment",
               "kind": "select",
@@ -3797,6 +4123,12 @@
           "context": [],
           "fields": [
             {
+              "name": "presentation",
+              "kind": "presentation",
+              "required": false,
+              "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+            },
+            {
               "name": "headingAlignment",
               "kind": "select",
               "required": false,
@@ -3829,14 +4161,15 @@
               "name": "mapSlug",
               "kind": "text",
               "required": false,
-              "description": "WHICH map renders here, by its address (the Pages editor's placement picker writes it; the Maps area is where maps exist). Absent = the tenant's first published map."
+              "description": "WHICH published map renders here, by its address (the Pages editor's placement picker writes it; the Maps area owns its title, description and points). An absent or blank selection renders no map. A missing or ineligible selected map never falls back to another record."
             }
           ],
           "minimal": {},
           "sample": {
             "eyebrow": "Where we work",
             "heading": "Our impact, on the map",
-            "text": "Every marker is a real place: a programme, an appeal, a story. Click one to see what happens there."
+            "text": "Every marker is a real place: a programme, an appeal, a story. Click one to see what happens there.",
+            "mapSlug": "our-work"
           }
         },
         {
@@ -3846,6 +4179,12 @@
             "home"
           ],
           "fields": [
+            {
+              "name": "presentation",
+              "kind": "presentation",
+              "required": false,
+              "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+            },
             {
               "name": "showCollectionLink",
               "kind": "boolean",
@@ -7257,6 +7596,219 @@
           ]
         }
       ]
+    },
+    "presentation": {
+      "version": 1,
+      "description": "Platform-owned presentation meanings. Templates declare supported choices; saved values remain tenant-owned. An absent override inherits the exact artifact's authored default. Hidden or unsupported values remain stored but are not projected into template rendering.",
+      "sectionTypes": [
+        "hero",
+        "values",
+        "cta",
+        "homeHero",
+        "impact",
+        "events",
+        "articles",
+        "campaigns",
+        "emergency",
+        "stats",
+        "appealGrid",
+        "services",
+        "documents",
+        "people",
+        "impactMap",
+        "courses"
+      ],
+      "legacySectionAliases": {
+        "programmes": "services",
+        "resources": "documents",
+        "whatsOn": "events"
+      },
+      "controls": {
+        "sectionLayout": {
+          "label": "Section layout",
+          "kind": "choice",
+          "scope": "section",
+          "sectionTypes": [
+            "hero"
+          ],
+          "contentFields": {
+            "imageUrl": "image",
+            "imageAlt": "text"
+          },
+          "address": [
+            "presentation",
+            "sectionLayout"
+          ],
+          "options": [
+            "image-start",
+            "image-end",
+            "stacked"
+          ],
+          "labels": {
+            "image-start": "Image at start",
+            "image-end": "Image at end",
+            "stacked": "Image above"
+          },
+          "minimumOptions": 2,
+          "reset": "remove",
+          "target": "section-layout",
+          "responsive": "author-defined",
+          "attribute": "data-p60-section-layout",
+          "description": "Author-owned image/text layout for an explicitly supported About introduction. Start/end follow the site direction. Mark the single natural outer root and existing frame/media/content slots; token CSS changes only bounded grid tracks and slot placement when a photograph exists. Missing/reset preserves authored styling. Preserve copy, imagery, reading order, links, gutters and narrow-screen stacking; never invent absent media, add arbitrary containers or target platform islands. Every exact section declaration is independent; missing support is unsupported."
+        },
+        "colourTreatment": {
+          "label": "Colour treatment",
+          "kind": "choice",
+          "scope": "section",
+          "sectionTypes": [
+            "hero",
+            "values",
+            "cta",
+            "impact",
+            "events",
+            "articles",
+            "campaigns",
+            "emergency",
+            "stats",
+            "appealGrid",
+            "services",
+            "documents",
+            "people",
+            "courses"
+          ],
+          "address": [
+            "presentation",
+            "colourTreatment"
+          ],
+          "options": [
+            "standard",
+            "soft",
+            "contrast"
+          ],
+          "labels": {
+            "standard": "Standard",
+            "soft": "Soft",
+            "contrast": "Contrast"
+          },
+          "minimumOptions": 2,
+          "reset": "remove",
+          "target": "section-colour-treatment",
+          "responsive": "author-defined",
+          "attribute": "data-p60-colour-treatment",
+          "description": "Coordinated author-owned section surface, copy, links and buttons within the selected Look. Missing/reset retains the original treatment. Mark the natural outer root and explicitly owned colour roles; token CSS changes paint only, never shared palette variables, imagery, layout or island internals. Home hero, impact maps and sections containing platform islands are not supported in this slice."
+        },
+        "headingScale": {
+          "label": "Heading size",
+          "kind": "choice",
+          "scope": "section",
+          "address": [
+            "presentation",
+            "headingScale"
+          ],
+          "options": [
+            "compact",
+            "standard",
+            "large"
+          ],
+          "labels": {
+            "compact": "Compact",
+            "standard": "Standard",
+            "large": "Large"
+          },
+          "minimumOptions": 2,
+          "reset": "remove",
+          "target": "section-heading",
+          "responsive": "author-defined",
+          "attribute": "data-p60-heading-scale",
+          "description": "Changes only the actual section heading's responsive font size, never its heading level, eyebrow, body, cards, buttons or islands. Templates provide each size in their own CSS. The declared default describes inherited styling; it is not written into tenant content."
+        },
+        "sectionSpacing": {
+          "label": "Section spacing",
+          "kind": "choice",
+          "scope": "section",
+          "address": [
+            "presentation",
+            "sectionSpacing"
+          ],
+          "options": [
+            "compact",
+            "standard",
+            "spacious"
+          ],
+          "labels": {
+            "compact": "Compact",
+            "standard": "Standard",
+            "spacious": "Spacious"
+          },
+          "minimumOptions": 2,
+          "reset": "remove",
+          "target": "section-root",
+          "responsive": "author-defined",
+          "attribute": "data-p60-section-spacing",
+          "description": "Changes only the natural outer section root's block-axis padding, never horizontal gutters, card gaps, heights or island internals. Templates provide each spacing in their own CSS. The declared default describes inherited styling; it is not written into tenant content. Keep the permanent hook even when the heading is hidden."
+        },
+        "imageOverlay": {
+          "label": "Photo overlay",
+          "kind": "choice",
+          "scope": "section",
+          "sectionTypes": [
+            "homeHero"
+          ],
+          "requiresSupport": "heroImagery",
+          "address": [
+            "presentation",
+            "imageOverlay"
+          ],
+          "options": [
+            "subtle",
+            "standard",
+            "strong"
+          ],
+          "labels": {
+            "subtle": "Subtle",
+            "standard": "Standard",
+            "strong": "Strong"
+          },
+          "minimumOptions": 2,
+          "reset": "remove",
+          "target": "section-image-treatment",
+          "responsive": "author-defined",
+          "attribute": "data-p60-image-overlay",
+          "description": "Changes only authored palette-derived decorative photo treatments in Home hero, never image opacity, source media, geometry, copy, widgets or a required readability scrim. Each exact artifact declares its safe choices and inherited default. Mark the existing photo wrapper with data-p60-image-overlay-media and empty decorative layers with data-p60-image-overlay-layer; token CSS may target those layers, marked wrapper pseudo-elements or the documented hero-slide-scrim. Missing and reset values preserve the authored treatment."
+        },
+        "headingAlignment": {
+          "label": "Desktop heading alignment",
+          "kind": "choice",
+          "scope": "section",
+          "address": [
+            "headingAlignment"
+          ],
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "minimumOptions": 1,
+          "reset": "remove",
+          "target": "section-heading-and-eyebrow",
+          "responsive": "desktop-1024",
+          "attribute": "data-p60-heading-align",
+          "declaration": "sectionHeadingAlignment"
+        },
+        "showCollectionLink": {
+          "label": "Show collection link",
+          "kind": "toggle",
+          "scope": "section",
+          "address": [
+            "showCollectionLink"
+          ],
+          "reset": "remove",
+          "target": "collection-link",
+          "responsive": "all",
+          "attribute": "data-p60-collection-link",
+          "declaration": "sectionCollectionLinkVisibility"
+        }
+      }
     }
   }
 }

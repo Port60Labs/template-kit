@@ -1,7 +1,3 @@
-// The `site` tree for validator and preview renders (content model v1, contract/v1/
-// content-model.json): ONE realistic organisation assembled from the canonical fixtures, with
-// `site.content.about` composed per-template from the section catalogue's samples for the
-// manifest's declared sections, the admin-authored page composition, previewed honestly.
 import contextContract from '../contract/v1/context.json' with { type: 'json' };
 import sectionCatalogue from '../contract/v1/sections.json' with { type: 'json' };
 
@@ -20,8 +16,6 @@ export const PAGE_KEYS = ['home', 'about'];
  * site's composition is admin-authored, and the preview-content `pages` block plays that role.
  */
 export function composePage(manifest, page) {
-  // The template's own composition when it declares one (stage 4): its order, its choice of
-  // sections, the `optional` ones left out so the preview shows the designed default.
   const declared = manifest?.compositions?.[page];
   if (Array.isArray(declared) && declared.length > 0) {
     return declared
@@ -54,11 +48,6 @@ export function buildSiteFixture(manifest, { page = null } = {}) {
       .filter(Boolean);
   return { ...base, content: { ...base.content, about } };
 }
-
-// ── preview-content.json (author-editable data) ────────────────────────────────
-// Data is free, SHAPE is fixed: a collection override must be an array of items whose fields all
-// exist in the model, within the collection's cap. Proofs always run on the canonical fixtures,
-// so custom data can never dodge a gate; this file only feeds the dev preview.
 
 const BRAND_FIELDS = new Set(['name', 'tagline', 'logoUrl', 'logoType', 'footerLogoUrl']);
 const NAV_ITEM_FIELDS = new Set(['label', 'href', 'cta', 'children', 'group', 'description', 'imageUrl', 'megaMenu', 'type']);
@@ -136,8 +125,6 @@ export function validatePreviewContent(json) {
     return ['preview-content.json: must be an object of { collection: [items] } overrides'];
   }
   for (const [name, items] of Object.entries(json)) {
-    // `nav` is the menu the layout renders (the shape of site.nav), `pages` the section
-    // compositions of the home and about pages (the admin-authored composition, previewed).
     if (name === 'nav') {
       if (items === null || typeof items !== 'object' || Array.isArray(items)) {
         errors.push('preview-content.json: nav must be an object with an items array');
@@ -163,7 +150,6 @@ export function validatePreviewContent(json) {
       }
       continue;
     }
-    // `brand` is the one other non-collection override: the organisation's own name and marks.
     if (name === 'brand') {
       if (items === null || typeof items !== 'object' || Array.isArray(items)) {
         errors.push('preview-content.json: brand must be an object');

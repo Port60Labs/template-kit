@@ -1,14 +1,3 @@
-// FIXTURE ART, the studio's sealed imagery. Fixtures reference imagery as `p60fixture:<kind>/<seed>`
-// and this module resolves every reference before a render: by default to a deterministic inline-SVG
-// scene (a data: URI, so the network-dead studio CSP renders it), or, when the caller passes an
-// `imageBase`, to `<imageBase>/<kind>-<seed>.jpg`, the dev-richer half of the dev-richer /
-// studio-sealed split (the same shape as the behaviour runtime: the kit's dev server may opt into
-// the one platform CDN host; the studio document never fetches anything).
-//
-// The art is deliberately scenery, not labels: layered gradients, a horizon, soft shapes, enough
-// composition that cards, carousels and banners read like a real site rather than a wireframe.
-// Deterministic by seed so goldens stay byte-identical run to run.
-
 const PALETTES = {
   hero: [['#27413a', '#0f2b22', '#c9a961'], ['#1f3550', '#0c1a2c', '#d08c4a'], ['#3c2f42', '#191423', '#c96f6f']],
   event: [['#2c2440', '#141024', '#e0a458'], ['#402438', '#1f0f1c', '#d97f6a'], ['#1f3345', '#0d1a26', '#7fb3d9']],
@@ -23,8 +12,6 @@ const PALETTES = {
 
 const SIZES = { wide: [160, 90], photo: [150, 100], portrait: [96, 120] };
 
-// A tiny deterministic PRNG seeded from the reference string, good enough for composition,
-// stable across runs and platforms.
 function rng(seedText) {
   let h = 2166136261;
   for (let i = 0; i < seedText.length; i += 1) {
@@ -43,7 +30,6 @@ function scene(kind, seed, aspect) {
   const set = PALETTES[kind] ?? PALETTES.hero;
   const [top, bottom, accent] = set[Math.floor(random() * set.length)];
 
-  // Horizon line + two hill paths, varied by seed.
   const horizon = hgt * (0.52 + random() * 0.2);
   const hill = (base, amp, fill, opacity) => {
     const y1 = base - amp * random();
@@ -52,7 +38,6 @@ function scene(kind, seed, aspect) {
     return `<path d='M0 ${base.toFixed(1)} C ${w * 0.2} ${y1.toFixed(1)}, ${w * 0.4} ${y2.toFixed(1)}, ${w * 0.6} ${y3.toFixed(1)} S ${w} ${y1.toFixed(1)}, ${w} ${base.toFixed(1)} L ${w} ${hgt} L 0 ${hgt} Z' fill='${fill}' opacity='${opacity}'/>`;
   };
 
-  // A sun/moon disc and a small cluster of soft foreground shapes.
   const discX = w * (0.15 + random() * 0.7);
   const discY = horizon * (0.35 + random() * 0.4);
   const discR = 6 + random() * (w / 14);

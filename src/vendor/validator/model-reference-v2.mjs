@@ -1,7 +1,3 @@
-// THE MODEL, VISIBLE (content model v2): a self-contained reference page the kit's dev server
-// serves at /model, the registry's shape beside the LIVE example data the preview is rendering
-// right now (preview-content.json overlay included), so "what can I read?" is answered where the
-// developer already lives. Network-dead like every preview document.
 import { contentModelV2 as contentModel } from '../engine/content-footprint.mjs';
 
 const escapeHtml = (s) =>

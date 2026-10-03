@@ -36,14 +36,14 @@
 {% assign heroFraming = section.photoFraming | default: 'fill' %}
 {% if heroCount > 0 and heroFraming == 'whole' %}
 {% if section.actionStyle == 'button' %}
-<section class="lq-homehero lq-homehero--vista{% if heroCount > 1 %} lq-homehero--carousel{% endif %}">
+<section class="lq-homehero lq-homehero--vista{% if heroCount > 1 %} lq-homehero--carousel{% endif %}" data-p60-section-spacing="{{ section.presentation.sectionSpacing }}">
   <div class="lq-vista">
     <img class="lq-vista-sizer" src="{{ section.images.first.imageUrl }}" alt="{{ section.images.first.alt }}" style="object-position: {{ heroFocus }}" fetchpriority="high" decoding="async">
     {% if heroCount > 1 %}{% island 'hero_carousel' %}{% else %}<div class="lq-vista-scrim" aria-hidden="true"></div>{% endif %}
     <div class="lq-vista-copy">
       <div class="container">
         {% if section.eyebrow != nil and section.eyebrow != '' %}<p class="lq-kicker" data-p60-field="eyebrow">{{ section.eyebrow }}</p>{% endif %}
-        {% if section.title != nil and section.title != '' %}<h1 data-p60-field="title">{{ section.title }}</h1>{% endif %}
+        {% if section.title != nil and section.title != '' %}<h1 data-p60-field="title" data-p60-heading-scale="{{ section.presentation.headingScale }}">{{ section.title }}</h1>{% endif %}
         {% if section.lead %}<p class="lq-homehero-lead" data-p60-field="lead">{{ section.lead }}</p>{% endif %}
         <div class="lq-homehero-actions">
         {% if heroButtonLabel != nil and heroButtonLabel != '' and heroButtonHref != nil and heroButtonHref != '' %}<a class="button button-primary" href="{{ heroButtonHref }}">{% if section.primaryLabel != nil %}<span data-p60-field="primaryLabel">{{ section.primaryLabel }}</span>{% else %}{{ heroButtonLabel }}{% endif %}</a>{% endif %}
@@ -56,7 +56,7 @@
 {% else %}
 {% comment %} Form mode: the grid pulls up over the band, copy on the photo, the widget riding
     the seam onto the gradient below (never a stacked strip). {% endcomment %}
-<section class="lq-homehero lq-homehero--vista lq-homehero--vista-form{% if heroCount > 1 %} lq-homehero--carousel{% endif %}">
+<section class="lq-homehero lq-homehero--vista lq-homehero--vista-form{% if heroCount > 1 %} lq-homehero--carousel{% endif %}" data-p60-section-spacing="{{ section.presentation.sectionSpacing }}">
   <div class="lq-vista">
     <img class="lq-vista-sizer" src="{{ section.images.first.imageUrl }}" alt="{{ section.images.first.alt }}" style="object-position: {{ heroFocus }}" fetchpriority="high" decoding="async">
     {% if heroCount > 1 %}{% island 'hero_carousel' %}{% else %}<div class="lq-vista-scrim" aria-hidden="true"></div>{% endif %}
@@ -64,7 +64,7 @@
   <div class="container lq-homehero-inner lq-vista-overlap">
     <div>
       {% if section.eyebrow != nil and section.eyebrow != '' %}<p class="lq-kicker" data-p60-field="eyebrow">{{ section.eyebrow }}</p>{% endif %}
-      {% if section.title != nil and section.title != '' %}<h1 data-p60-field="title">{{ section.title }}</h1>{% endif %}
+      {% if section.title != nil and section.title != '' %}<h1 data-p60-field="title" data-p60-heading-scale="{{ section.presentation.headingScale }}">{{ section.title }}</h1>{% endif %}
       {% if section.lead %}<p class="lq-homehero-lead" data-p60-field="lead">{{ section.lead }}</p>{% endif %}
       <div class="lq-homehero-actions">
         {% if heroButtonLabel != nil and heroButtonLabel != '' and heroButtonHref != nil and heroButtonHref != '' %}<a class="button button-primary" href="{{ heroButtonHref }}">{% if section.primaryLabel != nil %}<span data-p60-field="primaryLabel">{{ section.primaryLabel }}</span>{% else %}{{ heroButtonLabel }}{% endif %}</a>{% endif %}
@@ -79,7 +79,7 @@
 </section>
 {% endif %}
 {% else %}
-<section class="lq-homehero{% if heroPhoto %} lq-homehero--photo{% endif %}{% if heroCount > 1 %} lq-homehero--carousel{% endif %}"{% if heroPhoto %} style="background-image: url('{{ heroPhoto }}'); background-position: {{ heroFocus }}"{% endif %}>
+<section class="lq-homehero{% if heroPhoto %} lq-homehero--photo{% endif %}{% if heroCount > 1 %} lq-homehero--carousel{% endif %}" data-p60-section-spacing="{{ section.presentation.sectionSpacing }}"{% if heroPhoto %} style="background-image: url('{{ heroPhoto }}'); background-position: {{ heroFocus }}"{% endif %}>
   {% comment %}
     Several photos → the BEHAVIOUR carousel (data-p60-carousel, engine-wired, the template ships
     no JavaScript): complete static markup, one data-p60-slide per photo, auto-advance opt-in.
@@ -99,7 +99,7 @@
   <div class="container lq-homehero-inner">
     <div>
       {% if section.eyebrow != nil and section.eyebrow != '' %}<p class="lq-kicker" data-p60-field="eyebrow">{{ section.eyebrow }}</p>{% endif %}
-      {% if section.title != nil and section.title != '' %}<h1 data-p60-field="title">{{ section.title }}</h1>{% endif %}
+      {% if section.title != nil and section.title != '' %}<h1 data-p60-field="title" data-p60-heading-scale="{{ section.presentation.headingScale }}">{{ section.title }}</h1>{% endif %}
       {% if section.lead %}<p class="lq-homehero-lead" data-p60-field="lead">{{ section.lead }}</p>{% endif %}
       <div class="lq-homehero-actions">
         {% if section.actionStyle == 'button' %}

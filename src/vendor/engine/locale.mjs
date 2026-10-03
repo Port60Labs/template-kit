@@ -1,5 +1,3 @@
-// Template interface copy only. Never translate tenant-authored content or source record labels.
-// Plain JS so the host and kit use the exact same implementation, without network or tenant state.
 const arabic = Object.freeze({
   'Explore': 'تصفّح', 'Menu': 'القائمة', 'Open menu': 'فتح القائمة', 'Close menu': 'إغلاق القائمة',
   'Skip to content': 'انتقل إلى المحتوى', 'Skip to main content': 'انتقل إلى المحتوى الرئيسي',
@@ -54,11 +52,8 @@ export function templateMessage(message, locale) {
   return language(locale) === 'ar' && Object.hasOwn(arabic, message) ? arabic[message] : message;
 }
 
-// Exactly six formatter instances at most. No per-tenant or arbitrary-pattern cache growth.
 const formatters = new Map();
 export function templateDate(value, locale, style = 'date') {
-  // A timestamp needs an explicit offset. Date.parse on a zone-less timestamp would depend
-  // on the kit author's machine rather than the host's UTC rendering contract.
   if (typeof value !== 'string' || value.length > 64 || !/^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,9})?)?(?:Z|[+-]\d{2}:\d{2}))?$/.test(value)) return '';
   const timestamp = Date.parse(value);
   if (!Number.isFinite(timestamp) || !['date', 'datetime'].includes(style)) return '';

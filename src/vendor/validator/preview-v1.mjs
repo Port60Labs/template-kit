@@ -1,16 +1,9 @@
-// The STUDIO PREVIEW renderer (developer program T1.3): a validated artifact rendered over the
-// contract's KIND FIXTURES, no tenant, no tenant data, exactly what `template-kit dev` will show
-// locally in T3. Deliberately NOT the production TemplateHost path: a studio version must never
-// touch a live site, so this renders from an in-memory file map and the page it produces is
-// self-contained and network-dead, a CSP meta of default-src 'none' means the template's CSS
-// cannot fetch, beacon or import anything, and the consumer embeds it in a sandboxed iframe.
-// Islands render as realistic, non-interactive fixture skeletons through their public styling
-// classes. Preview HTML carries no runtime and never attempts a platform transaction.
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { Liquid } from 'liquidjs';
 import { CONTENT_SLOT, configureDialect, splitIslandParts } from '../engine/dialect.mjs';
 import { LIQUID_BUDGETS } from '../engine/budgets.mjs';
+import { resolveDesignSettings } from '../engine/design-settings.mjs';
 import dialect from '../contract/v1/dialect.json' with { type: 'json' };
 import sectionCatalogue from '../contract/v1/sections.json' with { type: 'json' };
 import islandRegistry from '../contract/v1/islands.json' with { type: 'json' };
@@ -21,23 +14,15 @@ import { withResolvedIcons } from './icons.mjs';
 import { FONT_PROVIDER_ORIGIN, fontCssHref, fontStackFor, knownFamily, toProvider } from './fonts.mjs';
 import { normaliseFocus, previewActions, withResolvedActions, applyFocus } from './focus.mjs';
 
-// Fixture imagery resolved for the SEALED studio render (p60fixture: refs become inline-SVG data
-// URIs the network-dead CSP can show). The dev preview may instead resolve them to the platform
-// CDN via options.fixtureImageBase, the dev-richer / studio-sealed split.
 const STUDIO_FX = resolveFixtureArt(contextContract.fixtures);
 
 const escapeHtml = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-// The platform base stylesheet, production loads it on EVERY template page before the theme, so
-// the preview does too: islands and platform components arrive with their real baseline look,
-// wearing the template's tokens, and the theme restyles over it exactly as in production.
-// (Generated copy of src/styles/global.css, scripts/build-preview-base.mjs.)
 let PLATFORM_BASE = '';
 try {
   PLATFORM_BASE = readFileSync(join(import.meta.dirname, 'platform-base.css'), 'utf8');
 } catch {
-  // An older vendored copy without the file, the preview degrades to theme-only styling.
 }
 
 function previewNote(name) {
@@ -73,8 +58,6 @@ function islandSkeleton(name, ctx = {}, fx = STUDIO_FX) {
         <p class="donate-note">Secure payment provided by Port60</p>
       </section>`;
     case 'member_menu':
-      // Lives INSIDE the nav row, so the wrapper stays inline and the badge trails the button,
-      // block layout here read as a stray element between the nav's last link and Sign in.
       return `<div data-p60-preview-island="member_menu" style="display:inline-flex;align-items:center;gap:8px">
         <button class="nav-p60-signin" type="button" disabled><span class="p60-mark" aria-hidden="true">P</span> Sign in</button>
         ${previewNote(name)}
@@ -127,8 +110,6 @@ function islandSkeleton(name, ctx = {}, fx = STUDIO_FX) {
         <div class="article-comments-gate"><p class="article-comments-note">Sign in to join the conversation.</p></div>
       </section>`;
     case 'hero_carousel': {
-      // Hydrated from the surrounding section's images (the homeHero sample fixture), real
-      // slides through the real styling API, CSS-crossfaded by the preview so it reads as alive.
       const images = Array.isArray(ctx.section?.images) ? ctx.section.images.filter((i) => i?.imageUrl) : [];
       const slides = images.length > 0
         ? images.map((image, i) => `<div class="hero-slide${i === 0 ? ' hero-slide--active' : ''} p60-preview-slide"><img class="hero-slide-img" src="${escapeHtml(image.imageUrl)}" alt="${escapeHtml(image.alt ?? '')}"><div class="hero-slide-scrim"></div></div>`).join('')
@@ -147,8 +128,6 @@ function islandSkeleton(name, ctx = {}, fx = STUDIO_FX) {
         <label class="newsletter-consent"><input type="checkbox" disabled><span>Email me about our work and appeals.</span></label>
       </form>`;
     case 'primary_action_widget':
-      // What this island becomes follows the preview's focus (fixtures.focus, from ?focus= on the
-      // dev server): the volunteer sign-up, nothing, or the default, the donation widget.
       if (fixtures.focus === 'volunteer') {
         return islandSkeleton('volunteer_signup', ctx, fx).replace('data-p60-preview-island="volunteer_signup"', 'data-p60-preview-island="primary_action_widget"');
       }
@@ -170,8 +149,6 @@ function islandSkeleton(name, ctx = {}, fx = STUDIO_FX) {
     case 'search':
       return `<div class="site-search" data-p60-preview-island="search">${previewNote(name)}<form class="site-search-form"><label class="site-search-label">Search this site</label><div class="site-search-fields"><input class="site-search-input" type="search" disabled><button class="site-search-submit" type="button" disabled>Search</button></div></form><ul class="site-search-results"><li class="site-search-result"><span class="site-search-kind">Article</span><a class="site-search-link" href="#">The Community Garden Opens Its Gates</a><p class="site-search-summary">Two years of digging and Saturday mornings in the rain: the Foundry Lane garden is open.</p></li></ul></div>`;
     case 'map': {
-      // The impact-map skeleton: the fixture's points projected onto a token-themed canvas,
-      // the same fallback rendering production uses until the platform tile layer is configured.
       const im = fx.sections?.impactMap?.impactMap ?? { title: 'Impact map', points: [] };
       const pts = im.points ?? [];
       const lats = pts.map((pt) => pt.latitude);
@@ -199,13 +176,6 @@ function islandSkeleton(name, ctx = {}, fx = STUDIO_FX) {
       return `<div class="p60-preview-island" data-p60-preview-island="${escapeHtml(name)}" role="note">${previewNote(name)}</div>`;
   }
 }
-
-// ── Platform surface skeletons ──────────────────────────────────────────────
-// The ROUTED dev preview's answer to "what does X look like in my theme": each platform-owned
-// page as a fixture skeleton through the PRODUCTION class names, so the platform base + the
-// theme's tokens style it exactly as live, wrapped by the template's own layout. Never
-// interactive, the same posture as island skeletons. Where the theme ships its own page
-// template for a surface (events, course, articles, article), that template renders instead.
 
 function surfaceDivider(label) {
   return `<div class="p60-preview-divider" role="note">platform page: ${escapeHtml(label)}, styled by your tokens and chrome</div>`;
@@ -360,7 +330,6 @@ function aboutSkeleton(fx, composition = []) {
   return `${surfaceDivider('about')}<section class="section"><div class="container"><h1>About us</h1>${rows}</div></section>`;
 }
 
-// surface → { pageTemplate to prefer when the theme declares it, builtin skeleton }
 const SURFACES = {
   events: { template: 'events', builtin: eventsListingSkeleton },
   event: { template: null, builtin: eventDetailSkeleton },
@@ -388,13 +357,9 @@ function surfaceBar(active, focus = 'donate', looks = [], activeLook = null) {
     link('campaigns', '/campaigns'), link('campaign', '/campaigns/fixture'), link('course', '/courses'),
     `<a href="${withFocus('/model')}" style="margin-left:auto;font-weight:700">site.content model →</a>`,
   ];
-  // What leads: the charity's switch, here as three links, so a developer sees the hero widget as
-  // the donation widget, as the volunteer sign-up, or absent, with the buttons following each time.
   const focusLink = (value, label) =>
     `<a href="${value === 'donate' ? '/' : `/?focus=${value}`}"${value === focus ? ' style="font-weight:700;text-decoration:underline"' : ''}>${label}</a>`;
   const focusLinks = [focusLink('donate', 'giving'), focusLink('volunteer', 'volunteering'), focusLink('none', 'buttons only')];
-  // Looks: the author's one-click bundles, switchable here the way a charity switches them in
-  // Appearance; ?look= on any URL, and ?p60s-<key>=<value> for a single knob.
   const lookLink = (name, href) =>
     `<a href="${href}"${name === activeLook ? ' style="font-weight:700;text-decoration:underline"' : ''}>${escapeHtml(name)}</a>`;
   const lookLinks = looks.length
@@ -429,29 +394,8 @@ function partsToHtml(html, contentHtml, ctx = {}, fx = STUDIO_FX) {
  * sealed and renders the fallback stacks).
  */
 function knobValues(manifest, overrides = {}) {
-  const attrs = [];
-  const vars = [];
-  const fontSlots = [];
-  for (const knob of manifest?.settings?.schema ?? []) {
-    const raw = overrides[knob.key] ?? knob.default;
-    if (raw == null || raw === '') continue;
-    const value = String(raw);
-    if (knob.kind === 'color') {
-      if (/^#[0-9a-fA-F]{3,8}$/.test(value)) vars.push(`--p60s-${knob.key}: ${value};`);
-    } else if (knob.kind === 'font') {
-      const family = knownFamily(value) ?? knownFamily(knob.default);
-      if (family) {
-        fontSlots.push({ family, weights: knob.weights ?? [] });
-        vars.push(`--p60s-${knob.key}: ${fontStackFor(family)};`);
-      }
-    } else {
-      const options = Array.isArray(knob.options) ? knob.options : null;
-      const chosen = options && !options.includes(value) ? knob.default : raw;
-      if (chosen == null || chosen === '') continue;
-      attrs.push(`data-p60s-${knob.key}="${escapeHtml(String(chosen))}"`);
-    }
-  }
-  return { attrs: attrs.join(' '), vars: vars.join(' '), fontSlots };
+  const { bodyAttrs, colorVars, fontSlots } = resolveDesignSettings(manifest?.settings?.schema, overrides, { knownFamily, fontStackFor });
+  return { attrs: Object.entries(bodyAttrs).map(([key, value]) => `${key}="${escapeHtml(value)}"`).join(' '), vars: colorVars.join(' '), fontSlots };
 }
 
 /**
@@ -467,22 +411,12 @@ export async function renderStudioPreview(files, options = {}) {
   configureDialect(liquid, dialect, allIslands);
 
   const catalogueByType = new Map(sectionCatalogue.sections.map((s) => [s.type, s]));
-  // Studio-sealed by default; the kit's dev server may pass fixtureImageBase to resolve fixture
-  // imagery to the platform CDN instead of inline-SVG art (the dev-richer half of the split).
   const artOptions = options.fixtureImageBase ? { imageBase: options.fixtureImageBase } : null;
   let fx = artOptions ? resolveFixtureArt(contextContract.fixtures, artOptions) : STUDIO_FX;
-  // What leads (docs/volunteering.md 'Site focus'): the dev server passes ?focus=; the studio
-  // renders the platform default. The island skeletons read it from the fixtures they are handed.
   const focus = normaliseFocus(options.focus);
   const actions = previewActions(focus);
   fx = { ...fx, focus };
-  // The one content tree (content model v1): about composed from this manifest's declared
-  // sections, dev preview-content overlaid when the kit passes it (validated there), imagery
-  // resolved exactly like the rest of the fixtures.
   const surface = options.surface ?? 'home';
-  // The section-based pages: home and about compose from supports.pages and the catalogue's page
-  // assignment (or the preview-content `pages` block, the admin-authored composition previewed).
-  // The tree's `about` is the composition of the page being rendered, as it is live.
   const pageOf = (page) => pageComposition(manifest, page, options.previewContent);
   const treePage = PAGE_KEYS.includes(surface) ? surface : 'home';
   const baseSite = buildSiteFixture(manifest, { page: treePage });
@@ -490,9 +424,6 @@ export async function renderStudioPreview(files, options = {}) {
     applyPreviewContent({ ...baseSite, content: { ...baseSite.content, about: pageOf(treePage) } }, options.previewContent ?? null),
     artOptions ?? {}), actions);
   const brand = site.brand ?? fx.brand;
-  // With a content override, the TREE is the source of truth for every fixture view: the routed
-  // platform skeletons and island skeletons re-derive their slices from the overridden site, so
-  // the developer's own data shows on /events, /donate and friends, not just where site.* is read.
   if (options.previewContent) {
     const c = site.content;
     fx = {
@@ -523,8 +454,6 @@ export async function renderStudioPreview(files, options = {}) {
 
   let contentHtml;
   if (surface !== 'home' && SURFACES[surface]) {
-    // A routed platform surface: the theme's own page template when it ships one, else the
-    // platform-page fixture skeleton, either way inside the theme's layout below.
     const def = SURFACES[surface];
     const templateSource = def.template ? files[`pages/${def.template}.liquid`] : null;
     const fixture = def.template ? fx.pages?.[def.template] : null;
@@ -538,13 +467,8 @@ export async function renderStudioPreview(files, options = {}) {
       contentHtml = def.builtin(fx);
     }
   } else if (surface === 'about' && !(manifest?.supports?.pages ?? []).includes('about')) {
-    // The template declares no about page: live, the platform's own About body renders inside the
-    // template's layout, so the preview shows that as a skeleton rather than the home composition.
     contentHtml = aboutSkeleton(fx, pageOf('about'));
   } else {
-    // Render one page composition: each section's Liquid over its content (the sample, or the
-    // preview-content override), icons resolved on items like the engine does, an unsupported
-    // type omitted, never an error (the contract).
     const renderComposition = async (composition) => {
       const out = [];
       for (const { type, content } of composition) {
@@ -553,17 +477,12 @@ export async function renderStudioPreview(files, options = {}) {
         if (!entry || source == null) continue;
         const base = artOptions ? resolveFixtureArt(content ?? {}, artOptions) : resolveFixtureArt(content ?? {});
         const context = {
-          // The home hero carries the resolved actions exactly as the platform hands them over, so a
-          // developer sees the widget AND the button that pairs with it. The catalogue sample's
-          // givingStyle is dropped here: in the preview the focus decides the style.
           section: withResolvedIcons(type === 'homeHero' ? withResolvedActions({ ...base, givingStyle: undefined, actionStyle: undefined }, actions) : base),
           brand,
           site,
           ...(fx.sections?.[type] ?? {})
         };
         const rendered = await liquid.parseAndRender(source, context);
-        // Island skeletons see the SAME context the section rendered with, that is what lets the
-        // hero carousel skeleton hydrate from the section's own photo fixtures.
         out.push(partsToHtml(rendered, '', context, fx));
       }
       return out;
@@ -573,17 +492,12 @@ export async function renderStudioPreview(files, options = {}) {
       sectionsHtml.push(...(await renderComposition(pageOf('about'))));
     } else {
       sectionsHtml.push(...(await renderComposition(pageOf('home'))));
-      // The studio's single document (no surface requested) keeps showing everything the template
-      // ships: the about composition follows the home one under a divider.
       if (!options.surface && (manifest?.supports?.pages ?? []).includes('about')) {
         const about = await renderComposition(pageOf('about'));
         if (about.length) sectionsHtml.push(`<div class="p60-preview-divider" role="note">page: about</div>`, ...about);
       }
     }
 
-    // Declared page templates render too (over their page fixtures), the loop an author lives in
-    // covers every surface they ship, not just home sections. The routed dev preview ALSO serves
-    // each at its own path; this keeps the studio's single document complete.
     for (const page of surface === 'about' ? [] : (manifest?.supports?.pageTemplates ?? [])) {
       const source = files[`pages/${page}.liquid`];
       const fixture = fx.pages?.[page];
@@ -613,9 +527,6 @@ export async function renderStudioPreview(files, options = {}) {
 
   const themeCss = files['assets/theme.css'] ?? '';
   const { attrs, vars, fontSlots } = knobValues(manifest, options.knobs ?? {});
-  // Webfonts: the DEV preview loads the same stylesheets production would (the template's own
-  // manifest.fonts through the provider mirror, plus one for the chosen font knobs) so type is
-  // judged for real locally; the studio render stays network-dead and shows the fallback stacks.
   const webfonts = options.webfonts
     ? [...(manifest?.fonts ?? []).map(toProvider), ...(fontCssHref(fontSlots) ? [fontCssHref(fontSlots)] : [])]
     : [];
@@ -623,28 +534,17 @@ export async function renderStudioPreview(files, options = {}) {
     ? `<link rel="preconnect" href="${FONT_PROVIDER_ORIGIN}" crossorigin>\n${webfonts.map((href) => `<link rel="stylesheet" href="${escapeHtml(href)}">`).join('\n')}`
     : '';
 
-  // The kit's dev server passes the platform's own behaviour runtime (a self-contained bundle) so
-  // authors see their carousels, reveals and tabs living locally. The document stays network-dead
-  //, the ONLY script it can run is the inline platform bundle; studio and demo previews pass
-  // nothing and keep the fully script-free CSP. Without the runtime, a CSS-only crossfade
-  // approximates behaviour carousels so a static preview still reads as alive.
   const runtime = options.behaviorsRuntime ?? null;
-  // With a fixture image base, the dev document may load imagery from that ONE origin; the studio
-  // render never widens beyond data: URIs.
   const imgOrigins = new Set();
   if (options.fixtureImageBase) {
     try {
       imgOrigins.add(new URL(options.fixtureImageBase).origin);
     } catch {
-      // A relative or malformed base stays sealed rather than guessing an origin.
     }
   }
-  // The author's own imagery (a --content override) renders from exactly the hosts it names.
   for (const origin of options.contentImageOrigins ?? []) {
     imgOrigins.add(origin);
   }
-  // The author's own photographs beside the template (a preview/ folder the dev server serves)
-  // are same-origin; the studio never admits them, there is no such folder to serve there.
   if (options.localImages) imgOrigins.add("'self'");
   const imgSrc = ['data:', ...imgOrigins].join(' ');
   const styleSrc = webfonts.length ? `'unsafe-inline' ${FONT_PROVIDER_ORIGIN}` : "'unsafe-inline'";

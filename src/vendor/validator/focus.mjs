@@ -1,7 +1,3 @@
-// The site focus for the PREVIEW: a JavaScript twin of charity-site's lib/focus.ts, kept in step by
-// hand (the validator is plain JS and is vendored into the kit). Same rules: the leading action is
-// the widget in the hero; the other action is the one button in the header and beside the hero; the
-// leading action never appears twice. The preview assumes volunteering is OPEN, so the pairing shows.
 export const FOCUS_CHOICES = ['donate', 'volunteer', 'none'];
 
 const ACTION = {
@@ -20,7 +16,6 @@ export function previewActions(focus) {
     return { primary: ACTION.volunteer, secondary: ACTION.donate, widget: 'volunteer', header: ACTION.donate, hero: ACTION.donate };
   }
   if (focus === 'none') {
-    // Buttons only (a Custom setting with no widget): the hero button leads with giving.
     return { primary: ACTION.donate, secondary: ACTION.volunteer, widget: null, header: ACTION.donate, hero: ACTION.donate };
   }
   return { primary: ACTION.donate, secondary: ACTION.volunteer, widget: 'donate', header: ACTION.volunteer, hero: ACTION.volunteer };

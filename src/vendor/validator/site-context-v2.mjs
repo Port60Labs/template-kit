@@ -5,6 +5,8 @@ import schema from '../contract/v2/site.schema.json' with { type: 'json' };
 import contentModel from '../contract/v2/content-model.json' with { type: 'json' };
 import { withHeadingAlignment } from '../engine/section-heading-alignment.mjs';
 import { resolvedNavigationMode, withCollectionLinkVisibility } from '../engine/presentation-capabilities.mjs';
+import { presentationValueErrors, withSectionPresentation } from '../engine/section-presentation.mjs';
+import { INTRO_PHOTO_FRAMING, safeSectionImageUrl, withSectionFields } from '../engine/section-fields.mjs';
 export { extractContentFootprint } from '../engine/content-footprint.mjs';
 export { contentModel };
 
@@ -27,7 +29,7 @@ export function composePage(manifest, page) {
 
 export function buildSiteFixture(manifest, { page = 'home', path } = {}) {
   const site = structuredClone(context.fixtures.site);
-  site.locale.languages = []; // One site's language, not a visitor language catalogue.
+  site.locale.languages = [];
   const headerMode = resolvedNavigationMode(manifest, site.nav.headerMode);
   if (headerMode === undefined) delete site.nav.headerMode;
   else site.nav.headerMode = headerMode;
@@ -62,6 +64,19 @@ function validatePageSections(value, path, errors) {
     for (const [name, fieldValue] of Object.entries(section.content)) {
       const field = fields.get(name);
       if (!field) { errors.push(`${at}.content.${name}: not an authored ${section.type} field`); continue; }
+      if (section.type === 'hero' && name === 'imageUrl' && fieldValue !== '' && fieldValue !== null && !safeSectionImageUrl(fieldValue, { fixture: true })) {
+        errors.push(`${at}.content.imageUrl: must be a safe public image URL or a preview fixture reference`);
+        continue;
+      }
+      if (section.type === 'hero' && ['imageUrl', 'imageAlt'].includes(name) && fieldValue === null) continue;
+      if (section.type === 'hero' && name === 'photoFraming') {
+        if (fieldValue !== null && !INTRO_PHOTO_FRAMING.includes(fieldValue)) errors.push(`${at}.content.photoFraming: must be fill or whole; omit it to inherit`);
+        continue;
+      }
+      if (name === 'presentation') {
+        errors.push(...presentationValueErrors(fieldValue, section.type).map(error => `${at}.content.presentation: ${error}`));
+        continue;
+      }
       if (name === 'headingAlignment' && !field.options?.includes(fieldValue)) {
         errors.push(`${at}.content.headingAlignment: must be start, center or end; omit it for the template default`);
         continue;
@@ -120,7 +135,7 @@ export function pageComposition(manifest, page, json) {
 /** Keep missing fields missing so a generated label never becomes an authored field marker. */
 export function resolveSectionFixture(section, _site, manifest) {
   const content = structuredClone(section.content ?? {});
-  return manifest === undefined ? content : withCollectionLinkVisibility(withHeadingAlignment(content, section.type, manifest), section.type, manifest);
+  return manifest === undefined ? content : withSectionFields(withSectionPresentation(withCollectionLinkVisibility(withHeadingAlignment(content, section.type, manifest), section.type, manifest), section.type, manifest), section.type, manifest, { fixture: true });
 }
 
 export function emptyCollections(site) {

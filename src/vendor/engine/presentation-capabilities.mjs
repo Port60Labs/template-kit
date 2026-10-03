@@ -1,5 +1,3 @@
-// Exact-artifact opt-ins. Preferences survive template switches in the stored document;
-// only supported values reach the render context or the editor's controls.
 export const NAVIGATION_MODES = Object.freeze(['simple', 'mega']);
 export const COLLECTION_LINK_SECTIONS = Object.freeze([
   'events', 'articles', 'courses', 'campaigns', 'services', 'documents', 'appealGrid'

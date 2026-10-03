@@ -1,8 +1,3 @@
-// The CONTRACT MAJORS registry (roadmap 8.6, multi-major engine support): the engine resolves a
-// template's declared `format` to the contract set that renders it, so `port60-liquid@1` keeps
-// rendering after `@2` ships. Today one major exists; when `@2` arrives it gets its own entry
-// (own dialect/catalogues, own configured Liquid instance) and @1 artifacts keep resolving here
-// untouched, with the published deprecation window governing how long.
 import dialect from '../contract/v1/dialect.json' with { type: 'json' };
 import sections from '../contract/v1/sections.json' with { type: 'json' };
 import islands from '../contract/v1/islands.json' with { type: 'json' };
