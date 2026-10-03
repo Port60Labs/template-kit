@@ -50,10 +50,47 @@ See the [AI quickstart](https://developers.port60.com/guides/ai-quickstart/).
 
 ## The contract
 
-Kit 1.2.1 authors **port60-liquid@2**, content model **2.0**, using the contract under
+Kit 1.3.0 authors **port60-liquid@2**, content model **2.0**, using the contract under
 `src/vendor/contract/v2`. Collection envelopes, independent header/footer navigation,
 resolved actions and page-scoped sections are explicit. V1 sources need a deliberate migration,
 not a manifest-only relabel. Historical v1 contracts remain frozen for existing platform pins.
+
+### Editor design flexibility in 1.3.0
+
+The editor offers only controls declared by the exact selected template version. The v2
+presentation registry in `src/vendor/contract/v2/presentation.json` describes the bounded
+choices and reset semantics, not evidence that every template implements each choice.
+
+- `supports.sectionPresentation` can declare per-section heading size, vertical spacing,
+  coordinated colour treatments, photo-only Home hero overlays and About introduction layouts.
+  Keep permanent hooks on the actual heading or natural section root, with token CSS scoped
+  to the control's permitted properties. Preserve inherited defaults, Looks, content and islands.
+  An absent saved key inherits; reset removes the override. Unsupported stored choices stay
+  stored but do not enter the rendering projection.
+- About introductions can independently declare `supports.sectionFields.hero` photograph and
+  alt-text fields, optionally with Fill/Show whole framing. Layout choices require those fields
+  and are logical `image-start`, `image-end` or `stacked` compositions. No photo means the
+  existing no-photo design, never a borrowed Home hero image or empty column. Reset restores
+  the author's framing, which need not match explicit Show whole.
+- The v2 `colour_roles` filter adds bounded semantic paint roles to platform-sanitised rich
+  text. Use `{{ section.bodyHtml | colour_roles | raw }}` consistently; it is not a sanitiser
+  or permission to render untrusted HTML. Colour controls cannot change geometry or content.
+- Existing theme settings may use `group: "header"` or `group: "footer"` when shared layout is
+  supported. These remain website-wide settings, with authored choices and defaults. Add section
+  uses existing exact section/layout declarations, not arbitrary presets or nested blocks.
+- A v2 Impact map placement requires an explicit `section.mapSlug`. Missing, cleared or
+  unavailable selections show no replacement map. Custom preview content must pair that slug
+  with the same `impactMap.slug`; historical v1 behaviour is unchanged.
+
+The scaffold demonstrates its own supported heading, spacing, colour and About-photo/layout
+choices without advertising controls on unsuitable island surfaces. Structural validation is
+not computed browser proof: verify every offered choice and reset across Looks, widths, sparse
+content, keyboard and no-JavaScript states before declaring support.
+
+Deploy the compatible platform first, publish this matching kit, then validate and publish new
+immutable template versions using the registry package. Existing pins do not upgrade themselves.
+See the [section authoring guide](https://developers.port60.com/guides/sections-and-data/) and
+generated AGENTS.md/CLAUDE.md for the detailed markup, CSS and acceptance boundaries.
 
 ### Photo-only hero playback in 1.2.1
 

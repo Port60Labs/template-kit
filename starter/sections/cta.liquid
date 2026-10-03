@@ -1,7 +1,7 @@
-<section class="lq-cta">
+<section class="lq-cta" data-p60-section-spacing="{{ section.presentation.sectionSpacing }}">
   <div class="container lq-cta-grid">
     <div>
-      <h2 data-p60-field="heading">{{ section.heading }}</h2>
+      <h2 data-p60-field="heading" data-p60-heading-scale="{{ section.presentation.headingScale }}">{{ section.heading }}</h2>
       {% if section.text %}<p data-p60-field="text">{{ section.text }}</p>{% endif %}
       <a class="button button-primary" href="{{ section.buttonHref }}">{{ section.buttonLabel }}</a>
     </div>

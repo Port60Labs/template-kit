@@ -8,7 +8,6 @@ export async function proveCollectionLinkVisibility(render, entry, declared) {
   const errors = [];
   const href = `/p60-collection-link-${entry.type}`;
   const content = { ...structuredClone(entry.sample ?? {}) };
-  // Authored appeal cards intentionally replace the connected causes collection.
   if (entry.type === 'appealGrid') content.items = [];
   delete content.showCollectionLink;
   let baseline;

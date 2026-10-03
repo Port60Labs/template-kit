@@ -1,8 +1,6 @@
-// Existing artifacts are validated against their own contract. New uploads have an explicit v2 gate.
 import { validateArtifact as validateV1Artifact } from './validate-v1.mjs';
 import { validateArtifact as validateV2Artifact } from './validate-v2.mjs';
 export { validateV1Artifact, validateV2Artifact };
-// Historical consumers use these exact v1 exports; v2 consumers select the versioned module.
 export { contractDialect, sectionCatalogue, islandRegistry, contextContract, behaviourCatalogue, BEHAVIOUR_PRIMARY_ATTR } from './validate-v1.mjs';
 
 function manifestOf(files) {

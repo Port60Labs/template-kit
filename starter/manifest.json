@@ -7,6 +7,26 @@
   "supports": {
     "navigationHighlights": false,
     "fieldMarkers": true,
+    "sectionFields": { "hero": ["imageUrl", "imageAlt", "photoFraming"] },
+    "sectionPresentation": {
+      "homeHero": {
+        "headingScale": { "options": ["compact", "standard", "large"], "default": "standard" },
+        "sectionSpacing": { "options": ["compact", "standard", "spacious"], "default": "standard" }
+      },
+      "hero": {
+        "sectionLayout": { "options": ["image-start", "image-end", "stacked"], "default": "stacked" },
+        "headingScale": { "options": ["compact", "standard", "large"], "default": "standard" },
+        "sectionSpacing": { "options": ["compact", "standard", "spacious"], "default": "standard" }
+      },
+      "values": {
+        "headingScale": { "options": ["compact", "standard", "large"], "default": "standard" },
+        "sectionSpacing": { "options": ["compact", "standard", "spacious"], "default": "standard" }
+      },
+      "cta": {
+        "headingScale": { "options": ["compact", "standard", "large"], "default": "standard" },
+        "sectionSpacing": { "options": ["compact", "standard", "spacious"], "default": "standard" }
+      }
+    },
     "pages": [
       "home",
       "about"

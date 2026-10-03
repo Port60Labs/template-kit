@@ -1,6 +1,6 @@
-<section class="lq-values">
+<section class="lq-values" data-p60-section-spacing="{{ section.presentation.sectionSpacing }}">
   <div class="container">
-    {% if section.heading != nil and section.heading != '' %}<h2 data-p60-field="heading">{{ section.heading }}</h2>{% endif %}
+    {% if section.heading != nil and section.heading != '' %}<h2 data-p60-field="heading" data-p60-heading-scale="{{ section.presentation.headingScale }}">{{ section.heading }}</h2>{% endif %}
     {% comment %}
       data-p60-reveal-group: the engine stamps --p60-reveal-index on each child and adds
       is-revealed when the rail scrolls into view, the stagger and motion are OURS, in theme.css,

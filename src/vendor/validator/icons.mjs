@@ -1,7 +1,3 @@
-// Icon resolution for the preview, the same rule as the engine's icons.ts: content carries a
-// Lucide icon NAME ("heart-handshake"), the platform supplies `iconSvg` on items[] entries, and
-// the template renders it through the dialect's `raw` filter. Unknown names resolve to '' so a
-// template's `{% if item.iconSvg %}` branch falls back to the plain name, exactly as it does live.
 import * as lucide from 'lucide-static';
 
 const table = lucide;

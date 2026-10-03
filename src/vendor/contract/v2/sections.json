@@ -7,8 +7,14 @@
       "pages": [
         "about"
       ],
-      "description": "The page opener: a headline with an optional kicker and sanitised rich-text intro.",
+      "description": "The page opener: a headline with an optional kicker, sanitised rich-text intro and one optional author-supported photograph. Photograph support is explicit per section of the exact template; layout choices are a separate capability.",
       "fields": [
+        {
+          "name": "presentation",
+          "kind": "presentation",
+          "required": false,
+          "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+        },
         {
           "name": "headingAlignment",
           "kind": "select",
@@ -36,7 +42,26 @@
           "name": "bodyHtml",
           "kind": "richtext",
           "required": false,
-          "description": "Sanitised HTML intro, render with the raw filter."
+          "description": "Sanitised HTML intro, render with the raw filter. A colour-capable introduction renders bodyHtml | colour_roles | raw so semantic descendants receive bounded paint roles without changing content."
+        },
+        {
+          "name": "imageUrl",
+          "kind": "image",
+          "required": false,
+          "description": "Optional introduction photograph. Requires supports.sectionFields.hero to declare imageUrl and imageAlt together. Missing or blank renders no photograph, placeholder or empty media column. Fixed-layout photo support is independent of sectionLayout. Use the supplied safe URL on the actual image, never in inline CSS; unsupported stored values remain saved but do not render."
+        },
+        {
+          "name": "imageAlt",
+          "kind": "text",
+          "required": false,
+          "description": "Plain-text alternative for this introduction photograph, escaped into its alt attribute. Missing or blank means an empty alternative; never invent a description or render it as visible copy. Paired with imageUrl in supports.sectionFields.hero."
+        },
+        {
+          "name": "photoFraming",
+          "kind": "select",
+          "required": false,
+          "options": ["fill", "whole"],
+          "description": "Optional exact-section photograph framing, declared as a third supports.sectionFields.hero member beside imageUrl/imageAlt. Absent/reset inherits the template's authored image composition, which may crop. Explicit whole shows the full photograph at its natural ratio, width 100% and height auto without a blanket height cap. Fill deliberately crops into an author-bounded aspect ratio. Keep data-p60-photo-framing on the actual img, empty when inherited. Token CSS may change only object-fit and bounded aspect-ratio on that image, never its source, width, grid, copy or neighbours. Home hero semantics are unchanged. Unsupported saved choices remain stored but are not projected."
         }
       ],
       "minimal": {
@@ -56,6 +81,12 @@
       ],
       "description": "A set of principles shown as cards or a numbered list, per the template.",
       "fields": [
+        {
+          "name": "presentation",
+          "kind": "presentation",
+          "required": false,
+          "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+        },
         {
           "name": "headingAlignment",
           "kind": "select",
@@ -143,6 +174,12 @@
       "description": "A closing band: heading, optional line, one button.",
       "fields": [
         {
+          "name": "presentation",
+          "kind": "presentation",
+          "required": false,
+          "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+        },
+        {
           "name": "headingAlignment",
           "kind": "select",
           "required": false,
@@ -198,6 +235,12 @@
       ],
       "description": "The home opener. EVERY field optional: eyebrow/title derive from branding when absent, the lead OMITS when absent (never a fabricated placeholder), buttons fall back to platform defaults.",
       "fields": [
+        {
+          "name": "presentation",
+          "kind": "presentation",
+          "required": false,
+          "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+        },
         {
           "name": "headingAlignment",
           "kind": "select",
@@ -340,6 +383,12 @@
       "description": "What gifts make possible, optional intro plus icon/title/description cards. Claims must be truthful for the tenant.",
       "fields": [
         {
+          "name": "presentation",
+          "kind": "presentation",
+          "required": false,
+          "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+        },
+        {
           "name": "headingAlignment",
           "kind": "select",
           "required": false,
@@ -440,6 +489,12 @@
       "description": "Published events across registration modes. Render the supplied bounded site.content.events.items with this placement's authored introduction. Optional motion uses declared behaviours; ticket sales and RSVP stay on the platform-owned detail route supplied by each item.",
       "fields": [
         {
+          "name": "presentation",
+          "kind": "presentation",
+          "required": false,
+          "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+        },
+        {
           "name": "showCollectionLink",
           "kind": "boolean",
           "required": false,
@@ -494,6 +549,12 @@
       "kind": "widget",
       "description": "Published articles from the supplied bounded site.content.articles.items. Render the records with this placement's authored introduction and link through the supplied item URLs. Article engagement and comments remain platform islands on the detail page.",
       "fields": [
+        {
+          "name": "presentation",
+          "kind": "presentation",
+          "required": false,
+          "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+        },
         {
           "name": "showCollectionLink",
           "kind": "boolean",
@@ -553,6 +614,12 @@
       ],
       "fields": [
         {
+          "name": "presentation",
+          "kind": "presentation",
+          "required": false,
+          "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+        },
+        {
           "name": "showCollectionLink",
           "kind": "boolean",
           "required": false,
@@ -607,6 +674,12 @@
       ],
       "fields": [
         {
+          "name": "presentation",
+          "kind": "presentation",
+          "required": false,
+          "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+        },
+        {
           "name": "headingAlignment",
           "kind": "select",
           "required": false,
@@ -660,6 +733,12 @@
       ],
       "description": "Big headline numbers, the at-a-glance impact band. Values are author-entered text (write them exactly as they should read), or, per item, a live figure the platform counts (`source`).",
       "fields": [
+        {
+          "name": "presentation",
+          "kind": "presentation",
+          "required": false,
+          "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+        },
         {
           "name": "headingAlignment",
           "kind": "select",
@@ -754,6 +833,12 @@
         "causes"
       ],
       "fields": [
+        {
+          "name": "presentation",
+          "kind": "presentation",
+          "required": false,
+          "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+        },
         {
           "name": "showCollectionLink",
           "kind": "boolean",
@@ -861,6 +946,12 @@
       ],
       "fields": [
         {
+          "name": "presentation",
+          "kind": "presentation",
+          "required": false,
+          "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+        },
+        {
           "name": "showCollectionLink",
           "kind": "boolean",
           "required": false,
@@ -915,6 +1006,12 @@
       ],
       "fields": [
         {
+          "name": "presentation",
+          "kind": "presentation",
+          "required": false,
+          "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+        },
+        {
           "name": "showCollectionLink",
           "kind": "boolean",
           "required": false,
@@ -965,6 +1062,12 @@
       ],
       "description": "The key people behind the charity, trustees, staff, volunteers, as simple cards: name, position, an optional photograph (uploaded through the platform pipeline) and an optional one-line statement. Templates render a card grid that collapses to a single column on small screens; a card without a photo renders cleanly (initials or plain), never a placeholder face.",
       "fields": [
+        {
+          "name": "presentation",
+          "kind": "presentation",
+          "required": false,
+          "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+        },
         {
           "name": "headingAlignment",
           "kind": "select",
@@ -1069,6 +1172,12 @@
       "context": [],
       "fields": [
         {
+          "name": "presentation",
+          "kind": "presentation",
+          "required": false,
+          "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+        },
+        {
           "name": "headingAlignment",
           "kind": "select",
           "required": false,
@@ -1101,14 +1210,15 @@
           "name": "mapSlug",
           "kind": "text",
           "required": false,
-          "description": "WHICH map renders here, by its address (the Pages editor's placement picker writes it; the Maps area is where maps exist). Absent = the tenant's first published map."
+          "description": "WHICH published map renders here, by its address (the Pages editor's placement picker writes it; the Maps area owns its title, description and points). An absent or blank selection renders no map. A missing or ineligible selected map never falls back to another record."
         }
       ],
       "minimal": {},
       "sample": {
         "eyebrow": "Where we work",
         "heading": "Our impact, on the map",
-        "text": "Every marker is a real place: a programme, an appeal, a story. Click one to see what happens there."
+        "text": "Every marker is a real place: a programme, an appeal, a story. Click one to see what happens there.",
+        "mapSlug": "our-work"
       }
     },
     {
@@ -1118,6 +1228,12 @@
         "home"
       ],
       "fields": [
+        {
+          "name": "presentation",
+          "kind": "presentation",
+          "required": false,
+          "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+        },
         {
           "name": "showCollectionLink",
           "kind": "boolean",

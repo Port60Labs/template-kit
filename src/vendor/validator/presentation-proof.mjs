@@ -1,4 +1,3 @@
-// Small structural parser for capability proofs. CSS geometry and accessibility still need browser QA.
 const VOID = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr']);
 export function parsePresentationMarkup(html) {
   const root = { tag: 'root', attrs: {}, children: [], parent: null };
@@ -39,7 +38,6 @@ export function presentationText(node) {
 export function presentationVisible(node, { navigation = false } = {}) {
   for (let current = node; current; current = current.parent) {
     if (['template', 'script', 'style', 'noscript', 'textarea', 'select'].includes(current.tag)) return false;
-    // Dropdown panels may start closed. Hidden links and their own fields may not.
     if (navigation && current !== node && 'data-p60-nav-menu' in current.attrs) continue;
     if ('hidden' in current.attrs || current.attrs['aria-hidden'] === 'true' || /(?:display\s*:\s*none|visibility\s*:\s*hidden|opacity\s*:\s*0(?:[;\s]|$))/i.test(current.attrs.style ?? '')) return false;
   }

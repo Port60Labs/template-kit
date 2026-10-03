@@ -1,5 +1,3 @@
-// Presentation choices are opt-in on the exact immutable artifact. Never mutate saved content:
-// switching to an unsupported template leaves the original choice available for a later switch.
 export const HEADING_ALIGNMENTS = Object.freeze(['start', 'center', 'end']);
 
 export function headingAlignmentCapabilities(manifest) {

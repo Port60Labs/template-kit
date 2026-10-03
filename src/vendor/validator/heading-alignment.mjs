@@ -1,5 +1,3 @@
-// This is a structural render proof, not a CSS audit. The platform's desktop-only rule
-// aligns the marked heading; authors still check every Look at desktop/mobile and in RTL.
 import { HEADING_ALIGNMENTS } from '../engine/section-heading-alignment.mjs';
 
 const ATTRIBUTE = 'data-p60-heading-align';
@@ -27,7 +25,6 @@ function markup(html) {
     const attrs = {};
     for (const attribute of token.slice(open[0].length, -1).matchAll(/([^\s=/>]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g)) {
       const name = attribute[1].toLowerCase();
-      // HTML keeps the first duplicate attribute; do not prove a later value the browser ignores.
       if (!Object.hasOwn(attrs, name)) attrs[name] = decodeEntities(attribute[2] ?? attribute[3] ?? attribute[4] ?? '');
     }
     const node = { tag: open[1].toLowerCase(), attrs, children: [], parent: stack.at(-1) };

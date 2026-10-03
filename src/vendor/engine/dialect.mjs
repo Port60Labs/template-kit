@@ -1,11 +1,6 @@
-// Applies the Port60 dialect (contract/v1/dialect.json) to a LiquidJS instance. Plain JS on purpose:
-// this exact module is imported by BOTH the rendering engine (Vite-bundled into charity-site) and the
-// Node conformance validator (scripts/validate-template.mjs), one enforcement implementation, so the
-// validator can never disagree with production rendering. The dialect object is passed IN (parsed
-// JSON); this module does no file loading.
-
 /** Marker protocol for island placement: the island tag emits these; the renderer splits on them. */
 import { templateMessage, templateDate } from './locale.mjs';
+import { colourRoles } from './colour-roles.mjs';
 
 export const ISLAND_MARK_START = '\u0000P60_ISLAND:';
 export const ISLAND_MARK_END = '\u0000';
@@ -31,10 +26,10 @@ export function configureDialect(liquid, dialect, islandNames) {
       }
     });
   }
-  // Filters LiquidJS ships beyond our whitelist (e.g. its non-standard json/inspect debug filters).
   const allowed = new Set(dialect.filters);
   if (allowed.has('t')) liquid.registerFilter('t', templateMessage);
   if (allowed.has('local_date')) liquid.registerFilter('local_date', templateDate);
+  if (allowed.has('colour_roles')) liquid.registerFilter('colour_roles', colourRoles);
   for (const name of ['json', 'inspect', 'to_integer', 'normalize_whitespace', 'find', 'find_exp', 'group_by', 'group_by_exp', 'where_exp', 'sum']) {
     if (!allowed.has(name)) {
       liquid.registerFilter(name, () => {
@@ -49,13 +44,11 @@ export function configureDialect(liquid, dialect, islandNames) {
     async render(ctx) {
       const name = String(await this.liquid.evalValue(this.args, ctx));
       if (!islandNames.has(name)) {
-        return ''; // unknown island, omitted at render; rejected at publish by the validator
+        return '';
       }
       return `${ISLAND_MARK_START}${name}${ISLAND_MARK_END}`;
     }
   });
-  // {% content %}, the layout's page slot (contract v1, roadmap 8.2). Registered everywhere; a
-  // section that emits it is rejected by the validator and stripped by the section renderer.
   liquid.registerTag('content', {
     parse() {},
     render() {

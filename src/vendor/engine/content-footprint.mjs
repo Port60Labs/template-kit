@@ -1,19 +1,9 @@
-// CONTENT FOOTPRINTS (content model v1, docs/template-content-model.md): which site.* paths a
-// template touches, decidable at publish because the dialect is closed. Lives in the ENGINE so
-// the production loader computes the same footprint the validator stamps, the render path
-// fetches precisely what a template reads, and the two can never disagree.
 import contentModel from '../contract/v1/content-model.json' with { type: 'json' };
 import contentModelV2 from '../contract/v2/content-model.json' with { type: 'json' };
 import siteSchemaV2 from '../contract/v2/site.schema.json' with { type: 'json' };
 
 export { contentModel };
 export { contentModelV2 };
-
-// ── Extraction ─────────────────────────────────────────────────────────
-// The dialect is closed, so the site paths a template reads are decidable from its sources: every
-// reference is a literal `site.…` chain (dynamic indexing is refused below, and aliasing the tree
-// itself is refused so a chain can never hide behind a variable). The footprint is collection-
-// granular, `content.events`, because item fields ride the collection fetch.
 
 const CHAIN = /\bsite((?:\.[A-Za-z_][A-Za-z0-9_-]*|\[\s*'[^']*'\s*\]|\[\s*"[^"]*"\s*\])+)/g;
 const DYNAMIC_INDEX = /\bsite(?:\.[A-Za-z_][A-Za-z0-9_-]*|\[\s*(?:'[^']*'|"[^"]*")\s*\])*\[\s*(?!\s*['"])[^\]]/;
@@ -140,7 +130,6 @@ export function extractContentFootprint(files, options = {}) {
         touched.add(head);
       } else errors.push(`${path}: site.${head} is not part of the v2 model.`);
     }
-    // Local aliases of nav/collection objects are valid. Retired members are not.
     const retired = [
       [/\b(?:site\.)?nav\.(?:items|derived)\b/, 'nav.header and nav.footer replace nav.items/nav.derived'],
       [/\b(?:site\.)?actions\.(?:primary|secondary)\b/, 'actions.header, actions.hero and actions.widget replace action aliases'],

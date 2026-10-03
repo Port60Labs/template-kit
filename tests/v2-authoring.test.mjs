@@ -42,6 +42,25 @@ test('new CLI authoring rejects a v1 manifest without overwriting its local brie
   assert.equal(readFileSync(join(dir, 'AGENTS.md'), 'utf8'), 'Author notes stay here.');
 });
 
+test('generated briefing defines bounded heading size and separates validator proof from browser QA', () => {
+  const briefing = agentsMd('test');
+  assert.match(briefing, /supports.sectionPresentation/);
+  assert.match(briefing, /section.content.presentation.headingScale/);
+  assert.match(briefing, /data-p60-heading-scale="{{ section.presentation.headingScale }}"/);
+  assert.match(briefing, /actual\s+visible h1 to h6 section heading/);
+  assert.match(briefing, /An absent key inherits/);
+  assert.match(briefing, /Unsupported saved choices stay stored/);
+  assert.match(briefing, /No raw CSS/);
+  assert.match(briefing, /cannot prove computed CSS/);
+  assert.match(briefing, /template-presentation-v2.json/);
+  assert.match(briefing, /not an arbitrary schema-driven editor or condition language/);
+  assert.match(briefing, /section.content.presentation.sectionSpacing/);
+  assert.match(briefing, /data-p60-section-spacing="{{ section.presentation.sectionSpacing }}"/);
+  assert.match(briefing, /both controls on homeHero, hero, values and cta/);
+  assert.match(briefing, /people, campaigns and impactMap remain excluded/);
+  assert.match(briefing, /whole-photo hero's zero top padding/);
+});
+
 test('generated briefing keeps navigation modes and collection visibility explicit and independent', () => {
   const briefing = agentsMd('test');
   assert.match(briefing, /supports.navigationModes/);

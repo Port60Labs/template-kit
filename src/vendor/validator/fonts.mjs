@@ -1,8 +1,3 @@
-// Font-slot resolution for the DEV preview, the same rules as the engine's fonts.ts: the template
-// declares font knobs (slot, default family, the weights its type system uses); a chosen family
-// becomes a --p60s-<key> variable with an honest fallback stack and ONE stylesheet URL for every
-// chosen family at the slot's weights, clamped to the family's real weights. Served from the
-// catalogue's provider (Bunny Fonts, the privacy-first mirror of the Google catalogue).
 import catalogue from '../contract/v1/fonts.json' with { type: 'json' };
 
 const byName = new Map(catalogue.families.map((f) => [f.name, f]));
@@ -44,7 +39,6 @@ export function fontCssHref(slots) {
   const weightsByFamily = new Map();
   for (const slot of slots) {
     const family = byName.get(slot.family);
-    // A platform-hosted family is declared in global.css (served from /fonts/), never fetched.
     if (!family || family.hosted) continue;
     const set = weightsByFamily.get(family.name) ?? new Set();
     const asked = slot.weights?.length > 0 ? slot.weights : [400, 700];

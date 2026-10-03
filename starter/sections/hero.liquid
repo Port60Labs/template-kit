@@ -5,10 +5,12 @@
   wrap the value in a span when there is punctuation or other copy beside it (people.liquid shows
   one). Marking is optional and additive: an unmarked template is edited in the panel as before.
 {% endcomment %}
-<section class="lq-hero">
-  <div class="container">
+<section class="lq-hero" data-p60-section-spacing="{{ section.presentation.sectionSpacing }}" data-p60-section-layout="{{ section.presentation.sectionLayout }}"{% if section.imageUrl != blank %} data-p60-layout-has-media{% endif %}>
+  <div class="container" data-p60-layout-role="frame">
+    {% if section.imageUrl != blank %}<div data-p60-layout-role="media"><img data-p60-field="imageUrl" data-p60-photo-framing="{{ section.photoFraming }}" src="{{ section.imageUrl }}" alt="{{ section.imageAlt }}" loading="lazy" decoding="async"></div><div data-p60-layout-role="content">{% endif %}
     {% if section.eyebrow %}<p class="lq-kicker" data-p60-field="eyebrow">{{ section.eyebrow }}</p>{% endif %}
-    <h1 data-p60-field="title">{{ section.title }}</h1>
+    <h1 data-p60-field="title" data-p60-heading-scale="{{ section.presentation.headingScale }}">{{ section.title }}</h1>
     <div class="lq-hero-body">{{ section.bodyHtml | raw }}</div>
+    {% if section.imageUrl != blank %}</div>{% endif %}
   </div>
 </section>

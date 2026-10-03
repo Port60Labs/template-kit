@@ -1,5 +1,3 @@
-// Structural render proof, not a CSS or accessibility audit. Menus may start closed and their
-// responsive styling belongs to the author. Browser checks still establish visual usability.
 const VOID = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr']);
 const NON_CONTENT = new Set(['script', 'style', 'template', 'noscript']);
 const CARDS = new Set(['aside', 'article', 'section', 'div', 'a']);
@@ -36,7 +34,6 @@ function parseMarkup(html) {
 
 function isHidden(node) {
   if (NON_CONTENT.has(node.tag)) return true;
-  // A closed navigation panel is expected. Hiding the card or its fields explicitly is not.
   if ('data-p60-nav-menu' in node.attrs || 'data-p60-nav' in node.attrs) return false;
   return 'hidden' in node.attrs || node.attrs['aria-hidden'] === 'true' ||
     /(?:display\s*:\s*none|visibility\s*:\s*hidden|opacity\s*:\s*0(?:[;\s]|$))/i.test(node.attrs.style ?? '');
