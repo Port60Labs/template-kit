@@ -96,16 +96,23 @@ test('visitor language controls stay absent, including legacy slots and author f
 
 test('preview resolves explicit navigation modes and leaves unsupported saved preferences untouched', async () => {
   const manifest = JSON.parse(files['manifest.json']);
-  manifest.supports.navigationModes = { options: ['simple', 'mega'], default: 'mega' };
+  manifest.supports.navigationModes = { options: ['simple', 'cascading', 'mega', 'panel'], default: 'panel' };
   const candidate = { ...files, 'manifest.json': JSON.stringify(manifest),
     'layout.liquid': '<nav data-p60-navigation-mode="{{ site.nav.headerMode }}">{% for item in site.nav.header %}{{ item.label }}{% endfor %}</nav>{% content %}' };
-  for (const headerMode of [undefined, 'simple', 'mega']) {
+  for (const headerMode of [undefined, 'simple', 'cascading', 'mega', 'panel']) {
     const previewContent = content();
     if (headerMode !== undefined) previewContent.nav.headerMode = headerMode;
     const original = structuredClone(previewContent);
     const html = await renderStudioPreview(candidate, { previewContent });
-    assert.ok(html.includes('data-p60-navigation-mode="' + (headerMode ?? 'mega') + '"'));
+    assert.ok(html.includes('data-p60-navigation-mode="' + (headerMode ?? 'panel') + '"'));
     assert.deepEqual(previewContent, original);
+  }
+  manifest.supports.navigationModes = { options: ['simple', 'panel'], default: 'panel' };
+  candidate['manifest.json'] = JSON.stringify(manifest);
+  for (const headerMode of ['mega', 'cascading']) {
+    const previewContent = content(); previewContent.nav.headerMode = headerMode;
+    assert.ok((await renderStudioPreview(candidate, { previewContent })).includes('data-p60-navigation-mode="panel"'));
+    assert.equal(previewContent.nav.headerMode, headerMode);
   }
   delete manifest.supports.navigationModes;
   candidate['manifest.json'] = JSON.stringify(manifest);

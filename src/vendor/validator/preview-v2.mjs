@@ -164,7 +164,7 @@ function surfaceDivider(label) {
 function eventsListingSkeleton(fx = STUDIO_FX) {
   const events = fx.pages?.events?.events ?? [];
   return `${surfaceDivider('events')}<section class="section"><div class="container">
-    <h1>${escapeHtml(fx.site?.content.events.label ?? 'Events')}</h1>
+    <h1 data-p60-page-title>${escapeHtml(fx.site?.content.events.label ?? 'Events')}</h1>
     <div class="event-grid">${events.map((e) => `
       <article class="event-card">
         <div class="event-card-body">
@@ -189,7 +189,7 @@ function eventDetailSkeleton(fx = STUDIO_FX) {
   return `${surfaceDivider('event tickets')}<section class="section"><div class="container">
     <article class="event-detail" data-p60-preview-island="event tickets">
       ${previewNote('ticket purchase')}
-      <h1>${escapeHtml(event.name)}</h1>
+      <h1 data-p60-page-title>${escapeHtml(event.name)}</h1>
       <p class="event-detail-meta">${escapeHtml(event.venueName ?? 'Online')}</p>
       <p class="event-detail-desc">${escapeHtml(event.description ?? 'An evening of music and giving.')}</p>
       <div class="ticket-types">
@@ -221,7 +221,7 @@ function donateSkeleton(fx = STUDIO_FX) {
 function articlesListingSkeleton(fx = STUDIO_FX) {
   const articles = fx.pages?.articles?.articles ?? [];
   return `${surfaceDivider('articles')}<section class="section"><div class="container">
-    <h1>${escapeHtml(fx.site?.content.articles.label ?? 'Articles')}</h1>
+    <h1 data-p60-page-title>${escapeHtml(fx.site?.content.articles.label ?? 'Articles')}</h1>
     <div class="article-grid">${articles.map((a) => `
       <article class="article-card"><div class="article-card-body">
         <p>${escapeHtml(a.categories?.[0] ?? 'Article')}</p>
@@ -235,7 +235,7 @@ function articleDetailSkeleton(fx = STUDIO_FX) {
   const article = fx.pages?.article?.article ?? { title: 'Fixture article', bodyHtml: '<p>Body</p>' };
   return `${surfaceDivider('article')}<section class="section"><div class="container">
     <article class="article-body">
-      <h1>${escapeHtml(article.title)}</h1>
+      <h1 data-p60-page-title>${escapeHtml(article.title)}</h1>
       <p class="article-card-meta">${escapeHtml(article.authorName ?? '')} · ${article.readingMinutes ?? 3} min read</p>
       ${article.bodyHtml ?? ''}
       ${islandSkeleton('article_engagement', {}, fx)}
@@ -247,7 +247,7 @@ function articleDetailSkeleton(fx = STUDIO_FX) {
 function campaignsListingSkeleton(fx = STUDIO_FX) {
   const campaigns = fx.sections?.campaigns?.campaigns ?? [];
   return `${surfaceDivider('campaigns')}<section class="section"><div class="container">
-    <h1>${escapeHtml(fx.sections?.campaigns?.campaignsLabel ?? 'Campaigns')}</h1>
+    <h1 data-p60-page-title>${escapeHtml(fx.sections?.campaigns?.campaignsLabel ?? 'Campaigns')}</h1>
     <div class="article-grid">${campaigns.map((c) => `
       <article class="article-card"><div class="article-card-body">
         <h3><a href="/campaigns/${escapeHtml(c.href?.split('/').pop() ?? '')}">${escapeHtml(c.title)}</a></h3>
@@ -260,7 +260,7 @@ function campaignDetailSkeleton(fx = STUDIO_FX) {
   const campaign = (fx.sections?.campaigns?.campaigns ?? [])[0]
     ?? { title: 'Fixture Winter Campaign', summary: '' };
   return `${surfaceDivider('campaign')}<section class="section"><div class="container">
-    <h1>${escapeHtml(campaign.title)}</h1>
+    <h1 data-p60-page-title>${escapeHtml(campaign.title)}</h1>
     ${campaign.summary ? `<p>${escapeHtml(campaign.summary)}</p>` : ''}
     ${islandSkeleton('form', {}, fx)}
   </div></section>`;
@@ -269,7 +269,7 @@ function campaignDetailSkeleton(fx = STUDIO_FX) {
 function servicesListingSkeleton(fx = STUDIO_FX) {
   const services = fx.sections?.programmes?.services ?? [];
   return `${surfaceDivider('services')}<section class="section"><div class="container">
-    <h1>${escapeHtml(fx.site?.content.services.label ?? 'Services')}</h1>
+    <h1 data-p60-page-title>${escapeHtml(fx.site?.content.services.label ?? 'Services')}</h1>
     <div class="article-grid">${services.map((s) => `
       <article class="article-card"><div class="article-card-body">
         <h3><a href="${escapeHtml(s.href ?? '#')}">${escapeHtml(s.title)}</a></h3>
@@ -283,7 +283,7 @@ function serviceDetailSkeleton(fx = STUDIO_FX) {
     ?? { title: 'Fixture service', summary: '' };
   return `${surfaceDivider('service page')}<section class="section"><div class="container">
     <article class="article-body">
-      <h1>${escapeHtml(service.title)}</h1>
+      <h1 data-p60-page-title>${escapeHtml(service.title)}</h1>
       ${service.summary ? `<p>${escapeHtml(service.summary)}</p>` : ''}
       <p>Content pages are written in the workspace's WYSIWYG editor and arrive as sanitised
       HTML, headings, lists, images and embeds render here styled by your theme's typography.</p>
@@ -294,7 +294,7 @@ function serviceDetailSkeleton(fx = STUDIO_FX) {
 function courseListingSkeleton(fx = STUDIO_FX) {
   const course = fx.pages?.course?.course ?? { title: 'Fixture course' };
   return `${surfaceDivider('courses')}<section class="section"><div class="container">
-    <h1>${escapeHtml(fx.site?.content.courses.label ?? 'Courses')}</h1>
+    <h1 data-p60-page-title>${escapeHtml(fx.site?.content.courses.label ?? 'Courses')}</h1>
     <article class="event-card"><div class="event-card-body">
       <h3>${escapeHtml(course.title)}</h3>
       <p class="event-card-when">${escapeHtml(course.venue ?? '')}</p>
@@ -307,7 +307,7 @@ function courseListingSkeleton(fx = STUDIO_FX) {
  *  composition's sections listed as skeletons, the way the platform renders them itself live. */
 function aboutSkeleton(fx, composition = []) {
   const rows = composition.map((s) => `<article class="event-card"><div class="event-card-body"><h3>${escapeHtml(s.type)}</h3><p class="event-card-when">rendered by the platform</p></div></article>`).join('');
-  return `${surfaceDivider('about')}<section class="section"><div class="container"><h1>About us</h1>${rows}</div></section>`;
+  return `${surfaceDivider('about')}<section class="section"><div class="container"><h1 data-p60-page-title>About us</h1>${rows}</div></section>`;
 }
 
 const SURFACES = {

@@ -50,10 +50,40 @@ See the [AI quickstart](https://developers.port60.com/guides/ai-quickstart/).
 
 ## The contract
 
-Kit 1.3.0 authors **port60-liquid@2**, content model **2.0**, using the contract under
+Kit 1.4.0 authors **port60-liquid@2**, content model **2.0**, using the contract under
 `src/vendor/contract/v2`. Collection envelopes, independent header/footer navigation,
 resolved actions and page-scoped sections are explicit. V1 sources need a deliberate migration,
 not a manifest-only relabel. Historical v1 contracts remain frozen for existing platform pins.
+
+### Authored navigation styles in 1.4.0
+
+Declare a unique subset of two to four implemented styles through `supports.navigationModes`,
+with a default from that subset. The editor offers only the exact selected version's choices
+as compact illustrated tiles. Existing two-mode declarations remain valid.
+
+| Value | Editor label | Presentation |
+| --- | --- | --- |
+| `simple` | Dropdown | Descendants expand below their parent |
+| `cascading` | Side-opening | Descendants open beside their parent, reversing at viewport edges |
+| `mega` | Wide dropdown | A header item opens a wide grouped dropdown |
+| `panel` | Menu panel | A single Menu button opens the complete navigation |
+
+For example, `{"options":["simple","cascading","panel"],"default":"panel"}` offers
+three suitable presentations, not four universal choices. Put
+`data-p60-navigation-mode="{{ site.nav.headerMode }}"` on the actual header navigation root.
+Preserve every supplied destination, label, order and grouping in every style. A nested
+destination remains a real link beside its separately labelled disclosure control.
+
+Cascading branches use `data-p60-nav-item`, `data-p60-nav-toggle` and `data-p60-nav-menu` at
+the supported child levels. The shared runtime manages pointer intent, keyboard ownership,
+physical placement and edge reversal. Read its transient `data-p60-nav-placement` and
+`data-p60-nav-direction` state for geometry and decorative chevrons; never author those hints.
+When a flyout cannot fit, retain the click-only inline fallback. Support tall-menu scrolling,
+mobile, both text directions and complete no-JavaScript navigation without template scripts.
+
+The validator proves declared-mode differences and preserved navigation. Test actual geometry,
+hover travel, focus, arrows, long labels and scroll reachability in a browser too. Deploy the
+compatible platform from PR 305 before releasing templates that require these capabilities.
 
 ### Editor design flexibility in 1.3.0
 

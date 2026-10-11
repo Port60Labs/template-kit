@@ -279,12 +279,22 @@ tests, browser acceptance, local deployment and remote release are separate gate
 
 ## Navigation and actions
 
-Optional supports.navigationModes is {options:["simple","mega"],default:"mega"} (either supported
-mode may be the default). It requires supports.layout and both working presentations. Mark the
+Optional supports.navigationModes declares 2 to 4 working styles, for example
+{options:["simple","cascading","panel"],default:"panel"}. Values: simple (inline dropdown),
+cascading (side-opening children), mega (wide panel per header item), panel (one Menu button).
+Declare only styles this exact layout implements; the default must be in the options.
+It requires supports.layout. Mark the
 header navigation root data-p60-navigation-mode="{{ site.nav.headerMode }}". The host resolves the
 saved choice or declared default; missing capability keeps the historical layout. Do not infer
-support from navigationHighlights. Both modes retain supplied destinations, node order and saved
+support from navigationHighlights. Every mode retains supplied destinations, node order and saved
 metadata. Scope mode CSS to that marker and verify mobile, keyboard and no-JavaScript navigation.
+Cascading parents at both child levels need their own data-p60-nav-item, toggle and menu hooks,
+with a separate link for a real destination. The platform runtime handles stable hover, RTL and
+viewport collision placement; narrow flyouts fall back to click-only inline disclosure.
+Style nested chevrons from runtime-owned data-p60-nav-direction (left, right, inline) on the
+toggle and its own aria-expanded: towards the opening side when closed, back when open;
+inline uses down/up. Never author or save that direction hint or infer it from RTL alone.
+Never add template scripts. Test long labels, diagonal sibling travel and both viewport edges.
 
 site.nav.header and site.nav.footer are independent arrays. kind link has href; kind group has
 null href and children. Use disclosure controls for groups, not fake links. Render two child

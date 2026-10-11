@@ -165,13 +165,13 @@
             "options": {
               "type": "array",
               "minItems": 2,
-              "maxItems": 2,
+              "maxItems": 4,
               "uniqueItems": true,
-              "items": { "enum": ["simple", "mega"] }
+              "items": { "enum": ["simple", "cascading", "mega", "panel"] }
             },
-            "default": { "enum": ["simple", "mega"] }
+            "default": { "enum": ["simple", "cascading", "mega", "panel"] }
           },
-          "description": "Explicit header presentation switch for this exact layout. Both simple and mega must be implemented without changing saved navigation nodes, destinations or metadata. Requires supports.layout. The host resolves an accepted saved menus.headerMode or this default into site.nav.headerMode. Mark the navigation root data-p60-navigation-mode with that resolved mode. Missing support preserves the historical layout and leaves saved preferences unused, never inferred from navigationHighlights."
+          "description": "Explicit header presentation choices for this exact layout: simple (inline dropdown), cascading (side-opening descendants), mega (wide panel per header item), panel (one Menu button). Declare only the 2 to 4 implemented modes, with a default from that subset. Preserve navigation nodes, order, destinations and saved metadata in every mode. Requires supports.layout. The host resolves an accepted saved menus.headerMode or this default into site.nav.headerMode. Mark the navigation root data-p60-navigation-mode with that resolved mode. Missing support leaves saved preferences unused, never inferred from navigationHighlights."
         },
         "sectionCollectionLinkVisibility": {
           "type": "array",
