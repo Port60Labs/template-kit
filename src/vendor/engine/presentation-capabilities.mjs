@@ -1,4 +1,4 @@
-export const NAVIGATION_MODES = Object.freeze(['simple', 'mega']);
+export const NAVIGATION_MODES = Object.freeze(/** @type {const} */ (['simple', 'cascading', 'mega', 'panel']));
 export const COLLECTION_LINK_SECTIONS = Object.freeze([
   'events', 'articles', 'courses', 'campaigns', 'services', 'documents', 'appealGrid'
 ]);
@@ -15,8 +15,8 @@ export function navigationModeCapabilities(manifest) {
   const declared = manifest.supports.navigationModes;
   if (!declared || typeof declared !== 'object' || Array.isArray(declared)) return null;
   const { options, default: fallback } = declared;
-  if (!Array.isArray(options) || options.length !== 2 || new Set(options).size !== 2
-    || options.some(option => !NAVIGATION_MODES.includes(option)) || !options.includes(fallback)) return null;
+  if (!Array.isArray(options) || options.length < 2 || options.length > NAVIGATION_MODES.length || new Set(options).size !== options.length
+    || ![...options].every(option => NAVIGATION_MODES.includes(option)) || !options.includes(fallback)) return null;
   return { options: [...options], default: fallback };
 }
 

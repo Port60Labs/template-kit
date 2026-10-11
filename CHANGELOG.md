@@ -1,5 +1,32 @@
 # Changelog
 
+## 1.4.0
+
+### Added
+
+- Template-authored navigation subsets with two to four supported styles: Dropdown,
+  Side-opening, Wide dropdown and Menu panel. The exact template version owns the choices
+  and default; every presentation preserves the same navigation tree and destinations.
+- Shared cascading-menu placement, viewport-edge reversal in both directions, tall-menu
+  scrolling and state-aware disclosure hints. Templates still contain no JavaScript.
+
+### Fixed
+
+- Closed-panel measurement preserves authored grid/flex layouts and transitions, including
+  collapsed-height, transformed and wrapper-hidden panels.
+- Stable nested pointer travel, fast root hover switching, form-control keyboard ownership,
+  cached geometry and scroll preservation match the deployed platform runtime.
+- Failed renders no longer produce misleading additional navigation-distinctness errors.
+- Preview fallback-page headings carry the deployed platform's page-title hook, so template
+  title scales remain consistent outside authored Home and About sections.
+
+### Compatibility and release
+
+Requires the compatible platform from `Port60Labs/multi-tenant-services` PR 305 before
+templates opt into the new modes. Existing two-mode artifacts and v1 contracts remain
+supported. Publish through this mirror's GitHub Release workflow, then update first-party
+template pins and run their normal registry-only gates before merging templates PR 24.
+
 ## 1.3.0
 
 ### Added

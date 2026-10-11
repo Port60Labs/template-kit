@@ -286,23 +286,27 @@
                 "options": {
                   "type": "array",
                   "minItems": 2,
-                  "maxItems": 2,
+                  "maxItems": 4,
                   "uniqueItems": true,
                   "items": {
                     "enum": [
                       "simple",
-                      "mega"
+                      "cascading",
+                      "mega",
+                      "panel"
                     ]
                   }
                 },
                 "default": {
                   "enum": [
                     "simple",
-                    "mega"
+                    "cascading",
+                    "mega",
+                    "panel"
                   ]
                 }
               },
-              "description": "Explicit header presentation switch for this exact layout. Both simple and mega must be implemented without changing saved navigation nodes, destinations or metadata. Requires supports.layout. The host resolves an accepted saved menus.headerMode or this default into site.nav.headerMode. Mark the navigation root data-p60-navigation-mode with that resolved mode. Missing support preserves the historical layout and leaves saved preferences unused, never inferred from navigationHighlights."
+              "description": "Explicit header presentation choices for this exact layout: simple (inline dropdown), cascading (side-opening descendants), mega (wide panel per header item), panel (one Menu button). Declare only the 2 to 4 implemented modes, with a default from that subset. Preserve navigation nodes, order, destinations and saved metadata in every mode. Requires supports.layout. The host resolves an accepted saved menus.headerMode or this default into site.nav.headerMode. Mark the navigation root data-p60-navigation-mode with that resolved mode. Missing support leaves saved preferences unused, never inferred from navigationHighlights."
             },
             "sectionCollectionLinkVisibility": {
               "type": "array",
@@ -877,7 +881,9 @@
             "headerMode": {
               "enum": [
                 "simple",
-                "mega"
+                "cascading",
+                "mega",
+                "panel"
               ],
               "description": "Resolved header presentation only when the exact template declares navigationModes. The host uses the accepted saved preference or the declared default. Omitted for unsupported templates; never inferred from menu shape or highlights."
             },
@@ -6397,6 +6403,14 @@
             {
               "attr": "data-p60-nav-burger",
               "value": "none, or the id of the panel when aria-controls is absent"
+            },
+            {
+              "attr": "data-p60-nav-placement",
+              "value": "runtime-owned, not authored or saved: dropdown on a cascading root, dropdown-scroll on a tall root with authored scrolling and click-only inline children, left/right on a fitted child flyout, inline on a click-only fallback. Cascading parents own a separate real destination link and disclosure. CSS must not clip fitted flyouts; no-JavaScript descendants stay accessible in document flow."
+            },
+            {
+              "attr": "data-p60-nav-direction",
+              "value": "runtime-owned on visible nested cascading toggles, not authored or saved: left/right predicts the opening side, inline means a stacked disclosure. Combine with the toggle's own aria-expanded for closed-towards/open-back chevrons, or down/up for inline. Follows viewport edges, RTL and layout changes without retaining closed-panel geometry."
             }
           ],
           "stateClasses": [
