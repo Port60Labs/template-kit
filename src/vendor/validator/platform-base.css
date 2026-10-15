@@ -557,7 +557,7 @@ input:focus {
 .footer-note {
   margin-top: 1.5rem;
   font-size: 0.85rem;
-  color: rgba(93, 107, 120, 0.8);
+  color: var(--muted);
 }
 
 /* Footer socials, tenant's social links, rendered by the template (ours: here). Variable-driven so
@@ -1745,6 +1745,7 @@ html:has(.donation-giftaid-dialog[open]) { overflow: hidden; }
   box-shadow: 0 12px 26px rgba(18, 135, 122, 0.3);
 }
 
+.donate-success h2,
 .donate-success h3 {
   margin: 0;
   font-size: 1.5rem;
@@ -2576,7 +2577,7 @@ html:has(.donation-giftaid-dialog[open]) { overflow: hidden; }
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
-.event-card-body h3 {
+.event-card-body h2 {
   margin: 0;
   font-size: 1.15rem;
 }
@@ -2624,8 +2625,9 @@ html:has(.donation-giftaid-dialog[open]) { overflow: hidden; }
 .event-schedule {
   margin: 1.5rem 0;
 }
-.event-schedule h3 {
+.event-schedule h2 {
   margin-bottom: 0.5rem;
+  font-size: 1.3rem;
 }
 .event-schedule ul {
   list-style: none;
@@ -2658,8 +2660,9 @@ html:has(.donation-giftaid-dialog[open]) { overflow: hidden; }
   background: var(--surface);
   max-width: 460px;
 }
-.event-register-card h3 {
+.event-register-card > h2 {
   margin: 0;
+  font-size: 1.3rem;
 }
 .event-price-line {
   color: var(--muted);
@@ -4288,14 +4291,38 @@ html:has(.donation-giftaid-dialog[open]) { overflow: hidden; }
 }
 .course-enrol-form,
 .course-enrol-pay,
-.course-enrol-done,
-.course-enrol-gate {
+.course-enrol-done {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 1.25rem;
   margin-top: 1rem;
   max-width: 40rem;
+}
+.course-enrol-gate {
+  display: grid;
+  gap: 1rem;
+  min-inline-size: 0;
+  margin-block-start: 1rem;
+}
+.course-enrol-gate > p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.course-enrol-gate > .button,
+.course-enrol-gate > .button:hover {
+  justify-self: start;
+  max-inline-size: 100%;
+  min-block-size: 2.75rem;
+  white-space: normal;
+  text-align: center;
+  box-shadow: none;
+}
+.course-enrol-gate > .button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
 }
 .course-fieldset {
   border: 0;
@@ -5111,7 +5138,9 @@ html:has(.donation-giftaid-dialog[open]) { overflow: hidden; }
 }
 .people-statement {
   margin: 0.7rem 0 0;
-  font-style: italic;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  text-align: start;
   font-size: 0.95rem;
   opacity: 0.85;
 }
@@ -5125,7 +5154,7 @@ html:has(.donation-giftaid-dialog[open]) { overflow: hidden; }
    that stays legible on any theme. Templates restyle any of this via the tokens or these classes. */
 .impact-map { margin: 24px 0; }
 .impact-map-head h2 { margin: 0 0 6px; }
-.impact-map-intro { margin: 0 0 14px; opacity: 0.85; }
+.impact-map-intro { margin: 0 0 14px; }
 .impact-map-stats { margin: 0 0 14px; color: var(--muted); font-weight: 600; letter-spacing: 0.01em; }
 /* The stable stage, shaped like THE WORLD BAND ITSELF: the island's planet view is all 360° of
    longitude by 84°N-58°S (whole Greenland in, only the polar void and Antarctica trimmed), which in
@@ -5153,11 +5182,13 @@ html:has(.donation-giftaid-dialog[open]) { overflow: hidden; }
 }
 .impact-map-canvas { position: absolute; inset: 0;
   background: linear-gradient(160deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.55)), var(--muted); }
-.impact-map-pin { position: absolute; width: 16px; height: 16px; border-radius: 50%;
-  transform: translate(-50%, -50%); border: 2px solid var(--surface); background: var(--marker);
-  cursor: pointer; padding: 0; transition: transform 120ms ease; }
-.impact-map-pin:hover, .impact-map-pin:focus-visible { transform: translate(-50%, -50%) scale(1.35); }
+.impact-map-pin { position: absolute; width: 16px; height: 16px; box-sizing: border-box; border-radius: 50%;
+  transform: translate(-50%, -50%); border: 2px solid var(--surface); background: var(--marker); pointer-events: none; }
 .impact-map-pin--active { box-shadow: 0 0 0 5px var(--primary-soft); }
+.impact-map-location-picker { display: grid; gap: 6px; max-width: 34rem; margin: 0 0 14px; font-weight: 600; }
+.impact-map-location-picker select { width: 100%; min-width: 0; min-height: 44px; padding: 8px 12px;
+  border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); font: inherit; }
+.impact-map-location-picker select:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .impact-map-card { margin-top: 14px; background: var(--surface); color: var(--ink);
   border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: var(--shadow-sm);
   padding: 16px 18px; max-width: 34rem; }
@@ -5182,7 +5213,7 @@ html:has(.donation-giftaid-dialog[open]) { overflow: hidden; }
 .impact-map-card-kind { display: inline-block; font-size: 11px; font-weight: 700;
   letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
 .impact-map-card-title { margin: 0 0 6px; }
-.impact-map-card-summary { margin: 0 0 10px; opacity: 0.9; }
+.impact-map-card-summary { margin: 0 0 10px; }
 .impact-map-card-cta { font-weight: 600; color: var(--primary); }
 .impact-map-empty { opacity: 0.7; }
 /* The live tile layer (slice 2): fills the stage from first render so MapLibre measures a real box;

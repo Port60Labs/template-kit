@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.4.1
+
+### Fixed
+
+- Shared preview styles follow the platform's accessible event heading hierarchy,
+  donation confirmation headings and course sign-in spacing.
+- Footer and impact-map copy retain their theme's intended contrast. Map location
+  controls match the platform's keyboard-accessible selector instead of interactive dots.
+- Plain-text biographies preserve line breaks and wrap long content without forced italics.
+
+### Compatibility and release
+
+This patch changes preview styling only. It does not change the template contract or
+require template dependency updates from 1.4.0. Publish through the mirror's existing
+GitHub Release workflow after the matching platform changes have been merged and deployed.
+
 ## 1.4.0
 
 ### Added
