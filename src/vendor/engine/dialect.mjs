@@ -16,6 +16,11 @@ export const CONTENT_SLOT = 'P60/content';
  * an unknown island renders to nothing (the validator rejects it at publish time).
  */
 export function configureDialect(liquid, dialect, islandNames) {
+  const outputEscape = liquid.options.outputEscape;
+  if (typeof outputEscape !== 'function') throw new Error('The Port60 dialect requires output escaping.');
+  liquid.options.outputEscape = function escapeAuthoredOutput(value) {
+    return outputEscape.call(this, value).replace(/\u0000/g, '\uFFFD');
+  };
   for (const tag of dialect.excluded?.tags ?? []) {
     liquid.registerTag(tag, {
       parse() {

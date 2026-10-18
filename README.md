@@ -111,6 +111,16 @@ choices and reset semantics, not evidence that every template implements each ch
 - A v2 Impact map placement requires an explicit `section.mapSlug`. Missing, cleared or
   unavailable selections show no replacement map. Custom preview content must pair that slug
   with the same `impactMap.slug`; historical v1 behaviour is unchanged.
+- A v2 Form placement (Home and About) names a form the organisation built in Forms:
+  `section.formSlug` addresses the instance the `form` island renders, beside `formId` and
+  `formInstanceId`, which templates never read. Ship `sections/form.liquid` (your surround plus
+  `{% island 'form' %}`); the island brings the respondent fields, the questions, the privacy line
+  and the submit, and the platform records the response. Absent or blank `formSlug` renders no
+  form and an unavailable selection never substitutes another. The preview renders the form
+  fixture only for the matching slug (`volunteer-with-us`); minimal content stays empty.
+- Plain-text biographies on People sections are bounded at 200 characters for new or changed
+  values; older longer values are retained. Render the complete escaped statement with line
+  breaks and wrapping, without fixed-height clipping or added quotation marks.
 
 The scaffold demonstrates its own supported heading, spacing, colour and About-photo/layout
 choices without advertising controls on unsuitable island surfaces. Structural validation is

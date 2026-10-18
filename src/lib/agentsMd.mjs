@@ -235,6 +235,11 @@ or generated text surrounds it. Never mark source records, generated labels or r
 
 ## Shared inspectors and section starting arrangements
 
+People biographies use the existing person.statement field as escaped plain text, not quotes or
+HTML. Preserve paragraph breaks with white-space:pre-line, wrap long words and allow cards to grow.
+New or changed values are bounded to 200 UTF-16 characters; older longer values must still render
+without silent truncation. Keep the field marker on the authored text itself, without punctuation.
+
 An implemented v2 settings.schema entry may use group:"header" or group:"footer" with
 supports.layout:true to appear in the matching shared website inspector. Historical v1 groups
 and artifacts remain unchanged. This is explicit exact-artifact metadata, not a guessed
@@ -268,6 +273,13 @@ no replacement fallback. Historical v1/built-in default-map behaviour is unchang
 preview only shows its non-interactive map fixture when the selected slug matches that fixture:
 canonical sample mapSlug:"our-work" matches impactMap.slug:"our-work"; minimal stays empty.
 Custom demos must also explicitly select their matching fixture, never fetch tenant records.
+
+A form section places a form the organisation built in Forms: section.formSlug names the
+forms-service instance the form island renders, beside formId and formInstanceId, which templates
+never read. Ship sections/form.liquid (surround plus {% island 'form' %}); the island brings the
+respondent fields, questions, privacy line and submit, and the platform records the response.
+Missing/blank formSlug renders no form; never substitute another form. The kit preview shows its
+form fixture only when formSlug matches it: the sample formSlug:"volunteer-with-us" does.
 
 Connected source choices are bounded typed references, not duplicate content or free expressions.
 Map title/description/points stay in Maps; local introduction copy is only for templates that

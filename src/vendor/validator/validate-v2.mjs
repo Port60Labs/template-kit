@@ -149,7 +149,7 @@ export async function validateArtifact(files) {
       events: () => sections.has('events') || pages.has('events'),
       articles: () => sections.has('articles') || hasAny(pages, ['articles', 'article']),
       services: () => sections.has('services') || pages.has('services'),
-      forms: () => islands.has('form'),
+      forms: () => sections.has('form') || islands.has('form'),
       documents: () => sections.has('documents'),
       newsletter: () => islands.has('newsletter_signup'),
       i18n: () => islands.has('language_switch'),

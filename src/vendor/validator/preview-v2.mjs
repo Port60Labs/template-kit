@@ -150,8 +150,25 @@ function islandSkeleton(name, ctx = {}, fx = STUDIO_FX) {
         ${first ? `<aside class="impact-map-card"><span class="impact-map-card-kind">${escapeHtml(first.kind)}</span><h3 class="impact-map-card-title">${escapeHtml(first.title)}</h3><p class="impact-map-card-summary">${escapeHtml(first.summary ?? '')}</p>${first.href ? `<a class="impact-map-card-cta" href="${escapeHtml(first.href)}">See more</a>` : ''}</aside>` : '<p class="impact-map-empty">No published map yet.</p>'}
       </section>`;
     }
-    case 'form':
-      return `<form class="public-form" data-p60-preview-island="form">${previewNote(name)}<header class="public-form-head"><h2>Ask the team</h2><p>Send a question and the team will respond.</p></header><label class="public-form-field"><span>Name</span><input disabled></label><label class="public-form-field"><span>Email address</span><input disabled></label><label class="public-form-field"><span>Your question</span><textarea disabled></textarea></label><label class="public-form-privacy"><input type="checkbox" disabled><span>I agree that the organisation may respond.</span></label><button class="public-form-submit" type="button" disabled>Send</button></form>`;
+    case 'form': {
+      const form = fx.sections?.form?.form;
+      // A fixture is an explicitly selected placement, never a default for an empty one.
+      if (!form || typeof ctx.section?.formSlug !== 'string' || !ctx.section.formSlug.trim()
+          || ctx.section.formSlug !== form.slug) return '';
+      const question = (form.fields ?? [])[0] ?? null;
+      return `<form class="p60-form p60-form--embedded" data-p60-preview-island="form" aria-label="${escapeHtml(form.name)}">${previewNote(name)}
+        ${form.description ? `<p class="p60-form-intro">${escapeHtml(form.description)}</p>` : ''}
+        <fieldset class="p60-form-respondent"><legend class="p60-form-label">Your details</legend>
+          <div class="p60-form-field"><label class="p60-form-label">Your name<span class="p60-form-req"> *</span></label><input class="p60-form-control" type="text" disabled></div>
+          <div class="p60-form-field"><label class="p60-form-label">Email address<span class="p60-form-req"> *</span></label><input class="p60-form-control" type="email" disabled></div>
+        </fieldset>
+        ${question ? `<div class="p60-form-field"><label class="p60-form-label">${escapeHtml(question.label)}${question.required ? '<span class="p60-form-req"> *</span>' : ''}</label>${Array.isArray(question.options)
+          ? `<div class="p60-form-radios">${question.options.map((option) => `<label class="p60-form-check"><input type="radio" disabled><span>${escapeHtml(option)}</span></label>`).join('')}</div>`
+          : '<textarea class="p60-form-control" disabled></textarea>'}</div>` : ''}
+        <label class="p60-form-check"><input type="checkbox" disabled><span>I agree to my responses being stored so this organisation can respond.</span></label>
+        <button class="button button-primary" type="button" disabled>${escapeHtml(form.submitLabel ?? 'Submit')}</button>
+      </form>`;
+    }
     default:
       return `<div class="p60-preview-island" data-p60-preview-island="${escapeHtml(name)}" role="note">${previewNote(name)}</div>`;
   }
@@ -262,7 +279,7 @@ function campaignDetailSkeleton(fx = STUDIO_FX) {
   return `${surfaceDivider('campaign')}<section class="section"><div class="container">
     <h1 data-p60-page-title>${escapeHtml(campaign.title)}</h1>
     ${campaign.summary ? `<p>${escapeHtml(campaign.summary)}</p>` : ''}
-    ${islandSkeleton('form', {}, fx)}
+    ${islandSkeleton('form', { section: { formSlug: fx.sections?.form?.form?.slug ?? '' } }, fx)}
   </div></section>`;
 }
 

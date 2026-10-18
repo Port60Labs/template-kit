@@ -176,18 +176,28 @@
     },
     {
       "name": "form",
-      "label": "Public form",
+      "label": "Form",
       "status": "available",
-      "description": "Renders the tenant's first published platform form and records its submission with explicit privacy acceptance. Templates cannot handle or redirect submissions themselves.",
+      "description": "The form instance the placing `form` section names (its formSlug): respondent name and email, the form's questions, privacy acceptance and submit, with Turnstile and the i18n error contract. Renders nothing without a placement. The platform owns the questions, validation and the response; the template owns placement and documented styling. Templates cannot handle or redirect submissions themselves.",
       "params": [],
       "stylingApi": [
-        ".public-form",
-        ".public-form-head",
-        ".public-form-field",
-        ".public-form-check",
-        ".public-form-privacy",
-        ".public-form-submit",
-        ".public-form-message"
+        ".p60-form",
+        ".p60-form--embedded",
+        ".p60-form-intro",
+        ".p60-form-respondent",
+        ".p60-form-field",
+        ".p60-form-label",
+        ".p60-form-req",
+        ".p60-form-control",
+        ".p60-form-help",
+        ".p60-form-note",
+        ".p60-form-error",
+        ".p60-form-alert",
+        ".p60-form-heading",
+        ".p60-form-check",
+        ".p60-form-check-help",
+        ".p60-form-checklist",
+        ".p60-form-radios"
       ]
     },
     {

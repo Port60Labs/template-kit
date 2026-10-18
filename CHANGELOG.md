@@ -1,5 +1,33 @@
 # Changelog
 
+## 1.5.0
+
+### Added
+
+- The `form` section: a placement (Home and About) that names a form the organisation built
+  in Forms through the Pages editor. The section stores `formId`, `formInstanceId` and
+  `formSlug`; the `form` island renders the instance the slug addresses with the respondent
+  fields, the questions, the privacy line and the submit. The island's styling API is the
+  renderer's `p60-form-*` classes. The validator accepts the section or the island for the
+  `forms` capability; the preview renders the form fixture only for a matching `formSlug`.
+- The starter ships `sections/form.liquid` and declares the section and the island.
+- Content bounds record the 200-character plain-text biography limit on People sections.
+
+### Fixed
+
+- The starter renders complete biographies with line breaks and wrapping instead of italics.
+- Authored output escaping replaces NUL characters so a stored control character cannot
+  reach a rendered page.
+
+### Compatibility and release
+
+Additive: the section catalogue, manifest schema (`sectionPresentation` and
+`sectionHeadingAlignment` accept `form`, at most 17 entries) and the `form` island entry grow;
+nothing existing changes. Templates that do not ship `sections/form.liquid` are unaffected: the
+editor marks a placed form section not visible and the public page skips it. Publish through
+the mirror's GitHub Release workflow after the matching platform release
+(multi-tenant-services #329) is live.
+
 ## 1.4.1
 
 ### Fixed
