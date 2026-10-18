@@ -1046,6 +1046,33 @@
             }
           ]
         }
+      },
+      "form": {
+        "form": {
+          "slug": "volunteer-with-us",
+          "name": "Volunteer with us",
+          "description": "A few questions so we can match you with the right role.",
+          "submitLabel": "Register interest",
+          "fields": [
+            {
+              "key": "availability",
+              "kind": "CHOICE",
+              "label": "When could you help?",
+              "required": true,
+              "options": [
+                "Weekday mornings",
+                "Weekday evenings",
+                "Weekends"
+              ]
+            },
+            {
+              "key": "about",
+              "kind": "TEXTAREA",
+              "label": "Tell us a little about yourself",
+              "required": false
+            }
+          ]
+        }
       }
     },
     "pages": {

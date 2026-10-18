@@ -1,8 +1,3 @@
-{% comment %}
-  People / team, the reference implementation: simple cards (name, role, optional photo and
-  one-line statement), a grid that collapses to one column on phones. No placeholder faces:
-  a person without a photo just renders text (derive or omit, never fabricate).
-{% endcomment %}
 <section class="lq-section">
   <div class="container">
     {% if section.eyebrow or section.heading or section.text %}
@@ -18,8 +13,7 @@
         {% if person.imageUrl %}<img class="lq-person-photo" src="{{ person.imageUrl }}" alt="" loading="lazy">{% endif %}
         <h3 data-p60-field="items.{{ forloop.index0 }}.name">{{ person.name }}</h3>
         <p class="lq-person-role" data-p60-field="items.{{ forloop.index0 }}.role">{{ person.role }}</p>
-        {%- comment -%} The quotation marks are ours, so the marker goes on a span holding the statement alone. {%- endcomment -%}
-        {% if person.statement %}<p class="lq-person-statement">“<span data-p60-field="items.{{ forloop.index0 }}.statement">{{ person.statement }}</span>”</p>{% endif %}
+        {% if person.statement %}<p class="lq-person-statement" data-p60-field="items.{{ forloop.index0 }}.statement">{{ person.statement }}</p>{% endif %}
       </article>
       {% endfor %}
     </div>

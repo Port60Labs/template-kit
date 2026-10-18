@@ -60,7 +60,10 @@
           "name": "photoFraming",
           "kind": "select",
           "required": false,
-          "options": ["fill", "whole"],
+          "options": [
+            "fill",
+            "whole"
+          ],
           "description": "Optional exact-section photograph framing, declared as a third supports.sectionFields.hero member beside imageUrl/imageAlt. Absent/reset inherits the template's authored image composition, which may crop. Explicit whole shows the full photograph at its natural ratio, width 100% and height auto without a blanket height cap. Fill deliberately crops into an author-bounded aspect ratio. Keep data-p60-photo-framing on the actual img, empty when inherited. Token CSS may change only object-fit and bounded aspect-ratio on that image, never its source, width, grid, copy or neighbours. Home hero semantics are unchanged. Unsupported saved choices remain stored but are not projected."
         }
       ],
@@ -1060,7 +1063,7 @@
       "pages": [
         "about"
       ],
-      "description": "The key people behind the charity, trustees, staff, volunteers, as simple cards: name, position, an optional photograph (uploaded through the platform pipeline) and an optional one-line statement. Templates render a card grid that collapses to a single column on small screens; a card without a photo renders cleanly (initials or plain), never a placeholder face.",
+      "description": "The key people behind the charity as cards: name, role, an optional photograph and an optional plain-text biography. Templates preserve biography paragraph breaks, wrap long words and allow cards to grow without clipping. A card without a photo renders cleanly (initials or plain), never a placeholder face.",
       "fields": [
         {
           "name": "presentation",
@@ -1125,7 +1128,7 @@
               "name": "statement",
               "kind": "text",
               "required": false,
-              "description": "One line in their voice, e.g. why they serve."
+              "description": "Optional plain-text biography, up to 200 UTF-16 code units for new or changed content. Retain this stored field name for compatibility. Render escaped text with paragraph breaks, not a quotation or raw HTML; do not truncate older longer biographies. Unchanged older content and progressive shortening remain accepted."
             }
           ]
         }
@@ -1275,6 +1278,80 @@
         "eyebrow": "Learn with us",
         "title": "Courses",
         "subtitle": "Published courses from this organisation."
+      }
+    },
+    {
+      "type": "form",
+      "label": "Form",
+      "pages": [
+        "home",
+        "about"
+      ],
+      "description": "A form the organisation built in Forms, placed on this page: the `form` island renders the named instance with its respondent details, questions, privacy acceptance and submit, and the platform records the response (Turnstile and the forms caps apply). Your template brings the surround and documented styling; it never handles or redirects the submission.",
+      "context": [],
+      "fields": [
+        {
+          "name": "presentation",
+          "kind": "presentation",
+          "required": false,
+          "description": "Typed placement preferences from presentation.json. Only controls declared by the exact template version affect rendering. An absent key inherits; unsupported stored preferences remain untouched. headingScale changes only this section heading, not its eyebrow, cards or body. sectionSpacing independently changes only the natural outer section root's block-axis padding, never horizontal gutters, gaps, heights or island internals."
+        },
+        {
+          "name": "headingAlignment",
+          "kind": "select",
+          "required": false,
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "description": "Desktop alignment of the heading and optional eyebrow. The template may position their heading-only group within its existing content container and gutters while preserving readable width. Only applied when this exact template declares supports.sectionHeadingAlignment for this section and option. Absent means template default. Start/end follow the site direction. Below 1024 CSS pixels the template retains its own layout. Introductions, body copy, buttons, cards, images and islands keep their placement and alignment; full-bleed imagery does not widen the heading bounds."
+        },
+        {
+          "name": "eyebrow",
+          "kind": "text",
+          "required": false,
+          "description": "Short kicker."
+        },
+        {
+          "name": "heading",
+          "kind": "text",
+          "required": false,
+          "description": "The section heading."
+        },
+        {
+          "name": "text",
+          "kind": "text",
+          "required": false,
+          "description": "Optional introduction."
+        },
+        {
+          "name": "formId",
+          "kind": "text",
+          "required": false,
+          "description": "The published form definition the organisation chose in the Pages editor's placement picker. Forms owns the questions, the responses and the inbox; the template never reads them."
+        },
+        {
+          "name": "formInstanceId",
+          "kind": "text",
+          "required": false,
+          "description": "The forms-service instance the picker created for this page. Publishing the page makes the instance PUBLISHED; removing the section and publishing returns it to DRAFT, responses kept. Templates never read it."
+        },
+        {
+          "name": "formSlug",
+          "kind": "text",
+          "required": false,
+          "description": "WHICH form instance the `form` island renders here, by its address (the picker writes it alongside formId and formInstanceId). An absent or blank selection renders no form. A missing, draft or closed instance never falls back to another form."
+        }
+      ],
+      "minimal": {},
+      "sample": {
+        "eyebrow": "Get involved",
+        "heading": "Volunteer with us",
+        "text": "Tell us a little about yourself and we will be in touch about the next induction.",
+        "formId": "8c1d2d3a-5f1e-4f4e-9b7b-2f3d4e5f6a7b",
+        "formInstanceId": "b6f0e1c2-3d4e-4f5a-8b9c-0d1e2f3a4b5c",
+        "formSlug": "volunteer-with-us"
       }
     }
   ]

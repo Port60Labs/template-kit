@@ -1,7 +1,7 @@
 {
   "version": 1,
   "description": "Platform-owned presentation meanings. Templates declare supported choices; saved values remain tenant-owned. An absent override inherits the exact artifact's authored default. Hidden or unsupported values remain stored but are not projected into template rendering.",
-  "sectionTypes": ["hero", "values", "cta", "homeHero", "impact", "events", "articles", "campaigns", "emergency", "stats", "appealGrid", "services", "documents", "people", "impactMap", "courses"],
+  "sectionTypes": ["hero", "values", "cta", "homeHero", "impact", "events", "articles", "campaigns", "emergency", "stats", "appealGrid", "services", "documents", "people", "impactMap", "courses", "form"],
   "legacySectionAliases": {"programmes": "services", "resources": "documents", "whatsOn": "events"},
   "controls": {
     "sectionLayout": {

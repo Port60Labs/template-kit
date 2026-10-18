@@ -202,8 +202,8 @@
         },
         "sectionPresentation": {
           "type": "object",
-          "maxProperties": 16,
-          "propertyNames": { "enum": ["hero", "values", "cta", "homeHero", "impact", "events", "articles", "campaigns", "emergency", "stats", "appealGrid", "services", "documents", "people", "impactMap", "courses"] },
+          "maxProperties": 17,
+          "propertyNames": { "enum": ["hero", "values", "cta", "homeHero", "impact", "events", "articles", "campaigns", "emergency", "stats", "appealGrid", "services", "documents", "people", "impactMap", "courses", "form"] },
           "additionalProperties": {
             "type": "object",
             "additionalProperties": false,
@@ -263,8 +263,8 @@
         },
         "sectionHeadingAlignment": {
           "type": "object",
-          "maxProperties": 16,
-          "propertyNames": { "enum": ["hero", "values", "cta", "homeHero", "impact", "events", "articles", "campaigns", "emergency", "stats", "appealGrid", "services", "documents", "people", "impactMap", "courses"] },
+          "maxProperties": 17,
+          "propertyNames": { "enum": ["hero", "values", "cta", "homeHero", "impact", "events", "articles", "campaigns", "emergency", "stats", "appealGrid", "services", "documents", "people", "impactMap", "courses", "form"] },
           "additionalProperties": {
             "type": "array",
             "minItems": 1,
