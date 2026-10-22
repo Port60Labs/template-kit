@@ -26,10 +26,12 @@ const PRIMARY_ATTR = Object.fromEntries(
   behaviourCatalogue.behaviours.map((b) => [b.name, [new RegExp(`${escapeRegExp(b.primaryAttribute)}\\b`), b.primaryAttribute]])
 );
 
+import { STYLE_BREAKOUT } from '../engine/inline-style.mjs';
+
 const FORBIDDEN_MARKUP = [
   [/<script\b/i, 'a <script> tag'],
   [/<(iframe|object|embed)\b/i, 'an embedded frame or plugin element'],
-  [/\son(?:click|dbl|aux|load|error|abort|unload|mouse|pointer|touch|drag|drop|wheel|scroll|key|focus|blur|input|change|submit|reset|invalid|select|toggle|copy|paste|cut|context|play|pause|ended|seek|stall|suspend|time|volume|waiting|canplay|animation|transition|message|resize|hashchange|popstate|storage|got|lost)[a-z]*\s*=/i,
+  [/[\s/"']on(?:click|dbl|aux|load|error|abort|unload|mouse|pointer|touch|drag|drop|wheel|scroll|key|focus|blur|input|change|submit|reset|invalid|select|toggle|copy|paste|cut|context|play|pause|ended|seek|stall|suspend|time|volume|waiting|canplay|animation|transition|message|resize|hashchange|popstate|storage|got|lost)[a-z]*\s*=/i,
     'an inline event handler'],
   [/javascript\s*:/i, 'a javascript: URL'],
 ];
@@ -110,6 +112,11 @@ export async function validateArtifact(files) {
       if (pattern.test(source)) {
         errors.push(`${path}: contains ${what}, templates are markup and attributes, never code (behaviour is engine-owned; see the behaviour catalogue)`);
       }
+    }
+  }
+  for (const [path, source] of Object.entries(files)) {
+    if (path.endsWith('.css') && STYLE_BREAKOUT.test(source)) {
+      errors.push(`${path}: contains a closing style tag, the theme is inlined into the page's style element and must never close it`);
     }
   }
 

@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import { Liquid } from 'liquidjs';
 import { CONTENT_SLOT, configureDialect, splitIslandParts } from '../engine/dialect.mjs';
 import { LIQUID_BUDGETS } from '../engine/budgets.mjs';
+import { inertInlineCss } from '../engine/inline-style.mjs';
 import { resolveDesignSettings } from '../engine/design-settings.mjs';
 import dialect from '../contract/v2/dialect.json' with { type: 'json' };
 import sectionCatalogue from '../contract/v2/sections.json' with { type: 'json' };
@@ -519,7 +520,7 @@ export async function renderStudioPreview(files, options = {}) {
     bodyHtml = contentHtml;
   }
 
-  const themeCss = files['assets/theme.css'] ?? '';
+  const themeCss = inertInlineCss(files['assets/theme.css'] ?? '');
   const { attrs, vars, fontSlots } = knobValues(manifest, options.knobs ?? {});
   const webfonts = options.webfonts
     ? [...(manifest?.fonts ?? []).map(toProvider), ...(fontCssHref(fontSlots) ? [fontCssHref(fontSlots)] : [])]
