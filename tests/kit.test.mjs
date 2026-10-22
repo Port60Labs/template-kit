@@ -155,7 +155,7 @@ test('DRIFT GUARD: vendored contract/engine/validator match charity-site byte fo
     return; // published package outside the monorepo, the guard runs in-repo only
   }
   const vendor = resolve(import.meta.dirname, '../src/vendor');
-  const pairs = ['contract', 'validator', 'engine/dialect.mjs', 'engine/locale.mjs', 'engine/colour-roles.mjs', 'engine/budgets.mjs', 'engine/content-footprint.mjs', 'engine/majors.mjs', 'engine/section-heading-alignment.mjs', 'engine/presentation-capabilities.mjs', 'engine/section-presentation.mjs', 'engine/design-settings.mjs'];
+  const pairs = ['contract', 'validator', 'engine/dialect.mjs', 'engine/locale.mjs', 'engine/colour-roles.mjs', 'engine/budgets.mjs', 'engine/content-footprint.mjs', 'engine/majors.mjs', 'engine/section-heading-alignment.mjs', 'engine/presentation-capabilities.mjs', 'engine/section-presentation.mjs', 'engine/design-settings.mjs', 'engine/inline-style.mjs'];
   const compare = (relativePath) => {
     const src = join(site, relativePath);
     const ven = join(vendor, relativePath);

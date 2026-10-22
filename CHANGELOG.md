@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.6.0
+
+### Changed
+
+- The validator refuses a closing style tag in any `.css` entry. The platform inlines
+  `assets/theme.css` into the page's style element, so a `</style` in the theme would end that
+  element and whatever followed would be parsed as markup. The upload intake refuses the same.
+- The inline event handler check treats a slash or a quote before `on*=` as an attribute
+  boundary, as the HTML parser does, so `<img src="x"/onerror=...>` and `<img src="x"onerror=...>`
+  are refused like `<img src="x" onerror=...>`.
+- The preview renderers inline the theme through `inertInlineCss`
+  (`src/vendor/engine/inline-style.mjs`), which escapes `</` as `<\/`: no change to the meaning
+  of valid CSS, and a theme can never close the element it is inlined into, in a preview or on
+  the platform.
+
+### Compatibility and release
+
+Stricter validation only: a template whose theme carries no closing style tag and whose markup
+places no event handler attribute is unaffected, and every Port60 template validates unchanged.
+Publish through the mirror's GitHub Release workflow after the matching platform release
+(multi-tenant-services #343, the 2026-10-18 audit's H-04) is live.
+
 ## 1.5.0
 
 ### Added

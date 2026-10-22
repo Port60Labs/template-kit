@@ -55,6 +55,15 @@ Kit 1.4.0 authors **port60-liquid@2**, content model **2.0**, using the contract
 resolved actions and page-scoped sections are explicit. V1 sources need a deliberate migration,
 not a manifest-only relabel. Historical v1 contracts remain frozen for existing platform pins.
 
+### Theme CSS stays in its element in 1.6.0
+
+The platform inlines `assets/theme.css` into the page's style element, so the validator and the
+upload intake refuse a closing style tag in any `.css` entry, and the preview renderers escape
+`</` when they inline the theme. The inline event handler check also treats a slash or a quote
+before `on*=` as an attribute boundary, as the HTML parser does. Stricter validation only: a
+template with no closing style tag in its theme and no event handler attribute in its markup
+validates as before.
+
 ### Authored navigation styles in 1.4.0
 
 Declare a unique subset of two to four implemented styles through `supports.navigationModes`,
