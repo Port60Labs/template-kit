@@ -68,7 +68,7 @@ function imageOriginsOf(json) {
 }
 
 /**
- * `dev <dir> [--port 4400]`, the local preview: your template over the contract's kind fixtures,
+ * `dev <dir> [--port 4400] [--host 127.0.0.1]`, the local preview: your template over the contract's kind fixtures,
  * the SAME render the studio and reviewers see (islands as fixture-hydrated skeletons,
  * network-dead CSP), composed per page from supports.pages. Dev-only widenings over the studio
  * render, each one something production does: the platform's own behaviour runtime is inlined
@@ -76,7 +76,8 @@ function imageOriginsOf(json) {
  * a knob can be switched from the query, and a preview/ folder beside the template serves the
  * author's own imagery. Files are re-read on every request, so a browser refresh is the hot
  * reload; file changes also re-run validation into the terminal, the human watches the page,
- * the agent watches the JSON.
+ * the agent watches the JSON. The server listens on the loopback address only; `--host 0.0.0.0`
+ * opens it to the network for a look on a phone.
  */
 export async function dev(args) {
   const dir = resolve(args._[0] ?? '.');
@@ -87,6 +88,19 @@ export async function dev(args) {
     return;
   }
   const port = Number(args.port ?? 4400);
+  if (args.host !== undefined && typeof args.host !== 'string') {
+    console.error('✗ --host needs an address, for example: --host 0.0.0.0');
+    process.exitCode = 1;
+    return;
+  }
+  const joinedHost = Object.keys(args).find((k) => k.startsWith('host='));
+  if (joinedHost) {
+    console.error(`✗ write the address after a space: --host ${joinedHost.slice(5)}`);
+    process.exitCode = 1;
+    return;
+  }
+  const host = typeof args.host === 'string' ? args.host : '127.0.0.1';
+  const loopback = host === '127.0.0.1' || host === 'localhost' || host === '::1';
   // The dev-richer half of the imagery split: point P60_FIXTURE_IMAGES at the platform's fixture
   // imagery base and the preview loads photographic fixtures from that ONE origin instead of the
   // sealed inline-SVG art. Unset (the default), the preview stays fully network-dead.
@@ -183,8 +197,9 @@ ${errors.length ? `<h2>Validation says</h2><ul>${errors.map((x) => `<li>${String
     throw e;
   });
 
-  server.listen(port, () => {
+  server.listen(port, host, () => {
     console.log(`✓ preview at http://localhost:${port}, refresh after edits`);
+    if (!loopback) console.log(`  listening on ${host}, so other devices on the network can reach this preview`);
     console.log('  watching for changes; validation runs on save:');
   });
 

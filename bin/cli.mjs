@@ -87,8 +87,9 @@ switch (command) {
 usage:
   p60-template-kit create <dir>                scaffold a template (name = the folder;
                                                --name/--label override the identity)
-  p60-template-kit dev [dir] [--port 4400] [--content my.json]
-                                               live preview; --content renders YOUR data
+  p60-template-kit dev [dir] [--port 4400] [--content my.json] [--host 127.0.0.1]
+                                               live preview; --content renders YOUR data;
+                                               --host 0.0.0.0 reaches it from another device
   p60-template-kit model [--json]              the content model, in hand (--json for agents)
   p60-template-kit content [dir] [--out file]  eject the model's data as your editable copy
   p60-template-kit validate [dir] [--json]     the platform's exact conformance checks
