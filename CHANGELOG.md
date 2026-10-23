@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.6.1
+
+### Changed
+
+- `p60-template-kit login` opens the sign-in page only when the address the platform returned is
+  `https:`, and never through a shell: on Windows it hands the address to `rundll32
+  url.dll,FileProtocolHandler` as one argument, elsewhere to `open` or `xdg-open`. Any other
+  address is left as the printed link.
+- `p60-template-kit dev` listens on 127.0.0.1 unless `--host` says otherwise (`--host 0.0.0.0`
+  opens the preview to the network, for a look on a phone), and says so when it is not the
+  loopback address. A bare `--host`, or `--host=address`, stops with a hint instead of binding
+  loopback in silence.
+
+### Compatibility and release
+
+No contract change: templates validate and preview as before. A developer who relied on the
+preview being reachable from another device passes `--host 0.0.0.0`. Publish through the mirror's
+GitHub Release workflow after the matching platform release (multi-tenant-services #351, the
+2026-10-18 audit's L-01 and L-04) is live.
+
 ## 1.6.0
 
 ### Changed

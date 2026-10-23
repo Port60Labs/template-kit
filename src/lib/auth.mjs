@@ -48,7 +48,7 @@ export function requireCredentials() {
   return creds;
 }
 
-/** The JWT payload, unverified — display only (email, subject). The server verifies for real. */
+/** The JWT payload, unverified, display only (email, subject). The server verifies for real. */
 export function decodeJwtPayload(token) {
   try {
     return JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString('utf8'));
@@ -91,13 +91,25 @@ export async function accessToken(creds) {
   return body.access_token;
 }
 
-function tryOpenBrowser(url) {
-  const opener = process.platform === 'darwin' ? 'open'
-    : process.platform === 'win32' ? 'start' : 'xdg-open';
+export function browserOpener(url, platform = process.platform) {
+  let parsed;
   try {
-    spawn(opener, [url], { stdio: 'ignore', detached: true, shell: process.platform === 'win32' }).unref();
+    parsed = new URL(url);
   } catch {
-    // no browser to open; the printed URL is the path
+    return null;
+  }
+  if (parsed.protocol !== 'https:') return null;
+  if (platform === 'darwin') return { command: 'open', args: [parsed.href] };
+  if (platform === 'win32') return { command: 'rundll32', args: ['url.dll,FileProtocolHandler', parsed.href] };
+  return { command: 'xdg-open', args: [parsed.href] };
+}
+
+function tryOpenBrowser(url) {
+  const opener = browserOpener(url);
+  if (!opener) return;
+  try {
+    spawn(opener.command, opener.args, { stdio: 'ignore', detached: true }).unref();
+  } catch {
   }
 }
 
@@ -112,7 +124,7 @@ export async function deviceLogin() {
   const realm = authRealm();
   const clientId = oauthClientId();
   // prompt=login forces a fresh, intentional sign-in at the verification page even when the
-  // browser already holds an SSO session — so a developer who is also signed in as (say) a charity
+  // browser already holds an SSO session, so a developer who is also signed in as (say) a charity
   // editor can never silently authorise the CLI as the wrong account. Login is rare (the offline
   // token lasts), so paying for intentionality every time is the right trade.
   const start = await form(`${base}/realms/${realm}/protocol/openid-connect/auth/device`, {
@@ -134,7 +146,7 @@ export async function deviceLogin() {
   console.log(`  Visit:  ${uri}`);
   console.log(`  Code:   ${userCode}`);
   console.log('');
-  console.log('  Sign in there with the account you want to PUBLISH AS — you will be asked to sign in');
+  console.log('  Sign in there with the account you want to PUBLISH AS. You will be asked to sign in');
   console.log('  even if your browser is already logged in, so pick the right one. This terminal will notice.');
   if (uriComplete) tryOpenBrowser(uriComplete);
 
