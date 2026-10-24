@@ -66,6 +66,21 @@ test('--host opens the preview to the network and says so', async () => {
   }
 });
 
+test('--host=ADDRESS is the same bind as --host ADDRESS', async () => {
+  const dir = mkdtempSync(join(tmpdir(), 'p60kit-dev-joined-'));
+  execFileSync(process.execPath, [CLI, 'create', dir, '--name', 'joined-check'], { encoding: 'utf8' });
+  const port = await freePort();
+  const { child, output } = await startDev(dir, [`--port=${port}`, '--host=0.0.0.0']);
+  try {
+    assert.match(output, /listening on 0\.0\.0\.0, so other devices on the network can reach this preview/);
+    const response = await fetch(`http://127.0.0.1:${port}/`);
+    assert.equal(response.status, 200);
+  } finally {
+    child.kill();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test('--host without an address is refused with a hint instead of a silent loopback bind', () => {
   const dir = mkdtempSync(join(tmpdir(), 'p60kit-dev-bind-'));
   execFileSync(process.execPath, [CLI, 'create', dir, '--name', 'bind-check'], { encoding: 'utf8' });
@@ -73,9 +88,6 @@ test('--host without an address is refused with a hint instead of a silent loopb
     const bare = spawnSync(process.execPath, [CLI, 'dev', dir, '--host'], { encoding: 'utf8' });
     assert.equal(bare.status, 1);
     assert.match(bare.stderr, /--host needs an address/);
-    const joined = spawnSync(process.execPath, [CLI, 'dev', dir, '--host=0.0.0.0'], { encoding: 'utf8' });
-    assert.equal(joined.status, 1);
-    assert.match(joined.stderr, /--host 0\.0\.0\.0/);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
