@@ -93,12 +93,6 @@ export async function dev(args) {
     process.exitCode = 1;
     return;
   }
-  const joinedHost = Object.keys(args).find((k) => k.startsWith('host='));
-  if (joinedHost) {
-    console.error(`✗ write the address after a space: --host ${joinedHost.slice(5)}`);
-    process.exitCode = 1;
-    return;
-  }
   const host = typeof args.host === 'string' ? args.host : '127.0.0.1';
   const loopback = host === '127.0.0.1' || host === 'localhost' || host === '::1';
   // The dev-richer half of the imagery split: point P60_FIXTURE_IMAGES at the platform's fixture

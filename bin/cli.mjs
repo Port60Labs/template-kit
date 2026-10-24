@@ -14,26 +14,7 @@ import { login, logout, whoami } from '../src/commands/auth.mjs';
 import { publish } from '../src/commands/publish.mjs';
 import { releaseCmd } from '../src/commands/release.mjs';
 import { setupPreviews } from '../src/commands/setupPreviews.mjs';
-
-function parseArgs(argv) {
-  const args = { _: [] };
-  for (let i = 0; i < argv.length; i++) {
-    const a = argv[i];
-    if (a.startsWith('--')) {
-      const key = a.slice(2);
-      const next = argv[i + 1];
-      if (next !== undefined && !next.startsWith('--')) {
-        args[key] = next;
-        i++;
-      } else {
-        args[key] = true;
-      }
-    } else {
-      args._.push(a);
-    }
-  }
-  return args;
-}
+import { parseArgs } from '../src/lib/args.mjs';
 
 const [command, ...rest] = process.argv.slice(2);
 const args = parseArgs(rest);

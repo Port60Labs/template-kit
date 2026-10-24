@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.6.2
+
+### Changed
+
+- Every option accepts `--name=value` as well as `--name value`: the kit's argument parser splits
+  a joined option on its first equals sign, so `--host=0.0.0.0` binds the preview to the network
+  the way `--host 0.0.0.0` does, and `--out=dist` is the same as `--out dist`. Before this, a
+  joined option was read as a flag whose name included the value and the value was lost. The hint
+  that `dev` printed for `--host=address` is gone because the form now works; a bare `--host`
+  still stops with the hint. The parser lives in `src/lib/args.mjs` with its own tests.
+
+### Compatibility and release
+
+No contract change: templates validate and preview as before, and every spaced option behaves as
+it did. Nothing on the platform side is needed for the joined form. Publish through the mirror's
+GitHub Release workflow; the matching platform change is multi-tenant-services #356.
+
 ## 1.6.1
 
 ### Changed
