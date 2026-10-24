@@ -12,7 +12,14 @@ jobs:
         with:
           node-version: 24
       - run: npm ci
-      - run: node bin/cli.mjs setup-previews --with-deps
+      - name: Install the preview browsers, eight minutes a try and one retry
+        timeout-minutes: 18
+        run: |
+          for attempt in 1 2; do
+            timeout 8m node bin/cli.mjs setup-previews --with-deps && exit 0
+            echo "browser install attempt $attempt did not finish"
+          done
+          exit 1
       - name: Enable the browser sandbox for this CI executable only
         run: |
           sudo install -o root -g root -m 644 .github/preview-browser.apparmor /etc/apparmor.d/port60-preview-browser
