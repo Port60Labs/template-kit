@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.6.3
+
+### Fixed
+
+- The preview loads each of a template's fonts from its own Bunny Fonts stylesheet. It used to
+  ask for the heading and body families in one request, and Bunny answers that request from a
+  cache keyed on its first family, so the second family often came back as a different one
+  (Figtree as Inter, Inter as IBM Plex Sans): the preview, and the gallery posters drawn from it,
+  showed body text in a fallback face. A template's own `fonts` URL with several families is
+  split the same way, one request per family, keeping its other parameters.
+
+### Compatibility and release
+
+No contract change: templates validate exactly as before and need no edits. The fix is in the
+vendored preview renderers (`src/vendor/validator/fonts.mjs`, `preview-v1.mjs`, `preview-v2.mjs`),
+matching the platform's live pages, which already request one stylesheet per family. Publish
+through the mirror's GitHub Release workflow; the matching platform change is
+multi-tenant-services #380, live since 2 November 2026.
+
 ## 1.6.2
 
 ### Changed
