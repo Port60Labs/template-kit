@@ -34,8 +34,9 @@ function nearestWeight(target, available) {
   return best;
 }
 
-/** One css2 URL covering every chosen family at its slot's clamped weights, or null. */
-export function fontCssHref(slots) {
+/** One css2 URL per chosen family at its slots' clamped weights. The provider answers a
+ *  multi-family request from a cache keyed on its first family, so one family per request. */
+export function fontCssHrefs(slots) {
   const weightsByFamily = new Map();
   for (const slot of slots) {
     const family = byName.get(slot.family);
@@ -45,13 +46,16 @@ export function fontCssHref(slots) {
     for (const weight of asked) set.add(nearestWeight(weight, family.weights));
     weightsByFamily.set(family.name, set);
   }
-  if (weightsByFamily.size === 0) return null;
-  const parts = [...weightsByFamily.entries()].map(([name, weights]) =>
-    `family=${name.replace(/ /g, '+')}:wght@${[...weights].sort((a, b) => a - b).join(';')}`);
-  return `${catalogue.provider.cssBase}?${parts.join('&')}&display=swap`;
+  return [...weightsByFamily.entries()].map(([name, weights]) =>
+    `${catalogue.provider.cssBase}?family=${name.replace(/ /g, '+')}:wght@${[...weights].sort((a, b) => a - b).join(';')}&display=swap`);
 }
 
-/** A template's own Google Fonts URL, rewritten to the mirror (same css2 API). */
-export function toProvider(url) {
-  return String(url).replace('https://fonts.googleapis.com/', `${FONT_PROVIDER_ORIGIN}/`);
+/** A template's own Google Fonts URL on the mirror (same css2 API), one URL per family. */
+export function toProviderHrefs(url) {
+  const [base, query = ''] = String(url).replace('https://fonts.googleapis.com/', `${FONT_PROVIDER_ORIGIN}/`).split('?', 2);
+  const params = query.split('&').filter(Boolean);
+  const families = params.filter(param => param.startsWith('family='));
+  const shared = params.filter(param => !param.startsWith('family='));
+  if (families.length < 2) return [query ? `${base}?${query}` : base];
+  return families.map(family => `${base}?${[family, ...shared].join('&')}`);
 }

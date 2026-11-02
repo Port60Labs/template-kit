@@ -13,7 +13,7 @@ import { resolveFixtureArt } from './fixture-art.mjs';
 import { buildSiteFixture, applyPreviewContent, pageComposition, PAGE_KEYS, resolveSectionFixture } from './site-context-v2.mjs';
 import { resolvedNavigationMode } from '../engine/presentation-capabilities.mjs';
 import { withResolvedIcons } from './icons.mjs';
-import { FONT_PROVIDER_ORIGIN, fontCssHref, fontStackFor, knownFamily, toProvider } from './fonts.mjs';
+import { FONT_PROVIDER_ORIGIN, fontCssHrefs, fontStackFor, knownFamily, toProviderHrefs } from './fonts.mjs';
 import { normaliseFocus, previewActions } from './focus.mjs';
 
 const STUDIO_FX = resolveFixtureArt(contextContract.fixtures);
@@ -523,7 +523,7 @@ export async function renderStudioPreview(files, options = {}) {
   const themeCss = inertInlineCss(files['assets/theme.css'] ?? '');
   const { attrs, vars, fontSlots } = knobValues(manifest, options.knobs ?? {});
   const webfonts = options.webfonts
-    ? [...(manifest?.fonts ?? []).map(toProvider), ...(fontCssHref(fontSlots) ? [fontCssHref(fontSlots)] : [])]
+    ? [...new Set([...(manifest?.fonts ?? []).flatMap(toProviderHrefs), ...fontCssHrefs(fontSlots)])]
     : [];
   const fontLinks = webfonts.length
     ? `<link rel="preconnect" href="${FONT_PROVIDER_ORIGIN}" crossorigin>\n${webfonts.map((href) => `<link rel="stylesheet" href="${escapeHtml(href)}">`).join('\n')}`
