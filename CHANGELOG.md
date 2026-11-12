@@ -1,5 +1,40 @@
 # Changelog
 
+## 1.7.0
+
+### Changed
+
+- Fonts come from Port60's own font store at `cdn.port60.com/fonts`, never from a third-party
+  font host. Bunny Fonts began pointing its stylesheets at `cdn.jsdelivr.net` in November 2026
+  with no notice; the preview only allows fonts from one host, so preview fonts stopped loading
+  and `release` failed with `Preview font failed`. The store holds every family in the font
+  catalogue, built from pinned open-licence packages; its files are byte-identical to the ones
+  Bunny served, so type renders as before.
+- The dev preview and every sealed Look carry their font rules inline, at the weights your
+  template declares. No font stylesheet is requested. A sealed Look's policy allows fonts and
+  runtime font stylesheets from `https://cdn.port60.com/fonts/v1/` only.
+- A template's own `fonts` URLs keep their Google Fonts css2 shape, but nothing is requested from
+  Google: each URL is read for its families and weights, and those are served from the store.
+  Only catalogue families load, upright; italic and optical-size axes are read past, and a weight
+  range loads the catalogue weights inside it.
+- The gallery poster renderer accepts only font files inside the store. Set `P60_FONT_STORE_DIR`
+  to a directory holding a copy of the store to render with no network.
+- The designer bridge in a sealed Look accepts only a family stylesheet inside the store
+  (`/fonts/v<n>/<family>/index.css`).
+- The platform base stylesheet the preview uses now includes the platform's page head (the trail
+  and photograph treatment the host adds first inside `<main>` on inner pages) and the page frame
+  rules, so a preview matches the live host.
+
+### Compatibility and release
+
+No template needs an edit and no manifest field changes. The font catalogue's families and
+weights are unchanged; its `provider` entry is now `{ "base": "https://cdn.port60.com/fonts" }`.
+A sealed Look published by an earlier kit keeps its old policy and its Bunny stylesheets until
+the template's next version is published with this one. `release` and `setup-previews` need
+access to `cdn.port60.com`, no longer to `fonts.bunny.net`. Publish through the mirror's GitHub
+Release workflow; the matching platform changes are multi-tenant-services #411 and #407, live
+since 12 November 2026.
+
 ## 1.6.3
 
 ### Fixed

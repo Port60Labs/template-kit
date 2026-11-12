@@ -3,15 +3,21 @@ import assert from 'node:assert/strict';
 import { createPosterRenderer, posterResource, galleryCaptureHtml, MAX_POSTER_BYTES } from '../src/lib/galleryPosters.mjs';
 
 const page = html => ({ bytes: Buffer.from(html), contentType: 'text/html; charset=utf-8' });
-test('poster asset routing only allows packaged preview assets and the established font host', () => {
+test('poster asset routing only allows packaged preview assets and font files in the Port60 font store', () => {
   const file = page('<h1>Example</h1>');
   const files = { 'preview/looks/one.html': file };
   assert.equal(posterResource('https://p60-preview.invalid/preview/looks/one.html', files).file, file);
-  assert.ok(posterResource('https://fonts.bunny.net/css2?family=Inter:wght@400', files).font);
+  assert.equal(posterResource('https://cdn.port60.com/fonts/v1/inter/inter-latin-400-normal.woff2', files).stored, 'v1/inter/inter-latin-400-normal.woff2');
   for (const url of ['http://127.0.0.1:8083/private', 'file:///etc/passwd',
     'https://p60-preview.invalid/template/manifest.json', 'https://p60-preview.invalid/preview/looks/missing.html',
-    'https://fonts.bunny.net:1234/font.woff2', 'https://evil.test/a.woff2',
-    'https://user:pass@fonts.bunny.net/css2?family=Inter', 'https://fonts.bunny.net/other']) {
+    'https://cdn.port60.com:1234/fonts/v1/inter/inter-latin-400-normal.woff2', 'https://evil.test/a.woff2',
+    'https://user:pass@cdn.port60.com/fonts/v1/inter/inter-latin-400-normal.woff2',
+    'https://cdn.port60.com/fonts/v1/inter/inter-latin-400-normal.woff2?next=1',
+    'https://cdn.port60.com/fonts/v1/inter/index.css', 'https://cdn.port60.com/fonts/v2/inter/inter-latin-400-normal.woff2',
+    'https://cdn.port60.com/charity-assets/t/one/inter-latin-400-normal.woff2',
+    'https://cdn.port60.com/fonts/v1/inter/nested/inter-latin-400-normal.woff2',
+    'https://fonts.bunny.net/inter/files/inter-latin-400-normal.woff2',
+    'https://cdn.jsdelivr.net/fontsource/fonts/inter@5.3.0/latin-400-normal.woff2']) {
     assert.equal(posterResource(url, files), null, url);
   }
 });

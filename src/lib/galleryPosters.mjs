@@ -1,4 +1,7 @@
+import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
 import { chromium } from 'playwright';
+import { storedFontFile } from '../vendor/validator/fonts.mjs';
 
 export const POSTER_WIDTH = 960;
 export const POSTER_HEIGHT = 600;
@@ -14,7 +17,7 @@ export function galleryCaptureHtml(html) {
   return html.replace(/@font-face\s*\{[^{}]*font-family:\s*'(?:KFGQPC HAFS Uthmanic Script|KFGQPC Nastaleeq|IBM Plex Sans Arabic)'[^{}]*\}/g, '');
 }
 
-/** Only sealed bundle assets and the preview's existing font host may be requested. */
+/** Only sealed bundle assets and font files in the Port60 font store may be requested. */
 export function posterResource(url, files) {
   const parsed = new URL(url);
   if (parsed.username || parsed.password || parsed.hash) return null;
@@ -22,10 +25,19 @@ export function posterResource(url, files) {
     const path = parsed.pathname.slice(1);
     if (path.startsWith('preview/') && Object.hasOwn(files, path)) return { file: files[path] };
   }
-  if (parsed.origin === 'https://fonts.bunny.net' && (
-    /^\/css2?$/.test(parsed.pathname) || /^\/[a-zA-Z0-9_./-]+\.woff2?$/.test(parsed.pathname)
-  )) return { font: parsed.href };
-  return null;
+  const stored = storedFontFile(parsed.href);
+  return stored ? { font: parsed.href, stored } : null;
+}
+
+async function fontBytes(route, stored) {
+  const local = process.env.P60_FONT_STORE_DIR;
+  if (local) return readFile(resolve(local, stored));
+  const response = await route.fetch({ timeout: 15000, maxRedirects: 0 });
+  try {
+    const body = await response.body();
+    if (!response.ok() || body.length > 2 * 1024 * 1024) throw new Error('Font unavailable or too large');
+    return body;
+  } finally { await response.dispose(); }
 }
 
 /** One browser per release; one isolated, script-disabled context per Look. */
@@ -54,18 +66,13 @@ export async function createPosterRenderer(files) {
             } else if (resource?.font) {
               let font = fontCache.get(resource.font);
               if (!font) {
-                const response = await route.fetch({ timeout: 15000, maxRedirects: 0 });
-                try {
-                  const body = await response.body();
-                  if (!response.ok() || body.length > 2 * 1024 * 1024) throw new Error('Font unavailable or too large');
-                  font = { body, contentType: response.headers()['content-type'] };
-                  if (fontCache.size >= 128) fontCache.delete(fontCache.keys().next().value);
-                  fontCache.set(resource.font, font);
-                } finally { await response.dispose(); }
+                font = { body: await fontBytes(route, resource.stored), contentType: 'font/woff2' };
+                if (fontCache.size >= 128) fontCache.delete(fontCache.keys().next().value);
+                fontCache.set(resource.font, font);
               }
               await route.fulfill({ status: 200, ...font, headers: { 'access-control-allow-origin': '*' } });
             } else {
-              failures.add('A preview requested an asset outside the sealed bundle/font host');
+              failures.add('A preview requested an asset outside the sealed bundle and the font store');
               await route.abort('blockedbyclient');
             }
           } catch {

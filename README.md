@@ -222,7 +222,9 @@ host, configure an administrator-approved sandbox according to
 [Chromium's guidance](https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md).
 Browser installation alone does not change the host's security policy.
 
-Only packaged preview assets and fonts.bunny.net are accessible during capture. Failed required
+Only packaged preview assets and font files in the Port60 font store (`cdn.port60.com/fonts`)
+are accessible during capture. Set `P60_FONT_STORE_DIR` to a directory holding a copy of the
+store to render without the network. Failed required
 imagery or Latin fonts stop generation. Arabic-specific poster font fidelity is deferred;
 full previews and live-site typography are unchanged. Preserve the same kit/browser/OS for
 immutable upload retries; output changes need a new version, not an overwrite.

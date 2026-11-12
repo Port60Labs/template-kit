@@ -39,7 +39,7 @@ separate from the first-party store release lane. Use platform media URLs in run
 Release automatically captures each Look as a 960x600 WebP under preview/gallery/, from a
 1440x900 desktop render. Do not author separate screenshots. Posters have a 160 KiB cap;
 HTML, images and metadata remain beside them. The gallery loads posters; details load HTML.
-The build needs Chromium plus access to fonts.bunny.net, and refuses failed required assets.
+The build needs Chromium plus access to the Port60 font store (cdn.port60.com/fonts), and refuses failed required assets.
 Use the same kit/browser/OS for immutable-upload retries; bump the version for changed output.
 Arabic-specific poster font fidelity is deferred, not proof of Arabic-locale conformance.
 

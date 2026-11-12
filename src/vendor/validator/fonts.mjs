@@ -1,8 +1,12 @@
 import catalogue from '../contract/v1/fonts.json' with { type: 'json' };
+import faces from '../engine/font-faces.json' with { type: 'json' };
+import { declaredFontSlots, fontFaceRules, fontFilePath, fontStoreBase, fontStoreUrl } from '../engine/font-faces.mjs';
 
 const byName = new Map(catalogue.families.map((f) => [f.name, f]));
 
-export const FONT_PROVIDER_ORIGIN = new URL(catalogue.provider.cssBase).origin;
+const FONT_STORE_BASE = fontStoreBase(null, catalogue.provider.base);
+export const FONT_STORE = fontStoreUrl(faces, FONT_STORE_BASE);
+export const FONT_STORE_ORIGIN = new URL(FONT_STORE).origin;
 
 /** A catalogue-valid family name, else null. */
 export function knownFamily(name) {
@@ -24,38 +28,14 @@ export function fontStackFor(name) {
   return `${arabicFirst}'${family.name}', ${family.stack}`;
 }
 
-function nearestWeight(target, available) {
-  let best = available[0];
-  for (const w of available) {
-    const d = Math.abs(w - target);
-    const bestD = Math.abs(best - target);
-    if (d < bestD || (d === bestD && w > best)) best = w;
-  }
-  return best;
+export function fontFaceCss(slots) {
+  return fontFaceRules(faces, slots, FONT_STORE).join('');
 }
 
-/** One css2 URL per chosen family at its slots' clamped weights. The provider answers a
- *  multi-family request from a cache keyed on its first family, so one family per request. */
-export function fontCssHrefs(slots) {
-  const weightsByFamily = new Map();
-  for (const slot of slots) {
-    const family = byName.get(slot.family);
-    if (!family || family.hosted) continue;
-    const set = weightsByFamily.get(family.name) ?? new Set();
-    const asked = slot.weights?.length > 0 ? slot.weights : [400, 700];
-    for (const weight of asked) set.add(nearestWeight(weight, family.weights));
-    weightsByFamily.set(family.name, set);
-  }
-  return [...weightsByFamily.entries()].map(([name, weights]) =>
-    `${catalogue.provider.cssBase}?family=${name.replace(/ /g, '+')}:wght@${[...weights].sort((a, b) => a - b).join(';')}&display=swap`);
+export function declaredFonts(urls) {
+  return (urls ?? []).flatMap((url) => declaredFontSlots(faces, url));
 }
 
-/** A template's own Google Fonts URL on the mirror (same css2 API), one URL per family. */
-export function toProviderHrefs(url) {
-  const [base, query = ''] = String(url).replace('https://fonts.googleapis.com/', `${FONT_PROVIDER_ORIGIN}/`).split('?', 2);
-  const params = query.split('&').filter(Boolean);
-  const families = params.filter(param => param.startsWith('family='));
-  const shared = params.filter(param => !param.startsWith('family='));
-  if (families.length < 2) return [query ? `${base}?${query}` : base];
-  return families.map(family => `${base}?${[family, ...shared].join('&')}`);
+export function storedFontFile(url) {
+  return fontFilePath(faces, url, FONT_STORE_BASE);
 }
