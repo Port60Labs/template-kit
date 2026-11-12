@@ -12,7 +12,7 @@ import contextContract from '../contract/v1/context.json' with { type: 'json' };
 import { resolveFixtureArt } from './fixture-art.mjs';
 import { buildSiteFixture, applyPreviewContent, pageComposition, PAGE_KEYS } from './site-context.mjs';
 import { withResolvedIcons } from './icons.mjs';
-import { FONT_PROVIDER_ORIGIN, fontCssHrefs, fontStackFor, knownFamily, toProviderHrefs } from './fonts.mjs';
+import { FONT_STORE, FONT_STORE_ORIGIN, declaredFonts, fontFaceCss, fontStackFor, knownFamily } from './fonts.mjs';
 import { normaliseFocus, previewActions, withResolvedActions, applyFocus } from './focus.mjs';
 
 const STUDIO_FX = resolveFixtureArt(contextContract.fixtures);
@@ -528,11 +528,9 @@ export async function renderStudioPreview(files, options = {}) {
 
   const themeCss = inertInlineCss(files['assets/theme.css'] ?? '');
   const { attrs, vars, fontSlots } = knobValues(manifest, options.knobs ?? {});
-  const webfonts = options.webfonts
-    ? [...new Set([...(manifest?.fonts ?? []).flatMap(toProviderHrefs), ...fontCssHrefs(fontSlots)])]
-    : [];
-  const fontLinks = webfonts.length
-    ? `<link rel="preconnect" href="${FONT_PROVIDER_ORIGIN}" crossorigin>\n${webfonts.map((href) => `<link rel="stylesheet" href="${escapeHtml(href)}">`).join('\n')}`
+  const fontCss = options.webfonts ? fontFaceCss([...declaredFonts(manifest?.fonts), ...fontSlots]) : '';
+  const fontLinks = fontCss
+    ? `<link rel="preconnect" href="${FONT_STORE_ORIGIN}" crossorigin>\n<style data-p60-fonts>${fontCss}</style>`
     : '';
 
   const runtime = options.behaviorsRuntime ?? null;
@@ -548,8 +546,8 @@ export async function renderStudioPreview(files, options = {}) {
   }
   if (options.localImages) imgOrigins.add("'self'");
   const imgSrc = ['data:', ...imgOrigins].join(' ');
-  const styleSrc = webfonts.length ? `'unsafe-inline' ${FONT_PROVIDER_ORIGIN}` : "'unsafe-inline'";
-  const fontSrc = webfonts.length ? ` font-src ${FONT_PROVIDER_ORIGIN};` : '';
+  const styleSrc = "'unsafe-inline'";
+  const fontSrc = fontCss ? ` font-src ${FONT_STORE}/;` : '';
   const csp = runtime
     ? `default-src 'none'; style-src ${styleSrc}; img-src ${imgSrc};${fontSrc} script-src 'unsafe-inline';`
     : `default-src 'none'; style-src ${styleSrc}; img-src ${imgSrc};${fontSrc}`;

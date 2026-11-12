@@ -6,6 +6,7 @@ import { loadArtifactDir } from './artifactFiles.mjs';
 import { designerPalette } from './designerPalette.mjs';
 import { createPosterRenderer, POSTER_WIDTH, POSTER_HEIGHT } from './galleryPosters.mjs';
 import { validateNewArtifact } from '../vendor/validator/validate.mjs';
+import { FONT_STORE } from '../vendor/validator/fonts.mjs';
 import { renderStudioPreview } from '../vendor/validator/preview-v2.mjs';
 import { composePage, validatePreviewContent } from '../vendor/validator/site-context-v2.mjs';
 
@@ -108,14 +109,12 @@ export async function buildReleaseBundle(directory) {
         if (!src.startsWith('data:') && ![...images.values()].includes(src)) img.remove();
         img.removeAttribute('srcset');
       });
-      doc.querySelectorAll('link').forEach(link => {
-        if (link.getAttribute('rel') !== 'stylesheet' || !/^https:\/\/fonts\.bunny\.net\/css2?\?/.test(link.getAttribute('href') ?? '')) link.remove();
-      });
+      doc.querySelectorAll('link').forEach(link => link.remove());
       const style = doc.createElement('style');
       style.textContent = `html{scroll-behavior:auto}.menu-panel,[data-p60-nav-menu]{display:none!important}[data-p60-reveal]{opacity:1!important;transform:none!important}*,*::before,*::after{animation:none!important;transition:none!important}.p60-preview-slide:not(:first-child){display:none}a[aria-disabled]{cursor:default}`;
       doc.head.append(style);
       const script = doc.createElement('script'); script.textContent = bridge; doc.body.append(script);
-      doc.querySelector('meta[http-equiv="Content-Security-Policy"]').content = `default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline' https://fonts.bunny.net; font-src https://fonts.bunny.net; script-src 'sha256-${bridgeHash}'; connect-src 'none'; form-action 'none'; base-uri 'none'; frame-src 'none'`;
+      doc.querySelector('meta[http-equiv="Content-Security-Policy"]').content = `default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline' ${FONT_STORE}/; font-src ${FONT_STORE}/; script-src 'sha256-${bridgeHash}'; connect-src 'none'; form-action 'none'; base-uri 'none'; frame-src 'none'`;
       const output = dom.serialize();
       if (Buffer.byteLength(output) > MAX_HTML) throw new Error('Preview page exceeds 2 MiB');
       const path = `looks/${index}-${digest(output).slice(0, 12)}.html`;

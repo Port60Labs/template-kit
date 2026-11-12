@@ -15,7 +15,7 @@
     for (const href of [...new Set(Array.isArray(event.data.fonts) ? event.data.fonts : [])].slice(0, 4)) {
       try {
         const url = new URL(href);
-        if (url.origin !== 'https://fonts.bunny.net' || url.pathname !== '/css2' || url.username || url.password) continue;
+        if (url.origin !== 'https://cdn.port60.com' || !/^\/fonts\/v[0-9]+\/[a-z0-9-]+\/index\.css$/.test(url.pathname) || url.search || url.hash || url.username || url.password) continue;
         const link = document.createElement('link');
         link.rel = 'stylesheet'; link.href = url.href; link.dataset.designerFont = '';
         document.head.append(link);

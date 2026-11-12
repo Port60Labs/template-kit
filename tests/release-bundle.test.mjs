@@ -83,9 +83,12 @@ test('the presentation bridge accepts only the parent and rejects arbitrary URL 
   const send = (data,source=page.window) => page.window.dispatchEvent(new page.window.MessageEvent('message',{source,origin:'https://admin.example.test',data:{type:'p60-designer-settings',...data}}));
   send({vars:{displayFont:'Inter, sans-serif'}},null);
   assert.equal(page.window.document.documentElement.style.cssText,'');
-  send({vars:{displayFont:'Inter, sans-serif',evil:'url(https://evil.test)'},fonts:['https://evil.test/css','https://fonts.bunny.net/css2?family=Inter:wght@400&display=swap']});
+  send({vars:{displayFont:'Inter, sans-serif',evil:'url(https://evil.test)'},fonts:['https://evil.test/css','https://fonts.bunny.net/css2?family=Inter:wght@400&display=swap','https://cdn.port60.com/charity-assets/inter/index.css','https://cdn.port60.com/fonts/v1/inter/index.css']});
   assert.equal(page.window.document.documentElement.style.getPropertyValue('--p60s-displayFont'),'Inter, sans-serif');
   assert.equal(page.window.document.documentElement.style.getPropertyValue('--p60s-evil'),'');
   assert.equal(page.window.document.querySelectorAll('link').length,1);
+  assert.equal(page.window.document.querySelector('link').href,'https://cdn.port60.com/fonts/v1/inter/index.css');
+  send({fonts:['https://cdn.port60.com/fonts/v1/inter/index.css?next=1','https://cdn.port60.com/fonts/v1/inter/400.css','https://cdn.port60.com/fonts/v1/inter/nested/index.css']});
+  assert.equal(page.window.document.querySelectorAll('link').length,0);
   page.window.close();
 });
